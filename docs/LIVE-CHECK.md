@@ -1,3 +1,17 @@
+# Produkcija — verzija 3.1.0
+
+Verzija **3.1.0 je postavljena i aktivna** na https://cvjetan.dev/srbija-na-dlanu/ — 6. novembar 2026. Paket je zamenjen kroz standardni WP obrazac i potvrđeno je uspešno ažuriranje. Ostali dodaci i progres nisu menjani.
+
+- Provereni izvor i ZIP su na `main`; izdanje: `cf030ea2aa33803844e8295db54f3c859bb09d7c`.
+- SHA256 ZIP-a: `6646237ce526307cb250ed367281a5cb3eb16bfabe044569ba2a9b320eb8c432` (120 datoteka).
+- GitHub Actions prošao je sa MySQL-om, Autoptimize i Slim SEO, uključujući stvarni Chromium: https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/42300284605 . Provera na `main` takođe je prošla.
+- Prošla je **631 produkcijska HTTP tvrdnja**: svih pet javnih pogleda u četiri jezika, puni nazivi jezika, tri dugmeta teme, kompas i sopstveno zaglavlje, canonical/hreflang i privatni keš.
+- Mapa Srbije i spisak imaju svih 30 okružnih celina. Mape i spiskovi opština provereni su za Beograd, Šumadijski i svih pet okruga Kosova i Metohije u sva četiri jezika. Klikabilni linkovi otvaraju opštinu, njen obris i istaknut položaj; linkovi za promenu jezika čuvaju odabranu opštinu i okrug.
+- Produkcijski `ui.js`, `library.js`, `themes.css` i `atlas.css` poklapaju se po bajtovima sa proverenim paketom. Potvrđeni su izbor tamne teme kroz nativni GET obrazac i ažuriran prikaz bez parametara URL-a.
+- Svih pet administratorskih pogleda se otvara uz HTTP 200 bez PHP grešaka. Nisu napravljene nove partije tokom ove produkcijske provere.
+
+Na izolovanom WP-u prošlo je **25.846 tvrdnji**: 25.312 PHP, 135 Node, 98 stvarni Chromium i 301 HTTP. Pregledani su Chromium snimci svetle i tamne teme i mobilnih dimenzija; fizički telefon nije korišćen. Chromium provera produkcije nije izvršena: pri HTTPS pristupu kroz proksi pregledač je vratio ERR_CERT_AUTHORITY_INVALID; TLS provera nije isključivana. Produkcijski HTTP proveren je standardnim HTTPS klijentom sa uključenom proverom sertifikata. Dostava WP e-pošte nije deo ove izmene. Detalji novog toka: [ATLAS-3.1.md](ATLAS-3.1.md).
+
 # Produkcija — verzija 3.0.0
 
 Verzija **3.0.0 je postavljena i aktivna** na https://cvjetan.dev/srbija-na-dlanu/ — 6. novembar 2026. ZIP je otpremljen i postojeći dodatak zamenjen kroz standardni WordPress obrazac, uz prijavu preko forme aplikacije. Ostali dodaci nisu menjani.

@@ -4,7 +4,7 @@ Zasebna geografska aplikacija unutar WordPress-a: početna, igre za okruge i op�
 
 **[Preuzmi instalacioni ZIP](https://github.com/cvjetan23/Srbija-na-dlanu/raw/refs/heads/main/dist/srbija-na-dlanu.zip)** · [Instalacija](srbija-na-dlanu/INSTALACIJA.md) · [Provere](docs/PROVERA.md) · [Zastave i licence](srbija-na-dlanu/FLAGS.md)
 
-**Verzija 3.0.0 postavljena je i aktivna na [cvjetan.dev/srbija-na-dlanu](https://cvjetan.dev/srbija-na-dlanu/).** Prošlo je 317 produkcijskih HTTP provera i pregled svih pet novih administratorskih stranica. [Evidencija i granice provere](docs/LIVE-CHECK.md).
+**Verzija 3.1.0 postavljena je i aktivna na [cvjetan.dev/srbija-na-dlanu](https://cvjetan.dev/srbija-na-dlanu/).** Prošla je 631 produkcijska HTTP provera i pregled svih pet administratorskih stranica. Lokalno i u CI-ju prošlo je 98 Chromium provera mapa, jezika i teme. [Evidencija i granice provere](docs/LIVE-CHECK.md).
 
 ## Instalacija i ažuriranje
 
