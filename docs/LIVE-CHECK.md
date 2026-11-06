@@ -1,4 +1,20 @@
-# Provera objavljene igre i ispravka 1.0.1
+# Produkcija — verzija 3.0.0
+
+Verzija **3.0.0 je postavljena i aktivna** na https://cvjetan.dev/srbija-na-dlanu/ — 6. novembar 2026. ZIP je otpremljen i postojeći dodatak zamenjen kroz standardni WordPress obrazac, uz prijavu preko forme aplikacije. Ostali dodaci nisu menjani.
+
+- Provereni izvor i instalacioni ZIP objavljeni su na `main`; izdanje: `1bfd38d4dc97614a0ce100b23352e2fc8ea078e0`.
+- SHA256 instalacionog ZIP-a: `571bdf621ddf5279331174dfbae2b3bc1436634520e9f32c6fa402bea63c5c44`.
+- GitHub Actions prošao je na MySQL-u sa Autoptimize i Slim SEO: https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/42295142488 . Provera na `main` takođe je prošla.
+- Produkcijski WordPress API potvrdio je aktivan dodatak 3.0.0. `bootstrap` potvrđuje svih 30 okružnih celina i 174 opštine/grada, sa Kosovom i Metohijom.
+- Prošlo je **317 produkcijskih HTTP tvrdnji**: pet javnih pogleda u sva četiri jezika, kompas i sopstveni meni, odsustvo Astra zaglavlja/podnožja, četiri jezika i tri teme u izboru, jezik HTML-a, jedan naslov, četiri hreflang linka i `no-store` zaglavlja.
+- Provereni su prevodi baze sa 30 kartica i detalji Beograda, Šumadijskog i svih pet okruga Kosova i Metohije u sva četiri jezika, sa jednim obrisom i pripadajućim opštinama.
+- Inline rečnici jezika pravilno se parsiraju uz aktivan Autoptimize. Produkcijski `i18n.js`, `ui.js` i `game.js` po bajtovima odgovaraju proverenom paketu.
+- Odigrane su dve gostujuće partije vežbanja, po jedna za okruge na engleskom i opštine na ruskom: početak, otkrivanje, četiri pitanja, lokalne slike kada su ponuđene, označena pomoć preko izvora fotografije, odgovori/objašnjenja, rezultat i ponovno otvaranje. Neodgovorena pitanja nisu otkrivala rešenje.
+- Svih pet novih administratorskih pogleda — Analitika, Igrači, Partije, Podešavanja i Prevodi — vraćaju HTTP 200 i očekivani prikaz bez PHP grešaka.
+
+Funkcionalne produkcijske provere napravile su **dve stvarne gostujuće partije vežbanja**, koje mogu biti vidljive u početnoj analitici. Administratorska podešavanja nisu menjana tokom provere. Nije korišćen pravi pregledač niti fizički telefon; vizuelni prikaz tamne teme i produkcijska isporuka e-pošte nisu nezavisno potvrđeni. Registracija/lozinka, promena teme kroz JS događaje, administratorsko čuvanje i izvoz provereni su na izolovanoj WP instalaciji.
+
+# Prethodna provera objavljene igre i ispravka 1.0.1
 
 Proverena javna stranica: https://cvjetan.dev/srbija-na-dlanu/ — 6. novembar 2026.
 
