@@ -1,7 +1,7 @@
 <?php
 defined('ABSPATH') || exit;
 ?><!doctype html>
-<html lang="<?php echo esc_attr(SND_I18n::html_lang()); ?>" dir="ltr" data-snd-theme="light">
+<html lang="<?php echo esc_attr(SND_I18n::html_lang()); ?>" dir="ltr" data-snd-theme="<?php echo SND_I18n::theme()==='dark'?'dark':'light'; ?>" data-snd-preference="<?php echo esc_attr(SND_I18n::theme()); ?>">
 <head>
 <meta charset="<?php bloginfo('charset'); ?>">
 <meta name="viewport" content="width=device-width, initial-scale=1">

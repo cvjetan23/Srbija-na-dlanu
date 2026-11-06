@@ -1,7 +1,7 @@
 name: WordPress checks and package
 on:
   push:
-    branches: [main, feature/v3-admin-i18n]
+    branches: [main, feature/v3-1-atlas]
   workflow_dispatch:
 concurrency:
   group: wp-checks-${{ github.ref }}
@@ -56,6 +56,29 @@ jobs:
           php tests/asset-loading.php
           if test -f tests/qa-regressions.php; then php tests/qa-regressions.php; fi
           php tests/v3-features.php
+          php tests/atlas-flow.php
+      - name: Real Chromium map and preference flows
+        env:
+          WP_ROOT: /tmp/snd-wp
+          SND_TEST_URL: http://127.0.0.1:8899
+          SND_PLAYWRIGHT_PATH: /tmp/snd-browser/node_modules/playwright-core
+          SND_SCREENSHOTS: /tmp/snd-screenshots
+          CHROMIUM_BIN: /usr/bin/google-chrome
+        run: |
+          php /tmp/wp-cli.phar --path=/tmp/snd-wp config set WP_HOME 'getenv("SND_TEST_URL") ?: "http://snd.test"' --raw
+          php /tmp/wp-cli.phar --path=/tmp/snd-wp config set WP_SITEURL WP_HOME --raw
+          php /tmp/wp-cli.phar --path=/tmp/snd-wp rewrite structure '/%postname%/'
+          npm install --prefix /tmp/snd-browser playwright-core@1.65.0 --no-audit --no-fund
+          php -S 127.0.0.1:8899 -t /tmp/snd-wp tests/http-router.php >/tmp/snd-http.log 2>&1 &
+          snd_server_pid=$!
+          trap 'kill "$snd_server_pid"' EXIT
+          node tests/atlas-browser.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: atlas-chromium-previews
+          path: /tmp/snd-screenshots
+          if-no-files-found: ignore
       - name: Build and inspect installable ZIP
         run: python3 tools/build-package.py
       - uses: actions/upload-artifact@v4
@@ -65,7 +88,7 @@ jobs:
             dist/srbija-na-dlanu.zip
             dist/SHA256SUMS
   package:
-    if: github.ref == 'refs/heads/feature/v3-admin-i18n'
+    if: github.ref == 'refs/heads/feature/v3-1-atlas'
     needs: check
     runs-on: ubuntu-24.04
     permissions:
@@ -82,5 +105,5 @@ jobs:
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git commit -m "Build verified WordPress installation package"
-            git push origin HEAD:feature/v3-admin-i18n
+            git push origin HEAD:feature/v3-1-atlas
           fi

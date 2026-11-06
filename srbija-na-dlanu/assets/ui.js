@@ -6,16 +6,19 @@
     if(!['light','dark','auto'].includes(choice))choice=cfg.theme||'auto';
     if(!cfg.theme_switch)choice=cfg.theme||'auto';
     html.dataset.sndPreference=choice;html.dataset.sndTheme=choice==='auto'?(media.matches?'dark':'light'):choice;
-    if(remember){try{localStorage.setItem('snd:theme',choice);}catch(_){}document.cookie='snd_theme='+choice+'; Max-Age=31536000; Path='+(cfg.cookie_path||'/')+'; SameSite=Lax'+(location.protocol==='https:'?'; Secure':'');}
-    document.querySelectorAll('.snd-preferences [name=snd_theme]').forEach(select=>{select.value=choice;});
+    if(remember){try{localStorage.setItem('snd:theme',choice);}catch(_){}document.cookie='snd_theme='+choice+'; Max-Age=31536000; Path='+(cfg.cookie_path||'/')+'; SameSite=Lax'+(location.protocol==='https:'?'; Secure':'');
+      if(window.history && window.history.replaceState){const url=new URL(location.href);if(url.searchParams.has('snd_theme')){url.searchParams.delete('snd_theme');window.history.replaceState(null,'',url.href);}}
+    }
+    document.querySelectorAll('[data-snd-theme-choice]').forEach(button=>{button.setAttribute('aria-pressed',String(button.dataset.sndThemeChoice===choice));});
   }
   apply(html.dataset.sndPreference||cfg.theme||'auto',false);
   if(media.addEventListener)media.addEventListener('change',()=>{if(html.dataset.sndPreference==='auto')apply('auto',false);});
-  document.querySelectorAll('.snd-preferences').forEach(form=>{
-    const theme=form.querySelector('[name=snd_theme]'),language=form.querySelector('[name=lang]');
-    if(theme)theme.addEventListener('change',()=>{apply(theme.value,true);send('preference',0);});
-    if(language)language.addEventListener('change',()=>form.submit());
-    const submit=form.querySelector('button');if(submit)submit.hidden=true;
+  document.querySelectorAll('[data-snd-theme-choice]').forEach(button=>{
+    button.addEventListener('click',event=>{event.preventDefault();apply(button.dataset.sndThemeChoice,true);send('preference',0);});
+  });
+  document.querySelectorAll('.snd-language-picker').forEach(picker=>{
+    picker.addEventListener('keydown',event=>{if(event.key==='Escape'){picker.open=false;picker.querySelector('summary').focus();}});
+    document.addEventListener('click',event=>{if(!picker.contains(event.target))picker.open=false;});
   });
   let nonce='',identity=null,last=Date.now();
   async function session(){

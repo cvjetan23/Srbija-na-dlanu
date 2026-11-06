@@ -1,3 +1,7 @@
+# Provera verzije 3.1.0
+
+[Mapa, promena jezika i teme — tok i provere](ATLAS-3.1.md). Dodato je 6.216 WP tvrdnji za sve okruge/opštine i 98 provera u pravom Chromium-u, uključujući klikove na SVG, tastaturu, dodir, teme i prikaze širine 320, 390, 768 i 1440 px. Fizički telefon nije korišćen. Postojeće provere igre, naloga, analitike i izvoza ponovo se izvršavaju na novom kodu.
+
 # Provera verzije 3.0.0
 
 Verzija 3.0.0 proverena je na izolovanom WordPress-u 7.1.4 sa PHP 8.4.27 i SQLite integracijom kroz WP `wpdb`. Testovi nisu slati produkcijskim korisnicima; testna e-pošta je presretana lokalno.

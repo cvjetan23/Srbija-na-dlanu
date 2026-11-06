@@ -4,7 +4,7 @@ Tags: geography, quiz, serbia, education
 Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 3.0.0
+Stable tag: 3.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,7 +20,7 @@ Zasebna geografska aplikacija u WordPress-u: igre, baza znanja i nalozi.
 * Četiri dodatna pitanja: stanovništvo/položaj, geografija, zastava i znamenitost/prostorni izazov.
 * 52 lokalne zastave pokrivaju 17 sedišta okruga i 52 opštine/grada (69 teritorija). Za mesta bez zastave koristi se označeno geografsko pitanje.
 * 30 lokalnih fotografija sa autorima i licencama.
-* Pretraga svih okruga, detalji i samo silueta izabranog okruga.
+* Interaktivna mapa Srbije, mapa okruga sa opštinama, detalj opštine, pretraga i spiskovi ispod mapa.
 * Standardni WP korisnici, prijava, registracija Pretplatnika, postavljanje/promena lozinke preko WP e-pošte.
 * Aktivna partija i progres na nalogu, nastavak na drugom uređaju; gostujuća statistika u pregledaču.
 * Dnevni izazov, vežbanje, pretraga sa oba pisma, deljenje bez rešenja.
@@ -52,6 +52,15 @@ Detaljna analitika se od 3.0.0 čuva u dve tabele iste WP baze: {prefix}snd_game
 Kod: GPL-2.0-or-later. Geografija/fotografije: SOURCES.md i DATA-LICENSE.md. Zastave: FLAGS.md. Za dopunske granice Kosova i Metohije javni geografski servis nije naveo posebnu licencu za redistribuciju. Karte služe igri. Deaktivacija ne briše sadržaj i rezultate.
 
 == Changelog ==
+
+= 3.1.0 =
+* Pregledniji izbor jezika sa punim nazivima i obeleženim aktivnim jezikom.
+* Sunce, mesec i automatska tema; dostupno tastaturi, dodiru i bez JavaScript-a.
+* Baza znanja: mapa svih okruga Srbije, zatim mapa izabranog okruga sa opštinama.
+* Klik na opštinu otvara njen obris, podatke, izvore i položaj u okrugu.
+* Postojeći spiskovi ostaju ispod mapa, sa direktnim linkovima na sve detalje.
+* Svi okruzi i 174 opštine/grada, uključujući Kosovo i Metohiju, ostaju sačuvani.
+
 
 = 3.0.0 =
 * Svetla, tamna i automatska tema; četiri jezika: srpski, engleski, nemački i ruski.

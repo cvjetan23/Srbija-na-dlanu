@@ -1672,6 +1672,101 @@ return json_decode(<<<'SND_LANGUAGES'
     "de": "Urheber, einzelne Lizenzen und Quellseiten sind bei den Fotos und in SOURCES.md angegeben",
     "ru": "Авторы, отдельные лицензии и страницы источников указаны рядом с фотографиями и в SOURCES.md"
   },
+  "Izaberi jezik": {
+    "en": "Choose language",
+    "de": "Sprache wählen",
+    "ru": "Выбрать язык"
+  },
+  "Svetla tema": {
+    "en": "Light theme",
+    "de": "Helle Darstellung",
+    "ru": "Светлая тема"
+  },
+  "Tamna tema": {
+    "en": "Dark theme",
+    "de": "Dunkle Darstellung",
+    "ru": "Тёмная тема"
+  },
+  "Auto": {
+    "en": "Auto",
+    "de": "Auto",
+    "ru": "Авто"
+  },
+  "Mapa okruga Srbije": {
+    "en": "Map of Serbia’s districts",
+    "de": "Karte der Bezirke Serbiens",
+    "ru": "Карта округов Сербии"
+  },
+  "Mapa opština: {name}": {
+    "en": "Municipality map: {name}",
+    "de": "Gemeindekarte: {name}",
+    "ru": "Карта общин: {name}"
+  },
+  "Izaberi opštinu na mapi ili u spisku ispod.": {
+    "en": "Choose a municipality on the map or from the list below.",
+    "de": "Wähle eine Gemeinde auf der Karte oder aus der Liste darunter.",
+    "ru": "Выбери общину на карте или из списка ниже."
+  },
+  "Izaberi okrug na mapi ili u spisku ispod.": {
+    "en": "Choose a district on the map or from the list below.",
+    "de": "Wähle einen Bezirk auf der Karte oder aus der Liste darunter.",
+    "ru": "Выбери округ на карте или из списка ниже."
+  },
+  "Okruzi Srbije": {
+    "en": "Districts of Serbia",
+    "de": "Bezirke Serbiens",
+    "ru": "Округа Сербии"
+  },
+  "Svi okruzi": {
+    "en": "All districts",
+    "de": "Alle Bezirke",
+    "ru": "Все округа"
+  },
+  "Istraži Srbiju: od okruga do opštine.": {
+    "en": "Explore Serbia: from districts to municipalities.",
+    "de": "Entdecke Serbien: von Bezirken zu Gemeinden.",
+    "ru": "Исследуй Сербию: от округов к общинам."
+  },
+  "Obris teritorije": {
+    "en": "Territory outline",
+    "de": "Gebietsumriss",
+    "ru": "Контур территории"
+  },
+  "Putanja": {
+    "en": "Breadcrumbs",
+    "de": "Navigationspfad",
+    "ru": "Путь навигации"
+  },
+  "Opštine i gradovi ovog okruga": {
+    "en": "Municipalities and cities in this district",
+    "de": "Gemeinden und Städte dieses Bezirks",
+    "ru": "Общины и города этого округа"
+  },
+  "Popis RZS 2022. nije sproveden na teritoriji Kosova i Metohije.": {
+    "en": "The SORS 2022 census was not conducted in Kosovo and Metohija.",
+    "de": "Die RZS-Volkszählung 2022 wurde im Gebiet Kosovo und Metohija nicht durchgeführt.",
+    "ru": "Перепись РЗС 2022 года не проводилась на территории Косово и Метохии."
+  },
+  "Grad Beograd je posebna administrativna celina. Gradske opštine nisu zasebne teritorije ove igre.": {
+    "en": "The City of Belgrade is a separate administrative unit. Its urban municipalities are not separate territories in this game.",
+    "de": "Die Stadt Belgrad ist eine eigene Verwaltungseinheit. Ihre Stadtgemeinden sind keine eigenen Gebiete in diesem Spiel.",
+    "ru": "Город Белград — отдельная административная единица. Городские общины не являются отдельными территориями этой игры."
+  },
+  "Izvor podataka": {
+    "en": "Data source",
+    "de": "Datenquelle",
+    "ru": "Источник данных"
+  },
+  "Igraj opštine i gradove": {
+    "en": "Play municipalities and cities",
+    "de": "Gemeinden und Städte spielen",
+    "ru": "Играть в общины и города"
+  },
+  "{name}: obris, položaj u okrugu {district}, stanovništvo i izvori.": {
+    "en": "{name}: outline, location in {district}, population and sources.",
+    "de": "{name}: Umriss, Lage im Bezirk {district}, Bevölkerung und Quellen.",
+    "ru": "{name}: контур, положение в округе {district}, население и источники."
+  },
   "@days_one": {
     "sr": "{count} dan",
     "en": "{count} day",

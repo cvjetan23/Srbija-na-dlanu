@@ -15,6 +15,11 @@ final class SND_I18n {
     }
     public static function force($lang=null){self::$forced=$lang;}
     public static function html_lang(){return self::lang()==='sr'?'sr-Latn':self::lang();}
+    public static function theme() {
+        $default=SND_Settings::get('default_theme','auto');if(!SND_Settings::get('theme_switch')){return $default;}
+        $value=isset($_GET['snd_theme']) && is_string($_GET['snd_theme'])?$_GET['snd_theme']:($_COOKIE['snd_theme']??$default);
+        return is_string($value) && in_array($value,array('light','dark','auto'),true)?$value:$default;
+    }
     public static function wp_locale(){return array('sr'=>'sr_RS','en'=>'en_US','de'=>'de_DE','ru'=>'ru_RU')[self::lang()];}
     public static function data() {
         if(self::$data===null){self::$data=is_file(SND_DIR.'data/i18n.php')?require SND_DIR.'data/i18n.php':array();}
@@ -161,9 +166,9 @@ final class SND_I18n {
     }
     public static function head() {
         if(!SND_Site::view()){return;}
-        $theme=SND_Settings::get('default_theme');$switch=SND_Settings::get('theme_switch');
+        $theme=self::theme();$switch=SND_Settings::get('theme_switch');
         $script='(function(){var p='.wp_json_encode($theme).';';
-        if($switch){$script.='var saved;try{saved=localStorage.getItem("snd:theme");}catch(e){}p=saved||((document.cookie.match(/(?:^|; )snd_theme=(light|dark|auto)(?:;|$)/)||[])[1])||p;';}
+        if($switch && !isset($_GET['snd_theme'])){$script.='var saved;try{saved=localStorage.getItem("snd:theme");}catch(e){}p=saved||((document.cookie.match(/(?:^|; )snd_theme=(light|dark|auto)(?:;|$)/)||[])[1])||p;';}
         $script.='if(["light","dark","auto"].indexOf(p)<0)p="auto";document.documentElement.dataset.sndTheme=p==="auto"?(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"):p;document.documentElement.dataset.sndPreference=p;})();';
         echo '<script data-noptimize="1">'.$script.'</script>';
         echo '<style id="snd-custom-colors">.snd-app{--snd-accent:'.esc_html(SND_Settings::get('primary_color')).';--snd-on-accent:'.SND_Settings::foreground(SND_Settings::get('primary_color')).';--snd-on-dark-accent:'.SND_Settings::foreground(SND_Settings::get('dark_accent')).';--snd-dark-accent:'.esc_html(SND_Settings::get('dark_accent')).';--snd-font-scale:'.((int)SND_Settings::get('font_scale')/100).';}</style>';

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Srbija na dlanu
  * Description: Dnevna geografska igra i vežbanje za okruge, opštine i gradove. Shortcode: [srbija_na_dlanu]
- * Version: 3.0.0
+ * Version: 3.1.0
  * Requires at least: 6.2
  * Requires PHP: 7.4
  * Author: Srbija na dlanu
@@ -11,7 +11,7 @@
  */
 
 defined('ABSPATH') || exit;
-define('SND_VERSION', '3.0.0');
+define('SND_VERSION', '3.1.0');
 define('SND_DIR', plugin_dir_path(__FILE__));
 define('SND_URL', plugin_dir_url(__FILE__));
 
@@ -26,6 +26,7 @@ require_once SND_DIR . 'includes/class-game.php';
 require_once SND_DIR . 'includes/class-progress.php';
 require_once SND_DIR . 'includes/class-accounts.php';
 require_once SND_DIR . 'includes/class-site.php';
+require_once SND_DIR . 'includes/class-atlas.php';
 require_once SND_DIR . 'includes/class-api.php';
 require_once SND_DIR . 'includes/class-admin.php';
 require_once SND_DIR . 'includes/class-analytics.php';
@@ -105,7 +106,7 @@ add_action('snd_cleanup', array('SND_Game', 'cleanup'));
 // Autoptimize recognizes data-noptimize before rewriting template literals.
 // Keep our tested JavaScript and small styles intact without changing the site.
 function snd_preserve_asset_tag($tag,$handle) {
-    if(!in_array($handle,array('snd-game','snd-app','snd-library','snd-i18n','snd-ui','snd-themes'),true)){return $tag;}
+    if(!in_array($handle,array('snd-game','snd-app','snd-library','snd-i18n','snd-ui','snd-themes','snd-atlas'),true)){return $tag;}
     return '<!--noptimize-->'.preg_replace('/<(script|link)\b/','<$1 data-noptimize="1"',$tag,1).'<!--/noptimize-->';
 }
 add_filter('script_loader_tag','snd_preserve_asset_tag',10,2);

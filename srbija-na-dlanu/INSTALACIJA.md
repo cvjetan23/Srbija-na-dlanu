@@ -1,4 +1,4 @@
-# Instalacija i ažuriranje na 3.0.0
+# Instalacija i ažuriranje na 3.1.0
 
 1. Preuzmi instalacioni `srbija-na-dlanu.zip` iz direktorijuma `dist` repozitorijuma.
 2. WordPress → **Dodaci → Dodaj novi → Otpremi dodatak**. Izaberi ZIP, instaliraj; pri ažuriranju potvrdi **Zameni postojeći dodatak**. Aktiviraj ako je potrebno.
@@ -29,7 +29,7 @@ JSON izvoz sadrži geometriju, podatke i trenutnu bazu zastava. Pre uvoza uzmi r
 
 - Izuzmi svih šest stranica aplikacije, REST rute `srbija-na-dlanu/v1/*` i AJAX `snd_session` iz keširanja. Ne keširaj HTML prijavljenih korisnika. API vraća `no-store`.
 - Dozvoli JSON POST zahteve i zaglavlje `X-WP-Nonce`. Ako igra ne može da proveri prijavu, proveri da hosting ne blokira `admin-ajax.php?action=snd_session`.
-- Stari izgled: očisti Autoptimize, keš stranice/CDN-a i osveži pregledač. Resursi imaju verziju 3.0.0.
+- Stari izgled: očisti Autoptimize, keš stranice/CDN-a i osveži pregledač. Resursi imaju verziju 3.1.0.
 - Greška 404 na novim stranicama: **Podešavanja → Permalinks → Sačuvaj izmene**, pa proveri pravila servera.
 - Link za lozinku nije stigao: proveri WP dostavu pošte/spam. Korisnik može ponovo zatražiti lozinku preko aplikacije.
 - Brisanje podataka pregledača briše gostujuću statistiku. Statistika prijavljenog naloga ostaje u WP bazi.
@@ -65,3 +65,12 @@ U WP meniju **Srbija na dlanu** otvori **Podešavanja** za jezike, temu, boje, v
 Kreiraju se dve tabele u postojećoj WP bazi. Podrazumevani rok za analitiku je 365 dana, promenljiv u Podešavanjima; 0 znači neograničeno. Dnevni WP-Cron čisti isteklu analitiku, a progres ostaje na nalogu. Bez WP-Cron saobraćaja zakazani uvoz/čišćenje čekaju sledeće pokretanje. Rezervna kopija WordPress-a treba da obuhvati i nove tabele.
 
 Standardni WP alati **Izvoz ličnih podataka** i **Brisanje ličnih podataka** obuhvataju progres i analitiku igre. Izvoz administracije sadrži lične podatke igrača i dostupan je samo administratorima. Deaktivacija ne briše podatke.
+
+
+## Mape i izbor prikaza u 3.1.0
+
+Baza znanja prvo prikazuje mapu Srbije. Klik na okrug otvara njegovu mapu sa opštinama; klik na opštinu otvara obris, podatke i položaj u okrugu. Ispod mapa ostaju spiskovi sa istim linkovima. Poseban tretman Beograda i obuhvat Kosova i Metohije ostaju isti.
+
+Izbor jezika u zaglavlju prikazuje pun naziv aktivnog jezika; otvaranjem se vide svi omogućeni jezici. Pored njega su dugmad sa suncem, mesecom i automatskim izborom teme. Podrazumevani jezik, omogućeni jezici, tema i pravo korisnika da je menja i dalje se podešavaju kroz Podešavanja dodatka. Menjanje jezika čuva trenutno otvorenu opštinu/okrug i režim igre.
+
+Nisu potrebne nove WP stranice ili dodatni API ključevi. Detalji koriste postojeću Bazu znanja sa parametrima `okrug` i `opstina`. Nakon zamene dodatka otvori administraciju i očisti keš.

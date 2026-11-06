@@ -1,4 +1,4 @@
-# Srbija na dlanu 3.0
+# Srbija na dlanu 3.1
 
 Zasebna geografska aplikacija unutar WordPress-a: početna, igre za okruge i opštine, baza znanja i nalozi igrača. Sveden prikaz: slika gore, pitanje i odgovori ispod, sa većim slovima.
 
@@ -26,6 +26,17 @@ Ove stranice imaju svoj kompas, meni, zaglavlje i podnožje, bez zaglavlja i pod
 
 Shortcode `[srbija_na_dlanu]` i dalje radi na drugim WP stranicama; tu se zadržava njihova tema. Za određenu igru koristi `[srbija_na_dlanu kind="district"]` ili `kind="municipality"`.
 
+## Novo u 3.1.0
+
+[Mape i provere prikaza](docs/ATLAS-3.1.md).
+
+- Jasno označen izbor jezika sa punim nazivima i trenutnim izborom.
+- Sunce, mesec i automatski izbor teme, uz pamćenje i pristupačne oznake.
+- Baza znanja počinje interaktivnom mapom Srbije sa svih 30 okružnih celina.
+- Klik na okrug otvara njegovu mapu sa opštinama; klik na opštinu otvara obris, podatke i istaknut položaj u okrugu.
+- Spiskovi svih okruga i pripadajućih opština ostaju ispod mapa. Mape i izbor jezika koriste obične linkove i rade i bez JavaScript-a.
+- Sačuvani su svih 174 opštine/grada, Kosovo i Metohija i postojeći progres.
+
 ## Novo u 3.0.0
 
 - Svetla, tamna i automatska tema; izbor se pamti na uređaju.
@@ -42,7 +53,7 @@ Ispravke dva QA izveštaja obuhvataju deljene linkove sa režimom/datumom, tasta
 
 [Detaljno: nalaz → ispravka → provera](docs/QA-ISPRAVKE.md). Postojeći podaci, 30 okružnih celina, 174 opštine/grada i Kosovo i Metohija ostaju sačuvani. Banka od 30 fotografija i 52 zastave nije proširivana ovom ispravkom; uputstvo i oznake sada dosledno opisuju geografske zamene.
 
-**Ovaj repozitorijum sadrži paket 3.0.0.** Novi kod i paket proveravaju se u izdvojenoj GitHub Actions instalaciji sa Autoptimize i Slim SEO dodacima. Novi vizuelni pregled u pravom pregledaču ili na fizičkom telefonu nije izvršen.
+**Ovaj repozitorijum sadrži paket 3.1.0.** Novi kod i paket proveravaju se u izdvojenoj GitHub Actions instalaciji sa Autoptimize i Slim SEO dodacima. Za 3.1.0 izvršen je pregled i funkcionalna provera u Chromium-u, sa prikazima širine 320, 390, 768 i 1440 piksela; fizički telefon nije korišćen.
 
 ## Sadržaj i igra
 
@@ -54,7 +65,7 @@ Ispravke dva QA izveštaja obuhvataju deljene linkove sa režimom/datumom, tasta
 - **30 lokalnih fotografija znamenitosti**, sa autorima, licencama i izvorima.
 - Isti dnevni zadatak za sve, promena u ponoć po vremenu u Srbiji; nasumično vežbanje, nastavak i deljenje rezultata bez rešenja.
 - Pretraga prihvata latinicu, ćirilicu i unos bez kvačica.
-- Baza znanja: svih 30 teritorija, pretraga po nazivu i sedištu, detalji i samo obris izabranog okruga.
+- Baza znanja: mapa Srbije → okrug sa opštinama → detalj opštine, pretraga i spiskovi ispod mapa.
 
 Kosovo i Metohija su uključeni sa **pet okruga i 29 opština** prema podeli korišćenoj u projektu. Popis RZS 2022. tamo nije sproveden; broj stanovnika se ne izmišlja, a pitanje se zamenjuje geografskim. Na ostaloj teritoriji broj stanovnika odnosi se na cele opštine/gradove; zbir je 6.647.003.
 
@@ -86,8 +97,9 @@ WP_ROOT=/putanja/do/izolovanog/wp php tests/account-progress.php
 WP_ROOT=/putanja/do/izolovanog/wp php tests/asset-loading.php
 WP_ROOT=/putanja/do/izolovanog/wp php tests/qa-regressions.php
 WP_ROOT=/putanja/do/izolovanog/wp php tests/v3-features.php
+WP_ROOT=/putanja/do/izolovanog/wp php tests/atlas-flow.php
 ```
 
-PHP testove pokreći samo na namenskoj lokalnoj/razvojnoj WP instalaciji sa aktivnim dodatkom. Testovi kreiraju podatke; nisu namenjeni produkciji. [Izveštaj](docs/PROVERA.md) razlikuje HTTP/HTML provere od vizuelnog testa u pregledaču. Za lokalni HTTP test dostupni su `tests/http-router.php`, `tests/http-fixture.php` i `tests/http-v3.py` (beautifulsoup4, loopback server i namenski WP sa lokalnim okruženjem). Vizuelna provera u pravom pregledaču i dostava WP e-pošte nisu potvrđene.
+PHP testove pokreći samo na namenskoj lokalnoj/razvojnoj WP instalaciji sa aktivnim dodatkom. Testovi kreiraju podatke; nisu namenjeni produkciji. [Izveštaj](docs/PROVERA.md) razlikuje HTTP/HTML provere od vizuelnog testa u pregledaču. Za lokalni HTTP test dostupni su `tests/http-router.php`, `tests/http-fixture.php` i `tests/http-v3.py` (beautifulsoup4, loopback server i namenski WP sa lokalnim okruženjem). Prikaz i ponašanje 3.1.0 provereni su u Chromium-u; fizički telefon i produkcijska isporuka e-pošte nisu testirani.
 
 Kod je GPL-2.0-or-later. Geometrija, fotografije i zastave imaju zasebne uslove: [SOURCES.md](srbija-na-dlanu/SOURCES.md), [DATA-LICENSE.md](srbija-na-dlanu/DATA-LICENSE.md), [FLAGS.md](srbija-na-dlanu/FLAGS.md). Za dopunske granice Kosova i Metohije javni servis nije naveo posebnu licencu za redistribuciju. Karte služe igri i nisu katastarske karte.
