@@ -64,6 +64,6 @@ WP_ROOT=/putanja/do/izolovanog/wp php tests/account-progress.php
 WP_ROOT=/putanja/do/izolovanog/wp php tests/asset-loading.php
 ```
 
-PHP testove pokreći samo na namenskoj lokalnoj/razvojnoj WP instalaciji sa aktivnim dodatkom. Testovi kreiraju podatke; nisu namenjeni produkciji. [Izveštaj](docs/PROVERA.md) razlikuje HTTP/HTML provere od vizuelnog testa u pregledaču. Verzija 2.0.0 pripremljena je u repozitorijumu i ZIP-u; postavljanje na cvjetan.dev trenutno sprečava DreamWeb anti-bot provera pri administratorskoj prijavi.
+PHP testove pokreći samo na namenskoj lokalnoj/razvojnoj WP instalaciji sa aktivnim dodatkom. Testovi kreiraju podatke; nisu namenjeni produkciji. [Izveštaj](docs/PROVERA.md) razlikuje HTTP/HTML provere od vizuelnog testa u pregledaču. Verzija 2.0.0 je postavljena na cvjetan.dev ručnim otpremanjem ZIP-a. Naknadno su prošle 134 produkcijske HTTP provere stranica, obe igre, zastava, nativne prijave/odjave, čuvanja rezultata i nastavka na drugom uređaju. Vizuelna provera u pravom pregledaču i dostava WP e-pošte nisu potvrđene.
 
 Kod je GPL-2.0-or-later. Geometrija, fotografije i zastave imaju zasebne uslove: [SOURCES.md](srbija-na-dlanu/SOURCES.md), [DATA-LICENSE.md](srbija-na-dlanu/DATA-LICENSE.md), [FLAGS.md](srbija-na-dlanu/FLAGS.md). Za dopunske granice Kosova i Metohije javni servis nije naveo posebnu licencu za redistribuciju. Karte služe igri i nisu katastarske karte.

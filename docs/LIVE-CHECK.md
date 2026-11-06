@@ -37,3 +37,13 @@ U trenutku ove provere nije postojala autentifikovana veza sa WordPress administ
 ## Priprema 2.0.0 — 6. novembar 2026.
 
 Nove stranice, WP nalozi/progres, baza znanja i runda zastava pripremljeni su u repozitorijumu i instalacionom ZIP-u. Provere su opisane u PROVERA.md. Običnu administratorsku prijavu trenutno zaustavlja DreamWeb anti-bot provera, pa nova verzija nije postavljena. WP aplikacioni API pristup radi, ali core endpoint za dodatke ne prima proizvoljan instalacioni ZIP. Produkcijski tok nove verzije i dostava WP poruka nisu potvrđeni.
+
+## Potvrđena produkcija 2.0.0 — 6. novembar 2026.
+
+Posle vlasnikovog ručnog otpremanja ZIP-a javni API potvrđuje verziju 2.0.0 i 30/174 teritorija. Kreirane su i objavljene stranice: početna (1529), Okruzi (1541), Opštine (1542), Baza znanja (1543), Prijava (1544), Moj nalog (1545). Podstranice su ispod `/srbija-na-dlanu/`. Nije bilo potrebe za dodatnim pozivanjem administratorske setup rute.
+
+Prošle su 134 produkcijske HTTP provere. Provereni su svi detalji okruga, oba toka igre do rezultata, četiri bonus runde, stvarne lokalne zastave, ćirilična pretraga, isporuka stilova i skripti kroz Autoptimize, odvojeno zaglavlje/podnožje aplikacije i očuvana Astra tema na glavnoj stranici.
+
+Prijava na novoj stranici aplikacije radi sa datim privremenim WP nalogom. Provereni su vezivanje gostujuće partije za nalog, upis rezultata jednom, pregled progresa, nastavak iste partije u drugoj nezavisnoj WP sesiji, zaštita privatnog tokena od gosta i odjava. Dodato je jedno završeno vežbanje privremenom nalogu. Lozinke, kolačići, REST nonce i tokeni nisu sačuvani u repozitorijumu ili izveštaju.
+
+Ovo su HTTP i HTML provere; browser alat nije dostupan. Vizuelna provera u pravom pregledaču i dostava WP poruka nisu potvrđene.
