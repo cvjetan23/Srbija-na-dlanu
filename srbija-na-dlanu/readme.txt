@@ -4,7 +4,7 @@ Tags: geography, quiz, serbia, education
 Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -57,3 +57,10 @@ Ograničenje javnih zahteva koristi privremeni HMAC mrežne adrese; sirova IP ad
 WordPress tema treba da poziva wp_head() i wp_footer(). Ako tema ima usku kolonu, uključi šablon pune širine. Deaktivacija ne briše sadržaj i rezultate sa servera. JSON izvoz je rezervna kopija baze; fotografije dodate kroz Media Library prenose se uz standardnu WordPress rezervnu kopiju.
 
 Ova verzija ima jednu fotografiju po okrugu i po odgovarajućoj opštini/gradu. Za ostale opštine poslednja runda koristi prostorno pitanje. Više fotografija po istoj teritoriji nije deo verzije 1.0.
+
+== Changelog ==
+
+= 1.0.1 =
+* Ispravljeno učitavanje CSS-a za Elementor tekstualne i shortcode widgete.
+* CSS se više ne štampa u izlazu shortcode-a koji Elementor može odbaciti pri pripremi stranice.
+* Dodat je footer fallback za kasno učitane stilove i promenjena verzija resursa radi osvežavanja keša.

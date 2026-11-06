@@ -15,6 +15,10 @@
 
 Elementor: isti tekst upiši u **Shortcode widget**. Klasični editor: upiši shortcode u sadržaj. Nije potrebno dodavati PHP u stranicu niti menjati temu.
 
+### Ažuriranje na 1.0.1
+
+Otpremi novi ZIP istim putem i izaberi **Zameni postojeći dodatak** kada WordPress to ponudi. Zatim očisti Autoptimize i eventualni keš stranice/CDN-a. Verzija 1.0.1 ispravlja učitavanje stilova u Elementor tekstualnim i shortcode widgetima. Nije potrebno brisati bazu niti praviti novu stranicu.
+
 ## Šta dobijaš
 
 - Dve odvojene igre: **Okruzi** i **Opštine i gradovi**.
@@ -70,7 +74,7 @@ Dodatak koristi WordPress options, transients, REST API, administratorske dozvol
 
 ## Granice provere
 
-Backend i shortcode su provereni na čistom WordPress-u 7.1.4, PHP-u 8.4.27 i SQLite bazi kroz WordPress-ov standardni `wpdb` interfejs. Provereni su sadržaj svih 204 teritorije, tok partije, pomoć, ponovljeni i nevažeći potezi, zaključavanje odgovora, nastavak, dnevna nepromenljivost i validacija uvoza. Nije rađena provera u tvojoj temi, na tvom hostingu ili u pravom pregledaču; za vizuelnu proveru okruženje nije imalo dostupan alat.
+Backend i shortcode su provereni na čistom WordPress-u 7.1.4, PHP-u 8.4.27 i SQLite bazi kroz WordPress-ov standardni `wpdb` interfejs. Provereni su sadržaj svih 204 teritorije, tok partije, pomoć, ponovljeni i nevažeći potezi, zaključavanje odgovora, nastavak, dnevna nepromenljivost i validacija uvoza. U verziji 1.0.1 prošlo je i 10 provera učitavanja stilova za Elementor i kasno renderovan sadržaj. Javni API postavljene verzije 1.0.0 dodatno je proveren na cvjetan.dev u obe igre. Vizuelna provera u pravom pregledaču i novi prikaz verzije 1.0.1 u tvojoj temi još nisu testirani.
 
 Nema javne rang-liste i zaštite namenjene nagradnim takmičenjima. Rezultati su za ličnu igru i poređenje sa prijateljima. Jedna fotografija po teritoriji je početna banka sadržaja; paket još ne rotira više fotografija iste teritorije.
 

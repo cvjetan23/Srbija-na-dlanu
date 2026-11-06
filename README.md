@@ -18,6 +18,10 @@ Geografska igra za jednu WordPress stranicu: **Okruzi** i **Opštine i gradovi**
 
 Sadržaj se uređuje kroz meni **Srbija na dlanu** u WordPress administraciji.
 
+### Ažuriranje sa verzije 1.0.0
+
+Verzija **1.0.1** ispravlja nedostajuće stilove pri korišćenju Elementor tekstualnog ili shortcode widgeta. Otpremi novi instalacioni ZIP kroz **Dodaci → Dodaj novi → Otpremi dodatak** i izaberi **Zameni postojeći dodatak** kada WordPress to ponudi. Zatim očisti Autoptimize i eventualni keš stranice/CDN-a. Baza sadržaja i sačuvane partije ostaju u WordPress-u.
+
 ## Igra
 
 - **30 celina**: 29 upravnih okruga i Grad Beograd kao posebna celina.
@@ -55,6 +59,14 @@ python3 tools/build-package.py
 ## Provera i ograničenja
 
 Backend i aktivacija dodatka provereni su na WordPress-u 7.1.4 i PHP-u 8.4.27, sa 2.222 provere. Popisni zbir opština i gradova usklađen je sa zvaničnih 6.647.003 stanovnika iz Popisa 2022. Detalji su u [izveštaju](docs/PROVERA.md).
+
+Za regresionu proveru učitavanja CSS-a koristi isključivo lokalnu ili razvojnu testnu WordPress instalaciju sa aktiviranim dodatkom (`WP_ENVIRONMENT_TYPE` mora biti `local` ili `development`):
+
+```sh
+WP_ROOT=/putanja/do/test-wordpress php tests/asset-loading.php
+```
+
+Provera obuhvata Elementor metapodatke, odbačeno prethodno renderovanje, CSS u podnožju, sprečavanje dupliranja i stranice bez igre. [Provera objavljene stranice i ispravka 1.0.1](docs/LIVE-CHECK.md).
 
 Prikaz u pravom pregledaču, na konkretnom hostingu i u korisničkoj temi još nije testiran. Rezultati su lokalni, bez sinhronizacije među uređajima i bez javne rang-liste. Po teritoriji je podržana jedna fotografija znamenitosti.
 
