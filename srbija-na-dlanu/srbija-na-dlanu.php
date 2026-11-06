@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Srbija na dlanu
  * Description: Dnevna geografska igra i vežbanje za okruge, opštine i gradove. Shortcode: [srbija_na_dlanu]
- * Version: 1.0.1
+ * Version: 1.1.0
  * Requires at least: 6.2
  * Requires PHP: 7.4
  * Author: Srbija na dlanu
@@ -11,7 +11,7 @@
  */
 
 defined('ABSPATH') || exit;
-define('SND_VERSION', '1.0.1');
+define('SND_VERSION', '1.1.0');
 define('SND_DIR', plugin_dir_path(__FILE__));
 define('SND_URL', plugin_dir_url(__FILE__));
 
@@ -57,7 +57,7 @@ add_action('wp_footer', 'snd_print_late_styles', 5);
 add_shortcode('srbija_na_dlanu', function () {
     snd_enqueue_game_assets();
     $id = wp_unique_id('snd-');
-    return '<div id="' . esc_attr($id) . '" class="snd-game" lang="sr-Latn" data-api="' . esc_url(rest_url('srbija-na-dlanu/v1/')) . '" data-assets="' . esc_url(SND_URL . 'assets/') . '"><div class="snd-loading" role="status">Učitavamo tvoje putovanje…</div><noscript>Za igranje uključi JavaScript u pregledaču.</noscript></div>';
+    return '<div id="' . esc_attr($id) . '" class="snd-game" lang="sr-Latn" data-api="' . esc_url(rest_url('srbija-na-dlanu/v1/')) . '" data-assets="' . esc_url(SND_URL . 'assets/') . '"><div class="snd-loading" role="status">Učitavanje igre…</div><noscript>Za igranje uključi JavaScript u pregledaču.</noscript></div>';
 });
 
 register_activation_hook(__FILE__, function () {

@@ -4,7 +4,7 @@ Tags: geography, quiz, serbia, education
 Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.0.1
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -59,6 +59,13 @@ WordPress tema treba da poziva wp_head() i wp_footer(). Ako tema ima usku kolonu
 Ova verzija ima jednu fotografiju po okrugu i po odgovarajućoj opštini/gradu. Za ostale opštine poslednja runda koristi prostorno pitanje. Više fotografija po istoj teritoriji nije deo verzije 1.0.
 
 == Changelog ==
+
+= 1.1.0 =
+* Sveden prikaz u jednoj koloni: obris ili fotografija gore, pitanje i odgovori ispod.
+* Uklonjeni veliki uvod, slogani, bočni panel, traka rundi, datum i suvišni natpisi.
+* Kratka uputstva su pod dugmetom ?, a pomoć se prikazuje tek kada postane dostupna.
+* Zadržani su izbor obe igre, dnevni izazov/vežbanje, dodatna pitanja i svi postojeći podaci.
+
 
 = 1.0.1 =
 * Ispravljeno učitavanje CSS-a za Elementor tekstualne i shortcode widgete.

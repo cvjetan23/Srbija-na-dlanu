@@ -18,9 +18,11 @@ Geografska igra za jednu WordPress stranicu: **Okruzi** i **Opštine i gradovi**
 
 Sadržaj se uređuje kroz meni **Srbija na dlanu** u WordPress administraciji.
 
-### Ažuriranje sa verzije 1.0.0
+### Ažuriranje na 1.1.0
 
-Verzija **1.0.1** ispravlja nedostajuće stilove pri korišćenju Elementor tekstualnog ili shortcode widgeta. Otpremi novi instalacioni ZIP kroz **Dodaci → Dodaj novi → Otpremi dodatak** i izaberi **Zameni postojeći dodatak** kada WordPress to ponudi. Zatim očisti Autoptimize i eventualni keš stranice/CDN-a. Baza sadržaja i sačuvane partije ostaju u WordPress-u.
+Verzija **1.1.0** donosi sveden prikaz nalik Worldle-u: jedna uska kolona, obris ili fotografija gore, pitanje i odgovori ispod. Uklonjeni su veliki uvod, slogani, bočni panel, traka rundi, datum i ponovljena objašnjenja. Pomoć se prikazuje tek kada postane dostupna; uputstva su iza dugmeta **?**. Ostali su izbor obe igre, dnevni izazov/vežbanje i dodatna pitanja. Prethodna ispravka Elementor stilova je uključena.
+
+Otpremi novi instalacioni ZIP kroz **Dodaci → Dodaj novi → Otpremi dodatak** i izaberi **Zameni postojeći dodatak** kada WordPress to ponudi. Zatim očisti Autoptimize i eventualni keš stranice/CDN-a. Baza sadržaja i sačuvane partije ostaju u WordPress-u.
 
 ## Igra
 

@@ -15,9 +15,9 @@
 
 Elementor: isti tekst upiši u **Shortcode widget**. Klasični editor: upiši shortcode u sadržaj. Nije potrebno dodavati PHP u stranicu niti menjati temu.
 
-### Ažuriranje na 1.0.1
+### Ažuriranje na 1.1.0
 
-Otpremi novi ZIP istim putem i izaberi **Zameni postojeći dodatak** kada WordPress to ponudi. Zatim očisti Autoptimize i eventualni keš stranice/CDN-a. Verzija 1.0.1 ispravlja učitavanje stilova u Elementor tekstualnim i shortcode widgetima. Nije potrebno brisati bazu niti praviti novu stranicu.
+Otpremi novi ZIP istim putem i izaberi **Zameni postojeći dodatak** kada WordPress to ponudi. Zatim očisti Autoptimize i eventualni keš stranice/CDN-a. Verzija 1.1.0 donosi sveden prikaz u jednoj koloni: obris ili fotografija gore, pitanje, unos i pokušaji ispod. Uputstva su pod dugmetom **?**, a pomoć se prikazuje tek posle trećeg promašaja. Prethodna ispravka učitavanja stilova u Elementoru ostaje uključena. Podaci, dnevni izazovi i shortcode ostaju isti.
 
 ## Šta dobijaš
 
