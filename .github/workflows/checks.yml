@@ -1,0 +1,78 @@
+name: WordPress checks and package
+on:
+  push:
+    branches: [main, fix/qa-2-1]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: snd-ci-only
+          MYSQL_DATABASE: snd_test
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost -psnd-ci-only"
+          --health-interval=10s --health-timeout=5s --health-retries=10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax and frontend regressions
+        run: |
+          find srbija-na-dlanu tests -name '*.php' -print0 | xargs -0 -n1 php -l
+          node --check srbija-na-dlanu/assets/game.js
+          node tests/frontend.js
+          if test -f tests/qa-frontend.js; then node tests/qa-frontend.js; fi
+      - name: Isolated WordPress
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
+          mkdir -p /tmp/snd-wp
+          php /tmp/wp-cli.phar --path=/tmp/snd-wp core download
+          php /tmp/wp-cli.phar --path=/tmp/snd-wp config create --dbname=snd_test --dbuser=root --dbpass=snd-ci-only --dbhost=127.0.0.1
+          php /tmp/wp-cli.phar --path=/tmp/snd-wp config set WP_ENVIRONMENT_TYPE local
+          php /tmp/wp-cli.phar --path=/tmp/snd-wp core install --url=http://snd.test --title='SND isolated tests' --admin_user=snd-ci --admin_password='ephemeral-ci-test-only-password' --admin_email=ci@example.invalid --skip-email
+          ln -s "$GITHUB_WORKSPACE/srbija-na-dlanu" /tmp/snd-wp/wp-content/plugins/srbija-na-dlanu
+          php /tmp/wp-cli.phar --path=/tmp/snd-wp plugin activate srbija-na-dlanu
+      - name: WordPress regressions
+        env:
+          WP_ROOT: /tmp/snd-wp
+        run: |
+          php tests/game-flow.php
+          php tests/account-progress.php
+          php tests/asset-loading.php
+          if test -f tests/qa-regressions.php; then php tests/qa-regressions.php; fi
+      - name: Build and inspect installable ZIP
+        run: python3 tools/build-package.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: srbija-na-dlanu-package
+          path: |
+            dist/srbija-na-dlanu.zip
+            dist/SHA256SUMS
+  package:
+    if: github.ref == 'refs/heads/fix/qa-2-1'
+    needs: check
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/qa-2-1
+      - name: Commit reproducible package to the tested branch
+        run: |
+          python3 tools/build-package.py
+          git add dist/srbija-na-dlanu.zip dist/SHA256SUMS
+          if ! git diff --cached --quiet; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "Build verified WordPress installation package"
+            git push origin HEAD:fix/qa-2-1
+          fi
