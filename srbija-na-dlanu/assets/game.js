@@ -338,7 +338,7 @@
     sources() { this.modal('Mapa, podaci i slike', `<p>${esc(this.info.coverage)}</p><p>Obrisi su pojednostavljeni radi prikaza. Udaljenost se računa između geometrijskih centara, ne između granica ili administrativnih sedišta.</p><ul>${this.info.sources.map(s => `<li>${sourceLink(s.url,s.label)}<br><small>${esc(s.license)}</small></li>`).join('')}</ul><p>Uz odgovor na pitanje prikazan je njegov izvor. Fotografije i zastave imaju navedene autore i licence. Kada slika nije dostupna, dobijaš označeno geografsko pitanje.</p><p>${sourceLink('https://github.com/cvjetan23/Srbija-na-dlanu/blob/main/srbija-na-dlanu/FLAGS.md','Sve zastave: autori, licence i izvori ↗')}</p>`); }
     shareUrl() {
       const s=this.state,base=this.root.dataset[s.kind==='district'?'districtUrl':'municipalityUrl'] || location.href;
-      const url=new URL(base,location.href);url.search='';url.hash='';
+      const url=new URL(base,location.href);for(const key of ['mode','date','kind','token','_wpnonce','key','login','action','okrug','pretraga'])url.searchParams.delete(key);url.hash='';
       url.searchParams.set('mode',s.mode);if(s.mode==='daily')url.searchParams.set('date',s.date);
       if(!this.fixedKind)url.searchParams.set('kind',s.kind);
       return url.href;

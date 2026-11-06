@@ -69,6 +69,9 @@ async function run(){
  equal(daily.kind,'district','Dedicated page wins over saved kind');
  check(daily.notice.includes('Otvoren je današnji izazov'),'Old daily link explains lack of archive');
  const shared=new URL(daily.shareUrl());equal(shared.searchParams.get('mode'),'daily','Shared URL contains mode');equal(shared.searchParams.get('date'),serverDate,'Shared URL contains actual game date');
+ daily.root.dataset.districtUrl='https://example.test/?page_id=1541&token=private-test-token';
+ const plain=new URL(daily.shareUrl());equal(plain.searchParams.get('page_id'),'1541','Default WordPress permalink keeps required page id');check(!plain.searchParams.has('token'),'Shared URL removes private/transient parameters');
+ daily.root.dataset.districtUrl='https://example.test/srbija-na-dlanu/okruzi/';
  values.clear();location.href='https://example.test/srbija-na-dlanu/opstine/?mode=practice';
  const practice=new Game(host('municipality'));await practice.ready;equal(practice.mode,'practice','Explicit practice link is respected');
  // A tab crosses midnight and switches from practice to the daily challenge.
