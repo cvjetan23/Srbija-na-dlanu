@@ -84,7 +84,13 @@ final class SND_Game {
     }
 
     public static function question_for($state,$index) {
-        return $state['question_overrides'][$index]??$state['challenge']['questions'][$index];
+        if(isset($state['question_overrides'][$index])){return $state['question_overrides'][$index];}
+        $q=$state['challenge']['questions'][$index];
+        if($q['type']==='region' && !isset($state['answers'][$index])){
+            return self::distance_question($state['challenge']['target'],SND_Data::pool($state['challenge']['kind']),$state['challenge']['date'].':legacy:'.$state['challenge']['target']['id'].':'.$index,'Zamensko geografsko pitanje: zastava ovog mesta još nije potvrđena u bazi.');
+        }
+        if($q['type']==='region' && empty($q['source'])){$q['source']=add_query_arg('podela','regioni',SND_Site::url('library'));}
+        return $q;
     }
 
     public static function questions($target, $pool, $districts, $seed) {
@@ -105,6 +111,7 @@ final class SND_Game {
             $direction = self::direction($target['center'], $anchor['center']);
             $reason = $target['region'] === 'Kosovo i Metohija' ? 'Popis RZS 2022. nije sproveden na teritoriji Kosova i Metohije; zato je ovde geografsko pitanje.' : 'Za ovu teritoriju u bazi nije naveden uporediv podatak o stanovništvu, pa je postavljeno geografsko pitanje.';
             $q[] = self::choice_question('orientation', 'U kom smeru je centar teritorije „' . $anchor['name'] . '“ u odnosu na ovu teritoriju?', ucfirst($direction['name']), array('Sever', 'Severoistok', 'Istok', 'Jugoistok', 'Jug', 'Jugozapad', 'Zapad', 'Severozapad'), $seed . ':orientation', 'Od centra teritorije ' . $target['name'] . ' ka centru teritorije ' . $anchor['name'] . ' kreće se u smeru: ' . $direction['name'] . '. ' . $reason, $target['region'] === 'Kosovo i Metohija' ? 'https://kro.mre.gov.rs/arcgis/rest/services/IMIS/MINING_PUBLIC/MapServer' : 'https://www.geoboundaries.org/');
+            $q[0]=self::with_geometry_sources($q[0],array($target,$anchor));
         }
         if ($target['kind'] === 'district' && in_array($target['id'], array('rs-25', 'rs-26', 'rs-27', 'rs-28', 'rs-29'), true)) {
             $municipalities = SND_Data::pool('municipality'); $inside = array(); $outside = array();
@@ -112,10 +119,10 @@ final class SND_Game {
             $inside = self::ordered($inside, $seed . ':member');
             $q[] = self::choice_question('membership', 'Koja od ovih opština pripada ovom okrugu?', $inside[0], $outside, $seed . ':membership', 'Opština ' . $inside[0] . ' pripada celini: ' . $target['name'] . ', prema podeli na pet upravnih okruga na Kosovu i Metohiji.', 'https://kro.mre.gov.rs/arcgis/rest/services/IMIS/MINING_PUBLIC/MapServer');
         } elseif ($target['kind'] === 'district' && $target['id'] !== 'rs-00') {
-            $q[] = self::choice_question('seat', 'Koje je sedište ovog okruga?', $target['seat'], array_column($districts, 'seat'), $seed . ':seat', 'Sedište okruga je ' . $target['seat'] . '.', 'https://www.srbija.gov.rs/sekcija/329/okruzi.php');
+            $q[] = self::choice_question('seat', 'Koje je sedište ovog okruga?', $target['seat'], array_column($districts, 'seat'), $seed . ':seat', 'Sedište okruga je ' . $target['seat'] . '.', $target['region']==='Kosovo i Metohija'?'https://kro.mre.gov.rs/arcgis/rest/services/IMIS/MINING_PUBLIC/MapServer':'https://www.srbija.gov.rs/sekcija/329/okruzi.php');
         } elseif ($target['kind'] === 'municipality' && $target['district_id'] !== 'rs-00') {
             $parent = $districts[$target['district_id']];
-            $q[] = self::choice_question('district', 'Kojem okrugu pripada ova teritorija?', $parent['name'], array_column($districts, 'name'), $seed . ':district', $target['name'] . ' pripada administrativnoj celini: ' . $parent['name'] . '.', 'https://www.srbija.gov.rs/sekcija/329/okruzi.php');
+            $q[] = self::choice_question('district', 'Kojem okrugu pripada ova teritorija?', $parent['name'], array_column($districts, 'name'), $seed . ':district', $target['name'] . ' pripada administrativnoj celini: ' . $parent['name'] . '.', $target['region']==='Kosovo i Metohija'?'https://kro.mre.gov.rs/arcgis/rest/services/IMIS/MINING_PUBLIC/MapServer':'https://www.srbija.gov.rs/sekcija/329/okruzi.php');
         } else {
             $q[] = self::choice_question('river', 'Na ušću kojih reka se nalazi Beograd?', 'Save i Dunava', array('Tise i Dunava', 'Drine i Save', 'Južne i Zapadne Morave'), $seed . ':river', 'Beograd se nalazi na ušću Save u Dunav.', 'https://www.tob.rs/');
         }
@@ -213,6 +220,7 @@ final class SND_Game {
             $s['technical_replacements'][$s['question_index']]=true;
         } elseif (($action === 'answer' || $action === 'skip') && $s['stage'] === 'quiz' && !isset($s['answers'][$s['question_index']])) {
             $q = self::question_for($s,$s['question_index']);
+            if($q!==$c['questions'][$s['question_index']]){$s['question_overrides'][$s['question_index']]=$q;}
             if ($action === 'answer' && !in_array($value, array_column($q['options'], 'id'), true)) { return new WP_Error('snd_choice', 'Izaberi jedan ponuđeni odgovor.', array('status' => 400)); }
             $s['answers'][$s['question_index']] = array('choice' => $action === 'skip' ? null : $value, 'correct' => $action === 'answer' && $value === $q['correct'], 'skipped' => $action === 'skip');
         } elseif ($action === 'next' && $s['stage'] === 'quiz' && isset($s['answers'][$s['question_index']])) {

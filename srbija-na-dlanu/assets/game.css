@@ -133,7 +133,7 @@
 .snd-game .snd-outcome{font-size:17px;font-weight:600;margin:12px 0}
 .snd-game .snd-score-grid strong.snd-score-word{font-size:21px;line-height:1.5;padding:6px 0}
 .snd-game .snd-review article{padding:16px 0;border-top:1px solid #d9e2d3;text-align:left}
-.snd-game .snd-review h3{font:600 17px/1.5 inherit;margin:0 0 9px;color:#26372a}
+.snd-game .snd-review h3{font-family:inherit;font-weight:600;font-size:17px;line-height:1.5;margin:0 0 9px;color:#26372a}
 .snd-game .snd-review .snd-review-status{font-size:14px;font-weight:600;color:#4f6047}
 .snd-game .snd-review .snd-review-correct{font-weight:600;color:#355d3d}
 .snd-game .snd-review img{display:block;max-width:100%;width:220px;height:135px;object-fit:contain;background:#f5f7f3;border:1px solid #c5d1bd;margin:12px auto}
