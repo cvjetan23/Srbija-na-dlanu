@@ -19,11 +19,9 @@ final class SND_API {
     }
 
     private static function limit($bucket, $maximum) {
-        $ip = isset($_SERVER['REMOTE_ADDR']) ? (string) $_SERVER['REMOTE_ADDR'] : 'unknown';
-        $key = 'snd_rate_' . substr(hash_hmac('sha256', $bucket . ':' . $ip . ':' . floor(time() / 600), wp_salt('nonce')), 0, 32);
-        $n = (int) get_transient($key);
-        if ($n >= $maximum) { return new WP_Error('snd_rate', 'Previše zahteva. Sačekaj nekoliko minuta pa pokušaj ponovo.', array('status' => 429)); }
-        set_transient($key, $n + 1, 11 * MINUTE_IN_SECONDS);
+        if(!SND_Rate::allow('game:'.$bucket,$maximum,600,SND_Rate::actor(),max(6000,$maximum*50))){
+            return new WP_Error('snd_rate','Previše zahteva. Sačekaj nekoliko minuta pa pokušaj ponovo.',array('status'=>429));
+        }
         return true;
     }
 

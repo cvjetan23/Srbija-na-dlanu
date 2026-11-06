@@ -9,15 +9,9 @@ final class SND_Accounts {
         return in_array($mode, array('login','register','lost','reset'), true) ? $mode : 'login';
     }
     private static function limit($action, $suffix = '') {
-        $ip = (string) ($_SERVER['REMOTE_ADDR'] ?? 'unknown');
-        $buckets=array($action.':'.$ip=>($action==='login'?30:4));
-        if($action==='login'){$buckets[$action.':'.$ip.':'.strtolower($suffix)]=8;}
-        foreach($buckets as $bucket=>$maximum){
-            $key='snd_auth_'.substr(hash_hmac('sha256',$bucket.':'.floor(time()/900),wp_salt('auth')),0,40);
-            $n=(int)get_transient($key);if($n>=$maximum){return false;}
-            set_transient($key,$n+1,16*MINUTE_IN_SECONDS);
-        }
-        return true;
+        $client=SND_Rate::client_id();$window=15*MINUTE_IN_SECONDS;
+        if(!SND_Rate::allow('auth:'.$action,$action==='login'?30:12,$window,'client:'.$client,120)){return false;}
+        return SND_Rate::allow('auth-identity:'.$action,$action==='login'?8:6,$window,'identity:'.strtolower($suffix),240);
     }
     private static function cookie($value) {
         setcookie('snd_reset_' . COOKIEHASH, $value, array('expires' => $value ? 0 : time() - YEAR_IN_SECONDS, 'path' => wp_parse_url(SND_Site::url('login'), PHP_URL_PATH), 'domain' => COOKIE_DOMAIN ?: '', 'secure' => is_ssl(), 'httponly' => true, 'samesite' => 'Lax'));
@@ -112,7 +106,7 @@ final class SND_Accounts {
         $titles = array('login'=>'Prijava','register'=>'Napravi nalog','lost'=>'Zaboravljena lozinka','reset'=>'Nova lozinka');
         $notice = isset($_GET['notice']) && is_string($_GET['notice']) ? sanitize_key($_GET['notice']) : '';
         $messages = array('registered'=>'Proveri e-poštu. Poslali smo link za postavljanje lozinke.', 'reset-sent'=>'Ako nalog postoji, poslat je link za novu lozinku.', 'password-changed'=>'Lozinka je promenjena. Sada možeš da se prijaviš.');
-        echo '<section class="snd-auth-card"><h1>' . esc_html($titles[$mode]) . '</h1><p>Jedan WordPress nalog za tvoje rezultate i nastavak igre.</p>';
+        echo '<section class="snd-auth-card"><h1>' . esc_html($titles[$mode]) . '</h1><p>Sačuvaj rezultate i nastavi igru na drugom uređaju.</p>';
         if (self::$error) { echo '<div class="snd-auth-error" role="alert">' . esc_html(self::$error) . '</div>'; }
         if (isset($messages[$notice])) { echo '<div class="snd-auth-notice" role="status">' . esc_html($messages[$notice]) . '</div>'; }
         echo '<form method="post" action="' . esc_url(add_query_arg('mode',$mode,SND_Site::url('login'))) . '">';

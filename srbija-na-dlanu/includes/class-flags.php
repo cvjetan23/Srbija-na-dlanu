@@ -42,6 +42,6 @@ final class SND_Flags {
             $sources[] = array('label' => 'Zastava ' . chr(65 + $i), 'credit' => $value['credit'], 'license' => $value['license'], 'source' => $value['source']);
             if ($value['name'] === $flag['name']) { $correct = $id; }
         }
-        return array('type' => 'flag', 'title' => 'Koja je zastava mesta „' . $flag['name'] . '“?', 'subtitle' => $target['kind'] === 'district' ? 'Zastava grada-sedišta ovog okruga.' : 'Zastava ove opštine ili grada.', 'options' => $options, 'correct' => $correct, 'explanation' => 'Prikazana je zastava mesta ' . $flag['name'] . '.', 'source' => $flag['source'], 'credits' => $sources);
+        return array('type' => 'flag', 'correct_label'=>'Zastava mesta '.$flag['name'], 'title' => 'Koja je zastava mesta „' . $flag['name'] . '“?', 'subtitle' => $target['kind'] === 'district' ? 'Zastava grada-sedišta ovog okruga.' : 'Zastava ove opštine ili grada.', 'options' => $options, 'correct' => $correct, 'explanation' => 'Prikazana je zastava mesta ' . $flag['name'] . '.', 'source' => $flag['source'], 'credits' => $sources);
     }
 }

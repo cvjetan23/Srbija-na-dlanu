@@ -40,6 +40,9 @@ jobs:
           php /tmp/wp-cli.phar --path=/tmp/snd-wp core install --url=http://snd.test --title='SND isolated tests' --admin_user=snd-ci --admin_password='ephemeral-ci-test-only-password' --admin_email=ci@example.invalid --skip-email
           ln -s "$GITHUB_WORKSPACE/srbija-na-dlanu" /tmp/snd-wp/wp-content/plugins/srbija-na-dlanu
           php /tmp/wp-cli.phar --path=/tmp/snd-wp plugin activate srbija-na-dlanu
+      - name: Optimizer and SEO integration fixtures
+        run: |
+          php /tmp/wp-cli.phar --path=/tmp/snd-wp plugin install autoptimize slim-seo --activate
       - name: WordPress regressions
         env:
           WP_ROOT: /tmp/snd-wp

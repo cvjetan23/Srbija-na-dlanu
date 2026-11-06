@@ -3,7 +3,7 @@ defined('ABSPATH') || exit;
 
 final class SND_Game {
     const MAX_GUESSES = 6;
-    const RULESET = 2;
+    const RULESET = 3;
 
     public static function date() { return (new DateTimeImmutable('now', new DateTimeZone('Europe/Belgrade')))->format('Y-m-d'); }
 
@@ -40,18 +40,61 @@ final class SND_Game {
         return array('type' => $type, 'title' => $title, 'options' => self::ordered($options, $seed . ':order'), 'correct' => $options[0]['id'], 'explanation' => $explanation, 'source' => $source);
     }
 
+    public static function geometry_sources($territories) {
+        $kim=false;$other=false;
+        foreach($territories as $t){if(($t['region']??'')==='Kosovo i Metohija'){$kim=true;}else{$other=true;}}
+        $out=array();
+        if($kim){$out[]=array('label'=>'MRE — granice Kosova i Metohije','url'=>'https://kro.mre.gov.rs/arcgis/rest/services/IMIS/MINING_PUBLIC/MapServer');}
+        if($other){$out[]=array('label'=>'geoBoundaries / OpenStreetMap — granice ostalih teritorija','url'=>'https://www.geoboundaries.org/');}
+        return $out;
+    }
+
+    private static function with_geometry_sources($question,$territories) {
+        $question['sources']=self::geometry_sources($territories);
+        $question['source']=$question['sources'][0]['url']??'';
+        return $question;
+    }
+
+    public static function distance_question($target,$pool,$seed,$subtitle='') {
+        $others=array_filter($pool,function($t)use($target){return $t['id']!==$target['id'] && self::distance($target['center'],$t['center'])>25;});
+        if(!$others){$others=array_filter($pool,function($t)use($target){return $t['id']!==$target['id'];});}
+        $ordered=self::ordered($others,$seed.':distance-anchor');$anchor=$ordered[0];
+        $km=max(1,(int)round(self::distance($target['center'],$anchor['center'])));
+        $step=$km>=50?10:5;$rounded=max($step,(int)(round($km/$step)*$step));
+        $label=function($n){return 'Oko '.number_format($n,0,',','.').' km';};$decoys=array();
+        foreach(array(.5,.75,1.3,1.6,1.9) as $factor){$n=max($step,(int)(round($rounded*$factor/$step)*$step));if($n!==$rounded){$decoys[]=$label($n);}}
+        $q=self::choice_question('distance','Koliko su približno udaljeni centri teritorija „'.$target['name'].'“ i „'.$anchor['name'].'“?',$label($rounded),$decoys,$seed.':distance','Vazdušna udaljenost između geometrijskih centara je približno '.$km.' km. Ne meri se put automobilom ni razmak između granica.');
+        $q['subtitle']=$subtitle;
+        return self::with_geometry_sources($q,array($target,$anchor));
+    }
+
+    public static function nearby_question($target,$pool,$seed,$subtitle='') {
+        $others=array_filter($pool,function($t)use($target){return $t['id']!==$target['id'];});
+        uasort($others,function($a,$b)use($target){return self::distance($target['center'],$a['center'])<=>self::distance($target['center'],$b['center']);});
+        $near=reset($others);$decoys=array();$used=array($target,$near);
+        foreach($others as $t){
+            if(self::distance($target['center'],$t['center'])>self::distance($target['center'],$near['center'])+1){
+                $decoys[]=$t['name'];$used[]=$t;if(count($decoys)>=8){break;}
+            }
+        }
+        if(count($decoys)<3){return self::distance_question($target,$pool,$seed,$subtitle);}
+        $q=self::choice_question('nearby','Koja od ovih teritorija ima centar najbliži centru tražene teritorije?',$near['name'],$decoys,$seed.':nearby','Od ponuđenih odgovora, najbliža je teritorija '.$near['name'].': približno '.round(self::distance($target['center'],$near['center'])).' km vazdušnom linijom između geometrijskih centara.');
+        $q['subtitle']=$subtitle;
+        return self::with_geometry_sources($q,$used);
+    }
+
+    public static function question_for($state,$index) {
+        return $state['question_overrides'][$index]??$state['challenge']['questions'][$index];
+    }
+
     public static function questions($target, $pool, $districts, $seed) {
         $q = array();
         if (!empty($target['population'])) {
             $round = function ($n) { return (int) (round($n / ($n >= 10000 ? 1000 : 100)) * ($n >= 10000 ? 1000 : 100)); };
             $correct = $round($target['population']); $decoys = array();
-            foreach ($pool as $t) {
-                if (!empty($t['population']) && abs($t['population'] / $target['population'] - 1) >= .25) {
-                    $decoys[] = 'Oko ' . number_format($round($t['population']), 0, ',', '.');
-                }
-            }
-            if (count(array_unique($decoys)) < 3) {
-                foreach (array(.3, .5, 1.6, 2.5, 4) as $factor) { $decoys[] = 'Oko ' . number_format($round($target['population'] * $factor), 0, ',', '.'); }
+            foreach(array(.55,.75,1.3,1.55,1.75) as $factor){
+                $n=max(100,$round($target['population']*$factor));
+                if($n!==$correct){$decoys[]='Oko '.number_format($n,0,',','.');}
             }
             $q[] = self::choice_question('population', 'Koliko približno stanovnika ima cela teritorija?', 'Oko ' . number_format($correct, 0, ',', '.'), $decoys, $seed . ':population', 'Prema Popisu ' . $target['year'] . ', cela teritorija ima ' . number_format($target['population'], 0, ',', '.') . ' stanovnika. Podatak se ne odnosi samo na naselje.', $target['population_source']);
             $q[0]['subtitle'] = 'Popis ' . $target['year'] . ' · stanovništvo cele teritorije';
@@ -86,17 +129,10 @@ final class SND_Game {
             $last['credit'] = $l['credit']; $last['license'] = $l['license'];
             $q[] = $last;
         } else {
-            $others = array_filter($pool, function ($t) use ($target) { return $t['id'] !== $target['id']; });
-            uasort($others, function ($a, $b) use ($target) { return self::distance($target['center'], $a['center']) <=> self::distance($target['center'], $b['center']); });
-            $near = reset($others); $decoys = array();
-            foreach ($others as $t) { if (self::distance($target['center'], $t['center']) > self::distance($target['center'], $near['center']) + 1) { $decoys[] = $t['name']; } }
-            $q[] = self::choice_question('nearby', 'Koja od ovih teritorija ima centar najbliži centru tražene teritorije?', $near['name'], $decoys, $seed . ':nearby', 'Od ponuđenih odgovora, najbliža je teritorija ' . $near['name'] . ': približno ' . round(self::distance($target['center'], $near['center'])) . ' km vazdušnom linijom između geometrijskih centara.', 'https://www.geoboundaries.org/');
+            $q[]=self::nearby_question($target,$pool,$seed,'Zamensko geografsko pitanje: fotografija znamenitosti nije dostupna u bazi.');
         }
         $flag = SND_Flags::question($target, $seed);
-        if (!$flag) {
-            $flag = self::choice_question('region', 'U kom širem delu Srbije se nalazi ova teritorija?', $target['region'], array('Vojvodina','Beograd','Zapadna Srbija','Šumadija i Pomoravlje','Istočna Srbija','Južna Srbija','Kosovo i Metohija'), $seed . ':flag-replacement', 'Širi položaj teritorije: ' . $target['region'] . '. Zastava za ovo mesto još nije potvrđena u bazi, pa je postavljeno geografsko pitanje.');
-            $flag['subtitle'] = 'Zamensko pitanje: zastava još nije potvrđena u bazi.';
-        }
+        if(!$flag){$flag=self::distance_question($target,$pool,$seed.':flag-replacement','Zamensko geografsko pitanje: zastava ovog mesta još nije potvrđena u bazi.');}
         array_splice($q, 2, 0, array($flag));
         return $q;
     }
@@ -104,7 +140,7 @@ final class SND_Game {
     public static function challenge($kind, $mode) {
         $data = SND_Data::get(); $pool = SND_Data::pool($kind); $districts = SND_Data::pool('district');
         if (count($pool) < 4 || count($districts) < 4) { return new WP_Error('snd_empty', 'Nema dovoljno aktivnih teritorija. Obratite se administratoru.', array('status' => 503)); }
-        $date = self::date(); $key = 'snd_day_v2_' . str_replace('-', '', $date) . '_' . $kind;
+        $date = self::date(); $key = 'snd_day_v'.self::RULESET.'_' . str_replace('-', '', $date) . '_' . $kind;
         if ($mode === 'daily') { $saved = get_option($key); if ($saved) { return $saved; } }
         $lock=$mode==='daily'?'snd_challenge_lock_'.$key:'';$lease=$lock?SND_Lock::acquire($lock):true;
         if(!$lease){return new WP_Error('snd_busy','Dnevni izazov se priprema. Pokušaj ponovo.',array('status'=>409));}
@@ -165,8 +201,18 @@ final class SND_Game {
             $s['stage'] = 'reveal';
         } elseif ($action === 'next' && $s['stage'] === 'reveal') {
             $s['stage'] = 'quiz';
+        } elseif ($action==='source' && $s['stage']==='quiz' && !isset($s['answers'][$s['question_index']])) {
+            $q=self::question_for($s,$s['question_index']);
+            if(empty($q['image']) || empty($q['image_source'])){return new WP_Error('snd_source','Izvor slike sada nije dostupan.',array('status'=>409));}
+            $s['source_help']=true;$s['source_help_questions'][$s['question_index']]=true;
+        } elseif ($action==='media_unavailable' && $s['stage']==='quiz' && !isset($s['answers'][$s['question_index']])) {
+            $q=self::question_for($s,$s['question_index']);
+            if(empty($q['image']) && $q['type']!=='flag'){return new WP_Error('snd_media','Ovo pitanje ne koristi slike.',array('status'=>409));}
+            $target=$c['target'];$pool=SND_Data::pool($c['kind']);
+            $s['question_overrides'][$s['question_index']]=self::distance_question($target,$pool,$c['date'].':'.$target['id'].':media:'.$s['question_index'],'Zamensko geografsko pitanje: slika nije mogla da se učita. Prethodni pokušaji nisu potrošeni.');
+            $s['technical_replacements'][$s['question_index']]=true;
         } elseif (($action === 'answer' || $action === 'skip') && $s['stage'] === 'quiz' && !isset($s['answers'][$s['question_index']])) {
-            $q = $c['questions'][$s['question_index']];
+            $q = self::question_for($s,$s['question_index']);
             if ($action === 'answer' && !in_array($value, array_column($q['options'], 'id'), true)) { return new WP_Error('snd_choice', 'Izaberi jedan ponuđeni odgovor.', array('status' => 400)); }
             $s['answers'][$s['question_index']] = array('choice' => $action === 'skip' ? null : $value, 'correct' => $action === 'answer' && $value === $q['correct'], 'skipped' => $action === 'skip');
         } elseif ($action === 'next' && $s['stage'] === 'quiz' && isset($s['answers'][$s['question_index']])) {
@@ -182,26 +228,32 @@ final class SND_Game {
 
     public static function public_state($s) {
         $c = $s['challenge'];
-        $out = array_intersect_key($s, array_flip(array('stage', 'guesses', 'hint', 'solved', 'question_index', 'revision')));
+        $out = array_intersect_key($s, array_flip(array('stage', 'guesses', 'hint', 'solved', 'question_index', 'revision', 'source_help')));
         $out += array('date' => $c['date'], 'number' => $c['number'], 'kind' => $c['kind'], 'mode' => $c['mode'], 'shape' => $c['target']['path'], 'max_guesses' => self::MAX_GUESSES, 'question_count' => count($c['questions']));
-        $out['catalog'] = array_map(function ($t) { return array_intersect_key($t, array_flip(array('id', 'name', 'aliases'))); }, array_values($c['catalog']));
+        if($s['stage']==='guess'){$out['catalog'] = array_map(function ($t) { return array_intersect_key($t, array_flip(array('id', 'name', 'aliases'))); }, array_values($c['catalog']));}
         if ($s['hint']) { $out['hint_text'] = 'Širi položaj: ' . $c['target']['region'] . '.'; }
         if ($s['stage'] !== 'guess') {
             $out['territory'] = array_intersect_key($c['target'], array_flip(array('id', 'name', 'region', 'map_path')));
-            $out['map'] = array_map(function ($t) { return array_intersect_key($t, array_flip(array('id', 'name', 'map_path'))); }, array_values($c['catalog']));
+            if(in_array($s['stage'],array('reveal','complete'),true)){$out['map'] = array_map(function ($t) { return array_intersect_key($t, array_flip(array('id', 'name', 'map_path'))); }, array_values($c['catalog']));}
         }
         if ($s['stage'] === 'quiz') {
-            $i = $s['question_index']; $q = $c['questions'][$i];
-            if (!isset($s['answers'][$i])) { unset($q['correct'], $q['explanation'], $q['source'], $q['credits']); }
-            else { $q['answer'] = $s['answers'][$i]; }
+            $i = $s['question_index']; $q = self::question_for($s,$i);
+            if(!isset($s['answers'][$i])){
+                unset($q['correct'],$q['correct_label'],$q['explanation'],$q['source'],$q['sources'],$q['credits']);
+                if(empty($s['source_help_questions'][$i])){unset($q['image_source']);}
+            }
+            $q['source_help_used']=!empty($s['source_help_questions'][$i]);
+            if(isset($s['answers'][$i])){$q['answer']=$s['answers'][$i];}
             $out['question'] = $q;
         }
         $out['score'] = count(array_filter($s['answers'], function ($a) { return $a['correct']; }));
         if ($s['stage'] === 'complete') {
             $out['review'] = array();
-            foreach ($c['questions'] as $i => $q) {
-                $label = ''; foreach ($q['options'] as $option) { if ($option['id'] === $q['correct']) { $label = $option['label']; } }
-                $out['review'][] = array('title' => $q['title'], 'correct_label' => $label, 'explanation' => $q['explanation'], 'source' => $q['source'], 'answer' => $s['answers'][$i] ?? array('correct' => false, 'skipped' => true));
+            foreach($c['questions'] as $i=>$unused){
+                $q=self::question_for($s,$i);$answer=$s['answers'][$i]??array('correct'=>false,'skipped'=>true,'choice'=>null);
+                $correct=array();$chosen=array();
+                foreach($q['options'] as $o){if($o['id']===$q['correct']){$correct=$o;}if($o['id']===($answer['choice']??null)){$chosen=$o;}}
+                $out['review'][]=array('title'=>$q['title'],'type'=>$q['type'],'correct_label'=>$q['correct_label']??($correct['label']??''),'correct_image'=>$correct['image']??($q['image']??''),'choice_label'=>$chosen['label']??'','choice_image'=>$chosen['image']??'','explanation'=>$q['explanation'],'source'=>$q['source'],'sources'=>$q['sources']??array(),'credits'=>$q['credits']??array(),'credit'=>$q['credit']??'','license'=>$q['license']??'','image_source'=>$q['image_source']??'','answer'=>$answer,'source_help_used'=>!empty($s['source_help_questions'][$i]),'technical_replacement'=>!empty($s['technical_replacements'][$i]));
             }
         }
         return $out;
@@ -211,6 +263,6 @@ final class SND_Game {
         global $wpdb;
         $threshold = (new DateTimeImmutable(self::date()))->modify('-14 days')->format('Ymd');
         $names = $wpdb->get_col($wpdb->prepare("SELECT option_name FROM {$wpdb->options} WHERE option_name LIKE %s", $wpdb->esc_like('snd_day_') . '%'));
-        foreach ($names as $name) { if (preg_match('/^snd_day_(?:v2_)?([0-9]{8})_/', $name, $m) && $m[1] < $threshold) { delete_option($name); } }
+        foreach ($names as $name) { if (preg_match('/^snd_day_(?:v[0-9]+_)?([0-9]{8})_/', $name, $m) && $m[1] < $threshold) { delete_option($name); } }
     }
 }

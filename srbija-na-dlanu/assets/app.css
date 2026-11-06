@@ -129,3 +129,10 @@ html:has(body.snd-app-body){margin-top:0!important}
 @media(prefers-reduced-motion:reduce){.snd-app *{transition:none!important;scroll-behavior:auto!important}}
 
 .snd-app .snd-game .snd-modal{font-size:17px}.snd-app .snd-game .snd-modal p,.snd-app .snd-game .snd-modal li{font-size:16px}.snd-app .snd-game .snd-suggestions>[role=option]{font-size:17px}.snd-app .snd-game .snd-source{font-size:13px}
+
+.snd-app .snd-game .snd-source{font-size:14px;color:#4c6141}
+.snd-app .snd-game .snd-search-wrap input::placeholder{color:#596755;opacity:1}
+.snd-app .snd-game .snd-photo-credit,.snd-app .snd-game .snd-map-caption{font-size:14px;color:#53634b}
+.snd-region-table{width:100%;border-collapse:collapse;margin:24px 0;font-size:16px}
+.snd-region-table th,.snd-region-table td{padding:12px;border-bottom:1px solid #dbe5d4;text-align:left}
+.snd-region-note{font-size:16px!important;color:#52664a}

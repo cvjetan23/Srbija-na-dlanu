@@ -32,7 +32,7 @@ final class SND_Progress {
             $id = $state['game_id'] ?? hash('sha256', wp_json_encode(array($c['date'], $c['target']['id'], $state['guesses'], $state['answers'])));
             if (in_array($id, $p['completed_games'], true)) { $state['recorded'] = true; return true; }
             $correct = count(array_filter($state['answers'], function ($a) { return !empty($a['correct']); }));
-            $result = array('date' => $c['date'], 'territory' => $c['target']['id'], 'name' => $c['target']['name'], 'solved' => $state['solved'], 'guesses' => count($state['guesses']), 'score' => $correct, 'question_count' => count($c['questions']), 'hint' => $state['hint'], 'ruleset' => $c['ruleset'] ?? 1);
+            $result = array('date' => $c['date'], 'territory' => $c['target']['id'], 'name' => $c['target']['name'], 'solved' => $state['solved'], 'guesses' => count($state['guesses']), 'score' => $correct, 'question_count' => count($c['questions']), 'hint' => !empty($state['hint']) || !empty($state['source_help']), 'ruleset' => $c['ruleset'] ?? 1);
             $count = true;
             if ($c['mode'] === 'daily') {
                 if (isset($p['days'][$c['date']])) {
