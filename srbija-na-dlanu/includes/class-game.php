@@ -3,6 +3,7 @@ defined('ABSPATH') || exit;
 
 final class SND_Game {
     const MAX_GUESSES = 6;
+    const RULESET = 2;
 
     public static function date() { return (new DateTimeImmutable('now', new DateTimeZone('Europe/Belgrade')))->format('Y-m-d'); }
 
@@ -91,14 +92,24 @@ final class SND_Game {
             foreach ($others as $t) { if (self::distance($target['center'], $t['center']) > self::distance($target['center'], $near['center']) + 1) { $decoys[] = $t['name']; } }
             $q[] = self::choice_question('nearby', 'Koja od ovih teritorija ima centar najbliži centru tražene teritorije?', $near['name'], $decoys, $seed . ':nearby', 'Od ponuđenih odgovora, najbliža je teritorija ' . $near['name'] . ': približno ' . round(self::distance($target['center'], $near['center'])) . ' km vazdušnom linijom između geometrijskih centara.', 'https://www.geoboundaries.org/');
         }
+        $flag = SND_Flags::question($target, $seed);
+        if (!$flag) {
+            $flag = self::choice_question('region', 'U kom širem delu Srbije se nalazi ova teritorija?', $target['region'], array('Vojvodina','Beograd','Zapadna Srbija','Šumadija i Pomoravlje','Istočna Srbija','Južna Srbija','Kosovo i Metohija'), $seed . ':flag-replacement', 'Širi položaj teritorije: ' . $target['region'] . '. Zastava za ovo mesto još nije potvrđena u bazi, pa je postavljeno geografsko pitanje.');
+            $flag['subtitle'] = 'Zamensko pitanje: zastava još nije potvrđena u bazi.';
+        }
+        array_splice($q, 2, 0, array($flag));
         return $q;
     }
 
     public static function challenge($kind, $mode) {
         $data = SND_Data::get(); $pool = SND_Data::pool($kind); $districts = SND_Data::pool('district');
         if (count($pool) < 4 || count($districts) < 4) { return new WP_Error('snd_empty', 'Nema dovoljno aktivnih teritorija. Obratite se administratoru.', array('status' => 503)); }
-        $date = self::date(); $key = 'snd_day_' . str_replace('-', '', $date) . '_' . $kind;
+        $date = self::date(); $key = 'snd_day_v2_' . str_replace('-', '', $date) . '_' . $kind;
         if ($mode === 'daily') { $saved = get_option($key); if ($saved) { return $saved; } }
+        $lock=$mode==='daily'?'snd_challenge_lock_'.$key:'';$lease=$lock?SND_Lock::acquire($lock):true;
+        if(!$lease){return new WP_Error('snd_busy','Dnevni izazov se priprema. Pokušaj ponovo.',array('status'=>409));}
+        try {
+        if($mode==='daily'){$saved=get_option($key);if($saved){return $saved;}}
         $days = (int) (new DateTimeImmutable('2026-01-01'))->diff(new DateTimeImmutable($date))->format('%r%a');
         $cycle = (int) floor($days / count($pool));
         $order = self::ordered($pool, $kind . ':' . $cycle);
@@ -106,31 +117,34 @@ final class SND_Game {
         $seed = $mode === 'daily' ? $date . ':' . $kind : bin2hex(random_bytes(16));
         $catalog = array();
         foreach ($pool as $t) { $catalog[$t['id']] = array_intersect_key($t, array_flip(array('id', 'kind', 'name', 'center', 'aliases', 'map_path'))); }
-        $challenge = array('date' => $date, 'kind' => $kind, 'mode' => $mode, 'number' => max(1, $days + 1), 'target' => $target, 'catalog' => $catalog, 'revision' => $data['revision'], 'questions' => self::questions($target, $pool, $districts, $seed));
+        $challenge = array('date' => $date, 'kind' => $kind, 'mode' => $mode, 'ruleset' => self::RULESET, 'storage_key' => $key, 'number' => max(1, $days + 1), 'target' => $target, 'catalog' => $catalog, 'revision' => $data['revision'], 'questions' => self::questions($target, $pool, $districts, $seed));
         if ($mode === 'daily') { add_option($key, $challenge, '', false); return get_option($key); }
         return $challenge;
+        } finally {if($lock){SND_Lock::release($lock,$lease);}}
     }
 
     public static function create($kind, $mode) {
         $c = self::challenge($kind, $mode); if (is_wp_error($c)) { return $c; }
         $token = bin2hex(random_bytes(24));
-        $state = array('challenge' => $c, 'stage' => 'guess', 'guesses' => array(), 'hint' => false, 'solved' => false, 'answers' => array(), 'question_index' => 0, 'revision' => 0);
+        $state = array('challenge' => $c, 'stage' => 'guess', 'guesses' => array(), 'hint' => false, 'solved' => false, 'answers' => array(), 'question_index' => 0, 'revision' => 0, 'owner' => get_current_user_id(), 'game_id' => bin2hex(random_bytes(16)), 'recorded' => false);
         self::persist($token, $state);
+        SND_Progress::remember(get_current_user_id(), $kind, $mode, $token);
         return array('token' => $token, 'state' => self::public_state($state));
     }
 
     public static function persist($token, $state) {
         if ($state['challenge']['mode'] === 'daily') {
-            $state['challenge_key'] = 'snd_day_' . str_replace('-', '', $state['challenge']['date']) . '_' . $state['challenge']['kind'];
+            $state['challenge_key'] = $state['challenge']['storage_key'] ?? ('snd_day_' . str_replace('-', '', $state['challenge']['date']) . '_' . $state['challenge']['kind']);
             unset($state['challenge']);
         }
-        set_transient('snd_session_' . $token, $state, 3 * DAY_IN_SECONDS);
+        set_transient('snd_session_' . $token, $state, (!empty($state['owner']) ? 30 : 3) * DAY_IN_SECONDS);
     }
 
     public static function load($token) {
         if (!is_string($token) || !preg_match('/^[a-f0-9]{48}$/D', $token)) { return new WP_Error('snd_token', 'Partija nije pronađena. Pokreni novu.', array('status' => 404)); }
         $s = get_transient('snd_session_' . $token);
         if (!$s) { return new WP_Error('snd_expired', 'Sačuvana partija je istekla. Pokreni novu.', array('status' => 410)); }
+        if (!empty($s['owner']) && (int) $s['owner'] !== get_current_user_id()) { return new WP_Error('snd_owner', 'Ova partija pripada drugom nalogu.', array('status' => 403)); }
         if (!isset($s['challenge']) && isset($s['challenge_key'])) { $s['challenge'] = get_option($s['challenge_key']); }
         if (empty($s['challenge'])) { return new WP_Error('snd_expired', 'Podaci ove partije više nisu dostupni. Pokreni novu.', array('status' => 410)); }
         if ($s['challenge']['mode'] === 'daily' && $s['challenge']['date'] !== self::date()) { return new WP_Error('snd_new_day', 'Stigao je novi dnevni izazov. Pokreni današnju partiju.', array('status' => 410)); }
@@ -178,7 +192,7 @@ final class SND_Game {
         }
         if ($s['stage'] === 'quiz') {
             $i = $s['question_index']; $q = $c['questions'][$i];
-            if (!isset($s['answers'][$i])) { unset($q['correct'], $q['explanation'], $q['source']); }
+            if (!isset($s['answers'][$i])) { unset($q['correct'], $q['explanation'], $q['source'], $q['credits']); }
             else { $q['answer'] = $s['answers'][$i]; }
             $out['question'] = $q;
         }
@@ -197,6 +211,6 @@ final class SND_Game {
         global $wpdb;
         $threshold = (new DateTimeImmutable(self::date()))->modify('-14 days')->format('Ymd');
         $names = $wpdb->get_col($wpdb->prepare("SELECT option_name FROM {$wpdb->options} WHERE option_name LIKE %s", $wpdb->esc_like('snd_day_') . '%'));
-        foreach ($names as $name) { if (preg_match('/^snd_day_([0-9]{8})_/', $name, $m) && $m[1] < $threshold) { delete_option($name); } }
+        foreach ($names as $name) { if (preg_match('/^snd_day_(?:v2_)?([0-9]{8})_/', $name, $m) && $m[1] < $threshold) { delete_option($name); } }
     }
 }

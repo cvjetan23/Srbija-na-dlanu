@@ -1,79 +1,69 @@
-# Srbija na dlanu
+# Srbija na dlanu 2.0
 
-Geografska igra za jednu WordPress stranicu: **Okruzi** i **Opštine i gradovi**, sa dnevnim izazovom i režimom vežbanja.
+Zasebna geografska aplikacija unutar WordPress-a: početna, igre za okruge i opštine, baza znanja i nalozi igrača. Sveden prikaz: slika gore, pitanje i odgovori ispod, sa većim slovima.
 
-**[Preuzmi WordPress ZIP dodatak](https://github.com/cvjetan23/Srbija-na-dlanu/raw/refs/heads/main/dist/srbija-na-dlanu.zip)** · [Detaljno uputstvo](srbija-na-dlanu/INSTALACIJA.md) · [Provera](docs/PROVERA.md)
+**[Preuzmi instalacioni ZIP](https://github.com/cvjetan23/Srbija-na-dlanu/raw/refs/heads/main/dist/srbija-na-dlanu.zip)** · [Instalacija](srbija-na-dlanu/INSTALACIJA.md) · [Provere](docs/PROVERA.md) · [Zastave i licence](srbija-na-dlanu/FLAGS.md)
 
-## Instalacija
+## Instalacija i ažuriranje
 
-1. Preuzmi `dist/srbija-na-dlanu.zip` preko linka iznad. GitHub opcija **Code → Download ZIP** preuzima ceo repozitorijum i nije instalacioni ZIP dodatka.
-2. U WordPress-u otvori **Dodaci → Dodaj novi → Otpremi dodatak**. Otpremi instalacioni ZIP, instaliraj i aktiviraj dodatak.
-3. Napravi jednu stranicu, dodaj **Shortcode** blok i upiši:
+1. Preuzmi `dist/srbija-na-dlanu.zip`. GitHub **Code → Download ZIP** preuzima ceo repo i nije instalacioni paket dodatka.
+2. WordPress → **Dodaci → Dodaj novi → Otpremi dodatak**. Pri ažuriranju izaberi **Zameni postojeći dodatak**. Aktiviraj ako je potrebno.
+3. Otvori WP administraciju: dodatak automatski priprema stranice. Otvori `/srbija-na-dlanu/`.
+4. Očisti Autoptimize, keš stranica i CDN. Proveri dostavu WP poruka za postavljanje i promenu lozinke.
 
-   ```text
-   [srbija_na_dlanu]
-   ```
+| Stranica | Putanja |
+|---|---|
+| Početna | `/srbija-na-dlanu/` |
+| Okruzi | `/srbija-na-dlanu/okruzi/` |
+| Opštine i gradovi | `/srbija-na-dlanu/opstine/` |
+| Baza znanja | `/srbija-na-dlanu/baza-znanja/` |
+| Prijava / registracija / lozinka | `/srbija-na-dlanu/prijava/` |
+| Moj nalog | `/srbija-na-dlanu/nalog/` |
 
-4. Objavi stranicu. Preporučen je šablon pune širine. U Elementoru koristi Shortcode widget.
+Ove stranice imaju svoj kompas, meni, zaglavlje i podnožje, bez zaglavlja i podnožja aktivne teme. Ostali deo sajta zadržava postojeći izgled. Postojeći Elementor podaci početne stranice se ne brišu. Dodatak ne menja globalnu početnu stranicu WordPress-a.
 
-Sadržaj se uređuje kroz meni **Srbija na dlanu** u WordPress administraciji.
+Shortcode `[srbija_na_dlanu]` i dalje radi na drugim WP stranicama; tu se zadržava njihova tema. Za određenu igru koristi `[srbija_na_dlanu kind="district"]` ili `kind="municipality"`.
 
-### Ažuriranje na 1.1.0
+## Sadržaj i igra
 
-Verzija **1.1.0** donosi sveden prikaz nalik Worldle-u: jedna uska kolona, obris ili fotografija gore, pitanje i odgovori ispod. Uklonjeni su veliki uvod, slogani, bočni panel, traka rundi, datum i ponovljena objašnjenja. Pomoć se prikazuje tek kada postane dostupna; uputstva su iza dugmeta **?**. Ostali su izbor obe igre, dnevni izazov/vežbanje i dodatna pitanja. Prethodna ispravka Elementor stilova je uključena.
-
-Otpremi novi instalacioni ZIP kroz **Dodaci → Dodaj novi → Otpremi dodatak** i izaberi **Zameni postojeći dodatak** kada WordPress to ponudi. Zatim očisti Autoptimize i eventualni keš stranice/CDN-a. Baza sadržaja i sačuvane partije ostaju u WordPress-u.
-
-## Igra
-
-- **30 celina**: 29 upravnih okruga i Grad Beograd kao posebna celina.
-- **174 opštine i grada, uključujući Kosovo i Metohiju**, bez zasebnih gradskih opština.
-- Stvarne siluete, šest pokušaja, vazdušna udaljenost i smer između geometrijskih centara.
-- Pomoć posle trećeg promašaja i tri dodatna pitanja posle otkrivanja teritorije.
-- **30 lokalnih fotografija znamenitosti**, sa autorima, licencama i izvorima; prostorno pitanje kada fotografija nije dostupna.
+- **30 teritorija:** 29 upravnih okruga i Grad Beograd kao posebna celina.
+- **174 opštine i grada**, sa Kosovom i Metohijom, bez zasebnih gradskih opština.
+- Stvarne siluete, šest pokušaja, udaljenost i strelica od odgovora ka traženoj teritoriji.
+- Posle otkrivanja slede **četiri dodatna pitanja**: stanovništvo/položaj, administrativna geografija, zastava i znamenitost/prostorni izazov.
+- **52 lokalne zastave** pokrivaju 17 okružnih sedišta i 52 opštine/grada: ukupno 69 od 204 teritorije. Za ostala mesta koristi se jasno označeno geografsko pitanje. Zastava okružnog sedišta nije predstavljena kao zastava okruga.
+- **30 lokalnih fotografija znamenitosti**, sa autorima, licencama i izvorima.
+- Isti dnevni zadatak za sve, promena u ponoć po vremenu u Srbiji; nasumično vežbanje, nastavak i deljenje rezultata bez rešenja.
 - Pretraga prihvata latinicu, ćirilicu i unos bez kvačica.
-- Isti dnevni zadatak za sve, promena u ponoć po vremenu u Srbiji; odvojeno nasumično vežbanje.
-- Nastavak partije, lokalna statistika i deljenje rezultata bez otkrivanja rešenja.
+- Baza znanja: svih 30 teritorija, pretraga po nazivu i sedištu, detalji i samo obris izabranog okruga.
 
-Kosovo i Metohija su uključeni sa **pet okruga i 29 opština** prema podeli iz projektne baze. Pošto Popis RZS 2022. tamo nije sproveden, pitanje o stanovništvu zamenjuje se geografskim pitanjem. Brojevi stanovnika na ostaloj teritoriji odnose se na cele opštine i gradove.
+Kosovo i Metohija su uključeni sa **pet okruga i 29 opština** prema podeli korišćenoj u projektu. Popis RZS 2022. tamo nije sproveden; broj stanovnika se ne izmišlja, a pitanje se zamenjuje geografskim. Na ostaloj teritoriji broj stanovnika odnosi se na cele opštine/gradove; zbir je 6.647.003.
 
-## Tehnologija
+## Nalozi i progres
 
-WordPress **6.2+**, PHP **7.4+**, nativni JavaScript i CSS. Backend koristi postojeću WordPress bazu kroz options i transients, REST API, administratorske dozvole, nonce zaštitu i Media Library. Nisu potrebni poseban server, dodatna baza, Node.js, API ključevi ili obavezni dodaci.
+Prijava, odjava i promena lozinke koriste standardne WordPress funkcije i postojeće WP korisnike. Registracija igre pravi samo **Pretplatnika**, bez obzira na globalnu podrazumevanu ulogu; može se isključiti u meniju dodatka. Lozinka se postavlja preko linka u WP e-pošti.
 
-Stranica može da koristi keš, ali rute `/wp-json/srbija-na-dlanu/v1/*` treba izuzeti iz keširanja i dozvoliti JSON POST zahteve. Dodatak sam vraća `no-store` zaglavlja. Dnevni zadatak ostaje isti i ako administrator tokom dana promeni sadržaj.
+Prijavljenom igraču server čuva aktivnu partiju, upoznate teritorije, dnevne rezultate, vežbanja, kviz i niz dana u WP korisničkim podacima. Drugi uređaj sa istim nalogom nastavlja istu partiju. Dnevna partija se ne resetuje ponovnim otvaranjem. Rezultat se računa na serveru i upisuje jednom. Token privatne partije nije dovoljan drugom korisniku da je otvori.
 
-## Struktura
+Gost koristi lokalnu statistiku pregledača i serversku partiju do tri dana. Posle prijave trenutna gostujuća partija može se vezati za nalog, osim kada nalog već ima aktivnu partiju tog tipa. Stara lokalna statistika se ne uvozi kao verifikovani rezultat. Aktivne partije naloga ističu posle 30 dana; ukupni rezultati ostaju na nalogu. Keš može ranije ukloniti WP transient; sačuvani rezultati time se ne brišu.
 
-```text
-srbija-na-dlanu/       Izvorni kod WordPress dodatka i ugrađena baza
-dist/                 Instalacioni ZIP i SHA-256 kontrolni zbir
-docs/PROVERA.md        Izvršene provere i granice verifikacije
-tools/build-package.py Ponovljivo pravljenje instalacionog ZIP-a
-```
+## Administracija i tehnika
 
-Za izradu ZIP-a iz izvornog koda dovoljan je Python 3:
+WP meni **Srbija na dlanu** uređuje teritorije, fotografije i potvrđene zastave sa izvorima/licencama; podržan je JSON uvoz/izvoz. Današnji zadatak ostaje nepromenjen posle izmene sadržaja. Deaktivacija ne briše podatke.
+
+WordPress **6.2+**, PHP **7.4+**, nativni JavaScript/CSS. Koriste se postojeći WP options, transients, usermeta, REST API, korisnici, nonces i Media Library. Nema novog servera, posebne baze, npm instalacije ni API ključeva.
+
+Izuzmi iz keširanja prijavu, nalog, `/wp-json/srbija-na-dlanu/v1/*` i `admin-ajax.php?action=snd_session`. Dozvoli JSON POST i `X-WP-Nonce`. Dodatak šalje `no-store` za privatne podatke; `snd_session` proverava stvarni WP kolačić i daje svež REST nonce.
+
+## Izrada i provere
 
 ```sh
 python3 tools/build-package.py
+node tests/frontend.js
+WP_ROOT=/putanja/do/izolovanog/wp php tests/game-flow.php
+WP_ROOT=/putanja/do/izolovanog/wp php tests/account-progress.php
+WP_ROOT=/putanja/do/izolovanog/wp php tests/asset-loading.php
 ```
 
-## Provera i ograničenja
+PHP testove pokreći samo na namenskoj lokalnoj/razvojnoj WP instalaciji sa aktivnim dodatkom. Testovi kreiraju podatke; nisu namenjeni produkciji. [Izveštaj](docs/PROVERA.md) razlikuje HTTP/HTML provere od vizuelnog testa u pregledaču. Verzija 2.0.0 pripremljena je u repozitorijumu i ZIP-u; postavljanje na cvjetan.dev trenutno sprečava DreamWeb anti-bot provera pri administratorskoj prijavi.
 
-Backend i aktivacija dodatka provereni su na WordPress-u 7.1.4 i PHP-u 8.4.27, sa 2.222 provere. Popisni zbir opština i gradova usklađen je sa zvaničnih 6.647.003 stanovnika iz Popisa 2022. Detalji su u [izveštaju](docs/PROVERA.md).
-
-Za regresionu proveru učitavanja CSS-a koristi isključivo lokalnu ili razvojnu testnu WordPress instalaciju sa aktiviranim dodatkom (`WP_ENVIRONMENT_TYPE` mora biti `local` ili `development`):
-
-```sh
-WP_ROOT=/putanja/do/test-wordpress php tests/asset-loading.php
-```
-
-Provera obuhvata Elementor metapodatke, odbačeno prethodno renderovanje, CSS u podnožju, sprečavanje dupliranja i stranice bez igre. [Provera objavljene stranice i ispravka 1.0.1](docs/LIVE-CHECK.md).
-
-Prikaz u pravom pregledaču, na konkretnom hostingu i u korisničkoj temi još nije testiran. Rezultati su lokalni, bez sinhronizacije među uređajima i bez javne rang-liste. Po teritoriji je podržana jedna fotografija znamenitosti.
-
-## Izvori i licence
-
-Kod: **GPL-2.0-or-later**. Fotografije i geografski slojevi imaju zasebne uslove korišćenja: [SOURCES.md](srbija-na-dlanu/SOURCES.md) i [DATA-LICENSE.md](srbija-na-dlanu/DATA-LICENSE.md).
-
-Osnovne granice su iz geoBoundaries / OpenStreetMap pod ODbL 1.0. Dopunske granice Kosova i Metohije potiču iz javnog servisa Ministarstva rudarstva i energetike; taj servis nije naveo posebnu licencu za ponovno distribuiranje. Uslovi su opisani u DATA-LICENSE.md. Karte služe igri i nisu katastarske karte.
+Kod je GPL-2.0-or-later. Geometrija, fotografije i zastave imaju zasebne uslove: [SOURCES.md](srbija-na-dlanu/SOURCES.md), [DATA-LICENSE.md](srbija-na-dlanu/DATA-LICENSE.md), [FLAGS.md](srbija-na-dlanu/FLAGS.md). Za dopunske granice Kosova i Metohije javni servis nije naveo posebnu licencu za redistribuciju. Karte služe igri i nisu katastarske karte.

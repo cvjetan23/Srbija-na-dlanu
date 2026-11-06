@@ -33,3 +33,7 @@ Regresioni test je pre izmene pao na Elementor stranici čiji `post_content` nem
 3. Očisti Autoptimize i eventualni keš stranice/CDN-a, pa ponovo učitaj stranicu.
 
 U trenutku ove provere nije postojala autentifikovana veza sa WordPress administracijom. Ispravka se isporučuje kroz repozitorijum i ZIP; GitHub commit sam po sebi ne ažurira instalirani dodatak na cvjetan.dev.
+
+## Priprema 2.0.0 — 6. novembar 2026.
+
+Nove stranice, WP nalozi/progres, baza znanja i runda zastava pripremljeni su u repozitorijumu i instalacionom ZIP-u. Provere su opisane u PROVERA.md. Običnu administratorsku prijavu trenutno zaustavlja DreamWeb anti-bot provera, pa nova verzija nije postavljena. WP aplikacioni API pristup radi, ali core endpoint za dodatke ne prima proizvoljan instalacioni ZIP. Produkcijski tok nove verzije i dostava WP poruka nisu potvrđeni.

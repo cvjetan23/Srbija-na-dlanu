@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Srbija na dlanu
  * Description: Dnevna geografska igra i vežbanje za okruge, opštine i gradove. Shortcode: [srbija_na_dlanu]
- * Version: 1.1.0
+ * Version: 2.0.0
  * Requires at least: 6.2
  * Requires PHP: 7.4
  * Author: Srbija na dlanu
@@ -11,12 +11,18 @@
  */
 
 defined('ABSPATH') || exit;
-define('SND_VERSION', '1.1.0');
+define('SND_VERSION', '2.0.0');
 define('SND_DIR', plugin_dir_path(__FILE__));
 define('SND_URL', plugin_dir_url(__FILE__));
 
+require_once SND_DIR . 'includes/class-text.php';
+require_once SND_DIR . 'includes/class-lock.php';
 require_once SND_DIR . 'includes/class-data.php';
+require_once SND_DIR . 'includes/class-flags.php';
 require_once SND_DIR . 'includes/class-game.php';
+require_once SND_DIR . 'includes/class-progress.php';
+require_once SND_DIR . 'includes/class-accounts.php';
+require_once SND_DIR . 'includes/class-site.php';
 require_once SND_DIR . 'includes/class-api.php';
 require_once SND_DIR . 'includes/class-admin.php';
 
@@ -25,7 +31,17 @@ add_action('admin_menu', array('SND_Admin', 'menu'));
 add_action('admin_post_snd_save', array('SND_Admin', 'save'));
 add_action('admin_post_snd_import', array('SND_Admin', 'import'));
 add_action('admin_post_snd_export', array('SND_Admin', 'export'));
+add_action('admin_post_snd_save_flag', array('SND_Admin', 'save_flag'));
+add_action('admin_post_snd_settings', array('SND_Admin', 'settings'));
 add_action('admin_enqueue_scripts', array('SND_Admin', 'assets'));
+add_action('admin_init',array('SND_Site','maybe_install'));
+add_filter('template_include',array('SND_Site','template'),99);
+add_action('template_redirect',array('SND_Site','prepare'),0);
+add_action('wp_enqueue_scripts',array('SND_Site','assets'),5);
+add_action('wp_enqueue_scripts',array('SND_Site','trim_theme_assets'),999);
+add_filter('show_admin_bar',function($show){return SND_Site::view()?false:$show;});
+add_action('wp_ajax_snd_session',array('SND_Progress','ajax_session'));
+add_action('wp_ajax_nopriv_snd_session',array('SND_Progress','ajax_session'));
 function snd_enqueue_game_assets() {
     wp_enqueue_style('snd-game', SND_URL . 'assets/game.css', array(), SND_VERSION);
     wp_enqueue_script('snd-game', SND_URL . 'assets/game.js', array(), SND_VERSION, true);
@@ -54,13 +70,10 @@ function snd_print_late_styles() {
 }
 add_action('wp_footer', 'snd_print_late_styles', 5);
 
-add_shortcode('srbija_na_dlanu', function () {
-    snd_enqueue_game_assets();
-    $id = wp_unique_id('snd-');
-    return '<div id="' . esc_attr($id) . '" class="snd-game" lang="sr-Latn" data-api="' . esc_url(rest_url('srbija-na-dlanu/v1/')) . '" data-assets="' . esc_url(SND_URL . 'assets/') . '"><div class="snd-loading" role="status">Učitavanje igre…</div><noscript>Za igranje uključi JavaScript u pregledaču.</noscript></div>';
-});
+add_shortcode('srbija_na_dlanu',function($atts){return SND_Site::game_root(shortcode_atts(array('kind'=>''),$atts,'srbija_na_dlanu'));});
 
 register_activation_hook(__FILE__, function () {
+    SND_Site::install();
     if (!wp_next_scheduled('snd_cleanup')) {
         wp_schedule_event(time() + HOUR_IN_SECONDS, 'daily', 'snd_cleanup');
     }

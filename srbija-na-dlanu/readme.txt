@@ -4,70 +4,62 @@ Tags: geography, quiz, serbia, education
 Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.1.0
+Stable tag: 2.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Dnevna geografska igra i vežbanje na jednoj WordPress stranici.
+Zasebna geografska aplikacija u WordPress-u: igre, baza znanja i nalozi.
 
 == Opis ==
 
-Jedan dodatak, jedna stranica, dve odvojene igre: Okruzi i Opštine i gradovi.
-
-* 29 upravnih okruga i Grad Beograd (30 celina).
-* 174 opštine i grada, sa Kosovom i Metohijom, bez zasebnih gradskih opština.
-* Šest pokušaja za prepoznavanje siluete; udaljenost i smer između geometrijskih centara.
-* Pomoć posle trećeg promašaja.
-* Tri dodatna pitanja: stanovništvo ili orijentacija, administrativna pripadnost ili sedište, znamenitost ili prostorni izazov.
-* 30 fotografija znamenitosti sa autorima, licencama i izvorima.
-* Dnevni izazov, vežbanje, nastavak partije, lokalni rezultati i deljenje bez otkrivanja rešenja.
-* Pretraga prihvata srpsku latinicu, ćirilicu i unos bez kvačica.
-* Sadržaj se uređuje kroz WordPress administraciju, sa JSON uvozom i izvozom.
-
-PHP, WordPress options/transients, REST API, Media Library, JavaScript i CSS. Nema dodatnog servera, npm instalacije, API ključeva ili obaveznih dodataka.
+* Sopstveni kompas i meni, početna, Okruzi, Opštine, Baza znanja, Prijava i Moj nalog.
+* Bez zaglavlja/podnožja teme na stranicama aplikacije; ostale stranice sajta zadržavaju temu.
+* Sveden prikaz sa većim slovima: slika gore, pitanje/odgovori ispod.
+* 29 upravnih okruga i Grad Beograd, 174 opštine/grada, uključujući pet okruga i 29 opština Kosova i Metohije.
+* Šest pokušaja, udaljenost/smer i pomoć posle trećeg promašaja.
+* Četiri dodatna pitanja: stanovništvo/položaj, geografija, zastava i znamenitost/prostorni izazov.
+* 52 lokalne zastave pokrivaju 17 sedišta okruga i 52 opštine/grada (69 teritorija). Za mesta bez zastave koristi se označeno geografsko pitanje.
+* 30 lokalnih fotografija sa autorima i licencama.
+* Pretraga svih okruga, detalji i samo silueta izabranog okruga.
+* Standardni WP korisnici, prijava, registracija Pretplatnika, postavljanje/promena lozinke preko WP e-pošte.
+* Aktivna partija i progres na nalogu, nastavak na drugom uređaju; gostujuća statistika u pregledaču.
+* Dnevni izazov, vežbanje, pretraga sa oba pisma, deljenje bez rešenja.
+* Administracija podataka i zastava, JSON uvoz/izvoz, Media Library.
 
 == Instalacija ==
 
-1. Dodaci > Dodaj novi > Otpremi dodatak: izaberi srbija-na-dlanu.zip.
-2. Instaliraj i aktiviraj.
-3. Napravi jednu stranicu i dodaj Shortcode blok: [srbija_na_dlanu]
-4. Objavi stranicu. Preporučen je šablon pune širine.
-5. Sadržaj uređuj u meniju Srbija na dlanu.
+1. Otpremi instalacioni ZIP kroz Dodaci > Dodaj novi > Otpremi dodatak.
+2. Pri ažuriranju izaberi Zameni postojeći dodatak. Aktiviraj ako je potrebno.
+3. Otvori administraciju; automatski se pripremaju stranice ispod /srbija-na-dlanu/.
+4. Očisti keš. Proveri prijavu i dostavu WP e-pošte.
 
-Za Elementor koristi Shortcode widget. Za klasični editor upiši isti shortcode u sadržaj stranice. Ne lepi PHP u editor.
+Detaljno: INSTALACIJA.md. Shortcode [srbija_na_dlanu] ostaje dostupan za druge stranice sa njihovom temom.
 
-== Podaci ==
+== Podaci i čuvanje ==
 
-Kosovo i Metohija su uključeni prema podeli na pet okruga i 29 opština. Za taj deo baze nema izmišljenih vrednosti Popisa 2022. Umesto stanovništva dobija se pitanje o orijentaciji, a umesto potencijalno nejasnog sedišta okruga pitanje o pripadnosti opština.
+Popis 2022. odnosi se na cele teritorije opština/gradova. Za Kosovo i Metohiju ne izmišljaju se brojevi Popisa RZS 2022; umesto stanovništva koristi se geografsko pitanje.
 
-Osnovne granice: geoBoundaries / OpenStreetMap, 2017, ODbL 1.0. Dopunske granice Kosova i Metohije: javni geografski servis Ministarstva rudarstva i energetike. Geometrija je pojednostavljena i služi igri, ne katastarskoj ili službenoj upotrebi. Pojedinačni izvori i licence fotografija nalaze se u SOURCES.md.
+Dnevni izazov menja se u ponoć Europe/Belgrade. Pripremljen izazov ostaje isti posle izmene sadržaja. Rezultat se računa na serveru. Prijavljenim korisnicima aktivna partija traje do 30 dana; ukupni rezultati ostaju u usermeta. Gosti imaju serversku partiju do tri dana i lokalnu statistiku. WP transient keš može ranije isteći. Nema javne rang-liste.
 
-== Dnevna igra i čuvanje ==
+Iz keširanja izuzmi prijavu, nalog, REST srbija-na-dlanu/v1/* i admin-ajax.php?action=snd_session. Ne keširaj privatni HTML. REST i AJAX vraćaju no-store; omogući JSON POST i X-WP-Nonce.
 
-Dnevni izazov menja se u ponoć po vremenskoj zoni Europe/Belgrade, nezavisno od vremenske zone servera. Teritorija, pitanja i izbori su isti za sve. Izazov se čuva u WP options i ne menja se usred dana posle izmene sadržaja.
+Ograničavanje zahteva koristi privremeni HMAC mrežne adrese; sirova IP adresa se ne čuva u podacima dodatka. Serverski pristupni logovi zavise od hostinga. Lozinke i sesije koristi i čuva WordPress.
 
-Aktivna partija se čuva u WordPress transient-u do tri dana. Pregledač čuva ključ te partije, kolekciju i niz završenih dana. Niz i rezultati su odvojeni za okruge i opštine. Brisanje podataka pregledača briše lokalnu statistiku. Nema sinhronizacije među uređajima, naloga ni javne rang-liste.
+== Licence ==
 
-Osnovne stranice mogu da koriste keš. Isključi iz keširanja REST rute srbija-na-dlanu/v1/* i omogući JSON POST zahteve. Dodatak već vraća no-store zaglavlja. Ne blokiraj WordPress REST API.
-
-Ograničenje javnih zahteva koristi privremeni HMAC mrežne adrese; sirova IP adresa se ne čuva u podacima dodatka. Standardni serverski pristupni logovi zavise od tvog hostinga.
-
-== Napomene ==
-
-WordPress tema treba da poziva wp_head() i wp_footer(). Ako tema ima usku kolonu, uključi šablon pune širine. Deaktivacija ne briše sadržaj i rezultate sa servera. JSON izvoz je rezervna kopija baze; fotografije dodate kroz Media Library prenose se uz standardnu WordPress rezervnu kopiju.
-
-Ova verzija ima jednu fotografiju po okrugu i po odgovarajućoj opštini/gradu. Za ostale opštine poslednja runda koristi prostorno pitanje. Više fotografija po istoj teritoriji nije deo verzije 1.0.
+Kod: GPL-2.0-or-later. Geografija/fotografije: SOURCES.md i DATA-LICENSE.md. Zastave: FLAGS.md. Za dopunske granice Kosova i Metohije javni geografski servis nije naveo posebnu licencu za redistribuciju. Karte služe igri. Deaktivacija ne briše sadržaj i rezultate.
 
 == Changelog ==
 
-= 1.1.0 =
-* Sveden prikaz u jednoj koloni: obris ili fotografija gore, pitanje i odgovori ispod.
-* Uklonjeni veliki uvod, slogani, bočni panel, traka rundi, datum i suvišni natpisi.
-* Kratka uputstva su pod dugmetom ?, a pomoć se prikazuje tek kada postane dostupna.
-* Zadržani su izbor obe igre, dnevni izazov/vežbanje, dodatna pitanja i svi postojeći podaci.
+= 2.0.0 =
+* Zasebna aplikacija sa kompasom, sopstvenim menijem i šest WP stranica.
+* WP prijava/registracija/lozinka i serverski progres po nalogu, sa nastavkom na drugom uređaju.
+* Pretraživa baza svih okruga sa njihovim siluetama, detaljima i izvorima.
+* Četvrta bonus runda: četiri slike zastava ili označeno zamensko geografsko pitanje.
+* Veća slova, zaštita privatnih partija, upis rezultata jednom i zaključavanje istovremenih poteza.
 
+= 1.1.0 =
+* Sveden prikaz u jednoj koloni, slika gore i pitanje/odgovori ispod.
 
 = 1.0.1 =
-* Ispravljeno učitavanje CSS-a za Elementor tekstualne i shortcode widgete.
-* CSS se više ne štampa u izlazu shortcode-a koji Elementor može odbaciti pri pripremi stranice.
-* Dodat je footer fallback za kasno učitane stilove i promenjena verzija resursa radi osvežavanja keša.
+* Ispravljeno učitavanje CSS-a za Elementor i kasno renderovan shortcode.

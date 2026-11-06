@@ -1,81 +1,39 @@
-# Srbija na dlanu — WordPress dodatak
+# Instalacija i ažuriranje na 2.0.0
 
-## Postavljanje na jednu stranicu
+1. Preuzmi instalacioni `srbija-na-dlanu.zip` iz direktorijuma `dist` repozitorijuma.
+2. WordPress → **Dodaci → Dodaj novi → Otpremi dodatak**. Izaberi ZIP, instaliraj; pri ažuriranju potvrdi **Zameni postojeći dodatak**. Aktiviraj ako je potrebno.
+3. Otvori administraciju. Automatska migracija priprema početnu `/srbija-na-dlanu/` i podstranice `okruzi/`, `opstine/`, `baza-znanja/`, `prijava/`, `nalog/`.
+4. Očisti Autoptimize i keš stranica/CDN-a. Proveri sve linkove menija, obe igre, prijavu i e-poštu.
 
-1. U WordPress-u otvori **Dodaci → Dodaj novi → Otpremi dodatak**.
-2. Izaberi **srbija-na-dlanu.zip**, instaliraj i aktiviraj.
-3. Otvori **Stranice → Dodaj novu** i nazovi je, na primer, „Srbija na dlanu“.
-4. Dodaj blok **Shortcode** i u njega upiši:
+Aplikacija koristi sopstveni šablon sa kompasom i menijem. Na ovim stranicama nema zaglavlja/podnožja glavnog sajta ni administratorske trake. Ostale WP stranice zadržavaju temu. Postojeća početna stranica se prepoznaje po putanji; njen sadržaj i Elementor metapodaci se ne brišu. Dodatak ne menja globalnu WP početnu stranicu. Koristi standardne WP permalinke; sa lepim permalinkovima putanje su kao gore.
 
-   ```text
-   [srbija_na_dlanu]
-   ```
+Ako migracija posle zamene nije pokrenuta, otvori WP administraciju kao administrator. Za administrativnu integraciju postoji autentifikovana POST ruta `/wp-json/srbija-na-dlanu/v1/admin/setup`, dostupna samo nalogu sa `manage_options`; ponovljeno pozivanje ne pravi duple stranice.
 
-5. Izaberi šablon stranice **pune širine** ako ga tema ima i objavi stranicu.
+## Nalozi
 
-Elementor: isti tekst upiši u **Shortcode widget**. Klasični editor: upiši shortcode u sadržaj. Nije potrebno dodavati PHP u stranicu niti menjati temu.
+Postojeći WP korisnik prijavljuje se istim korisničkim imenom/e-poštom i običnom lozinkom. WP aplikaciona lozinka služi API-ju i ne koristi se u formi prijave.
 
-### Ažuriranje na 1.1.0
+Registracija pravi Pretplatnika i šalje WP poruku sa linkom za postavljanje lozinke u istom stilu. Isključi registraciju u meniju **Srbija na dlanu** ako želiš samo postojeće naloge. Proveri da hosting stvarno dostavlja WP e-poštu; dodatak koristi postojeći `wp_mail` i eventualni SMTP dodatak.
 
-Otpremi novi ZIP istim putem i izaberi **Zameni postojeći dodatak** kada WordPress to ponudi. Zatim očisti Autoptimize i eventualni keš stranice/CDN-a. Verzija 1.1.0 donosi sveden prikaz u jednoj koloni: obris ili fotografija gore, pitanje, unos i pokušaji ispod. Uputstva su pod dugmetom **?**, a pomoć se prikazuje tek posle trećeg promašaja. Prethodna ispravka učitavanja stilova u Elementoru ostaje uključena. Podaci, dnevni izazovi i shortcode ostaju isti.
-
-## Šta dobijaš
-
-- Dve odvojene igre: **Okruzi** i **Opštine i gradovi**.
-- **30 celina za okruge:** 29 upravnih okruga i Grad Beograd kao posebna celina.
-- **174 opštine i grada**, uključujući **Kosovo i Metohiju**, bez dodatnih gradskih opština.
-- Stvarne, pojednostavljene siluete, sever nagore, šest pokušaja, smer i vazdušna udaljenost između geometrijskih centara.
-- Pomoć dostupna posle tri pogrešna pokušaja, označena u rezultatu.
-- Tri dodatna pitanja, koja možeš igrati i kada ne pogodiš teritoriju.
-- **30 fotografija znamenitosti**, sa autorima i licencama. Kod opština bez fotografije koristi se prostorno pitanje.
-- Zajednički dnevni izazov, nasumično vežbanje, nastavak partije i deljenje bez rešenja.
-- Lokalna kolekcija upoznatih teritorija i odvojeni nizovi odigranih dnevnih partija.
-- Prilagođen prikaz za telefon; pretraga sa latinicom, ćirilicom i bez kvačica.
+Rezultati i aktivne partije prijavljenih korisnika čuvaju se na nalogu. Drugi uređaj nastavlja istu partiju; svaka igra ima svoj dnevni izazov i vežbanje. Gostujuća trenutna partija vezuje se za nalog samo kada nema ranije aktivne partije tog tipa. Lokalna istorija prethodnih gostujućih rezultata ne uvozi se kao serverski verifikovan rezultat.
 
 ## Uređivanje sadržaja
 
-U levom WP meniju pojaviće se **Srbija na dlanu**. Klikom na naziv teritorije možeš promeniti naziv, alternativne nazive, pomoć, stanovništvo sa godinom i izvorom, sedište, fotografiju i zanimljivost.
+Meni **Srbija na dlanu** sadrži sve teritorije. Možeš menjati naziv, druge nazive, sedište, stanovništvo/godinu/izvor, fotografiju i zanimljivost. Za zastavu unesi HTTPS adresu slike iz WP biblioteke, autora, licencu i stranicu izvora. Zastava sedišta okruga i odgovarajućeg grada deli isti zapis. Moguće je vratiti ugrađenu zastavu.
 
-Fotografiju biraš iz WordPress biblioteke. Upiši naziv objekta, autora, licencu i HTTPS stranicu izvora. Za teritorije bez fotografije igra automatski postavlja prostorno pitanje. Imena i podaci se prikazuju kao tekst; SVG kod i skripte se ne prihvataju.
+Paket ima 52 zastave: 17 sedišta okruga i 52 opštine/grada (69 teritorija). Za ostala mesta postoji jasno označeno zamensko pitanje. Detalji i izvori su u FLAGS.md. Bez fotografije poslednja runda postaje prostorni izazov. Današnji pripremljeni izazov ne menja se usred dana.
 
-**Današnji izazov ostaje isti posle izmene sadržaja.** Izmene odmah važe za nove partije vežbanja i za buduće dnevne izazove.
+JSON izvoz sadrži geometriju, podatke i trenutnu bazu zastava. Pre uvoza uzmi rezervnu kopiju. WP korisnički podaci, opcije i uploads prenose se standardnom rezervnom kopijom WordPress-a; JSON baze nije rezervna kopija korisničkih naloga ili njihovih rezultata.
 
-## Stanovništvo i Kosovo i Metohija
+## Keš i problemi
 
-Za stanovništvo je korišćena zvanična tabela RZS: **Popis 2022, ukupan broj stanovnika po opštinama i gradovima**. Brojevi se odnose na celu administrativnu teritoriju. Kod gradova sa gradskim opštinama uzet je ukupan broj za grad.
+- Izuzmi `prijava/`, `nalog/`, REST rute `srbija-na-dlanu/v1/*` i AJAX `snd_session` iz keširanja. Ne keširaj HTML prijavljenih korisnika. API vraća `no-store`.
+- Dozvoli JSON POST zahteve i zaglavlje `X-WP-Nonce`. Ako igra ne može da proveri prijavu, proveri da hosting ne blokira `admin-ajax.php?action=snd_session`.
+- Stari izgled: očisti Autoptimize, keš stranice/CDN-a i osveži pregledač. Resursi imaju verziju 2.0.0.
+- Greška 404 na novim stranicama: **Podešavanja → Permalinks → Sačuvaj izmene**, pa proveri pravila servera.
+- Link za lozinku nije stigao: proveri WP dostavu pošte/spam. Korisnik može ponovo zatražiti lozinku preko aplikacije.
+- Brisanje podataka pregledača briše gostujuću statistiku. Statistika prijavljenog naloga ostaje u WP bazi.
 
-Kosovo i Metohija su u obe igre, sa **pet okruga i 29 opština** prema podeli korišćenoj u projektu. Pošto Popis RZS 2022. tamo nije sproveden, pitanje o stanovništvu zamenjuje se pitanjem o orijentaciji. Za pet okruga pitanje o sedištu zamenjuje se pitanjem o pripadnosti opština.
+Za ugradnju igre na neku drugu stranicu i dalje radi `[srbija_na_dlanu]`, odnosno `[srbija_na_dlanu kind="district"]` i `kind="municipality"`. Ta druga stranica koristi sopstveni šablon teme; uklanjanje zaglavlja/podnožja odnosi se na šest stranica aplikacije.
 
-## Rezervna kopija i uvoz
-
-Na dnu administratorske stranice klikni **Preuzmi JSON rezervnu kopiju**. Izvoz sadrži sve granice i trenutno uređene podatke.
-
-Uvoz JSON datoteke zamenjuje bazu i prethodne izmene; najpre preuzmi rezervnu kopiju. Uvoz proverava identifikatore, geometriju, koordinate, povezanost sa okruzima, izvore i broj aktivnih teritorija. Objavljeni dnevni izazov ostaje sačuvan.
-
-Fotografije iz ZIP-a dolaze uz dodatak. Za fotografije koje naknadno dodaješ u biblioteku koristi i uobičajenu WordPress rezervnu kopiju direktorijuma uploads.
-
-## Tehnički zahtevi
-
-- WordPress **6.2+** i PHP **7.4+**; preporučena je podržana verzija PHP-a.
-- Omogućen WordPress REST API i JavaScript u pregledaču.
-- Tema koja standardno poziva `wp_head()` i `wp_footer()`.
-- Nisu potrebni poseban backend, nova baza, API ključevi, Node.js ili drugi dodaci.
-
-Dodatak koristi WordPress options, transients, REST API, administratorske dozvole, nonce zaštitu i biblioteku medija. Baza teritorija je uključena u paket. Posle instalacije nisu potrebni spoljašnji servisi za granice ili pitanja. Ugrađene fotografije su lokalne; eksterni linkovi služe za izvore.
-
-## Ako nešto ne radi
-
-- **Vidi se tekst shortcode-a:** proveri da li je dodatak aktivan i da li koristiš Shortcode blok/widget.
-- **Igra ne može da se učita:** proveri da sigurnosni dodatak ili hosting ne blokiraju `/wp-json/srbija-na-dlanu/v1/` i JSON POST zahteve.
-- **Stari datum ili ista partija:** isključi REST rute igre iz keširanja i očisti keš dodataka/CDN-a. HTML stranica može da ostane keširana.
-- **Nema stilova ili interakcije:** proveri `wp_head()` / `wp_footer()` i odloženo učitavanje/objedinjavanje JavaScript-a u optimizacionim dodacima.
-- **Uska igra:** izaberi šablon stranice pune širine i ukloni bočnu traku.
-- **Nema nastavka ili statistike:** privatni režim ili podešavanja pregledača mogu blokirati localStorage. Sama igra radi, ali čuvanje tada nije dostupno.
-
-## Granice provere
-
-Backend i shortcode su provereni na čistom WordPress-u 7.1.4, PHP-u 8.4.27 i SQLite bazi kroz WordPress-ov standardni `wpdb` interfejs. Provereni su sadržaj svih 204 teritorije, tok partije, pomoć, ponovljeni i nevažeći potezi, zaključavanje odgovora, nastavak, dnevna nepromenljivost i validacija uvoza. U verziji 1.0.1 prošlo je i 10 provera učitavanja stilova za Elementor i kasno renderovan sadržaj. Javni API postavljene verzije 1.0.0 dodatno je proveren na cvjetan.dev u obe igre. Vizuelna provera u pravom pregledaču i novi prikaz verzije 1.0.1 u tvojoj temi još nisu testirani.
-
-Nema javne rang-liste i zaštite namenjene nagradnim takmičenjima. Rezultati su za ličnu igru i poređenje sa prijateljima. Jedna fotografija po teritoriji je početna banka sadržaja; paket još ne rotira više fotografija iste teritorije.
-
-Izvori i licence: **SOURCES.md** i **DATA-LICENSE.md** u dodatku.
+Zahtevi: WordPress 6.2+, PHP 7.4+, JavaScript, WP REST API. Poseban backend, Node.js i API ključevi nisu potrebni. Izvori i licence: SOURCES.md, DATA-LICENSE.md i FLAGS.md. Deaktivacija ne briše podatke.

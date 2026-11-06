@@ -43,3 +43,6 @@ Geografski izvori i uslovi korišćenja opisani su u DATA-LICENSE.md. Fotografij
 - Popis 2022: https://popis2022.stat.gov.rs/media/31323/0_ukupan-broj-stanovnika.xlsx
 
 Siluete su izvedene iz stvarnih granica; sever je gore. Centri su površinski geometrijski centri iz metričke projekcije UTM 34N, vraćeni u WGS84. Rastojanja su vazdušna, računata po sferi. Obrisi koriste lokalnu projekciju sa fiksnim odnosom geografske dužine i širine na 44° N. Ne prikazuje se razmera stvarne površine teritorije.
+## Zastave (2.0.0)
+
+52 lokalne PNG slike gradskih/opštinskih zastava, pripisivanje i pojedinačni izvori/licence: [FLAGS.md](FLAGS.md). Zastave pokrivaju 17 okružnih sedišta i 52 opštine/grada; za druga mesta koristi se zamensko geografsko pitanje. U igri se ne izmišljaju simboli.
