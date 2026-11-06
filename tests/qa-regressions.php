@@ -73,6 +73,13 @@ try{
     $legacy['question_overrides']=array();$legacy['answers'][2]=array('choice'=>'r1','correct'=>true,'skipped'=>false);
     $old=SND_Game::question_for($legacy,2);qa_check($old['type']==='region' && $old['correct']==='r1' && !empty($old['source']),'Already-answered legacy question retains score with documented source');
 
+    $legacy_geo=SND_Game::nearby_question($photo_target,SND_Data::pool('district'),'qa:legacy-geography');
+    unset($legacy_geo['sources']);$legacy_geo['source']='https://www.geoboundaries.org/';
+    $legacy['challenge']['target']=$photo_target;$legacy['challenge']['questions'][2]=$legacy_geo;$legacy['answers'][2]=array('choice'=>$legacy_geo['correct'],'correct'=>true,'skipped'=>false);
+    $fixed_geo=SND_Game::question_for($legacy,2);
+    qa_check(strpos(wp_json_encode($fixed_geo['sources']),'mre.gov.rs')!==false,'Legacy KiM geometry source is corrected too');
+    qa_check($fixed_geo['correct']===$legacy_geo['correct'] && $legacy['answers'][2]['correct'],'Legacy citation repair preserves choices and score');
+
     // School/workplace NAT: independent actors have independent normal quotas.
     $bucket='qa-group-'.bin2hex(random_bytes(5));$_SERVER['REMOTE_ADDR']='192.0.2.77';
     for($actor=0;$actor<30;$actor++){for($turn=0;$turn<12;$turn++){qa_check(SND_Rate::allow($bucket,240,600,'user:'.$actor,12000),'Shared NAT supports group play');}}

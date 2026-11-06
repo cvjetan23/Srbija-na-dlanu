@@ -32,7 +32,7 @@ Pripremljeno 6. novembra 2026. Izveštaji sa 14 i 17 nalaza imaju više istih pr
 
 ## Izvršena verifikacija
 
-GitHub Actions izolovani WordPress 7.1.4 i PHP 8.3.6, uz uključene Autoptimize i Slim SEO dodatke: **5.417 automatskih provera**.
+GitHub Actions izolovani WordPress 7.1.4 i PHP 8.3.6, uz uključene Autoptimize i Slim SEO dodatke: **5.419 automatskih provera**.
 
 | Skup | Broj |
 |---|---:|
@@ -41,7 +41,7 @@ GitHub Actions izolovani WordPress 7.1.4 i PHP 8.3.6, uz uključene Autoptimize 
 | Učitavanje resursa i Elementor regresije | 10 |
 | Postojeći frontend tok | 24 |
 | Novi događaji/stanja frontenda i kontrast | 66 |
-| Nove WordPress QA regresije | 2.332 |
+| Nove WordPress QA regresije | 2.334 |
 
 Provere obuhvataju sintaksu, oba skupa generisanih pitanja, veličinski uverljive alternative, izvore geometrije, izostanak odgovora pre vremena, pomoć za izvor, zamenu neispravnih medija, pregled zastave posle nastavka, stare sesije, odvajanje grupnih limita, metadata, stvarni Autoptimize hide/restore i regionalnu tabelu. Testovi ne iscrpljuju limite na produkciji.
 

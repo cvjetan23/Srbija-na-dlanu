@@ -1,6 +1,6 @@
 # Provera verzije 2.1.0
 
-Ispravke dva naknadna QA izveštaja, sa 5.417 provera na izdvojenom WordPress-u i granicama verifikacije, opisane su u [QA-ISPRAVKE.md](QA-ISPRAVKE.md). Novi paket 2.1.0 treba postaviti na produkciju. Ispod ostaje prethodna evidencija za 2.0.0.
+Ispravke dva naknadna QA izveštaja, sa 5.419 provera na izdvojenom WordPress-u i granicama verifikacije, opisane su u [QA-ISPRAVKE.md](QA-ISPRAVKE.md). Novi paket 2.1.0 treba postaviti na produkciju. Ispod ostaje prethodna evidencija za 2.0.0.
 
 # Provera — Srbija na dlanu 2.0.0
 

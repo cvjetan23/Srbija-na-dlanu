@@ -90,6 +90,12 @@ final class SND_Game {
             return self::distance_question($state['challenge']['target'],SND_Data::pool($state['challenge']['kind']),$state['challenge']['date'].':legacy:'.$state['challenge']['target']['id'].':'.$index,'Zamensko geografsko pitanje: zastava ovog mesta još nije potvrđena u bazi.');
         }
         if($q['type']==='region' && empty($q['source'])){$q['source']=add_query_arg('podela','regioni',SND_Site::url('library'));}
+        if(empty($q['sources']) && in_array($q['type'],array('nearby','orientation'),true)){
+            $used=array($state['challenge']['target']);$names=array_column($q['options'],'label');
+            if($q['type']==='orientation' && preg_match('/„([^“]+)“/u',$q['title'],$match)){$names[]=$match[1];}
+            foreach(SND_Data::pool($state['challenge']['kind']) as $t){if(in_array($t['name'],$names,true)){$used[]=$t;}}
+            $q=self::with_geometry_sources($q,$used);
+        }
         return $q;
     }
 
