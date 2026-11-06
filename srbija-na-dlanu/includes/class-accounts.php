@@ -22,11 +22,14 @@ final class SND_Accounts {
     }
     public static function reset_message($message, $key, $login, $user) {
         $url = add_query_arg(array('mode' => 'reset', 'key' => $key, 'login' => $login), SND_Site::url('login'));
-        return "Srbija na dlanu\n\nZa nalog " . $login . " zatražena je nova lozinka.\n\n" . $url . "\n\nAko nisi zatražio/la promenu, zanemari ovu poruku.\n";
+        return SND_Settings::get('app_name')."\n\n".SND_I18n::t('Za nalog {login} zatražena je nova lozinka.',array('login'=>$login))."\n\n".$url."\n\n".SND_I18n::t('Ako nisi zatražio/la promenu, zanemari ovu poruku.')."\n";
     }
+    public static function reset_title($title){return SND_Settings::get('app_name').' — '.SND_I18n::t('Nova lozinka');}
     public static function welcome_message($email, $user, $blogname) {
-        $email['message'] = str_replace(network_site_url('wp-login.php', 'login'), SND_Site::url('login'), $email['message']);
-        // Core's registration email uses action=rp; the app accepts it below.
+        preg_match_all('~https?://[^\s<>]+~',$email['message'],$matches);$reset='';
+        foreach($matches[0] as $link){$parts=array();parse_str(wp_parse_url(html_entity_decode($link),PHP_URL_QUERY)?:'',$parts);if(!empty($parts['key']) && !empty($parts['login'])){$reset=add_query_arg(array('key'=>$parts['key'],'login'=>$parts['login'],'mode'=>'reset'),SND_Site::url('login'));break;}}
+        if($reset){$email['message']=SND_Settings::get('app_name')."\n\n".SND_I18n::t('Dobro došao/la, {login}. Postavi lozinku preko ovog linka:',array('login'=>$user->user_login))."\n\n".$reset."\n\n".SND_I18n::t('Prijavi se').': '.SND_Site::url('login')."\n";}
+        $email['subject']=str_replace('%','%%',SND_Settings::get('app_name').' — '.SND_I18n::t('Napravi nalog'));
         return $email;
     }
     public static function handle() {
@@ -55,13 +58,13 @@ final class SND_Accounts {
                 self::$error = 'Forma je istekla. Osveži stranicu i pokušaj ponovo.'; return;
             }
             if ($action === 'logout') {
-                wp_logout(); wp_safe_redirect(SND_Site::url('home')); exit;
+                SND_Analytics::event('logout',array('view'=>'login'));wp_logout(); wp_safe_redirect(SND_Site::url('home')); exit;
             }
             if (!in_array($action,array('login','register','lost','reset'),true)) { self::$error = 'Nepoznata akcija.'; return; }
             if (!self::limit($action, self::posted('login'))) { self::$error = 'Previše pokušaja. Sačekaj nekoliko minuta i pokušaj ponovo.'; return; }
             if ($action === 'login') {
                 $user = wp_signon(array('user_login' => trim(self::posted('login')), 'user_password' => self::posted('password'), 'remember' => (bool) self::posted('remember')), is_ssl());
-                if (is_wp_error($user)) { self::$error = 'Korisničko ime ili lozinka nisu ispravni.'; return; }
+                if (is_wp_error($user)) { SND_Analytics::event('login_failed',array('view'=>'login','code'=>'invalid_credentials'));self::$error = 'Korisničko ime ili lozinka nisu ispravni.'; return; }
                 wp_safe_redirect(SND_Site::url('account')); exit;
             }
             if ($action === 'register') {
@@ -71,8 +74,10 @@ final class SND_Accounts {
             }
             if ($action === 'lost') {
                 add_filter('retrieve_password_message', array(__CLASS__, 'reset_message'), 10, 4);
+                add_filter('retrieve_password_title',array(__CLASS__,'reset_title'));
                 retrieve_password(trim(self::posted('login')));
                 remove_filter('retrieve_password_message', array(__CLASS__, 'reset_message'), 10);
+                remove_filter('retrieve_password_title',array(__CLASS__,'reset_title'));
                 wp_safe_redirect(add_query_arg('notice','reset-sent',SND_Site::url('login'))); exit;
             }
             if ($action === 'reset') {
@@ -95,6 +100,7 @@ final class SND_Accounts {
         if (username_exists($login) || email_exists($email)) { return new WP_Error('snd_registration_exists', 'Ovi podaci su već registrovani. Prijavi se ili zatraži novu lozinku.'); }
         $id = wp_insert_user(array('user_login' => $login, 'user_email' => $email, 'user_pass' => wp_generate_password(32, true, true), 'role' => 'subscriber', 'display_name' => $login));
         if (is_wp_error($id)) { return $id; }
+        do_action('snd_player_registered',$id);
         add_filter('wp_new_user_notification_email', array(__CLASS__, 'welcome_message'), 10, 3);
         wp_new_user_notification($id, null, 'user');
         remove_filter('wp_new_user_notification_email', array(__CLASS__, 'welcome_message'), 10);

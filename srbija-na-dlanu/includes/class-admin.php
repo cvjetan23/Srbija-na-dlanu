@@ -48,6 +48,11 @@ final class SND_Admin {
             self::field('landmark_license', 'Licenca fotografije', $l['license'] ?? '');
             self::field('landmark_source_url', 'Stranica izvora fotografije (HTTPS)', $l['source_url'] ?? '', 'url');
             self::field('landmark_fact', 'Kratka zanimljivost / objašnjenje', $l['fact'] ?? '');
+            foreach(array('en'=>'English','de'=>'Deutsch','ru'=>'Русский') as $lang=>$label){
+                self::field('landmark_'.$lang.'_name','Naziv znamenitosti — '.$label,$l['translations'][$lang]['name']??'');
+                self::field('landmark_'.$lang.'_fact','Zanimljivost — '.$label,$l['translations'][$lang]['fact']??'');
+            }
+            echo '<tr><th>Prevodi sadržaja</th><td>Prazno polje koristi ugrađeni prevod. Kada promeniš izvornu zanimljivost, dodaj i njene prevode; bez njih se prikazuje izvorni tekst.</td></tr>';
             echo '<tr><th>Status</th><td><label><input type="checkbox" name="disabled" value="1" ' . checked(!empty($target['disabled']), true, false) . '> Isključi iz novih partija</label></td></tr></table>';
             submit_button('Sačuvaj teritoriju');
             echo '</form><p><a href="' . esc_url(admin_url('admin.php?page=srbija-na-dlanu')) . '">← Sve teritorije</a></p>';
@@ -96,6 +101,7 @@ final class SND_Admin {
             $t['aliases'] = array_filter(array_map('trim', explode(',', wp_unslash($_POST['aliases'] ?? ''))));
             $t['disabled'] = !empty($_POST['disabled']); $t['landmark'] = array();
             foreach (array('name', 'image', 'credit', 'license', 'source_url', 'fact') as $key) { $t['landmark'][$key] = wp_unslash($_POST['landmark_' . $key] ?? ''); }
+            foreach(array('en','de','ru') as $lang){foreach(array('name','fact') as $field){$value=$_POST['landmark_'.$lang.'_'.$field]??'';if(is_string($value) && $value!==''){$t['landmark']['translations'][$lang][$field]=wp_unslash($value);}}}
         }
         unset($t);
         if (!$found) { self::redirect('Teritorija nije pronađena.', true); }

@@ -1,4 +1,4 @@
-# Instalacija i ažuriranje na 2.1.0
+# Instalacija i ažuriranje na 3.0.0
 
 1. Preuzmi instalacioni `srbija-na-dlanu.zip` iz direktorijuma `dist` repozitorijuma.
 2. WordPress → **Dodaci → Dodaj novi → Otpremi dodatak**. Izaberi ZIP, instaliraj; pri ažuriranju potvrdi **Zameni postojeći dodatak**. Aktiviraj ako je potrebno.
@@ -27,9 +27,9 @@ JSON izvoz sadrži geometriju, podatke i trenutnu bazu zastava. Pre uvoza uzmi r
 
 ## Keš i problemi
 
-- Izuzmi `prijava/`, `nalog/`, REST rute `srbija-na-dlanu/v1/*` i AJAX `snd_session` iz keširanja. Ne keširaj HTML prijavljenih korisnika. API vraća `no-store`.
+- Izuzmi svih šest stranica aplikacije, REST rute `srbija-na-dlanu/v1/*` i AJAX `snd_session` iz keširanja. Ne keširaj HTML prijavljenih korisnika. API vraća `no-store`.
 - Dozvoli JSON POST zahteve i zaglavlje `X-WP-Nonce`. Ako igra ne može da proveri prijavu, proveri da hosting ne blokira `admin-ajax.php?action=snd_session`.
-- Stari izgled: očisti Autoptimize, keš stranice/CDN-a i osveži pregledač. Resursi imaju verziju 2.1.0.
+- Stari izgled: očisti Autoptimize, keš stranice/CDN-a i osveži pregledač. Resursi imaju verziju 3.0.0.
 - Greška 404 na novim stranicama: **Podešavanja → Permalinks → Sačuvaj izmene**, pa proveri pravila servera.
 - Link za lozinku nije stigao: proveri WP dostavu pošte/spam. Korisnik može ponovo zatražiti lozinku preko aplikacije.
 - Brisanje podataka pregledača briše gostujuću statistiku. Statistika prijavljenog naloga ostaje u WP bazi.
@@ -52,3 +52,16 @@ Ako slika ne može da se učita, igrač bira ponovno učitavanje ili zamensko ge
 U Bazi znanja je dostupna stranica „Šire celine u igri” (?podela=regioni). To je urednička podela za orijentaciju, ne zvanična regionalizacija i ne bodovano zamensko pitanje. Geometrijske runde navode odgovarajuće izvore geoBoundaries/MRE.
 
 Nov funkcionalni kolačić snd_client (30 dana, HTTP-only, SameSite=Lax) razdvaja ograničenja anonimnih igrača koji dele IP adresu. Ne sadrži rezultate, ime, e-poštu ili lozinku. Nalozi imaju svoja ograničenja, uz viši zajednički prag protiv zloupotrebe.
+
+
+## Administracija u 3.0.0
+
+U WP meniju **Srbija na dlanu** otvori **Podešavanja** za jezike, temu, boje, veličinu teksta, broj pokušaja, pomoć, dodatne runde, registraciju i beleženje analitike. Promena pravila važi za nove partije vežbanja i buduće dnevne izazove; započete partije ostaju iste.
+
+**Prevodi** uređuju tekst interfejsa. Oznake poput `{count}` sačuvaj tačno; prevodi se čuvaju po jeziku i mogu se vratiti na ugrađene vrednosti. Nazive i zanimljivosti znamenitosti na engleskom, nemačkom i ruskom uređuješ u detalju teritorije. Ako promeniš izvorni opis, dopuni njegove prevode.
+
+**Analitika**, **Igrači** i **Partije** prikazuju aktivnosti, zbirni progres i stvarne pokušaje/odgovore. Dostupni su datum, igra, režim, faza, jezik i ID igrača kao filteri, kao i CSV/JSON izvoz. Detaljna istorija beleži se od instalacije 3.0.0; stariji dnevni rezultati se uvoze u manjim WP-Cron paketima kao zbirni zapisi. Stari zbir vežbanja ostaje u progresu, bez izmišljenih pojedinačnih partija.
+
+Kreiraju se dve tabele u postojećoj WP bazi. Podrazumevani rok za analitiku je 365 dana, promenljiv u Podešavanjima; 0 znači neograničeno. Dnevni WP-Cron čisti isteklu analitiku, a progres ostaje na nalogu. Bez WP-Cron saobraćaja zakazani uvoz/čišćenje čekaju sledeće pokretanje. Rezervna kopija WordPress-a treba da obuhvati i nove tabele.
+
+Standardni WP alati **Izvoz ličnih podataka** i **Brisanje ličnih podataka** obuhvataju progres i analitiku igre. Izvoz administracije sadrži lične podatke igrača i dostupan je samo administratorima. Deaktivacija ne briše podatke.

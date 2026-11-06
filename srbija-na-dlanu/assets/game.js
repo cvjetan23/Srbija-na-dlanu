@@ -1,5 +1,6 @@
 (function () {
   'use strict';
+  const L = typeof module === 'object' && module.exports ? require('./i18n.js') : window.SND_L10N;
   const esc = value => String(value == null ? '' : value).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const cyr = { а:'a',б:'b',в:'v',г:'g',д:'d',ђ:'dj',е:'e',ж:'z',з:'z',и:'i',ј:'j',к:'k',л:'l',љ:'lj',м:'m',н:'n',њ:'nj',о:'o',п:'p',р:'r',с:'s',т:'t',ћ:'c',у:'u',ф:'f',х:'h',ц:'c',ч:'c',џ:'dz',ш:'s' };
   const normalize = value => String(value).toLowerCase().replace(/[а-яђјљњћџ]/g, c => cyr[c] || c).replace(/đ/g, 'dj').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
@@ -19,11 +20,11 @@
   };
 
 
-  const formatDays = n => { const count = Math.max(0,Math.floor(Number(n)||0)); return count + (count % 10 === 1 && count % 100 !== 11 ? ' dan' : ' dana'); };
+  const formatDays = n => L.days(n);
   const nextSuggestionIndex = (active,count,key) => !count ? -1 : active < 0 ? key === 'ArrowUp' ? count - 1 : 0 : (active + (key === 'ArrowDown' ? 1 : -1) + count) % count;
   const touchMoved = (start,event) => Boolean(start && Math.hypot(event.clientX-start.x,event.clientY-start.y)>10);
   const kindStats = (all,kind) => { const value=all && typeof all[kind]==='object' && all[kind] || {}; return {...value,days:Array.isArray(value.days)?value.days:[],discovered:Array.isArray(value.discovered)?value.discovered:[],streak:Number(value.streak)||0}; };
-  const outcome = s => s.solved ? 'Pogođeno' : s.guesses.length >= s.max_guesses ? 'Nije pogođeno za šest pokušaja' : 'Odgovor je otkriven';
+  const outcome = s => L.text(s.solved ? 'Pogođeno' : s.guesses.length >= s.max_guesses ? s.max_guesses===6 ? 'Nije pogođeno za šest pokušaja' : L.t('Nije pogođeno za {count} pokušaja',{count:s.max_guesses}) : 'Odgovor je otkriven');
   const questionSources = q => Array.isArray(q.sources) && q.sources.length ? q.sources.map(x=>sourceLink(x.url,x.label)).join('<br>') : sourceLink(q.source);
 
   class Game {
@@ -45,17 +46,20 @@
       try {
         const headers = body ? { 'Content-Type': 'application/json' } : {};
         if (this.account.authenticated) headers['X-WP-Nonce'] = this.account.nonce;
-        const response = await fetch(this.api + route, { method: body ? 'POST' : 'GET', credentials: 'same-origin', cache: 'no-store', headers, body: body ? JSON.stringify(body) : undefined, signal: controller.signal });
+        if(document.documentElement && document.documentElement.dataset.sndTheme)headers['X-SND-Theme']=document.documentElement.dataset.sndTheme;
+        let address=this.api+route;const lang=L.config().language || this.root.dataset.lang || 'sr';if(lang!=='sr')address+=(address.includes('?')?'&':'?')+'lang='+encodeURIComponent(lang);
+        const response = await fetch(address, { method: body ? 'POST' : 'GET', credentials: 'same-origin', cache: 'no-store', headers, body: body ? JSON.stringify(body) : undefined, signal: controller.signal });
         let data; try { data = await response.json(); } catch (_) { throw new Error('Igra nije mogla da učita odgovor. Osveži stranicu ili pokušaj ponovo za nekoliko trenutaka.'); }
         if (!response.ok) { const e = new Error(data.code === 'rest_cookie_invalid_nonce' ? 'Prijava je istekla. Osveži stranicu i ponovo se prijavi.' : data.message || 'Zahtev nije uspeo. Pokušaj ponovo.'); e.code = data.code; throw e; }
         return data;
-      } catch (e) { if (e.name === 'AbortError') { throw new Error('Odgovor kasni. Pokušaj ponovo; prethodni potez će biti sačuvan ako je obrađen.'); } throw e; }
+      } catch (e) { if (e.name === 'AbortError') { throw new Error(L.text('Odgovor kasni. Pokušaj ponovo; prethodni potez će biti sačuvan ako je obrađen.')); } e.message=L.text(e.message);throw e; }
       finally { clearTimeout(timer); }
     }
     key(guest = false,date = this.info.date) { return `session:v2:${!guest && this.account.authenticated ? 'user-' + this.account.user.id : 'guest'}:${this.mode}:${this.kind}:${this.mode === 'daily' ? date : 'practice'}`; }
     async refreshDay() {
       if (!this.info || (this.info.next_change && Date.now() + (this.clockOffset || 0) >= this.info.next_change * 1000)) {
         this.info = await this.request('bootstrap');
+        if(this.info.config){const cfg=this.info.config;if(!cfg[this.mode+'_enabled'])this.mode=cfg.daily_enabled?'daily':'practice';}
         this.clockOffset = this.info.server_time ? this.info.server_time * 1000 - Date.now() : 0;
       }
     }
@@ -78,7 +82,7 @@
         if (this.mode === 'daily' && this.linkDate && this.linkDate !== this.info.date) this.notice = ['Link je za datum',this.linkDate + '.','Otvoren je današnji izazov; arhiva prethodnih dana nije dostupna.'].join(' ');
         await this.start(false);
       }
-      catch (e) { this.root.innerHTML = `<div class="snd-load-error"><h2>Igra trenutno ne može da se učita.</h2><p>${esc(e.message)}</p><button class="snd-primary" data-cmd="reload">Pokušaj ponovo</button></div>`; this.root.querySelector('button').onclick = () => this.boot(); }
+      catch (e) { this.root.innerHTML = L.html(`<div class="snd-load-error"><h2>Igra trenutno ne može da se učita.</h2><p>${esc(e.message)}</p><button class="snd-primary" data-cmd="reload">Pokušaj ponovo</button></div>`); this.root.querySelector('button').onclick = () => this.boot(); }
     }
     async start(fresh) {
       if (this.busy) return;
@@ -170,28 +174,28 @@
     render() {
       const s = this.state; if (!s) return;
       const isDistrict = s.kind === 'district';
-      this.root.innerHTML = `
-        <header class="snd-header"><h1>${this.fixedKind ? isDistrict ? 'Okruzi' : 'Opštine i gradovi' : 'Srbija na dlanu'}</h1><button class="snd-icon-button" data-cmd="help" aria-label="Kako se igra?" title="Kako se igra?">?</button></header>
+      this.root.innerHTML = L.html(`
+        <header class="snd-header"><h1>${this.fixedKind ? isDistrict ? 'Okruzi' : 'Opštine i gradovi' : esc(L.config().app_name || 'Srbija na dlanu')}</h1><button class="snd-icon-button" data-cmd="help" aria-label="Kako se igra?" title="Kako se igra?">?</button></header>
         <nav class="snd-toolbar" aria-label="Podešavanja igre">
           ${this.fixedKind ? '' : `<div class="snd-tabs" role="group" aria-label="Izaberi igru"><button class="${isDistrict ? 'is-active' : ''}" data-cmd="district" aria-pressed="${isDistrict}">Okruzi</button><button class="${!isDistrict ? 'is-active' : ''}" data-cmd="municipality" aria-pressed="${!isDistrict}">Opštine i gradovi</button></div>`}
-          <div class="snd-mode" role="group" aria-label="Režim igre"><button class="${s.mode === 'daily' ? 'is-active' : ''}" data-cmd="daily" aria-pressed="${s.mode === 'daily'}">Dnevni izazov</button><button class="${s.mode === 'practice' ? 'is-active' : ''}" data-cmd="practice" aria-pressed="${s.mode === 'practice'}">Vežbanje</button></div>
+          <div class="snd-mode" role="group" aria-label="Režim igre"><button class="${s.mode === 'daily' ? 'is-active' : ''}" data-cmd="daily" aria-pressed="${s.mode === 'daily'}" ${this.info.config && !this.info.config.daily_enabled?'hidden':''}>Dnevni izazov</button><button class="${s.mode === 'practice' ? 'is-active' : ''}" data-cmd="practice" aria-pressed="${s.mode === 'practice'}" ${this.info.config && !this.info.config.practice_enabled?'hidden':''}>Vežbanje</button></div>
         </nav>
         <div class="snd-board">${this.visual()}<section class="snd-panel" tabindex="-1" aria-label="Trenutna runda">${this.panel()}</section></div>
         <div class="snd-error" role="alert" ${this.error ? '' : 'hidden'}>${esc(this.error)}${this.recovery ? `<button data-cmd="${esc(this.recovery.command)}">${esc(this.recovery.label)}</button>` : ''}</div>
         ${this.canSave === false && !this.account.authenticated ? '<p class="snd-storage-note">Pregledač ne dozvoljava čuvanje partije i statistike.</p>' : ''}
         ${this.notice ? `<p class="snd-notice" role="status">${esc(this.notice)}</p>` : ''}
         <p class="snd-save-status">${this.account.authenticated ? `<span>Progres se čuva na nalogu.</span><a href="${safeUrl(this.root.dataset.account)}">Moj nalog</a>` : `<span>Igraš kao gost.</span><a href="${safeUrl(this.root.dataset.login)}">Prijavi se</a><span>za čuvanje na nalogu.</span>`}</p>
-        <footer class="snd-footer"><button data-cmd="sources">Obuhvat i izvori</button></footer>
-        <div class="snd-modal-host"></div><div class="snd-announcer" aria-live="polite" aria-atomic="true"></div>`;
+        ${L.config().show_sources===false?'':'<footer class="snd-footer"><button data-cmd="sources">Obuhvat i izvori</button></footer>'}
+        <div class="snd-modal-host"></div><div class="snd-announcer" aria-live="polite" aria-atomic="true"></div>`);
       this.bind();
       const live=this.root.querySelector('.snd-announcer');
-      if(live){const message=s.stage==='quiz'?['Runda',s.question_index+2,'od',s.question_count+1,s.question.title].join(' '):s.stage==='complete'?'Partija je završena.':s.stage==='reveal'?'Teritorija je otkrivena.':'Prepoznaj teritoriju.';setTimeout(()=>{if(this.root.querySelector('.snd-announcer')===live)live.textContent=message;},50);}
+      if(live){const message=s.stage==='quiz'?L.t('Runda {round} od {total}: {title}',{round:s.question_index+2,total:s.question_count+1,title:s.question.title}):L.text(s.stage==='complete'?'Partija je završena.':s.stage==='reveal'?'Teritorija je otkrivena.':'Prepoznaj teritoriju.');setTimeout(()=>{if(this.root.querySelector('.snd-announcer')===live)live.textContent=message;},50);}
       if (this.busy) this.setBusy(true);
     }
     visual() {
       const s = this.state, q = s.question;
       if (s.stage === 'quiz' && q.image) {
-        return `<div class="snd-visual snd-visual-photo"><div class="snd-photo-wrap"><img class="snd-landmark-photo snd-media-img" src="${this.mediaUrl(q.image)}" alt="Znamenitost koju treba prepoznati" loading="eager"></div><p class="snd-photo-credit">Foto: ${esc(q.credit)} · ${licenseUrl(q.license) ? `<a href="${safeUrl(licenseUrl(q.license))}" target="_blank" rel="noopener noreferrer">${esc(q.license)}</a>` : esc(q.license)}${q.image_source ? ` · ${sourceLink(q.image_source,'Izvor fotografije ↗')}` : ''}</p>${!q.answer && !q.image_source ? '<button class="snd-text-button" data-cmd="source">Prikaži izvor fotografije (pomoć)</button>' : ''}${q.source_help_used ? '<p class="snd-round">Izvor fotografije je korišćen kao pomoć.</p>' : ''}</div>`;
+        return `<div class="snd-visual snd-visual-photo"><div class="snd-photo-wrap"><img class="snd-landmark-photo snd-media-img" src="${this.mediaUrl(q.image)}" alt="Znamenitost koju treba prepoznati" loading="eager"></div><p class="snd-photo-credit">Foto: ${esc(q.credit)} · ${licenseUrl(q.license) ? `<a href="${safeUrl(licenseUrl(q.license))}" target="_blank" rel="noopener noreferrer">${esc(q.license)}</a>` : esc(q.license)}${q.image_source ? ` · ${sourceLink(q.image_source,'Izvor fotografije ↗')}` : ''}</p>${!q.answer && !q.image_source && s.source_help_enabled!==false ? '<button class="snd-text-button" data-cmd="source">Prikaži izvor fotografije (pomoć)</button>' : ''}${q.source_help_used ? '<p class="snd-round">Izvor fotografije je korišćen kao pomoć.</p>' : ''}</div>`;
       }
       if (s.stage === 'guess' || s.stage === 'quiz') {
         return `<div class="snd-visual ${s.stage === 'quiz' ? 'snd-visual-small' : ''}"><svg class="snd-shape" viewBox="0 0 360 360" role="img" aria-label="${s.stage === 'guess' ? 'Obris nepoznate teritorije; sever je gore' : 'Obris teritorije ' + esc(s.territory.name)}"><path d="${esc(s.shape)}"/></svg></div>`;
@@ -202,13 +206,13 @@
     panel() {
       const s = this.state;
       if (s.stage === 'guess') return this.guessPanel();
-      if (s.stage === 'reveal') return `<h2>${esc(s.territory.name)}</h2><p class="snd-panel-copy">${s.solved ? ['Pogođeno iz',s.guesses.length + '.', 'pokušaja.'].join(' ') : 'Odgovor je otkriven.'}</p><button class="snd-primary" data-cmd="next">Dodatna pitanja</button><button class="snd-text-button" data-cmd="finish">Završi partiju</button>`;
+      if (s.stage === 'reveal') return `<h2>${esc(s.territory.name)}</h2><p class="snd-panel-copy">${s.solved ? L.t('Pogođeno iz {count}. pokušaja.',{count:s.guesses.length}) : 'Odgovor je otkriven.'}</p><button class="snd-primary" data-cmd="next">${s.question_count ? 'Dodatna pitanja' : 'Rezultat'}</button><button class="snd-text-button" data-cmd="finish">Završi partiju</button>`;
       if (s.stage === 'quiz') return this.quizPanel();
       return this.resultPanel();
     }
     guessPanel() {
       const s = this.state;
-      return `<p class="snd-round-label">Runda 1/${s.question_count + 1}</p><div class="snd-question-heading"><h2>Koja je ovo teritorija?</h2><span class="snd-turn" aria-label="Pokušaj ${s.guesses.length + 1} od ${s.max_guesses}">Pokušaj ${s.guesses.length + 1}/${s.max_guesses}</span></div>${this.history()}<form class="snd-guess-form"><label class="snd-sr-only" for="${this.root.id}-search">${s.kind === 'district' ? 'Naziv okruga ili Grad Beograd' : 'Naziv opštine ili grada'}</label><div class="snd-search-wrap"><input id="${this.root.id}-search" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${s.kind === 'district' ? 'Unesi okrug…' : 'Unesi opštinu ili grad…'}" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="${this.root.id}-suggestions"><div id="${this.root.id}-suggestions" class="snd-suggestions" role="listbox" aria-label="Predložene teritorije" hidden></div></div><button class="snd-primary" type="submit" data-cmd="guess" disabled>Pogodi</button></form>${s.hint ? `<p class="snd-hint">${esc(s.hint_text)}</p>` : ''}<div class="snd-secondary-actions">${!s.hint && s.guesses.length >= 3 ? '<button class="snd-text-button" data-cmd="hint">Prikaži pomoć</button>' : ''}<button class="snd-text-button" data-cmd="giveup">Otkrij odgovor</button></div>`;
+      return `<p class="snd-round-label">Runda 1/${s.question_count + 1}</p><div class="snd-question-heading"><h2>Koja je ovo teritorija?</h2><span class="snd-turn" aria-label="Pokušaj ${s.guesses.length + 1} od ${s.max_guesses}">Pokušaj ${s.guesses.length + 1}/${s.max_guesses}</span></div>${this.history()}<form class="snd-guess-form"><label class="snd-sr-only" for="${this.root.id}-search">${s.kind === 'district' ? 'Naziv okruga ili Grad Beograd' : 'Naziv opštine ili grada'}</label><div class="snd-search-wrap"><input id="${this.root.id}-search" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${s.kind === 'district' ? 'Unesi okrug…' : 'Unesi opštinu ili grad…'}" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="${this.root.id}-suggestions"><div id="${this.root.id}-suggestions" class="snd-suggestions" role="listbox" aria-label="Predložene teritorije" hidden></div></div><button class="snd-primary" type="submit" data-cmd="guess" disabled>Pogodi</button></form>${s.hint ? `<p class="snd-hint">${esc(s.hint_text)}</p>` : ''}<div class="snd-secondary-actions">${!s.hint && s.hint_enabled!==false && s.guesses.length >= (s.hint_after || 3) ? '<button class="snd-text-button" data-cmd="hint">Prikaži pomoć</button>' : ''}<button class="snd-text-button" data-cmd="giveup">Otkrij odgovor</button></div>`;
     }
     history() {
       const s = this.state;
@@ -219,7 +223,7 @@
       const s=this.state,q=s.question,a=q.answer,media=Boolean(q.image || q.type==='flag');
       return `<p class="snd-round">${esc(s.territory.name)} · Runda ${s.question_index+2}/${s.question_count+1}</p><h2 class="snd-question-title">${esc(q.title)}</h2>${q.subtitle ? `<p class="snd-panel-copy">${esc(q.subtitle)}</p>` : ''}
         <div class="snd-options ${q.type==='flag'?'snd-flag-options':''}">${q.options.map(o=>`<button class="snd-option ${q.type==='flag'?'snd-flag-option':''} ${a?o.id===q.correct?'is-correct':o.id===a.choice?'is-wrong':'is-muted':''}" data-choice="${esc(o.id)}" ${a || this.mediaFailed?'disabled':''}>${o.image?`<img class="snd-media-img" src="${this.mediaUrl(o.image)}" alt="" loading="eager">`:''}<span>${esc(o.label)}</span>${a&&o.id===q.correct?'<b aria-label="Tačan odgovor">✓</b>':a&&o.id===a.choice?'<b aria-label="Netačan odgovor">×</b>':''}</button>`).join('')}</div>
-        ${media&&!a?`<div class="snd-media-error" role="status" ${this.mediaFailed?'':'hidden'}><p>Slika nije mogla da se učita. Pokušaj ponovo ili otvori zamensko geografsko pitanje.</p><button data-cmd="retrymedia">Ponovo učitaj slike</button><button data-cmd="media_unavailable">Zamensko pitanje</button></div>`:''}
+        ${media&&!a?`<div class="snd-media-error" role="status" ${this.mediaFailed?'':'hidden'}><p>${s.media_fallback!==false?'Slika nije mogla da se učita. Pokušaj ponovo ili otvori zamensko geografsko pitanje.':'Slika nije mogla da se učita. Pokušaj ponovo.'}</p><button data-cmd="retrymedia">Ponovo učitaj slike</button>${s.media_fallback!==false?'<button data-cmd="media_unavailable">Zamensko pitanje</button>':''}</div>`:''}
         ${a?`<div class="snd-explanation ${a.correct?'is-correct':''}" role="status"><strong>${a.skipped?'Preskočeno — tačan odgovor':a.correct?'Tačno.':'Netačno.'}</strong><p>${esc(q.explanation)}</p>${questionSources(q)}${this.credits(q)}</div><button class="snd-primary" data-cmd="next">${s.question_index+1===s.question_count?'Rezultat':'Dalje'}</button>`:'<button class="snd-text-button" data-cmd="skip">Preskoči pitanje</button>'}`;
     }
     credits(q) {
@@ -249,7 +253,7 @@
     resultPanel() {
       const s=this.state,stats=kindStats(this.account.authenticated?this.account.progress:storage.get('stats',{}),s.kind);
       const help=s.hint || s.source_help?'Pomoć: korišćena':'Pomoć: nije korišćena';
-      return `<h2>Rezultat</h2><p class="snd-panel-copy">${esc(s.territory.name)}</p><p class="snd-outcome">${esc(outcome(s))}</p><div class="snd-score-grid"><div><span>Teritorija</span><strong class="${s.solved?'':'snd-score-word'}">${s.solved?s.guesses.length+'<small>/6</small>':s.guesses.length>=s.max_guesses?'Nije pogođeno':'Otkriveno'}</strong></div><div><span>Kviz</span><strong>${s.score}<small>/${s.question_count}</small></strong></div></div><p class="snd-result-meta">${help}${s.mode==='daily'?' · Niz igranja: '+formatDays(this.streak()):''}</p><button class="snd-primary" data-cmd="share">Podeli rezultat</button><button class="snd-secondary" data-cmd="again">${s.mode==='daily'?'Vežbaj':'Nova partija'}</button><details class="snd-review"><summary>Odgovori i statistika</summary><p>Upoznato: ${stats.discovered.length}/${this.info.counts[s.kind]} teritorija.</p>${s.review.map(q=>this.reviewItem(q)).join('')}</details>`;
+      return `<h2>Rezultat</h2><p class="snd-panel-copy">${esc(s.territory.name)}</p><p class="snd-outcome">${esc(outcome(s))}</p><div class="snd-score-grid"><div><span>Teritorija</span><strong class="${s.solved?'':'snd-score-word'}">${s.solved?s.guesses.length+'<small>/'+s.max_guesses+'</small>':s.guesses.length>=s.max_guesses?'Nije pogođeno':'Otkriveno'}</strong></div><div><span>Kviz</span><strong>${s.score}<small>/${s.question_count}</small></strong></div></div><p class="snd-result-meta">${help}${s.mode==='daily'?' · Niz igranja: '+formatDays(this.streak()):''}</p><button class="snd-primary" data-cmd="share">Podeli rezultat</button><button class="snd-secondary" data-cmd="again">${s.mode==='daily'?'Vežbaj':'Nova partija'}</button><details class="snd-review"><summary>Odgovori i statistika</summary><p>Upoznato: ${stats.discovered.length}/${this.info.counts[s.kind]} teritorija.</p>${s.review.map(q=>this.reviewItem(q)).join('')}</details>`;
     }
     bind() {
       this.root.querySelectorAll('[data-cmd]').forEach(b => b.addEventListener('click', async event => {
@@ -281,10 +285,10 @@
         const display = () => {
           const query = normalize(input.value); const guessed = new Set(this.state.guesses.map(g => g.id));
           const found=this.state.catalog.filter(t=>(!query || [t.name,...(t.aliases || [])].some(n=>normalize(n).includes(query))));
-          matches=found.filter(t=>!guessed.has(t.id)).sort((a,b)=>a.name.localeCompare(b.name,'sr-Latn'));
+          matches=found.filter(t=>!guessed.has(t.id)).sort((a,b)=>a.name.localeCompare(b.name,L.config().language==='sr'?'sr-Latn':L.config().language || 'sr-Latn'));
           const alreadyTried=found.length>0 && matches.length===0;
           active = -1; input.removeAttribute('aria-activedescendant');
-          list.innerHTML = matches.length ? matches.map((t,i) => `<div role="option" id="${this.root.id}-option-${i}" aria-selected="false" data-index="${i}">${esc(t.name)}<span>↵</span></div>`).join('') : `<div class="snd-no-matches">${alreadyTried?'Ovu teritoriju si već pokušao/la.':'Nema rezultata. Probaj drugi naziv.'}</div>`;
+          list.innerHTML = L.html(matches.length ? matches.map((t,i) => `<div role="option" id="${this.root.id}-option-${i}" aria-selected="false" data-index="${i}">${esc(t.name)}<span>↵</span></div>`).join('') : `<div class="snd-no-matches">${alreadyTried?'Ovu teritoriju si već pokušao/la.':'Nema rezultata. Probaj drugi naziv.'}</div>`);
           list.hidden = false; input.setAttribute('aria-expanded','true');
           list.querySelectorAll('[role=option]').forEach(option=>option.addEventListener('click',()=>{
             if(gesture && gesture.moved)return;choose(Number(option.dataset.index));
@@ -318,7 +322,7 @@
     focusPanel() { const panel = this.root.querySelector('.snd-panel'); if (panel) panel.focus({ preventScroll:true }); }
     modal(title, content) {
       const host = this.root.querySelector('.snd-modal-host'), before = document.activeElement;
-      host.innerHTML = `<div class="snd-modal-backdrop"><section class="snd-modal" role="dialog" aria-modal="true" aria-labelledby="${this.root.id}-modal-title" tabindex="-1"><button class="snd-modal-close" aria-label="Zatvori">×</button><h2 id="${this.root.id}-modal-title">${esc(title)}</h2>${content}</section></div>`;
+      host.innerHTML = L.html(`<div class="snd-modal-backdrop"><section class="snd-modal" role="dialog" aria-modal="true" aria-labelledby="${this.root.id}-modal-title" tabindex="-1"><button class="snd-modal-close" aria-label="Zatvori">×</button><h2 id="${this.root.id}-modal-title">${esc(title)}</h2>${content}</section></div>`);
       const modal = host.querySelector('.snd-modal'), close = () => { host.innerHTML = ''; if (before) before.focus(); };
       host.querySelector('.snd-modal-close').onclick = close;
       host.querySelector('.snd-modal-backdrop').onclick = event => { if (event.target === event.currentTarget) close(); };
@@ -333,7 +337,10 @@
       modal.focus();
     }
     help() {
-      this.modal('Kako se igra?', '<ol><li>Prva runda: prepoznaj teritoriju sa slike iz najviše šest pokušaja.</li><li>Izaberi naziv iz pretrage. Prihvaćeni su latinica, ćirilica i unos bez kvačica.</li><li>Strelica i kilometri vode od tvog odgovora ka traženoj teritoriji. Sever je gore. Posle tri promašaja možeš dobiti pomoć.</li><li>Zatim slede četiri dodatna pitanja. Možeš ih odigrati, preskočiti ili odmah završiti partiju. Pitanja obuhvataju stanovništvo ili položaj, administrativnu geografiju, zastavu i znamenitost.</li></ol><p>Za mesta bez potvrđene zastave ili fotografije dobijaš jasno označeno geografsko pitanje. Ako slika ne može da se učita, možeš pokušati ponovo ili izabrati zamensko pitanje. Izvor fotografije dostupan je pre odgovora kao označena pomoć; autor i licenca uvek su vidljivi.</p><p>Dnevni izazov je isti za sve i menja se u ponoć po vremenu u Srbiji. Vežbanje daje nasumične partije. Niz igranja broji završene dnevne partije, uključujući one sa otkrivenim odgovorom i preskočenim kvizom.</p><p>Prijavljenim igračima partija i rezultati čuvaju se na nalogu. Gosti čuvaju rezultate u ovom pregledaču. Deljenje ne otkriva rešenje.</p>');
+      const s=this.state;
+      const intro=L.t('Prepoznaj teritoriju iz najviše {count} pokušaja.',{count:s.max_guesses});
+      const hint=s.hint_enabled!==false?L.t('Pomoć je dostupna posle {count} promašaja.',{count:s.hint_after || 3}):'';
+      this.modal('Kako se igra?', `<ol><li>${esc(intro)}</li><li>Izaberi naziv iz pretrage. Prihvaćeni su latinica, ćirilica i unos bez kvačica.</li><li>Strelica i kilometri vode od tvog odgovora ka traženoj teritoriji. Sever je gore.</li>${hint?`<li>${esc(hint)}</li>`:''}${s.question_count?'<li>Posle pogađanja slede dodatna pitanja. Možeš ih odigrati, preskočiti ili odmah završiti partiju.</li>':''}</ol><p>Za mesta bez potvrđene zastave ili fotografije dobijaš jasno označeno geografsko pitanje. Autor i licenca slike uvek su vidljivi.</p><p>Dnevni izazov je isti za sve i menja se u ponoć po vremenu u Srbiji. Vežbanje daje nasumične partije. Niz igranja broji završene dnevne partije, uključujući one sa otkrivenim odgovorom i preskočenim kvizom.</p><p>Prijavljenim igračima partija i rezultati čuvaju se na nalogu. Gosti čuvaju rezultate u ovom pregledaču. Deljenje ne otkriva rešenje.</p>`);
     }
     sources() { this.modal('Mapa, podaci i slike', `<p>${esc(this.info.coverage)}</p><p>Obrisi su pojednostavljeni radi prikaza. Udaljenost se računa između geometrijskih centara, ne između granica ili administrativnih sedišta.</p><ul>${this.info.sources.map(s => `<li>${sourceLink(s.url,s.label)}<br><small>${esc(s.license)}</small></li>`).join('')}</ul><p>Uz odgovor na pitanje prikazan je njegov izvor. Fotografije i zastave imaju navedene autore i licence. Kada slika nije dostupna, dobijaš označeno geografsko pitanje.</p><p>${sourceLink('https://github.com/cvjetan23/Srbija-na-dlanu/blob/main/srbija-na-dlanu/FLAGS.md','Sve zastave: autori, licence i izvori ↗')}</p>`); }
     shareUrl() {
@@ -348,14 +355,14 @@
       const marks=s.guesses.map(g=>g.correct?'🟩':'⬜').join('') || '↳';
       const review=s.review.map(r=>r.answer.correct?'🟩':r.answer.skipped?'⬜':'🟨').join('');
       const lines=[
-        ['Srbija na dlanu ·',s.kind==='district'?'Okruzi':'Opštine i gradovi'].join(' '),
+        [(L.config().app_name || 'Srbija na dlanu')+' ·',L.text(s.kind==='district'?'Okruzi':'Opštine i gradovi')].join(' '),
         s.mode==='daily'?['Dnevni izazov #'+s.number,'·',s.date].join(' '):'Vežbanje',
-        [marks,outcome(s),s.solved?s.guesses.length+'/6':''].filter(Boolean).join(' '),
-        ['Kviz',review,s.score+'/'+s.question_count].join(' '),
+        [marks,outcome(s),s.solved?s.guesses.length+'/'+s.max_guesses:''].filter(Boolean).join(' '),
+        L.t('Kviz {marks} {score}',{marks:review,score:s.score+'/'+s.question_count}),
         s.hint || s.source_help?'Pomoć: korišćena':'Pomoć: nije korišćena',
         this.shareUrl()
       ];
-      const text=lines.join('\n');
+      const text=lines.map(line=>L.text(line)).join('\n');
       try { await navigator.clipboard.writeText(text); this.modal('Rezultat je kopiran', '<p>Možeš da ga pošalješ prijateljima. Rešenje nije uključeno.</p>'); }
       catch (_) { this.modal('Podeli rezultat', `<p>Kopiraj tekst i pošalji prijateljima:</p><textarea class="snd-share-text" readonly rows="8" aria-label="Rezultat za kopiranje">${esc(text)}</textarea>`); const area = this.root.querySelector('textarea'); area.focus(); area.select(); }
     }

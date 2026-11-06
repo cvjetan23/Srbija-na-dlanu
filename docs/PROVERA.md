@@ -1,4 +1,25 @@
-# Provera verzije 2.1.0
+# Provera verzije 3.0.0
+
+Verzija 3.0.0 proverena je na izolovanom WordPress-u 7.1.4 sa PHP 8.4.27 i SQLite integracijom kroz WP `wpdb`. Testovi nisu slati produkcijskim korisnicima; testna e-pošta je presretana lokalno.
+
+| Skup | Provera |
+|---|---:|
+| Postojeći PHP backend, nalozi, resursi i QA regresije | 5.327 |
+| Novi jezici, pitanja svih 204 teritorije, pravila, istorija, privatnost i administracija | 13.655 |
+| Postojeći JS tok i događaji | 90 |
+| Novi JS prevodi, parametri API-ja, pravila i događaji promene teme | 43 |
+| Novi HTTP test četiri jezika, WP prijave, admin formi i izvoza | 301 |
+| Raniji puni HTTP tok, ponovo izvršen na 3.0.0 | 271 |
+
+Ukupno **19.687 tvrdnji u testovima**, uz PHP/JS sintaksu i proveru determinističkog instalacionog ZIP-a. Broj tvrdnji nije broj uređaja, korisnika ili nezavisnih scenarija.
+
+Novi HTTP test proverava svih pet javnih pogleda u četiri jezika, privatni nalog, obris i opštine okruga, pitanja i pregled odgovora, promenu jezika između dve sesije istog naloga, zabranu drugom nalogu, administratorske stranice, čuvanje pravila uz stvarni nonce, odbijanje pogrešnog nonce-a, svih šest CSV/JSON preuzimanja i zabranu njihovog preuzimanja Pretplatniku, registraciju i postavljanje lozinke na ruskom. PHP provere pokrivaju stabilne identifikatore odgovora u svim jezicima, zamrzavanje pravila, uvoz starijih zbirnih zapisa, izbegavanje duplog beleženja, spajanje gosta sa nalogom, HMAC identifikatore, zaštitu CSV formula i WP izvoz/brisanje podataka sa poništavanjem starih sesija.
+
+Svetla/tamna/automatska tema proverene su kroz generisani HTML, CSS pravila i JavaScript događaje/pamćenje izbora. **Vizuelni pregled u pravom pregledaču i na fizičkom telefonu nije izvršen.** Lokalna dostava pošte je simulirana; produkcijska SMTP isporuka nije deo ovih testova. GitHub Actions dodatno pokreće PHP testove na MySQL-u sa Autoptimize i Slim SEO.
+
+Ponovljivi novi testovi: `tests/v3-features.php`, `tests/v3-frontend.js`, `tests/http-v3.py`. HTTP harness zahteva beautifulsoup4, promenljive `WP_ROOT`, `PHP_BIN` (opciono), `SND_TEST_URL` i lokalni backend server, npr. `WP_ROOT=/putanja/wp SND_TEST_URL=http://127.0.0.1:8899 php -S 127.0.0.1:8899 -t /putanja/wp tests/http-router.php`. Testna WP konfiguracija mora koristiti isti `SND_TEST_URL` za `WP_HOME` i `WP_SITEURL`. Harness odbija servere koji nisu loopback; fixture odbija produkcijsko okruženje. Testovi menjaju namenske podatke i ne pokreću se na produkciji.
+
+# Provera verzije 2.1.0 (prethodna evidencija)
 
 Ispravke dva naknadna QA izveštaja, sa 5.419 provera na izdvojenom WordPress-u i granicama verifikacije, opisane su u [QA-ISPRAVKE.md](QA-ISPRAVKE.md). Novi paket 2.1.0 treba postaviti na produkciju. Ispod ostaje prethodna evidencija za 2.0.0.
 

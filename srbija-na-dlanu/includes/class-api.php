@@ -3,6 +3,7 @@ defined('ABSPATH') || exit;
 
 final class SND_API {
     public static function register() {
+        register_rest_route('srbija-na-dlanu/v1','/activity',array('methods'=>'POST','callback'=>array('SND_Analytics','activity'),'permission_callback'=>'__return_true'));
         register_rest_route('srbija-na-dlanu/v1', '/bootstrap', array('methods' => 'GET', 'callback' => array(__CLASS__, 'bootstrap'), 'permission_callback' => '__return_true'));
         foreach (array('start', 'resume', 'action') as $route) {
             register_rest_route('srbija-na-dlanu/v1', '/' . $route, array('methods' => 'POST', 'callback' => array(__CLASS__, $route), 'permission_callback' => '__return_true'));
@@ -29,13 +30,14 @@ final class SND_API {
         $data = SND_Data::get(); $date = SND_Game::date();
         $tomorrow = new DateTimeImmutable('tomorrow', new DateTimeZone('Europe/Belgrade'));
         $outline = array(); foreach (SND_Data::pool('district') as $t) { $outline[] = $t['map_path']; }
-        return self::response(array('date' => $date, 'next_change' => $tomorrow->getTimestamp(), 'server_time' => time(), 'counts' => array('district' => count(SND_Data::pool('district')), 'municipality' => count(SND_Data::pool('municipality'))), 'coverage' => $data['coverage'], 'sources' => $data['sources'], 'outline' => $outline, 'version' => SND_VERSION));
+        return self::response(array('date' => $date, 'next_change' => $tomorrow->getTimestamp(), 'server_time' => time(), 'counts' => array('district' => count(SND_Data::pool('district')), 'municipality' => count(SND_Data::pool('municipality'))), 'coverage' => $data['coverage'], 'sources' => $data['sources'], 'outline' => $outline, 'version' => SND_VERSION,'config'=>SND_Settings::public_config()));
     }
 
     public static function start($request) {
         $limit = self::limit('start', 60); if (is_wp_error($limit)) { return $limit; }
         $kind = $request->get_param('kind'); $mode = $request->get_param('mode');
         if (!in_array($kind, array('district', 'municipality'), true) || !in_array($mode, array('daily', 'practice'), true)) { return new WP_Error('snd_mode', 'Nepoznata igra ili režim.', array('status' => 400)); }
+        if(!SND_Settings::get($kind.'_enabled') || !SND_Settings::get($mode.'_enabled')){return new WP_Error('snd_disabled','Nove partije ovog tipa trenutno nisu dostupne.',array('status'=>503));}
         $lock = is_user_logged_in() ? 'snd_start_lock_'.get_current_user_id().'_'.$kind.'_'.$mode : '';
         $lease=$lock?SND_Lock::acquire($lock):true;
         if (!$lease) { return new WP_Error('snd_busy','Partija se još priprema. Pokušaj ponovo.',array('status'=>409)); }
@@ -85,6 +87,7 @@ final class SND_API {
         } finally { SND_Lock::release($key,$lease); }
     }
     private static function game_response($token, $state) {
+        SND_Analytics::capture($state);
         $out = array('token'=>$token,'state'=>SND_Game::public_state($state));
         if (get_current_user_id()) { $out['progress']=SND_Progress::summary(get_current_user_id()); }
         return self::response($out);
@@ -103,6 +106,7 @@ final class SND_API {
         try {
             $s=SND_Game::load($token);if(is_wp_error($s)){return $s;}
             $s['owner']=get_current_user_id();
+            $s['privacy_epoch']=get_user_meta(get_current_user_id(),'snd_privacy_epoch',true);
             $record=SND_Progress::record($s);if(is_wp_error($record)){return $record;}
             SND_Game::persist($token,$s);SND_Progress::remember(get_current_user_id(),$c['kind'],$c['mode'],$token);
             return self::game_response($token,$s);

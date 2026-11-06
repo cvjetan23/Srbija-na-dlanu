@@ -167,6 +167,8 @@ final class SND_Game {
         $catalog = array();
         foreach ($pool as $t) { $catalog[$t['id']] = array_intersect_key($t, array_flip(array('id', 'kind', 'name', 'center', 'aliases', 'map_path'))); }
         $challenge = array('date' => $date, 'kind' => $kind, 'mode' => $mode, 'ruleset' => self::RULESET, 'storage_key' => $key, 'number' => max(1, $days + 1), 'target' => $target, 'catalog' => $catalog, 'revision' => $data['revision'], 'questions' => self::questions($target, $pool, $districts, $seed));
+        $challenge['options']=SND_Settings::game_options();$slots=array('population','administration','flag','landmark');$selected=array();
+        foreach($challenge['questions'] as $i=>$question){if(in_array($slots[$i],$challenge['options']['rounds'],true)){$selected[]=$question;}}$challenge['questions']=$selected;
         if ($mode === 'daily') { add_option($key, $challenge, '', false); return get_option($key); }
         return $challenge;
         } finally {if($lock){SND_Lock::release($lock,$lease);}}
@@ -175,13 +177,15 @@ final class SND_Game {
     public static function create($kind, $mode) {
         $c = self::challenge($kind, $mode); if (is_wp_error($c)) { return $c; }
         $token = bin2hex(random_bytes(24));
-        $state = array('challenge' => $c, 'stage' => 'guess', 'guesses' => array(), 'hint' => false, 'solved' => false, 'answers' => array(), 'question_index' => 0, 'revision' => 0, 'owner' => get_current_user_id(), 'game_id' => bin2hex(random_bytes(16)), 'recorded' => false);
+        $state = array('challenge' => $c, 'stage' => 'guess', 'guesses' => array(), 'hint' => false, 'solved' => false, 'answers' => array(), 'question_index' => 0, 'revision' => 0, 'owner' => get_current_user_id(), 'game_id' => bin2hex(random_bytes(16)), 'recorded' => false,'started_at'=>time(),'activity_log'=>array(array('at'=>gmdate('c'),'action'=>'start')));
+        $state['privacy_epoch']=get_current_user_id()?get_user_meta(get_current_user_id(),'snd_privacy_epoch',true):'';
         self::persist($token, $state);
         SND_Progress::remember(get_current_user_id(), $kind, $mode, $token);
         return array('token' => $token, 'state' => self::public_state($state));
     }
 
     public static function persist($token, $state) {
+        SND_Analytics::capture($state);
         if ($state['challenge']['mode'] === 'daily') {
             $state['challenge_key'] = $state['challenge']['storage_key'] ?? ('snd_day_' . str_replace('-', '', $state['challenge']['date']) . '_' . $state['challenge']['kind']);
             unset($state['challenge']);
@@ -194,6 +198,7 @@ final class SND_Game {
         $s = get_transient('snd_session_' . $token);
         if (!$s) { return new WP_Error('snd_expired', 'Sačuvana partija je istekla. Pokreni novu.', array('status' => 410)); }
         if (!empty($s['owner']) && (int) $s['owner'] !== get_current_user_id()) { return new WP_Error('snd_owner', 'Ova partija pripada drugom nalogu.', array('status' => 403)); }
+        if(!empty($s['owner']) && (($s['privacy_epoch']??'')!==get_user_meta($s['owner'],'snd_privacy_epoch',true))){return new WP_Error('snd_expired','Sačuvana partija je istekla. Pokreni novu.',array('status'=>410));}
         if (!isset($s['challenge']) && isset($s['challenge_key'])) { $s['challenge'] = get_option($s['challenge_key']); }
         if (empty($s['challenge'])) { return new WP_Error('snd_expired', 'Podaci ove partije više nisu dostupni. Pokreni novu.', array('status' => 410)); }
         if ($s['challenge']['mode'] === 'daily' && $s['challenge']['date'] !== self::date()) { return new WP_Error('snd_new_day', 'Stigao je novi dnevni izazov. Pokreni današnju partiju.', array('status' => 410)); }
@@ -201,24 +206,26 @@ final class SND_Game {
     }
 
     public static function act(&$s, $action, $value) {
-        $c = $s['challenge'];
+        $c = $s['challenge'];$options=SND_Settings::options_for($c);$before_index=$s['question_index'];
         if ($action === 'guess' && $s['stage'] === 'guess') {
             if (!is_string($value) || !isset($c['catalog'][$value])) { return new WP_Error('snd_guess', 'Izaberi teritoriju iz ponuđene liste.', array('status' => 400)); }
             foreach ($s['guesses'] as $guess) { if ($guess['id'] === $value) { return new WP_Error('snd_duplicate', 'Ovu teritoriju si već pokušao/la.', array('status' => 400)); } }
             $from = $c['catalog'][$value]; $correct = $value === $c['target']['id'];
             $s['guesses'][] = array('id' => $value, 'name' => $from['name'], 'km' => (int) round(self::distance($from['center'], $c['target']['center'])), 'direction' => self::direction($from['center'], $c['target']['center']), 'correct' => $correct);
-            if ($correct || count($s['guesses']) >= self::MAX_GUESSES) { $s['stage'] = 'reveal'; $s['solved'] = $correct; }
-        } elseif ($action === 'hint' && $s['stage'] === 'guess' && count($s['guesses']) >= 3 && !$s['hint']) {
+            if ($correct || count($s['guesses']) >= $options['max_guesses']) { $s['stage'] = 'reveal'; $s['solved'] = $correct; }
+        } elseif ($action === 'hint' && $s['stage'] === 'guess' && $options['hint_enabled'] && count($s['guesses']) >= $options['hint_after'] && !$s['hint']) {
             $s['hint'] = true;
         } elseif ($action === 'giveup' && $s['stage'] === 'guess') {
             $s['stage'] = 'reveal';
         } elseif ($action === 'next' && $s['stage'] === 'reveal') {
-            $s['stage'] = 'quiz';
+            $s['stage'] = $c['questions']?'quiz':'complete';
         } elseif ($action==='source' && $s['stage']==='quiz' && !isset($s['answers'][$s['question_index']])) {
+            if(!$options['source_help_enabled']){return new WP_Error('snd_help_disabled','Ova pomoć je isključena u podešavanjima igre.',array('status'=>403));}
             $q=self::question_for($s,$s['question_index']);
             if(empty($q['image']) || empty($q['image_source'])){return new WP_Error('snd_source','Izvor slike sada nije dostupan.',array('status'=>409));}
             $s['source_help']=true;$s['source_help_questions'][$s['question_index']]=true;
         } elseif ($action==='media_unavailable' && $s['stage']==='quiz' && !isset($s['answers'][$s['question_index']])) {
+            if(!$options['media_fallback']){return new WP_Error('snd_fallback_disabled','Zamensko pitanje je isključeno u podešavanjima igre.',array('status'=>403));}
             $q=self::question_for($s,$s['question_index']);
             if(empty($q['image']) && $q['type']!=='flag'){return new WP_Error('snd_media','Ovo pitanje ne koristi slike.',array('status'=>409));}
             $target=$c['target'];$pool=SND_Data::pool($c['kind']);
@@ -236,14 +243,17 @@ final class SND_Game {
             foreach ($c['questions'] as $i => $q) { if (!isset($s['answers'][$i])) { $s['answers'][$i] = array('choice' => null, 'correct' => false, 'skipped' => true); } }
             $s['stage'] = 'complete';
         } else { return new WP_Error('snd_action', 'Ovaj potez sada nije dostupan. Osveži prikaz partije.', array('status' => 409)); }
+        $s['activity_log'][]=array('at'=>gmdate('c'),'action'=>$action,'stage'=>$s['stage'],'question'=>$before_index+1,'value'=>in_array($action,array('guess','answer'),true)?$value:null);
+        $s['activity_log']=array_slice($s['activity_log'],-100);
+        if($s['stage']==='complete' && empty($s['completed_at'])){$s['completed_at']=time();}
         $s['revision']++;
         return true;
     }
 
     public static function public_state($s) {
-        $c = $s['challenge'];
+        $c = $s['challenge'];$options=SND_Settings::options_for($c);
         $out = array_intersect_key($s, array_flip(array('stage', 'guesses', 'hint', 'solved', 'question_index', 'revision', 'source_help')));
-        $out += array('date' => $c['date'], 'number' => $c['number'], 'kind' => $c['kind'], 'mode' => $c['mode'], 'shape' => $c['target']['path'], 'max_guesses' => self::MAX_GUESSES, 'question_count' => count($c['questions']));
+        $out += array('date' => $c['date'], 'number' => $c['number'], 'kind' => $c['kind'], 'mode' => $c['mode'], 'shape' => $c['target']['path'], 'max_guesses' => $options['max_guesses'],'hint_after'=>$options['hint_after'],'hint_enabled'=>$options['hint_enabled'],'source_help_enabled'=>$options['source_help_enabled'],'media_fallback'=>$options['media_fallback'], 'question_count' => count($c['questions']));
         if($s['stage']==='guess'){$out['catalog'] = array_map(function ($t) { return array_intersect_key($t, array_flip(array('id', 'name', 'aliases'))); }, array_values($c['catalog']));}
         if ($s['hint']) { $out['hint_text'] = 'Širi položaj: ' . $c['target']['region'] . '.'; }
         if ($s['stage'] !== 'guess') {
@@ -251,7 +261,7 @@ final class SND_Game {
             if(in_array($s['stage'],array('reveal','complete'),true)){$out['map'] = array_map(function ($t) { return array_intersect_key($t, array_flip(array('id', 'name', 'map_path'))); }, array_values($c['catalog']));}
         }
         if ($s['stage'] === 'quiz') {
-            $i = $s['question_index']; $q = self::question_for($s,$i);
+            $i = $s['question_index']; $q = SND_I18n::question(self::question_for($s,$i),$c['target']);
             if(!isset($s['answers'][$i])){
                 unset($q['correct'],$q['correct_label'],$q['explanation'],$q['source'],$q['sources'],$q['credits']);
                 if(empty($s['source_help_questions'][$i])){unset($q['image_source']);}
@@ -264,12 +274,17 @@ final class SND_Game {
         if ($s['stage'] === 'complete') {
             $out['review'] = array();
             foreach($c['questions'] as $i=>$unused){
-                $q=self::question_for($s,$i);$answer=$s['answers'][$i]??array('correct'=>false,'skipped'=>true,'choice'=>null);
+                $q=SND_I18n::question(self::question_for($s,$i),$c['target']);$answer=$s['answers'][$i]??array('correct'=>false,'skipped'=>true,'choice'=>null);
                 $correct=array();$chosen=array();
                 foreach($q['options'] as $o){if($o['id']===$q['correct']){$correct=$o;}if($o['id']===($answer['choice']??null)){$chosen=$o;}}
                 $out['review'][]=array('title'=>$q['title'],'type'=>$q['type'],'correct_label'=>$q['correct_label']??($correct['label']??''),'correct_image'=>$correct['image']??($q['image']??''),'choice_label'=>$chosen['label']??'','choice_image'=>$chosen['image']??'','explanation'=>$q['explanation'],'source'=>$q['source'],'sources'=>$q['sources']??array(),'credits'=>$q['credits']??array(),'credit'=>$q['credit']??'','license'=>$q['license']??'','image_source'=>$q['image_source']??'','answer'=>$answer,'source_help_used'=>!empty($s['source_help_questions'][$i]),'technical_replacement'=>!empty($s['technical_replacements'][$i]));
             }
         }
+        foreach($out['guesses'] as &$guess){$t=$c['catalog'][$guess['id']]??null;if($t){$guess['name']=SND_I18n::territory_name($t);}$guess['direction']['name']=SND_I18n::direction($guess['direction']['name']);}unset($guess);
+        if(isset($out['catalog'])){foreach($out['catalog'] as &$entry){$original=$entry['name'];$t=$c['catalog'][$entry['id']];$entry['name']=SND_I18n::territory_name($t);$aliases=$entry['aliases']??array();$aliases[]=$original;foreach(array('sr','en','de','ru') as $language){$aliases[]=SND_I18n::t($original,array(),$language);}if($original==='Beograd'){$aliases=array_merge($aliases,array('Belgrade','Belgrad','Белград'));}$entry['aliases']=array_values(array_unique($aliases));}unset($entry);}
+        if(isset($out['territory'])){$out['territory']['name']=SND_I18n::territory_name($c['target']);}
+        if(isset($out['map'])){foreach($out['map'] as &$entry){$entry['name']=SND_I18n::territory_name($c['catalog'][$entry['id']]);}unset($entry);}
+        if($s['hint']){$out['hint_text']=SND_I18n::t('Širi položaj: {region}.',array('region'=>SND_I18n::region($c['target']['region'])));}
         return $out;
     }
 

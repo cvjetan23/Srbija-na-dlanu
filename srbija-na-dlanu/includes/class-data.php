@@ -87,6 +87,9 @@ final class SND_Data {
                 foreach (array('name', 'credit', 'license', 'fact') as $key) { $row['landmark'][$key] = sanitize_text_field($l[$key] ?? ''); }
                 $row['landmark']['image'] = $image;
                 $row['landmark']['source_url'] = esc_url_raw($l['source_url'], array('https'));
+                foreach(array('sr','en','de','ru') as $lang){foreach(array('name','fact') as $field){
+                    if(!empty($l['translations'][$lang][$field]) && is_string($l['translations'][$lang][$field])){$row['landmark']['translations'][$lang][$field]=sanitize_text_field($l['translations'][$lang][$field]);}
+                }}
             }
             $row['disabled'] = !empty($t['disabled']);
             $ids[$id] = true;

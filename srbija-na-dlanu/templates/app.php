@@ -1,7 +1,7 @@
 <?php
 defined('ABSPATH') || exit;
 ?><!doctype html>
-<html lang="sr-Latn" dir="ltr">
+<html lang="<?php echo esc_attr(SND_I18n::html_lang()); ?>" dir="ltr" data-snd-theme="light">
 <head>
 <meta charset="<?php bloginfo('charset'); ?>">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,11 +10,11 @@ defined('ABSPATH') || exit;
 <body <?php body_class('snd-app-body'); ?>>
 <?php wp_body_open(); ?>
 <div class="snd-app">
-<?php SND_Site::header(); ?>
+<?php ob_start();SND_Site::header();echo SND_I18n::html(ob_get_clean()); ?>
 <main id="snd-content" class="snd-app-content snd-view-<?php echo esc_attr(SND_Site::view()); ?>">
-<?php SND_Site::content(); ?>
+<?php ob_start();SND_Site::content();echo SND_I18n::html(ob_get_clean()); ?>
 </main>
-<footer class="snd-app-footer"><span>Srbija na dlanu</span><a href="<?php echo esc_url(SND_Site::url('library')); ?>">Baza znanja</a></footer>
+<footer class="snd-app-footer"><span><?php echo esc_html(SND_Settings::get('app_name')); ?></span><a href="<?php echo esc_url(SND_Site::url('library')); ?>"><?php echo esc_html(SND_I18n::t('Baza znanja')); ?></a></footer>
 </div>
 <?php wp_footer(); ?>
 </body>

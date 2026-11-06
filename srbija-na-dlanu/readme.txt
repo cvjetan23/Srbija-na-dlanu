@@ -4,7 +4,7 @@ Tags: geography, quiz, serbia, education
 Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 2.1.0
+Stable tag: 3.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -16,7 +16,7 @@ Zasebna geografska aplikacija u WordPress-u: igre, baza znanja i nalozi.
 * Bez zaglavlja/podnožja teme na stranicama aplikacije; ostale stranice sajta zadržavaju temu.
 * Sveden prikaz sa većim slovima: slika gore, pitanje/odgovori ispod.
 * 29 upravnih okruga i Grad Beograd, 174 opštine/grada, uključujući pet okruga i 29 opština Kosova i Metohije.
-* Šest pokušaja, udaljenost/smer i pomoć posle trećeg promašaja.
+* Podesiv broj pokušaja i pomoć; podrazumevano šest pokušaja i pomoć posle trećeg promašaja.
 * Četiri dodatna pitanja: stanovništvo/položaj, geografija, zastava i znamenitost/prostorni izazov.
 * 52 lokalne zastave pokrivaju 17 sedišta okruga i 52 opštine/grada (69 teritorija). Za mesta bez zastave koristi se označeno geografsko pitanje.
 * 30 lokalnih fotografija sa autorima i licencama.
@@ -41,15 +41,27 @@ Popis 2022. odnosi se na cele teritorije opština/gradova. Za Kosovo i Metohiju 
 
 Dnevni izazov menja se u ponoć Europe/Belgrade. Pripremljen izazov ostaje isti posle izmene sadržaja. Rezultat se računa na serveru. Prijavljenim korisnicima aktivna partija traje do 30 dana; ukupni rezultati ostaju u usermeta. Gosti imaju serversku partiju do tri dana i lokalnu statistiku. WP transient keš može ranije isteći. Nema javne rang-liste.
 
-Iz keširanja izuzmi prijavu, nalog, REST srbija-na-dlanu/v1/* i admin-ajax.php?action=snd_session. Ne keširaj privatni HTML. REST i AJAX vraćaju no-store; omogući JSON POST i X-WP-Nonce.
+Iz keširanja izuzmi svih šest stranica aplikacije, REST srbija-na-dlanu/v1/* i admin-ajax.php?action=snd_session. Ne keširaj privatni HTML. REST i AJAX vraćaju no-store; omogući JSON POST i X-WP-Nonce.
 
 Ograničavanje zahteva koristi privremeni HMAC mrežne adrese; sirova IP adresa se ne čuva u podacima dodatka. Serverski pristupni logovi zavise od hostinga. Lozinke i sesije koristi i čuva WordPress.
+
+Detaljna analitika se od 3.0.0 čuva u dve tabele iste WP baze: {prefix}snd_games i {prefix}snd_events. Administrator može da isključi beleženje, izuzme goste i promeni rok čuvanja (podrazumevano 365 dana). Progres je odvojen od analitike i ostaje na nalogu. Samo administratori sa manage_options vide spisak igrača, istoriju i izvode. Podržani su standardni WP alati za izvoz i brisanje ličnih podataka. Broj posetilaca i aktivno vreme su procene; vreme partije uključuje pauze.
 
 == Licence ==
 
 Kod: GPL-2.0-or-later. Geografija/fotografije: SOURCES.md i DATA-LICENSE.md. Zastave: FLAGS.md. Za dopunske granice Kosova i Metohije javni geografski servis nije naveo posebnu licencu za redistribuciju. Karte služe igri. Deaktivacija ne briše sadržaj i rezultate.
 
 == Changelog ==
+
+= 3.0.0 =
+* Svetla, tamna i automatska tema; četiri jezika: srpski, engleski, nemački i ruski.
+* Prevedena pitanja, objašnjenja, znamenitosti, prijava, poruke za lozinku, baza znanja i deljenje.
+* Administrativna podešavanja pravila, izgleda, jezika, registracije i analitike; urednik prevoda.
+* Spisak igrača, detaljna istorija pokušaja i kviza, filteri, pregledi i CSV/JSON izvoz.
+* Uvoz dostupnih starijih dnevnih rezultata kao zbirnih zapisa; ne postoje izmišljeni detalji starih partija.
+* Lokalna analitika bez spoljnih servisa, podesiv rok čuvanja, WP izvoz/brisanje ličnih podataka.
+* Ispravljeno spajanje parametara u registracionom linku za lozinku i zaglavlja kod tema bez title-tag podrške.
+
 
 = 2.1.0 =
 * Ispravke nalaza iz dva QA izveštaja: deljenje otvara traženi režim, a stari link jasno vodi na današnji izazov.

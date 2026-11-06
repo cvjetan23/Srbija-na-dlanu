@@ -1,4 +1,4 @@
-# Srbija na dlanu 2.1
+# Srbija na dlanu 3.0
 
 Zasebna geografska aplikacija unutar WordPress-a: početna, igre za okruge i opštine, baza znanja i nalozi igrača. Sveden prikaz: slika gore, pitanje i odgovori ispod, sa većim slovima.
 
@@ -24,20 +24,30 @@ Ove stranice imaju svoj kompas, meni, zaglavlje i podnožje, bez zaglavlja i pod
 
 Shortcode `[srbija_na_dlanu]` i dalje radi na drugim WP stranicama; tu se zadržava njihova tema. Za određenu igru koristi `[srbija_na_dlanu kind="district"]` ili `kind="municipality"`.
 
+## Novo u 3.0.0
+
+- Svetla, tamna i automatska tema; izbor se pamti na uređaju.
+- Srpski, engleski, nemački i ruski: meni, igre, pitanja, objašnjenja, baza znanja, prijava, poruke za lozinku i deljenje. Zvanični nazivi većine opština ostaju na srpskoj latinici.
+- WP podmeniji **Analitika**, **Igrači**, **Partije**, **Podešavanja** i **Prevodi**. Broj pokušaja, pomoć, runde, jezici, tema, boje, veličina teksta, registracija i analitika podešavaju se u administraciji.
+- Istorija pojedinačnih partija: ko je igrao, teritorija, pokušaji, odgovori u kvizu, pomoć, ishod i vreme. Filteri, dnevni pregled i CSV/JSON izvoz.
+- Postojeći dnevni rezultati uvoze se kao zbirni zapisi. Detalji starih pokušaja i pojedinačne stare partije vežbanja nisu postojali i ne izmišljaju se.
+
+[Uputstvo za administraciju i analitiku](docs/ADMINISTRACIJA.md). Struktura geografskih podataka i Kosovo i Metohija ostaju sačuvani.
+
 ## Ispravke 2.1.0
 
 Ispravke dva QA izveštaja obuhvataju deljene linkove sa režimom/datumom, tastaturu i dodir u pretrazi, pregled pitanja i tačnog odgovora sa slikom zastave, jasan ishod i niz igranja, oporavak slika i sesije, prelazak ponoći, regionalnu pomoć, izvore i uverljivije ponuđene odgovore. Dodatno su smanjeni odgovori API-ja i nepotrebni resursi teme, isključena problematična minifikacija resursa igre i uređeni kontrast i SEO podaci.
 
 [Detaljno: nalaz → ispravka → provera](docs/QA-ISPRAVKE.md). Postojeći podaci, 30 okružnih celina, 174 opštine/grada i Kosovo i Metohija ostaju sačuvani. Banka od 30 fotografija i 52 zastave nije proširivana ovom ispravkom; uputstvo i oznake sada dosledno opisuju geografske zamene.
 
-**Produkcija je prethodno potvrđena na 2.0.0. Verziju 2.1.0 treba postaviti novim ZIP-om i očistiti keš.** Novi kod i paket proveravaju se u izdvojenoj GitHub Actions instalaciji sa Autoptimize i Slim SEO dodacima. Novi vizuelni pregled u pravom pregledaču ili na fizičkom telefonu nije izvršen.
+**Ovaj repozitorijum sadrži paket 3.0.0.** Novi kod i paket proveravaju se u izdvojenoj GitHub Actions instalaciji sa Autoptimize i Slim SEO dodacima. Novi vizuelni pregled u pravom pregledaču ili na fizičkom telefonu nije izvršen.
 
 ## Sadržaj i igra
 
 - **30 teritorija:** 29 upravnih okruga i Grad Beograd kao posebna celina.
 - **174 opštine i grada**, sa Kosovom i Metohijom, bez zasebnih gradskih opština.
-- Stvarne siluete, šest pokušaja, udaljenost i strelica od odgovora ka traženoj teritoriji.
-- Posle otkrivanja slede **četiri dodatna pitanja**: stanovništvo/položaj, administrativna geografija, zastava i znamenitost/prostorni izazov.
+- Stvarne siluete, podrazumevano šest pokušaja (podesivo), udaljenost i strelica od odgovora ka traženoj teritoriji.
+- Posle otkrivanja podrazumevano slede **četiri dodatna pitanja** (runde su podesive): stanovništvo/položaj, administrativna geografija, zastava i znamenitost/prostorni izazov.
 - **52 lokalne zastave** pokrivaju 17 okružnih sedišta i 52 opštine/grada: ukupno 69 od 204 teritorije. Za ostala mesta koristi se jasno označeno geografsko pitanje. Zastava okružnog sedišta nije predstavljena kao zastava okruga.
 - **30 lokalnih fotografija znamenitosti**, sa autorima, licencama i izvorima.
 - Isti dnevni zadatak za sve, promena u ponoć po vremenu u Srbiji; nasumično vežbanje, nastavak i deljenje rezultata bez rešenja.
@@ -58,9 +68,9 @@ Gost koristi lokalnu statistiku pregledača i serversku partiju do tri dana. Pos
 
 WP meni **Srbija na dlanu** uređuje teritorije, fotografije i potvrđene zastave sa izvorima/licencama; podržan je JSON uvoz/izvoz. Današnji zadatak ostaje nepromenjen posle izmene sadržaja. Deaktivacija ne briše podatke.
 
-WordPress **6.2+**, PHP **7.4+**, nativni JavaScript/CSS. Koriste se postojeći WP options, transients, usermeta, REST API, korisnici, nonces i Media Library. Nema novog servera, posebne baze, npm instalacije ni API ključeva.
+WordPress **6.2+**, PHP **7.4+**, nativni JavaScript/CSS. Koriste se WP options, transients, usermeta, REST API, korisnici, nonces i Media Library, uz dve tabele analitike u istoj WP bazi (`{prefix}snd_games`, `{prefix}snd_events`). Nema novog servera, posebne baze, npm instalacije ni API ključeva.
 
-Izuzmi iz keširanja prijavu, nalog, `/wp-json/srbija-na-dlanu/v1/*` i `admin-ajax.php?action=snd_session`. Dozvoli JSON POST i `X-WP-Nonce`. Dodatak šalje `no-store` za privatne podatke; `snd_session` proverava stvarni WP kolačić i daje svež REST nonce.
+Izuzmi iz keširanja svih šest stranica aplikacije (jezik i tema zavise od izbora posetioca), `/wp-json/srbija-na-dlanu/v1/*` i `admin-ajax.php?action=snd_session`. Dozvoli JSON POST i `X-WP-Nonce`. Dodatak šalje `no-store` za privatne podatke; `snd_session` proverava stvarni WP kolačić i daje svež REST nonce.
 
 ## Izrada i provere
 
@@ -68,12 +78,14 @@ Izuzmi iz keširanja prijavu, nalog, `/wp-json/srbija-na-dlanu/v1/*` i `admin-aj
 python3 tools/build-package.py
 node tests/frontend.js
 node tests/qa-frontend.js
+node tests/v3-frontend.js
 WP_ROOT=/putanja/do/izolovanog/wp php tests/game-flow.php
 WP_ROOT=/putanja/do/izolovanog/wp php tests/account-progress.php
 WP_ROOT=/putanja/do/izolovanog/wp php tests/asset-loading.php
 WP_ROOT=/putanja/do/izolovanog/wp php tests/qa-regressions.php
+WP_ROOT=/putanja/do/izolovanog/wp php tests/v3-features.php
 ```
 
-PHP testove pokreći samo na namenskoj lokalnoj/razvojnoj WP instalaciji sa aktivnim dodatkom. Testovi kreiraju podatke; nisu namenjeni produkciji. [Izveštaj](docs/PROVERA.md) razlikuje HTTP/HTML provere od vizuelnog testa u pregledaču. Prethodna verzija 2.0.0 postavljena je na cvjetan.dev ručnim otpremanjem ZIP-a. Naknadno su prošle 134 produkcijske HTTP provere stranica, obe igre, zastava, nativne prijave/odjave, čuvanja rezultata i nastavka na drugom uređaju. Vizuelna provera u pravom pregledaču i dostava WP e-pošte nisu potvrđene.
+PHP testove pokreći samo na namenskoj lokalnoj/razvojnoj WP instalaciji sa aktivnim dodatkom. Testovi kreiraju podatke; nisu namenjeni produkciji. [Izveštaj](docs/PROVERA.md) razlikuje HTTP/HTML provere od vizuelnog testa u pregledaču. Za lokalni HTTP test dostupni su `tests/http-router.php`, `tests/http-fixture.php` i `tests/http-v3.py` (beautifulsoup4, loopback server i namenski WP sa lokalnim okruženjem). Vizuelna provera u pravom pregledaču i dostava WP e-pošte nisu potvrđene.
 
 Kod je GPL-2.0-or-later. Geometrija, fotografije i zastave imaju zasebne uslove: [SOURCES.md](srbija-na-dlanu/SOURCES.md), [DATA-LICENSE.md](srbija-na-dlanu/DATA-LICENSE.md), [FLAGS.md](srbija-na-dlanu/FLAGS.md). Za dopunske granice Kosova i Metohije javni servis nije naveo posebnu licencu za redistribuciju. Karte služe igri i nisu katastarske karte.

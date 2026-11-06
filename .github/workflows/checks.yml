@@ -1,7 +1,7 @@
 name: WordPress checks and package
 on:
   push:
-    branches: [main, fix/qa-2-1]
+    branches: [main, feature/v3-admin-i18n]
   workflow_dispatch:
 concurrency:
   group: wp-checks-${{ github.ref }}
@@ -32,6 +32,7 @@ jobs:
           find srbija-na-dlanu tests -name '*.php' -print0 | xargs -0 -n1 php -l
           node --check srbija-na-dlanu/assets/game.js
           node tests/frontend.js
+          node tests/v3-frontend.js
           if test -f tests/qa-frontend.js; then node tests/qa-frontend.js; fi
       - name: Isolated WordPress
         run: |
@@ -54,6 +55,7 @@ jobs:
           php tests/account-progress.php
           php tests/asset-loading.php
           if test -f tests/qa-regressions.php; then php tests/qa-regressions.php; fi
+          php tests/v3-features.php
       - name: Build and inspect installable ZIP
         run: python3 tools/build-package.py
       - uses: actions/upload-artifact@v4
@@ -63,7 +65,7 @@ jobs:
             dist/srbija-na-dlanu.zip
             dist/SHA256SUMS
   package:
-    if: github.ref == 'refs/heads/fix/qa-2-1'
+    if: github.ref == 'refs/heads/feature/v3-admin-i18n'
     needs: check
     runs-on: ubuntu-24.04
     permissions:
@@ -80,5 +82,5 @@ jobs:
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git commit -m "Build verified WordPress installation package"
-            git push origin HEAD:fix/qa-2-1
+            git push origin HEAD:feature/v3-admin-i18n
           fi
