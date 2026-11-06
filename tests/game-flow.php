@@ -126,4 +126,4 @@ check(!current_user_can('manage_options'),'Visitor cannot edit content');
 $shortcode = do_shortcode('[srbija_na_dlanu]');
 check(strpos($shortcode,'data-api=') !== false && strpos($shortcode,'snd-game') !== false,'WordPress shortcode mounts game');
 check(wp_script_is('snd-game','enqueued') && wp_style_is('snd-game','enqueued'),'Scoped assets enqueued');
-echo 'PASS: '.$assertions.' assertions; WordPress '.get_bloginfo('version').'; PHP '.PHP_VERSION.'; SQLite; 204 territories.' . PHP_EOL;
+echo 'PASS: '.$assertions.' assertions; WordPress '.get_bloginfo('version').'; PHP '.PHP_VERSION.'; database '.$GLOBALS['wpdb']->db_version().'; 204 territories.' . PHP_EOL;

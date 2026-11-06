@@ -185,7 +185,7 @@
         <div class="snd-modal-host"></div><div class="snd-announcer" aria-live="polite" aria-atomic="true"></div>`;
       this.bind();
       const live=this.root.querySelector('.snd-announcer');
-      if(live)live.textContent=s.stage==='quiz'?['Runda',s.question_index+2,'od',s.question_count+1,s.question.title].join(' '):s.stage==='complete'?'Partija je završena.':s.stage==='reveal'?'Teritorija je otkrivena.':'Prepoznaj teritoriju.';
+      if(live){const message=s.stage==='quiz'?['Runda',s.question_index+2,'od',s.question_count+1,s.question.title].join(' '):s.stage==='complete'?'Partija je završena.':s.stage==='reveal'?'Teritorija je otkrivena.':'Prepoznaj teritoriju.';setTimeout(()=>{if(this.root.querySelector('.snd-announcer')===live)live.textContent=message;},50);}
       if (this.busy) this.setBusy(true);
     }
     visual() {

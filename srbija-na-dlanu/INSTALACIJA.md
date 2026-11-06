@@ -1,4 +1,4 @@
-# Instalacija i ažuriranje na 2.0.0
+# Instalacija i ažuriranje na 2.1.0
 
 1. Preuzmi instalacioni `srbija-na-dlanu.zip` iz direktorijuma `dist` repozitorijuma.
 2. WordPress → **Dodaci → Dodaj novi → Otpremi dodatak**. Izaberi ZIP, instaliraj; pri ažuriranju potvrdi **Zameni postojeći dodatak**. Aktiviraj ako je potrebno.
@@ -29,7 +29,7 @@ JSON izvoz sadrži geometriju, podatke i trenutnu bazu zastava. Pre uvoza uzmi r
 
 - Izuzmi `prijava/`, `nalog/`, REST rute `srbija-na-dlanu/v1/*` i AJAX `snd_session` iz keširanja. Ne keširaj HTML prijavljenih korisnika. API vraća `no-store`.
 - Dozvoli JSON POST zahteve i zaglavlje `X-WP-Nonce`. Ako igra ne može da proveri prijavu, proveri da hosting ne blokira `admin-ajax.php?action=snd_session`.
-- Stari izgled: očisti Autoptimize, keš stranice/CDN-a i osveži pregledač. Resursi imaju verziju 2.0.0.
+- Stari izgled: očisti Autoptimize, keš stranice/CDN-a i osveži pregledač. Resursi imaju verziju 2.1.0.
 - Greška 404 na novim stranicama: **Podešavanja → Permalinks → Sačuvaj izmene**, pa proveri pravila servera.
 - Link za lozinku nije stigao: proveri WP dostavu pošte/spam. Korisnik može ponovo zatražiti lozinku preko aplikacije.
 - Brisanje podataka pregledača briše gostujuću statistiku. Statistika prijavljenog naloga ostaje u WP bazi.
@@ -37,3 +37,18 @@ JSON izvoz sadrži geometriju, podatke i trenutnu bazu zastava. Pre uvoza uzmi r
 Za ugradnju igre na neku drugu stranicu i dalje radi `[srbija_na_dlanu]`, odnosno `[srbija_na_dlanu kind="district"]` i `kind="municipality"`. Ta druga stranica koristi sopstveni šablon teme; uklanjanje zaglavlja/podnožja odnosi se na šest stranica aplikacije.
 
 Zahtevi: WordPress 6.2+, PHP 7.4+, JavaScript, WP REST API. Poseban backend, Node.js i API ključevi nisu potrebni. Izvori i licence: SOURCES.md, DATA-LICENSE.md i FLAGS.md. Deaktivacija ne briše podatke.
+
+
+## Ispravke 2.1.0
+
+Posle zamene dodatka otvori administraciju i očisti Autoptimize i keš stranica/CDN-a. Sadržaj naloga i dosadašnji rezultati se čuvaju. Započete partije zadržavaju pokušaje i odgovore; neodgovoreno staro pitanje o regionu zamenjuje se geografskim pitanjem, a već odgovoreno ostaje u pregledu sa svojim rezultatom.
+
+Skripte i mali stilovi aplikacije označeni su noptimize blokovima, jer je minifikacija na produkciji menjala razmake u tekstu. Optimizacija ostatka sajta ostaje uključena. Resursi teme i Elementor prikaza uklanjaju se samo na stranicama aplikacije, uključujući kasno prijavljene resurse i Google fontove teme.
+
+Deljeni link sadrži režim i datum. Datum ne otvara arhivu: stari link prikazuje današnji izazov uz obaveštenje. Igra sada posebno prikazuje ishod teritorije, upotrebu pomoći i niz igranja.
+
+Ako slika ne može da se učita, igrač bira ponovno učitavanje ili zamensko geografsko pitanje. Pregled odgovora sadrži pitanje, svoj izbor, tačan odgovor i sliku tačne zastave. Puni izvor fotografije pre odgovora otvara se kao označena pomoć; autor i licenca su stalno prikazani.
+
+U Bazi znanja je dostupna stranica „Šire celine u igri” (?podela=regioni). To je urednička podela za orijentaciju, ne zvanična regionalizacija i ne bodovano zamensko pitanje. Geometrijske runde navode odgovarajuće izvore geoBoundaries/MRE.
+
+Nov funkcionalni kolačić snd_client (30 dana, HTTP-only, SameSite=Lax) razdvaja ograničenja anonimnih igrača koji dele IP adresu. Ne sadrži rezultate, ime, e-poštu ili lozinku. Nalozi imaju svoja ograničenja, uz viši zajednički prag protiv zloupotrebe.

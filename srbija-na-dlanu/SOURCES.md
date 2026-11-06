@@ -46,3 +46,12 @@ Siluete su izvedene iz stvarnih granica; sever je gore. Centri su površinski ge
 ## Zastave (2.0.0)
 
 52 lokalne PNG slike gradskih/opštinskih zastava, pripisivanje i pojedinačni izvori/licence: [FLAGS.md](FLAGS.md). Zastave pokrivaju 17 okružnih sedišta i 52 opštine/grada; za druga mesta koristi se zamensko geografsko pitanje. U igri se ne izmišljaju simboli.
+
+
+## Geografska zamenska pitanja i šire celine (2.1.0)
+
+Rastojanja i smerovi izračunavaju se iz geometrijskih centara ugrađenih granica, po istim pravilima kao kilometri i strelice u igri. Nisu rastojanja drumom. Pitanje navodi MRE kada koristi granice Kosova i Metohije i geoBoundaries / OpenStreetMap za ostale granice; kod kombinacije navodi oba izvora. Pogrešni odgovori o broju stanovnika su jasno približne vrednosti za kviz, a ne alternativni popisni podaci.
+
+„Zapadna Srbija”, „Šumadija i Pomoravlje” i drugi nazivi šireg položaja predstavljaju uredničku podelu projektne baze namenjenu pomoći u igri. Tabela svih 30 celina dostupna je u Bazi znanja preko ?podela=regioni. Podela se ne predstavlja kao zvanična statistička/upravna regionalizacija i ne ocenjuje se kao zamensko pitanje.
+
+Autor i licenca fotografije ostaju vidljivi pre odgovora. Puni izvor, koji nazivom datoteke može otkriti znamenitost, dostupan je pre odgovora kao označena pomoć i beleži se u rezultatu. Posle odgovora izvor je normalno dostupan.

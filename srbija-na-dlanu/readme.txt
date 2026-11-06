@@ -4,7 +4,7 @@ Tags: geography, quiz, serbia, education
 Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 2.0.0
+Stable tag: 2.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -50,6 +50,19 @@ Ograničavanje zahteva koristi privremeni HMAC mrežne adrese; sirova IP adresa 
 Kod: GPL-2.0-or-later. Geografija/fotografije: SOURCES.md i DATA-LICENSE.md. Zastave: FLAGS.md. Za dopunske granice Kosova i Metohije javni geografski servis nije naveo posebnu licencu za redistribuciju. Karte služe igri. Deaktivacija ne briše sadržaj i rezultate.
 
 == Changelog ==
+
+= 2.1.0 =
+* Ispravke nalaza iz dva QA izveštaja: deljenje otvara traženi režim, a stari link jasno vodi na današnji izazov.
+* Pretraga: prvi ArrowUp bira poslednju stavku, dodirno skrolovanje ne bira odgovor, ponovljeni pokušaj ima posebnu poruku.
+* Rezime prikazuje pitanje, tvoj odgovor, tačan odgovor i sliku tačne zastave, i posle ponovnog otvaranja.
+* Jasni ishodi pogođeno/otkriveno/nepogođeno, pomoć i niz igranja sa pravilnim oblikom dan/dana.
+* Izvor fotografije pre odgovora označen je kao pomoć; autor/licenca ostaju vidljivi.
+* Problem sa slikom nudi ponovno učitavanje ili serversko zamensko pitanje bez gubitka pokušaja.
+* Geografska zamena više ne ocenjuje region iz pomoći; poboljšani pogrešni izbori i izvori geometrije.
+* Odvojeni limiti po igraču, veći zajednički IP prag, pouzdaniji prelazak ponoći i oporavak sesije.
+* Manji odgovori tokom kviza, izuzimanje resursa igre iz problematične minifikacije, uklanjanje tema/builder resursa na aplikaciji.
+* Veći kontrast, jedno pristupačno ime opcije zastave i ispravljeni naslovi, opisi, canonical i jezik strukturiranih podataka.
+
 
 = 2.0.0 =
 * Zasebna aplikacija sa kompasom, sopstvenim menijem i šest WP stranica.

@@ -1,4 +1,4 @@
-# Srbija na dlanu 2.0
+# Srbija na dlanu 2.1
 
 Zasebna geografska aplikacija unutar WordPress-a: početna, igre za okruge i opštine, baza znanja i nalozi igrača. Sveden prikaz: slika gore, pitanje i odgovori ispod, sa većim slovima.
 
@@ -23,6 +23,14 @@ Zasebna geografska aplikacija unutar WordPress-a: početna, igre za okruge i op�
 Ove stranice imaju svoj kompas, meni, zaglavlje i podnožje, bez zaglavlja i podnožja aktivne teme. Ostali deo sajta zadržava postojeći izgled. Postojeći Elementor podaci početne stranice se ne brišu. Dodatak ne menja globalnu početnu stranicu WordPress-a.
 
 Shortcode `[srbija_na_dlanu]` i dalje radi na drugim WP stranicama; tu se zadržava njihova tema. Za određenu igru koristi `[srbija_na_dlanu kind="district"]` ili `kind="municipality"`.
+
+## Ispravke 2.1.0
+
+Ispravke dva QA izveštaja obuhvataju deljene linkove sa režimom/datumom, tastaturu i dodir u pretrazi, pregled pitanja i tačnog odgovora sa slikom zastave, jasan ishod i niz igranja, oporavak slika i sesije, prelazak ponoći, regionalnu pomoć, izvore i uverljivije ponuđene odgovore. Dodatno su smanjeni odgovori API-ja i nepotrebni resursi teme, isključena problematična minifikacija resursa igre i uređeni kontrast i SEO podaci.
+
+[Detaljno: nalaz → ispravka → provera](docs/QA-ISPRAVKE.md). Postojeći podaci, 30 okružnih celina, 174 opštine/grada i Kosovo i Metohija ostaju sačuvani. Banka od 30 fotografija i 52 zastave nije proširivana ovom ispravkom; uputstvo i oznake sada dosledno opisuju geografske zamene.
+
+**Produkcija je prethodno potvrđena na 2.0.0. Verziju 2.1.0 treba postaviti novim ZIP-om i očistiti keš.** Novi kod i paket proveravaju se u izdvojenoj GitHub Actions instalaciji sa Autoptimize i Slim SEO dodacima. Novi vizuelni pregled u pravom pregledaču ili na fizičkom telefonu nije izvršen.
 
 ## Sadržaj i igra
 
@@ -59,11 +67,13 @@ Izuzmi iz keširanja prijavu, nalog, `/wp-json/srbija-na-dlanu/v1/*` i `admin-aj
 ```sh
 python3 tools/build-package.py
 node tests/frontend.js
+node tests/qa-frontend.js
 WP_ROOT=/putanja/do/izolovanog/wp php tests/game-flow.php
 WP_ROOT=/putanja/do/izolovanog/wp php tests/account-progress.php
 WP_ROOT=/putanja/do/izolovanog/wp php tests/asset-loading.php
+WP_ROOT=/putanja/do/izolovanog/wp php tests/qa-regressions.php
 ```
 
-PHP testove pokreći samo na namenskoj lokalnoj/razvojnoj WP instalaciji sa aktivnim dodatkom. Testovi kreiraju podatke; nisu namenjeni produkciji. [Izveštaj](docs/PROVERA.md) razlikuje HTTP/HTML provere od vizuelnog testa u pregledaču. Verzija 2.0.0 je postavljena na cvjetan.dev ručnim otpremanjem ZIP-a. Naknadno su prošle 134 produkcijske HTTP provere stranica, obe igre, zastava, nativne prijave/odjave, čuvanja rezultata i nastavka na drugom uređaju. Vizuelna provera u pravom pregledaču i dostava WP e-pošte nisu potvrđene.
+PHP testove pokreći samo na namenskoj lokalnoj/razvojnoj WP instalaciji sa aktivnim dodatkom. Testovi kreiraju podatke; nisu namenjeni produkciji. [Izveštaj](docs/PROVERA.md) razlikuje HTTP/HTML provere od vizuelnog testa u pregledaču. Prethodna verzija 2.0.0 postavljena je na cvjetan.dev ručnim otpremanjem ZIP-a. Naknadno su prošle 134 produkcijske HTTP provere stranica, obe igre, zastava, nativne prijave/odjave, čuvanja rezultata i nastavka na drugom uređaju. Vizuelna provera u pravom pregledaču i dostava WP e-pošte nisu potvrđene.
 
 Kod je GPL-2.0-or-later. Geometrija, fotografije i zastave imaju zasebne uslove: [SOURCES.md](srbija-na-dlanu/SOURCES.md), [DATA-LICENSE.md](srbija-na-dlanu/DATA-LICENSE.md), [FLAGS.md](srbija-na-dlanu/FLAGS.md). Za dopunske granice Kosova i Metohije javni servis nije naveo posebnu licencu za redistribuciju. Karte služe igri i nisu katastarske karte.

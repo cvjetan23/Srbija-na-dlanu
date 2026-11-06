@@ -1,3 +1,7 @@
+# Provera verzije 2.1.0
+
+Ispravke dva naknadna QA izveštaja, sa 5.415 provera na izdvojenom WordPress-u i granicama verifikacije, opisane su u [QA-ISPRAVKE.md](QA-ISPRAVKE.md). Novi paket 2.1.0 treba postaviti na produkciju. Ispod ostaje prethodna evidencija za 2.0.0.
+
 # Provera — Srbija na dlanu 2.0.0
 
 Izvršeno 6. novembra 2026. na izolovanom WordPress-u 7.1.4, PHP-u 8.4.27 i SQLite bazi kroz standardni WP `wpdb` interfejs. Testna WP instalacija i presretanje testne pošte nisu deo instalacionog ZIP-a.
