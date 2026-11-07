@@ -58,7 +58,7 @@ final class SND_Progress {
             $day = SND_Game::date(); $streak = 0;
             if (!isset($p['days'][$day])) { $day = (new DateTimeImmutable($day))->modify('-1 day')->format('Y-m-d'); }
             while (isset($p['days'][$day])) { $streak++; $day = (new DateTimeImmutable($day))->modify('-1 day')->format('Y-m-d'); }
-            $summary[$kind] = array('days' => array_keys($p['days']), 'discovered' => $p['discovered'], 'daily_count' => count($p['days']), 'practice_count' => $p['practice_count'], 'quiz_correct' => $p['quiz_correct'], 'quiz_total' => $p['quiz_total'], 'streak' => $streak, 'recent' => array_values(array_slice(array_reverse($p['days']), 0, 5)));
+            $summary[$kind] = array('days' => array_keys($p['days']), 'discovered' => array_values(array_diff($p['discovered'],SND_Data::retired_ids())), 'daily_count' => count($p['days']), 'practice_count' => $p['practice_count'], 'quiz_correct' => $p['quiz_correct'], 'quiz_total' => $p['quiz_total'], 'streak' => $streak, 'recent' => array_values(array_slice(array_reverse($p['days']), 0, 5)));
         }
         return $summary;
     }

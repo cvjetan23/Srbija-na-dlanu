@@ -11,9 +11,9 @@ body.snd-app-body{background:var(--snd-bg,#f8faf6)!important;color:var(--snd-tex
 .snd-app .snd-game .snd-panel-copy,.snd-app .snd-game .snd-option{font-size:calc(17px * var(--snd-font-scale,1))}
 .snd-app .snd-game .snd-search-wrap input{font-size:calc(18px * var(--snd-font-scale,1))}
 html[data-snd-theme=dark]{color-scheme:dark}
-html[data-snd-theme=dark] .snd-app{--snd-bg:#121a17;--snd-surface:#1c2922;--snd-soft:#26362c;--snd-text:#edf3e9;--snd-secondary:#c1d0b9;--snd-border:#53664c;--snd-shape:#b2ce9f;--snd-accent:var(--snd-dark-accent,#a5c797)}
-html[data-snd-theme=dark] body.snd-app-body{background:#121a17!important;color:#edf3e9!important}
-html[data-snd-theme=dark] .snd-app a,html[data-snd-theme=dark] .snd-app-brand,html[data-snd-theme=dark] .snd-app-nav a,html[data-snd-theme=dark] .snd-app .snd-card-action{color:#c5e1b5!important}
+html[data-snd-theme=dark] .snd-app{--snd-bg:#121a17;--snd-surface:#1c2922;--snd-soft:#26362c;--snd-text:#ffffff;--snd-secondary:#d0e6c2;--snd-border:#53664c;--snd-shape:#b2ce9f;--snd-accent:var(--snd-dark-accent,#a5c797)}
+html[data-snd-theme=dark] body.snd-app-body{background:#121a17!important;color:#ffffff!important}
+html[data-snd-theme=dark] .snd-app a,html[data-snd-theme=dark] .snd-app-brand,html[data-snd-theme=dark] .snd-app-nav a,html[data-snd-theme=dark] .snd-app .snd-card-action{color:#f7fbf3!important}
 html[data-snd-theme=dark] .snd-app-nav a[aria-current=page]{border-bottom-color:#a5c797}
 html[data-snd-theme=dark] .snd-app-header,html[data-snd-theme=dark] .snd-app-footer{border-color:var(--snd-border);color:var(--snd-secondary)}
 html[data-snd-theme=dark] .snd-home-game,html[data-snd-theme=dark] .snd-district-card,html[data-snd-theme=dark] .snd-auth-card,html[data-snd-theme=dark] .snd-progress-card,html[data-snd-theme=dark] .snd-facts{background:var(--snd-surface);border-color:var(--snd-border);color:var(--snd-text)!important}
@@ -25,37 +25,37 @@ html[data-snd-theme=dark] .snd-app input:not([type=checkbox]),html[data-snd-them
 html[data-snd-theme=dark] .snd-app input::placeholder{color:#bbcbb1!important}
 html[data-snd-theme=dark] .snd-app-button,html[data-snd-theme=dark] .snd-app .snd-game .snd-primary{background:var(--snd-accent);color:#13210f!important;border-color:var(--snd-accent)}
 html[data-snd-theme=dark] .snd-app-button:hover,html[data-snd-theme=dark] .snd-app .snd-game .snd-primary:hover:not(:disabled){background:#bddba9}
-html[data-snd-theme=dark] .snd-button-outline{background:transparent;color:#c5e1b5!important}
+html[data-snd-theme=dark] .snd-button-outline{background:transparent;color:#f7fbf3!important}
 html[data-snd-theme=dark] .snd-auth-error{background:#422a27;color:#ffd7ca;border-color:#b67e6d}
 html[data-snd-theme=dark] .snd-atlas-shape path{fill:var(--snd-shape)}
-html[data-snd-theme=dark] .snd-app .snd-game{--snd-ink:#edf3e9;--snd-muted:#c1d0b9;--snd-line:#52634a;--snd-green:#a5c797;background:transparent;color:#edf3e9}
+html[data-snd-theme=dark] .snd-app .snd-game{--snd-ink:#ffffff;--snd-muted:#d0e6c2;--snd-line:#52634a;--snd-green:#a5c797;background:transparent;color:#ffffff}
 html[data-snd-theme=dark] .snd-app .snd-game .snd-mode .is-active,html[data-snd-theme=dark] .snd-app .snd-game .snd-tabs{background:#293b2f;color:#dfefcf}
 html[data-snd-theme=dark] .snd-app .snd-game .snd-tabs .is-active{background:#a5c797;color:#13210f}
 html[data-snd-theme=dark] .snd-app .snd-game .snd-shape path{fill:#b2ce9f}
 html[data-snd-theme=dark] .snd-app .snd-game .snd-map-base path,html[data-snd-theme=dark] .snd-app .snd-game .snd-map-cell{fill:#26352b;stroke:#53674b}
 html[data-snd-theme=dark] .snd-app .snd-game .snd-map-target{fill:#b2ce9f;stroke:#e0f4cc}
 html[data-snd-theme=dark] .snd-app .snd-game .snd-map-last{fill:#c69f68;stroke:#dfc7a5}
-html[data-snd-theme=dark] .snd-app .snd-game .snd-option,html[data-snd-theme=dark] .snd-app .snd-game .snd-secondary,html[data-snd-theme=dark] .snd-app .snd-game .snd-history li,html[data-snd-theme=dark] .snd-app .snd-game .snd-suggestions,html[data-snd-theme=dark] .snd-app .snd-game .snd-search-wrap input,html[data-snd-theme=dark] .snd-app .snd-game .snd-modal{background:#1c2922;color:#edf3e9;border-color:#75876a}
+html[data-snd-theme=dark] .snd-app .snd-game .snd-option,html[data-snd-theme=dark] .snd-app .snd-game .snd-secondary,html[data-snd-theme=dark] .snd-app .snd-game .snd-history li,html[data-snd-theme=dark] .snd-app .snd-game .snd-suggestions,html[data-snd-theme=dark] .snd-app .snd-game .snd-search-wrap input,html[data-snd-theme=dark] .snd-app .snd-game .snd-modal{background:#1c2922;color:#ffffff;border-color:#75876a}
 html[data-snd-theme=dark] .snd-app .snd-game .snd-suggestions>[role=option]:hover,html[data-snd-theme=dark] .snd-app .snd-game .snd-suggestions>[aria-selected=true],html[data-snd-theme=dark] .snd-app .snd-game .snd-option:hover:not(:disabled){background:#32482f}
 html[data-snd-theme=dark] .snd-app .snd-game .snd-option.is-correct,html[data-snd-theme=dark] .snd-app .snd-game .snd-history .is-correct,html[data-snd-theme=dark] .snd-app .snd-game .snd-explanation.is-correct{background:#294127;color:#e3f7d8;border-color:#9ac780}
 html[data-snd-theme=dark] .snd-app .snd-game .snd-option.is-wrong{background:#4b2d28;color:#ffd9cc;border-color:#d59c88}
 html[data-snd-theme=dark] .snd-app .snd-game .snd-explanation,html[data-snd-theme=dark] .snd-app .snd-game .snd-hint,html[data-snd-theme=dark] .snd-app .snd-game .snd-notice,html[data-snd-theme=dark] .snd-app .snd-game .snd-media-error{background:#2a382c;color:#dfedcf;border-color:#748d65}
 html[data-snd-theme=dark] .snd-app .snd-game .snd-footer button,html[data-snd-theme=dark] .snd-app .snd-game .snd-source,html[data-snd-theme=dark] .snd-app .snd-game .snd-save-status,html[data-snd-theme=dark] .snd-app .snd-game .snd-photo-credit,html[data-snd-theme=dark] .snd-app .snd-game .snd-map-caption,html[data-snd-theme=dark] .snd-app .snd-game .snd-round,html[data-snd-theme=dark] .snd-app .snd-game .snd-round-label,html[data-snd-theme=dark] .snd-app .snd-game .snd-review-status,html[data-snd-theme=dark] .snd-app .snd-game .snd-review-correct,html[data-snd-theme=dark] .snd-app .snd-game .snd-no-matches,html[data-snd-theme=dark] .snd-app .snd-game .snd-distance{color:#c8dfb8!important}
-html[data-snd-theme=dark] .snd-app .snd-game .snd-review h3{color:#edf3e9}
+html[data-snd-theme=dark] .snd-app .snd-game .snd-review h3{color:#ffffff}
 html[data-snd-theme=dark] .snd-app .snd-game .snd-flag-option img,html[data-snd-theme=dark] .snd-app .snd-game .snd-review img{background:#e3e9dd;border-color:#9aab8f}
 html[data-snd-theme=dark] .snd-app .snd-game .snd-primary:disabled{background:#4e6244;color:#dbe4d4!important}
 @media(max-width:800px){.snd-app-brand{margin-right:0}.snd-app-header{row-gap:13px}.snd-preferences{justify-content:center}}
 @media(max-width:560px){.snd-preferences select{font-size:14px;max-width:145px;min-height:40px}.snd-app-header{padding-bottom:15px}.snd-app-nav{gap:3px 15px}}
 @media(prefers-reduced-motion:reduce){.snd-app *{scroll-behavior:auto!important}}
-html[data-snd-theme=dark] .snd-app .snd-game .snd-share-text{background:#142019;color:#edf3e9;border-color:#75876a}
-html[data-snd-theme=dark] .snd-app .snd-game .snd-flag-option b{background:#1c2922;color:#edf3e9}
-html[data-snd-theme=dark] .snd-knowledge-flag figcaption{color:#c1d0b9}
+html[data-snd-theme=dark] .snd-app .snd-game .snd-share-text{background:#142019;color:#ffffff;border-color:#75876a}
+html[data-snd-theme=dark] .snd-app .snd-game .snd-flag-option b{background:#1c2922;color:#ffffff}
+html[data-snd-theme=dark] .snd-knowledge-flag figcaption{color:#d0e6c2}
 
 .snd-app{font-size:calc(18px * var(--snd-font-scale,1))}.snd-app-nav a{font-size:calc(16px * var(--snd-font-scale,1))}.snd-preferences select:focus-visible{outline:3px solid #9bb88b;outline-offset:3px}
 .snd-app .snd-app-button,.snd-app .snd-game .snd-primary{color:var(--snd-on-accent,#fff)}
 html[data-snd-theme=dark] .snd-app .snd-game{color-scheme:dark}
 html[data-snd-theme=dark] .snd-app .snd-app-button,html[data-snd-theme=dark] .snd-app .snd-game .snd-primary{color:var(--snd-on-dark-accent,#13210f)!important}
-html[data-snd-theme=dark] .snd-app .snd-button-outline{background:transparent;color:#c5e1b5!important}
+html[data-snd-theme=dark] .snd-app .snd-button-outline{background:transparent;color:#f7fbf3!important}
 
 .snd-app .snd-button-outline{color:var(--snd-accent,#355d3d);background:transparent}
 html[data-snd-theme=dark] .snd-app .snd-app-button:hover,html[data-snd-theme=dark] .snd-app .snd-game .snd-primary:hover:not(:disabled){background:var(--snd-accent);filter:brightness(1.08)}

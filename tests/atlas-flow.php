@@ -46,5 +46,5 @@ try{
     $s['theme_switch']=true;$s['languages']=array('sr','de');update_option('snd_settings',$s,false);SND_Settings::reset();ob_start();SND_Site::header();$x=atlas_dom(ob_get_clean());atlas_ok($x->query('//a[@data-language]')->length===2,'Enabled languages respected');
     $GLOBALS['wp_rewrite']->set_permalink_structure('');$_GET=array('opstina'=>'m-cacak');parse_str(parse_url(SND_Site::preference_url(),PHP_URL_QUERY),$args);atlas_ok(isset($args['page_id'],$args['okrug'],$args['opstina'],$args['lang']),'Default permalinks retained');
     atlas_ok(SND_Atlas::viewbox(array(array('map_path'=>'m0 0 c10 10 20 20 30 30z')))==='0 0 600 800','Imported curved/relative path uses client fit fallback');
-    echo 'PASS: '.$count.' atlas and preference assertions; 30 districts, 174 municipalities and four languages.'.PHP_EOL;
+    echo 'PASS: '.$count.' atlas and preference assertions; 30 districts, 190 municipalities and four languages.'.PHP_EOL;
 }finally{$_GET=$get;$_COOKIE=$cookies;SND_I18n::force(null);if($saved===null){delete_option('snd_settings');}else{update_option('snd_settings',$saved,false);}SND_Settings::reset();$GLOBALS['wp_rewrite']->set_permalink_structure($permalinks);}

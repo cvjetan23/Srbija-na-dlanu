@@ -130,6 +130,7 @@ final class SND_I18n {
         }elseif($type==='seat'){$q['title']=self::t('Koje je sedište ovog okruga?');$q['explanation']=self::t('Sedište okruga je {seat}.',$vars);
         }elseif($type==='district'){$vars['district']=self::text($correct);$q['title']=self::t('Kojem okrugu pripada ova teritorija?');$q['explanation']=self::t('{name} pripada administrativnoj celini: {district}.',$vars);
         }elseif($type==='membership'){$vars['member']=self::place($correct);$q['title']=self::t('Koja od ovih opština pripada ovom okrugu?');$q['explanation']=self::t('Opština {member} pripada celini: {name}, prema podeli na pet upravnih okruga na Kosovu i Metohiji.',$vars);
+        }elseif($type==='city_membership'){$q['title']=self::t('Kom gradu pripada ova gradska opština?');$q['explanation']=self::t('Gradska opština {name} pripada Gradu Beogradu.',$vars);
         }elseif($type==='river'){$q['title']=self::t('Na ušću kojih reka se nalazi Beograd?');$q['explanation']=self::t('Beograd se nalazi na ušću Save u Dunav.');
         }elseif($type==='flag'){
             $vars['place']=self::place($meta['place']??($target['kind']==='district'?$target['seat']:$target['name']));

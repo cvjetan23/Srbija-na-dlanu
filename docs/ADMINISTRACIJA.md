@@ -25,3 +25,6 @@ Backup obuhvata WP `options`, `usermeta`, `{prefix}snd_games`, `{prefix}snd_even
 
 
 Od verzije 3.3.0, uređivanje teritorije uključuje poseban naziv znamenitosti u ponuđenim odgovorima, na srpskom, engleskom, nemačkom i ruskom. Upiši naziv bez grada koji bi otkrio rešenje; puni zvanični naziv i objašnjenje ostaju odvojeni. Prazno polje koristi ugrađeni neutralni naziv, a nova prilagođena znamenitost njen zvanični naziv dok ne uneseš neutralni. Podatak se prenosi JSON izvozom/uvozom baze.
+
+
+Od 3.4.0 u sadržaju su i sve beogradske gradske opštine; mogu se zasebno uređivati i isključivati. Raniji ceo Beograd (`m-beograd`) označen je kao istorijski zapis i ostaje radi prethodnih rezultata. U aktuelnoj opštinskoj igri je 190 teritorija. Ugrađene opštine dopunjuju i stariji JSON sadržaj, uz očuvane lokalne izmene; ako treba da se neka ne igra, isključi je umesto brisanja iz starije baze. Tekstovi ilustrovanih pravila i uvećanja zastava uređuju se kroz Prevode, a broj pokušaja u pravilima prati Podešavanja.

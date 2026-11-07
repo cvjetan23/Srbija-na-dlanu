@@ -1,4 +1,4 @@
-# Instalacija i ažuriranje na 3.3.0
+# Instalacija i ažuriranje na 3.4.0
 
 1. Preuzmi instalacioni `srbija-na-dlanu.zip` iz direktorijuma `dist` repozitorijuma.
 2. WordPress → **Dodaci → Dodaj novi → Otpremi dodatak**. Izaberi ZIP, instaliraj; pri ažuriranju potvrdi **Zameni postojeći dodatak**. Aktiviraj ako je potrebno.
@@ -23,7 +23,7 @@ Od 3.3.0 uz znamenitost postoje polja **Naziv u ponuđenim odgovorima — bez im
 
 Meni **Srbija na dlanu** sadrži sve teritorije. Možeš menjati naziv, druge nazive, sedište, stanovništvo/godinu/izvor, fotografiju i zanimljivost. Za zastavu unesi HTTPS adresu slike iz WP biblioteke, autora, licencu i stranicu izvora. Zastava sedišta okruga i odgovarajućeg grada deli isti zapis. Moguće je vratiti ugrađenu zastavu.
 
-Paket ima 52 zastave: 17 sedišta okruga i 52 opštine/grada (69 teritorija). Za ostala mesta postoji jasno označeno zamensko pitanje. Detalji i izvori su u FLAGS.md. Bez fotografije poslednja runda postaje prostorni izazov. Današnji pripremljeni izazov ne menja se usred dana.
+Paket ima 52 zastave: 17 sedišta okruga i 51 opštinu/grad (68 aktivnih teritorija). Za ostala mesta postoji jasno označeno zamensko pitanje. Detalji i izvori su u FLAGS.md. Bez fotografije poslednja runda postaje prostorni izazov. Današnji pripremljeni izazov ne menja se usred dana.
 
 JSON izvoz sadrži geometriju, podatke i trenutnu bazu zastava. Pre uvoza uzmi rezervnu kopiju. WP korisnički podaci, opcije i uploads prenose se standardnom rezervnom kopijom WordPress-a; JSON baze nije rezervna kopija korisničkih naloga ili njihovih rezultata.
 
@@ -85,3 +85,12 @@ Spisak opština sada je tabela sa nazivom, brojem stanovnika i godinom popisa. P
 Učitavanje prikazuje animirani kompas. Promena jezika, pitanja i teme ima blag prelaz; smanjeno kretanje u podešavanjima uređaja isključuje animacije. Bez JavaScript-a rade izvorni linkovi i obrazac teme.
 
 Ako se REST veza prekine (npr. prikazani HTTP/2 problem), klijent pokušava isti zahtev kroz `admin-ajax.php` sa akcijom `snd_game`. Vlasništvo, REST nonce prijavljenog korisnika, ograničenje zahteva i zaključavanje poteza ostaju isti. Jedna revizija prihvata samo jedan potez, a početak koristi request_id za povrat izgubljenog odgovora. Potrebno je dozvoliti JSON i form POST zahteve prema standardnom WP AJAX endpointu.
+
+
+## Beogradske opštine od 3.4.0
+
+Dodaje se svih 17 gradskih opština, uključujući Vračar, Zvezdaru, Novi Beograd, Palilulu, Surčin i ostale. Granice su iz sloja MRE, a stanovništvo iz beogradskog bloka tabele RZS 2022 (Palilula u Nišu je drugi red). Zbir 17 opština iznosi 1.681.405. U igri opština ima 190 aktivnih teritorija; cela teritorija Beograda više se ne dodaje njihovom zbiru. Grad Beograd ostaje u igri okruga.
+
+Dodatak dopunjuje i ranije sačuvane/uvežene baze bez prepisivanja postojećih lokalnih izmena. Svaka nova opština može se zasebno isključiti u uređivaču teritorija. Ako se isključe svih 17, vraća se raniji obuhvat sa celim Beogradom. JSON izvoz uključuje nove opštine, njihove izvore i matičnu celinu. Zapis `m-beograd` čuva istoriju i prethodne partije i u administraciji je označen kao istorijski.
+
+Već započeta i pripremljena dnevna partija ne menja geometriju, pitanja ili identifikatore. Beogradske opštine dostupne su u novim partijama vežbanja i novim dnevnim izazovima. Starija započeta partija nudi jasno dugme za novo vežbanje sa dodatim opštinama; bez tog izbora se ne resetuje. Staro dostignuće za ceo Beograd ostaje u istoriji, ali se ne računa kao rešenih 17 opština.

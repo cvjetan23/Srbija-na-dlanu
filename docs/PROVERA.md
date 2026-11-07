@@ -1,3 +1,11 @@
+# Provera verzije 3.4.0
+
+Lokalno je prošlo **226 tvrdnji u stvarnom Chromium-u**: prethodnih 169 plus 57 novih provera. Novi `tests/update34-browser.cjs` proverava početnu na četiri jezika, četiri SVG ilustracije pravila pre baze, istaknut CTA sa kontrastom najmanje 4,5:1, beli glavni tekst, mobilni prikaz, unos iznad istorije, izbor/rešavanje gradske opštine, mapu i tabelu svih 17 beogradskih opština, Vračar sa tačnim RZS podacima i MRE izvorom, svih šest promašaja, karticu i marker zadate teritorije, kao i uvećanje zastava pre/posle odgovora na 1440 i 320 px. Uvećanje nije slalo potez niti otkrivalo rešenje, a Escape je vraćao fokus. Provereno je i dobrovoljno otvaranje novog vežbanja iz starije partije, uz prelazak na katalog od 190 teritorija. Kvačica je SVG, kružna i van fotografije. Snimci su pregledani; fizički telefon nije korišćen.
+
+Novi `tests/belgrade.php` prošao je sa **354 tvrdnje**: sve geometrije, svih 17 pojedinačnih RZS brojeva, zbir 1.681.405, nacionalni zbir 6.647.003, 190 aktivnih teritorija bez dupliranja, KiM, četiri runde na četiri jezika, stabilni odgovori, izvori, dopuna starije prilagođene baze bez gubitka izmena, isključivanje opština, očuvana stara istorija i neizmenjena pripremljena dnevna partija. Provereno je prihvatanje starog odgovora `m-beograd` u zamrznutoj ranijoj partiji.
+
+Sve ranije PHP i JavaScript provere ponovo su prošle na proširenoj bazi, uz 301 lokalnu HTTP tvrdnju za nativnu prijavu, naloge, pravila, administraciju, izvoz i privatnost. WordPress ne zahteva dodatni backend ili GIS biblioteke; Shapely/pyproj koriste se samo pri pripremi ugrađenih granica.
+
 # Provera verzije 3.3.0
 
 Novi `tests/presentation.php` proverava sve ponuđene nazive fotografisanih znamenitosti na četiri jezika, jedinstvene opcije, nepromenjene identifikatore, skrivanje rešenja do odgovora, zvanično ime posle odgovora, sanitizaciju novih polja i ikonicu naloga. Lokalno je prošlo 2.530 tvrdnji.

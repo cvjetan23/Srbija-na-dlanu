@@ -1,4 +1,4 @@
-# Srbija na dlanu 3.3
+# Srbija na dlanu 3.4
 
 Zasebna geografska aplikacija unutar WordPress-a: početna, igre za okruge i opštine, baza znanja i nalozi igrača. Sveden prikaz: slika gore, pitanje i odgovori ispod, sa većim slovima.
 
@@ -25,6 +25,14 @@ Zasebna geografska aplikacija unutar WordPress-a: početna, igre za okruge i op�
 Ove stranice imaju svoj kompas, meni, zaglavlje i podnožje, bez zaglavlja i podnožja aktivne teme. Ostali deo sajta zadržava postojeći izgled. Postojeći Elementor podaci početne stranice se ne brišu. Dodatak ne menja globalnu početnu stranicu WordPress-a.
 
 Shortcode `[srbija_na_dlanu]` i dalje radi na drugim WP stranicama; tu se zadržava njihova tema. Za određenu igru koristi `[srbija_na_dlanu kind="district"]` ili `kind="municipality"`.
+
+## Novo u 3.4.0
+
+- Početna ima istaknuta dugmad Igraj i četiri ilustrovana koraka, pre baze znanja. Tamna tema koristi belo za glavni tekst i svetlozelenu za sporedni.
+- Unos odgovora je iznad spiska pokušaja. Zadati okrug/opština ima izdvojen naziv, jaču granicu i posebnu oznaku na mapi ako nije pogođen.
+- Svaka zastava ima zasebno uvećanje koje ne potvrđuje odgovor. SVG oznake tačnog/netačnog odgovora stoje uz naziv, bez preklapanja slike.
+- Dodato je 17 beogradskih gradskih opština sa stvarnim granicama i Popisom RZS 2022. Aktivna igra opština ima **190 teritorija**: dosadašnji ceo Grad Beograd zamenjen je sa 17 opština; zbir stanovništva nije dupliran. Grad Beograd ostaje posebna celina u igri okruga.
+- Započete/dnevne partije i stara istorija ostaju sačuvani. Nove opštine ulaze u nove partije. Istorijski zapis `m-beograd` ostaje u bazi, a stari link ka njemu vodi na detalj Beograda sa 17 opština.
 
 ## Novo u 3.3.0
 
@@ -69,15 +77,15 @@ Ispravke dva QA izveštaja obuhvataju deljene linkove sa režimom/datumom, tasta
 
 [Detaljno: nalaz → ispravka → provera](docs/QA-ISPRAVKE.md). Postojeći podaci, 30 okružnih celina, 174 opštine/grada i Kosovo i Metohija ostaju sačuvani. Banka od 30 fotografija i 52 zastave nije proširivana ovom ispravkom; uputstvo i oznake sada dosledno opisuju geografske zamene.
 
-**Ovaj repozitorijum sadrži paket 3.3.0.** Novi kod i paket proveravaju se u izdvojenoj GitHub Actions instalaciji sa Autoptimize i Slim SEO dodacima. Za 3.3.0 izvršen je pregled i funkcionalna provera u Chromium-u, sa prikazima širine 320, 390, 768 i 1440 piksela; fizički telefon nije korišćen.
+**Ovaj repozitorijum sadrži paket 3.4.0.** Novi kod i paket proveravaju se u izdvojenoj GitHub Actions instalaciji sa Autoptimize i Slim SEO dodacima. Za 3.4.0 izvršen je pregled i funkcionalna provera u Chromium-u, sa prikazima širine 320, 390, 768 i 1440 piksela; fizički telefon nije korišćen.
 
 ## Sadržaj i igra
 
 - **30 teritorija:** 29 upravnih okruga i Grad Beograd kao posebna celina.
-- **174 opštine i grada**, sa Kosovom i Metohijom, bez zasebnih gradskih opština.
+- **190 opština, gradova i gradskih opština**, sa 17 gradskih opština Beograda i Kosovom i Metohijom.
 - Stvarne siluete, podrazumevano šest pokušaja (podesivo), udaljenost i strelica od odgovora ka traženoj teritoriji.
 - Posle otkrivanja podrazumevano slede **četiri dodatna pitanja** (runde su podesive): stanovništvo/položaj, administrativna geografija, zastava i znamenitost/prostorni izazov.
-- **52 lokalne zastave** pokrivaju 17 okružnih sedišta i 52 opštine/grada: ukupno 69 od 204 teritorije. Za ostala mesta koristi se jasno označeno geografsko pitanje. Zastava okružnog sedišta nije predstavljena kao zastava okruga.
+- **52 lokalne zastave** pokrivaju 17 okružnih sedišta i 51 opštinu/grad: ukupno 68 od 220 aktivnih teritorija. Za ostala mesta koristi se jasno označeno geografsko pitanje. Zastava okružnog sedišta nije predstavljena kao zastava okruga.
 - **30 lokalnih fotografija znamenitosti**, sa autorima, licencama i izvorima.
 - Isti dnevni zadatak za sve, promena u ponoć po vremenu u Srbiji; nasumično vežbanje, nastavak i deljenje rezultata bez rešenja.
 - Pretraga prihvata latinicu, ćirilicu i unos bez kvačica.

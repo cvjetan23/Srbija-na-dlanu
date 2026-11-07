@@ -49,7 +49,7 @@ final class SND_API {
         $data = SND_Data::get(); $date = SND_Game::date();
         $tomorrow = new DateTimeImmutable('tomorrow', new DateTimeZone('Europe/Belgrade'));
         $outline = array(); foreach (SND_Data::pool('district') as $t) { $outline[] = $t['map_path']; }
-        return self::response(array('date' => $date, 'next_change' => $tomorrow->getTimestamp(), 'server_time' => time(), 'counts' => array('district' => count(SND_Data::pool('district')), 'municipality' => count(SND_Data::pool('municipality'))), 'coverage' => $data['coverage'], 'sources' => $data['sources'], 'outline' => $outline, 'version' => SND_VERSION,'config'=>SND_Settings::public_config()));
+        return self::response(array('date' => $date, 'next_change' => $tomorrow->getTimestamp(), 'server_time' => time(), 'counts' => array('district' => count(SND_Data::pool('district')), 'municipality' => count(SND_Data::pool('municipality'))), 'retired_ids'=>SND_Data::retired_ids(),'coverage' => $data['coverage'], 'sources' => $data['sources'], 'outline' => $outline, 'version' => SND_VERSION,'config'=>SND_Settings::public_config()));
     }
 
     public static function start($request) {

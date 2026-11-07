@@ -41,6 +41,7 @@ final class SND_Site {
     public static function template($template) {return self::view()?SND_DIR.'templates/app.php':$template;}
     public static function prepare() {
         if(!self::view()){return;}
+        if(self::view()==='library' && ($_GET['opstina']??'')==='m-beograd' && in_array('m-beograd',SND_Data::retired_ids(),true)){wp_safe_redirect(add_query_arg('okrug','rs-00',self::url('library')),301);exit;}
         // Account HTML contains private data or short-lived nonces; never cache it.
         if(is_user_logged_in() || in_array(self::view(),array('login','account'),true)){
             if(!defined('DONOTCACHEPAGE')){define('DONOTCACHEPAGE',true);}nocache_headers();
@@ -121,13 +122,21 @@ final class SND_Site {
     }
     private static function home() {
         $data=SND_Data::get();$districts=SND_Data::pool('district');$municipalities=SND_Data::pool('municipality');
-        echo '<section class="snd-home-intro"><h1 data-snd-original>'.esc_html(SND_Settings::get('app_name')).'</h1><p>Prepoznaj teritoriju sa slike i proveri svoje znanje. Dodatna pitanja možeš i preskočiti.</p></section><div class="snd-home-games">';
+        echo '<section class="snd-home-intro"><h1 data-snd-original>'.esc_html(SND_Settings::get('app_name')).'</h1><p>Prepoznaj teritoriju sa slike i proveri svoje znanje.</p></section><div class="snd-home-games">';
         foreach(array('district'=>array('Okruzi',$districts,'rs-12'),'municipality'=>array('Opštine i gradovi',$municipalities,'m-cacak')) as $kind=>$entry){
             if(!SND_Settings::get($kind.'_enabled')){continue;}$example=$entry[1][$entry[2]]??reset($entry[1]);
-            echo '<a class="snd-home-game" href="'.esc_url(self::url($kind)).'">'.self::silhouette($example).'<h2>'.esc_html($entry[0]).'</h2><p>'.count($entry[1]).' teritorija</p><span class="snd-card-action">Igraj →</span></a>';
+            echo '<a class="snd-home-game" href="'.esc_url(self::url($kind)).'">'.self::silhouette($example).'<h2>'.esc_html($entry[0]).'</h2><p>'.count($entry[1]).' teritorija</p><span class="snd-card-action"><span>Igraj</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></span></a>';
         }
-        echo '</div><section class="snd-home-library"><div><h2>Upoznaj okruge</h2><p>Pronađi obris, sedište, stanovništvo i opštine jednog okruga.</p></div><a class="snd-app-button snd-button-outline" href="'.esc_url(self::url('library')).'">Baza znanja</a></section>';
+        echo '</div>';self::home_rules();echo '<section class="snd-home-library"><div><h2>Upoznaj okruge</h2><p>Pronađi obris, sedište, stanovništvo i opštine jednog okruga.</p></div><a class="snd-app-button snd-button-outline" href="'.esc_url(self::url('library')).'">Baza znanja</a></section>';
         if(!is_user_logged_in()){echo '<p class="snd-home-account"><a href="'.esc_url(self::url('login')).'">Prijavi se</a> za čuvanje progresa na nalogu.</p>';}
+    }
+    private static function home_rules() {
+        $pool=SND_Data::pool('district');$example=$pool['rs-12']??reset($pool);if(!$example){return;}
+        $pictures=array('<path class="snd-rule-fill" d="'.esc_attr($example['path']).'" transform="translate(36 2) scale(.28)"/>','<rect x="14" y="35" width="112" height="40" rx="8"/><path d="M26 55h54m-52-10v20m68-10h19m-7-7 7 7-7 7"/>','<circle cx="46" cy="54" r="25"/><path d="M46 37v34m-10-22 10-12 10 12M85 43h35m-35 18h25"/>','<rect x="18" y="18" width="45" height="35" rx="5"/><rect x="76" y="18" width="45" height="35" rx="5"/><rect x="18" y="65" width="45" height="35" rx="5"/><rect x="76" y="65" width="45" height="35" rx="5"/><path d="m29 36 9 8 16-17"/>');
+        $steps=array(array('Prepoznaj obris','Pogledaj oblik okruga ili opštine. Sever je uvek gore.'),array('Unesi odgovor',SND_I18n::t('Imaš {count} pokušaja da pronađeš traženu teritoriju.',array('count'=>SND_Settings::get('max_guesses')))),array('Prati tragove','Kilometri i strelica vode od tvog odgovora ka traženoj teritoriji.'),array('Proveri znanje','Nastavi kroz pitanja o stanovništvu, pripadnosti, zastavi i znamenitostima.'));
+        echo '<section class="snd-home-rules" aria-labelledby="snd-rules-title"><h2 id="snd-rules-title">Kako se igra?</h2><ol role="list">';
+        foreach($steps as $i=>$step){echo '<li><div class="snd-rule-picture"><svg viewBox="0 0 140 115" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'.$pictures[$i].'</svg></div><span class="snd-rule-number" aria-hidden="true">'.($i+1).'</span><h3>'.esc_html($step[0]).'</h3><p>'.esc_html($step[1]).'</p></li>';}
+        echo '</ol></section>';
     }
     private static function library() {
         $districts=SND_Data::pool('district');if(isset($_GET['podela']) && $_GET['podela']==='regioni'){self::regions();return;}$key=isset($_GET['okrug'])&&is_string($_GET['okrug'])?sanitize_key(wp_unslash($_GET['okrug'])):'';
@@ -150,7 +159,7 @@ final class SND_Site {
         $members=array_filter(SND_Data::pool('municipality'),function($m)use($t){return $m['district_id']===$t['id'];});$flag=SND_Flags::for_territory($t);
         echo '<article class="snd-district-detail"><a class="snd-back-link" href="'.esc_url(self::url('library')).'">← Svi okruzi</a><h1>'.esc_html($t['name']).'</h1>'.SND_Atlas::map($t).'<dl class="snd-facts"><div><dt>'.($t['id']==='rs-00'?'Celina':($t['region']==='Kosovo i Metohija'?'Središte u korišćenoj podeli':'Sedište okruga')).'</dt><dd>'.esc_html(SND_I18n::place($t['seat'])).'</dd></div><div><dt>Širi položaj</dt><dd>'.esc_html(SND_I18n::region($t['region'])).'</dd></div><div><dt>Stanovništvo</dt><dd>'.(!empty($t['population'])?esc_html(SND_I18n::number($t['population'])).' <small>(Popis '.esc_html($t['year']).')</small>':'Nema uporedivog podatka iz Popisa RZS 2022.').'</dd></div><div><dt>Opštine i gradovi</dt><dd>'.count($members).'</dd></div></dl>';
         if($t['region']==='Kosovo i Metohija'){echo '<p class="snd-detail-note">Koristi se podela na pet okruga i 29 opština Kosova i Metohije. Naziv središta odnosi se na korišćenu teritorijalnu podelu, ne na adresu izmeštene uprave. Popis RZS 2022. na ovoj teritoriji nije sproveden.</p>';}
-        if($t['id']==='rs-00'){echo '<p class="snd-detail-note">Grad Beograd je posebna administrativna celina i nije upravni okrug. Gradske opštine nisu zasebne teritorije ove igre.</p>';}
+        if($t['id']==='rs-00'){echo '<p class="snd-detail-note">Grad Beograd je posebna administrativna celina i nije upravni okrug. Njegovih 17 gradskih opština uključeno je u igru opština. Stanovništvo se računa bez dupliranja cele gradske teritorije.</p>';}
         echo '<h2>Pripadajuće opštine i gradovi</h2>';SND_Atlas::member_list($t);
         if(!empty($t['landmark']['fact'])){echo '<h2>Jedna zanimljivost</h2><p>'.esc_html(SND_I18n::fact($t)).'</p>';}
         if($flag){echo '<h2>Zastava mesta '.esc_html(SND_I18n::place($flag['name'])).'</h2><figure class="snd-knowledge-flag"><img src="'.esc_url(SND_Data::image_url($flag['image'])).'" alt="Zastava mesta '.esc_attr(SND_I18n::place($flag['name'])).'"><figcaption>'.esc_html($flag['credit'].' · '.$flag['license']).' · <a href="'.esc_url($flag['source']).'" target="_blank" rel="noopener noreferrer">Izvor</a></figcaption></figure>';}
@@ -180,7 +189,7 @@ final class SND_Site {
         $m=SND_Atlas::municipality();if($m){$district=self::current_district();return SND_I18n::t('{name}: obris, položaj u okrugu {district}, stanovništvo i izvori.',array('name'=>SND_I18n::territory_name($m),'district'=>SND_I18n::territory_name($district)));}
         $t=self::current_district();
         if($t){return SND_I18n::t('{name}: obris teritorije, sedište {seat}, pripadajuće opštine, stanovništvo i izvori. Baza znanja igre Srbija na dlanu.',array('name'=>SND_I18n::territory_name($t),'seat'=>SND_I18n::place($t['seat'])));}
-        $values=array('home'=>'Prepoznaj okruge, opštine i gradove Srbije po obrisu. Dnevni izazov, vežbanje i dodatna pitanja, uključujući Kosovo i Metohiju.','district'=>'Pogodi okrug Srbije po obrisu, prati udaljenost i smer, pa proveri znanje kroz dodatna pitanja. Dnevni izazov i vežbanje.','municipality'=>'Prepoznaj 174 opštine i grada Srbije, sa Kosovom i Metohijom. Igraj dnevni izazov ili vežbaj.','library'=>'Pronađi svih 30 okružnih celina Srbije: obris, sedište, stanovništvo, pripadajuće opštine i izvori.','login'=>'Prijavi se da sačuvaš rezultate i nastaviš igru Srbija na dlanu na drugom uređaju.','account'=>'Tvoji rezultati, upoznate teritorije i niz igranja u igri Srbija na dlanu.');
+        $values=array('home'=>'Prepoznaj okruge, opštine i gradove Srbije po obrisu. Dnevni izazov, vežbanje i dodatna pitanja, uključujući Kosovo i Metohiju.','district'=>'Pogodi okrug Srbije po obrisu, prati udaljenost i smer, pa proveri znanje kroz dodatna pitanja. Dnevni izazov i vežbanje.','municipality'=>SND_I18n::t('Prepoznaj {count} opština i gradova Srbije, sa Kosovom i Metohijom. Igraj dnevni izazov ili vežbaj.',array('count'=>count(SND_Data::pool('municipality')))),'library'=>'Pronađi svih 30 okružnih celina Srbije: obris, sedište, stanovništvo, pripadajuće opštine i izvori.','login'=>'Prijavi se da sačuvaš rezultate i nastaviš igru Srbija na dlanu na drugom uređaju.','account'=>'Tvoji rezultati, upoznate teritorije i niz igranja u igri Srbija na dlanu.');
         return SND_I18n::t($values[$view]);
     }
     public static function canonical() {

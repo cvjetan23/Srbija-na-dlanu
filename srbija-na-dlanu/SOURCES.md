@@ -55,3 +55,10 @@ Rastojanja i smerovi izračunavaju se iz geometrijskih centara ugrađenih granic
 „Zapadna Srbija”, „Šumadija i Pomoravlje” i drugi nazivi šireg položaja predstavljaju uredničku podelu projektne baze namenjenu pomoći u igri. Tabela svih 30 celina dostupna je u Bazi znanja preko ?podela=regioni. Podela se ne predstavlja kao zvanična statistička/upravna regionalizacija i ne ocenjuje se kao zamensko pitanje.
 
 Autor i licenca fotografije ostaju vidljivi pre odgovora. Puni izvor, koji nazivom datoteke može otkriti znamenitost, dostupan je pre odgovora kao označena pomoć i beleži se u rezultatu. Posle odgovora izvor je normalno dostupan.
+
+
+## Beogradske gradske opštine (3.4.0)
+
+- MRE sloj 4, filter `Region_DOM_ID=15`, svih 17 opština: https://kro.mre.gov.rs/arcgis/rest/services/IMIS/MINING_PUBLIC/MapServer/4 . U preuzetim metapodacima nije navedena posebna licenca za redistribuciju; vidi DATA-LICENSE.md.
+- RZS Popis 2022, beogradski blok tabele: https://popis2022.stat.gov.rs/media/31323/0_ukupan-broj-stanovnika.xlsx . Palilula: 182.624 (Beograd), a ne 69.811 (Niš). Stari grad: 44.737. Zbir 17 opština: 1.681.405.
+- Dopuna: `data/belgrade-municipalities.php`; generator: `tools/build-belgrade.py`. Svaka gradska opština nosi `parent_id=m-beograd` i `district_id=rs-00`. Aktivna podela koristi 190 opštinskih teritorija, sa istim nacionalnim zbirom 6.647.003 i bez izmišljenog popisa za KiM.

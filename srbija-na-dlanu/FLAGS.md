@@ -62,3 +62,6 @@ Slike su rasterizovane i smanjene na najviše 600 × 500 px, bez menjanja simbol
 | Vrbas | flags/bd263ee953e5e58b1f23.png | g.Tihomir Ačanski - Original uploader was en:User:Cinoeye at en.wikipedia | Public domain | [Original](https://commons.wikimedia.org/wiki/File:Rs-vrbas.gif) |
 | Žagubica | flags/eea090741770ad3fd26f.png | User:Zscout370 (Return Fire) | CC BY-SA 3.0 | [Original](https://commons.wikimedia.org/wiki/File:Flag_of_Zagubica,_Serbia.svg) |
 | Zrenjanin | flags/5c5059dcf861799c0f5d.png | Grad Zrenjanin | Public domain | [Original](https://commons.wikimedia.org/wiki/File:Zastava_Zrenjanina.svg) |
+
+
+Od 3.4.0 ista banka od 52 datoteke pokriva 68 aktivnih teritorija (17 okružnih sedišta i 51 opštinu/grad). Cela teritorija Beograda više nije zaseban cilj u opštinskoj igri; zastava Beograda ostaje za odgovarajuću celinu u igri okruga. Za gradske opštine bez potvrđene lokalne zastave postoji geografsko zamensko pitanje. Uvećanje prikazuje isti izvorni fajl i ne menja simbol niti potvrđuje odgovor.

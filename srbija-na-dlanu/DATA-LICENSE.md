@@ -29,3 +29,12 @@ https://popis2022.stat.gov.rs/media/31323/0_ukupan-broj-stanovnika.xlsx
 ## Fotografije
 
 Fotografije imaju zasebne licence, autore i originalne stranice navedene u `SOURCES.md`. Obrada se sastoji od smanjenja rezolucije i JPEG kompresije za veb. Autori nisu povezani sa igrom niti je podržavaju samim ustupanjem fotografija pod otvorenim licencama.
+
+
+## Beogradske gradske opštine (3.4.0)
+
+Stvarne granice svih 17 opština preuzete su iz istog javnog MRE servisa, sloj 4, `Region_DOM_ID=15`: https://kro.mre.gov.rs/arcgis/rest/services/IMIS/MINING_PUBLIC/MapServer/4 . Metapodaci ne navode posebnu licencu za redistribuciju; za taj dopunski sloj ne tvrdi se ODbL ili GPL licenca. Izvedene siluete su u `data/belgrade-municipalities.php`, sa pojedinačnim izvorima. Pojednostavljenje od 85 m i centri koriste UTM 34N, a prikaz prati postojeću projekciju igre. Granice su ilustrativne i nisu katastarska karta.
+
+Stanovništvo je iz 17 redova beogradskog bloka iste RZS tabele 2022; zbir je 1.681.405. Cela teritorija Beograda zamenjena je opštinama u aktivnoj opštinskoj igri kako se stanovništvo ne bi računalo dva puta. Izvorni zbirni zapis ostaje zbog prethodnih partija i istorije. Fotografija Beogradske tvrđave pripada novoj gradskoj opštini Stari grad; originalna fotografija i njena licenca nisu menjani.
+
+Ponovljivo generisanje: `python3 tools/build-belgrade.py --sources-root /putanja/do/izvora`, uz openpyxl, Shapely 2.1+ i pyproj. Potrebni ulazi su `ministry-4.geojson`, `ministry-5.geojson`, `ADM1.geojson` i `census.xlsx`, navedeni u skripti i SOURCES.md. Razvojne biblioteke nisu potrebne WordPress-u i nisu u instalacionom ZIP-u.

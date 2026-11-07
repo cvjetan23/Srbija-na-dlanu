@@ -7,6 +7,13 @@ final class SND_Data {
     public static function editable() {
         $data = get_option('snd_dataset', null);
         if (!is_array($data) || empty($data['territories'])) { $data = require SND_DIR . 'data/territories.php'; }
+        $ids=array_column($data['territories'],'id');
+        if(in_array('rs-00',$ids,true) && in_array('m-beograd',$ids,true)){
+            foreach(require SND_DIR.'data/belgrade-municipalities.php' as $borough){if(!in_array($borough['id'],$ids,true)){$data['territories'][]=$borough;}}
+            if(strpos($data['coverage']??'','Igra obuhvata 29 upravnih okruga i Grad Beograd')===0){$data['coverage']='Igra obuhvata upravne okruge, Grad Beograd i opštine, uključujući 17 gradskih opština Beograda i Kosovo i Metohiju. Za Kosovo i Metohiju koristi se podela na pet okruga i 29 opština. Stanovništvo je iz Popisa RZS 2022; gde uporediv podatak nije dostupan, postavlja se geografsko pitanje. Obrisi služe igri i nisu katastarske karte.';}
+            $source='https://kro.mre.gov.rs/arcgis/rest/services/IMIS/MINING_PUBLIC/MapServer/4';
+            if(!in_array($source,array_column($data['sources']??array(),'url'),true)){$data['sources'][]=array('label'=>'MRE — granice beogradskih gradskih opština','url'=>$source,'license'=>'Javni geografski servis MRE; nije navedena posebna licenca za redistribuciju. Granice su pojednostavljene.');}
+        }
         $overrides = get_option('snd_overrides', array());
         foreach ($data['territories'] as &$item) { if (isset($overrides[$item['id']])) { $item = array_merge($item, $overrides[$item['id']]); } }
         unset($item);
@@ -31,7 +38,11 @@ final class SND_Data {
 
     public static function pool($kind) {
         $data = self::get();
-        return array_filter($data['territories'], function ($t) use ($kind) { return $t['kind'] === $kind; });
+        $retired=self::retired_ids();return array_filter($data['territories'], function ($t) use ($kind,$retired) { return $t['kind'] === $kind && !in_array($t['id'],$retired,true); });
+    }
+    public static function retired_ids() {
+        foreach(self::get()['territories'] as $t){if(($t['parent_id']??'')==='m-beograd'){return array('m-beograd');}}
+        return array();
     }
 
     public static function image_url($path) {
@@ -68,6 +79,10 @@ final class SND_Data {
             }
             $row = array('id' => $id, 'kind' => $kind, 'name' => sanitize_text_field($t['name']), 'center' => array((float) $c[0], (float) $c[1]), 'path' => $t['path'], 'map_path' => $t['map_path']);
             foreach (array('region', 'seat', 'district_id') as $key) { $row[$key] = sanitize_text_field($t[$key] ?? ''); }
+            if(isset($t['parent_id']) && !is_string($t['parent_id'])){return new WP_Error('snd_parent','Neispravna matična gradska celina: '.$id);}
+            if(isset($t['boundary_source']) && !is_string($t['boundary_source'])){return new WP_Error('snd_source','Neispravan izvor granice: '.$id);}
+            if(!empty($t['parent_id'])){$row['parent_id']=sanitize_key($t['parent_id']);}
+            if(!empty($t['boundary_source'])){$row['boundary_source']=esc_url_raw($t['boundary_source'],array('https'));}
             $row['aliases'] = array_map('sanitize_text_field', array_slice((array) ($t['aliases'] ?? array()), 0, 15));
             $row['population'] = max(0, (int) ($t['population'] ?? 0));
             $row['year'] = (int) ($t['year'] ?? 0);
@@ -97,6 +112,9 @@ final class SND_Data {
             if (!$row['disabled']) { $counts[$kind]++; }
             $out['territories'][] = $row;
         }
+        foreach($out['territories'] as $row){if(!empty($row['parent_id']) && !isset($ids[$row['parent_id']])){return new WP_Error('snd_parent','Nedostaje matična gradska celina: '.$row['id']);}}
+        $legacy_active=false;foreach($out['territories'] as $row){if($row['id']==='m-beograd' && !$row['disabled']){$legacy_active=true;}}
+        if($legacy_active){foreach($out['territories'] as $row){if(!$row['disabled'] && ($row['parent_id']??'')==='m-beograd'){$counts['municipality']--;break;}}}
         if ($counts['district'] < 4 || $counts['municipality'] < 4) { return new WP_Error('snd_pool', 'Potrebne su najmanje četiri aktivne teritorije u svakoj igri.'); }
         foreach ($out['territories'] as $row) {
             if ($row['kind'] === 'municipality' && (!isset($ids[$row['district_id']]) || !self::find_district($out['territories'], $row['district_id']))) {

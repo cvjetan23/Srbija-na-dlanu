@@ -1817,6 +1817,116 @@ return json_decode(<<<'SND_LANGUAGES'
     "de": "Versuch {count}: noch nicht gespielt.",
     "ru": "Попытка {count}: ещё не сделана."
   },
+  "Prepoznaj teritoriju sa slike i proveri svoje znanje.": {
+    "en": "Identify the territory in the picture and test your knowledge.",
+    "de": "Erkenne das Gebiet auf dem Bild und teste dein Wissen.",
+    "ru": "Узнай территорию по изображению и проверь свои знания."
+  },
+  "Prepoznaj obris": {
+    "en": "Recognise the outline",
+    "de": "Erkenne den Umriss",
+    "ru": "Узнай контур"
+  },
+  "Pogledaj oblik okruga ili opštine. Sever je uvek gore.": {
+    "en": "Look at the outline of a district or municipality. North is always up.",
+    "de": "Sieh dir den Umriss eines Bezirks oder einer Gemeinde an. Norden ist immer oben.",
+    "ru": "Посмотри на контур округа или общины. Север всегда сверху."
+  },
+  "Unesi odgovor": {
+    "en": "Enter a guess",
+    "de": "Gib einen Tipp ab",
+    "ru": "Введи ответ"
+  },
+  "Imaš {count} pokušaja da pronađeš traženu teritoriju.": {
+    "en": "You have {count} attempts to find the target territory.",
+    "de": "Du hast {count} Versuche, das gesuchte Gebiet zu finden.",
+    "ru": "У тебя {count} попыток найти загаданную территорию."
+  },
+  "Prati tragove": {
+    "en": "Follow the clues",
+    "de": "Folge den Hinweisen",
+    "ru": "Следуй подсказкам"
+  },
+  "Kilometri i strelica vode od tvog odgovora ka traženoj teritoriji.": {
+    "en": "The distance and arrow lead from your guess towards the target territory.",
+    "de": "Entfernung und Pfeil führen von deinem Tipp zum gesuchten Gebiet.",
+    "ru": "Расстояние и стрелка ведут от твоего ответа к загаданной территории."
+  },
+  "Proveri znanje": {
+    "en": "Test your knowledge",
+    "de": "Teste dein Wissen",
+    "ru": "Проверь знания"
+  },
+  "Nastavi kroz pitanja o stanovništvu, pripadnosti, zastavi i znamenitostima.": {
+    "en": "Continue with questions about population, location, flags and landmarks.",
+    "de": "Beantworte anschließend Fragen zu Bevölkerung, Zugehörigkeit, Flaggen und Sehenswürdigkeiten.",
+    "ru": "Продолжи вопросами о населении, принадлежности, флагах и достопримечательностях."
+  },
+  "Zadata teritorija": {
+    "en": "Target territory",
+    "de": "Gesuchtes Gebiet",
+    "ru": "Загаданная территория"
+  },
+  "Uvećaj": {
+    "en": "Enlarge",
+    "de": "Vergrößern",
+    "ru": "Увеличить"
+  },
+  "Uvećaj: {label}": {
+    "en": "Enlarge: {label}",
+    "de": "Vergrößern: {label}",
+    "ru": "Увеличить: {label}"
+  },
+  "Uvećana slika: {label}": {
+    "en": "Enlarged image: {label}",
+    "de": "Vergrößertes Bild: {label}",
+    "ru": "Увеличенное изображение: {label}"
+  },
+  "Kom gradu pripada ova gradska opština?": {
+    "en": "Which city does this city municipality belong to?",
+    "de": "Zu welcher Stadt gehört diese Stadtgemeinde?",
+    "ru": "К какому городу относится эта городская община?"
+  },
+  "Gradska opština {name} pripada Gradu Beogradu.": {
+    "en": "The city municipality of {name} belongs to the City of Belgrade.",
+    "de": "Die Stadtgemeinde {name} gehört zur Stadt Belgrad.",
+    "ru": "Городская община {name} относится к городу Белграду."
+  },
+  "MRE — granice beogradskih gradskih opština": {
+    "en": "Ministry of Mining and Energy — Belgrade borough boundaries",
+    "de": "Ministerium für Bergbau und Energie — Grenzen der Belgrader Stadtgemeinden",
+    "ru": "Министерство горного дела и энергетики — границы городских общин Белграда"
+  },
+  "Javni geografski servis MRE; nije navedena posebna licenca za redistribuciju. Granice su pojednostavljene.": {
+    "en": "Public ministry geographic service; no specific redistribution licence is stated. Boundaries are simplified.",
+    "de": "Öffentlicher Geodienst des Ministeriums; eine besondere Lizenz zur Weiterverbreitung ist nicht angegeben. Die Grenzen sind vereinfacht.",
+    "ru": "Открытый геосервис министерства; отдельная лицензия на распространение не указана. Границы упрощены."
+  },
+  "Grad Beograd je posebna administrativna celina i nije upravni okrug. Njegovih 17 gradskih opština uključeno je u igru opština. Stanovništvo se računa bez dupliranja cele gradske teritorije.": {
+    "en": "The City of Belgrade is a separate administrative unit, not an administrative district. Its 17 city municipalities are included in the municipality game. Population is counted without duplicating the whole city territory.",
+    "de": "Die Stadt Belgrad ist eine eigene Verwaltungseinheit und kein Verwaltungsbezirk. Ihre 17 Stadtgemeinden sind im Gemeindespiel enthalten. Die Bevölkerung wird ohne doppelte Erfassung des gesamten Stadtgebiets gezählt.",
+    "ru": "Город Белград — отдельная административная единица, а не управленческий округ. Его 17 городских общин включены в игру общин. Население учитывается без повторного подсчёта всей территории города."
+  },
+  "Prepoznaj {count} opština i gradova Srbije, sa Kosovom i Metohijom. Igraj dnevni izazov ili vežbaj.": {
+    "en": "Identify {count} municipalities and cities of Serbia, including Kosovo and Metohija. Play the daily challenge or practise.",
+    "de": "Erkenne {count} Gemeinden und Städte Serbiens, einschließlich Kosovo und Metohija. Spiele die Tagesaufgabe oder übe.",
+    "ru": "Узнавай {count} общин и городов Сербии, включая Косово и Метохию. Играй в ежедневное задание или тренируйся."
+  },
+  "Igra obuhvata upravne okruge, Grad Beograd i opštine, uključujući 17 gradskih opština Beograda i Kosovo i Metohiju. Za Kosovo i Metohiju koristi se podela na pet okruga i 29 opština. Stanovništvo je iz Popisa RZS 2022; gde uporediv podatak nije dostupan, postavlja se geografsko pitanje. Obrisi služe igri i nisu katastarske karte.": {
+    "en": "The game covers administrative districts, the City of Belgrade and municipalities, including Belgrade’s 17 city municipalities and Kosovo and Metohija. Kosovo and Metohija uses the division into five districts and 29 municipalities. Population comes from the SORS 2022 census; where comparable data is unavailable, a geography question is used. Outlines are for the game and are not cadastral maps.",
+    "de": "Das Spiel umfasst Verwaltungsbezirke, die Stadt Belgrad und Gemeinden, einschließlich der 17 Belgrader Stadtgemeinden sowie Kosovo und Metohija. Für Kosovo und Metohija gilt die Einteilung in fünf Bezirke und 29 Gemeinden. Die Bevölkerungsdaten stammen aus der RZS-Volkszählung 2022; fehlen vergleichbare Daten, wird eine Geografiefrage gestellt. Die Umrisse dienen dem Spiel und sind keine Katasterkarten.",
+    "ru": "Игра охватывает управленческие округа, город Белград и общины, включая 17 городских общин Белграда и Косово и Метохию. Для Косово и Метохии используется деление на пять округов и 29 общин. Население приведено по переписи РЗС 2022 года; при отсутствии сопоставимых данных задаётся географический вопрос. Контуры предназначены для игры и не являются кадастровыми картами."
+  },
+  "Beogradske opštine su dodate u igru. Nastavi ovu partiju ili ih isprobaj u novoj.": {
+    "en": "Belgrade’s city municipalities have been added. Continue this game or try them in a new one.",
+    "de": "Die Belgrader Stadtgemeinden wurden hinzugefügt. Setze diese Partie fort oder probiere sie in einer neuen aus.",
+    "ru": "Городские общины Белграда добавлены в игру. Продолжи эту партию или попробуй их в новой."
+  },
+  "Započni novo vežbanje": {
+    "en": "Start new practice",
+    "de": "Neue Übungsrunde starten",
+    "ru": "Начать новую тренировку"
+  },
   "@days_one": {
     "sr": "{count} dan",
     "en": "{count} day",

@@ -13,7 +13,8 @@ if($op==='setup'){
 }elseif($op==='scenario'){
     wp_set_current_user(0);$s=SND_Game::load($a['token']);$t=SND_Data::get()['territories'][$a['target']]??null;
     if(is_wp_error($s) || !$t || !empty($s['owner']) || $s['challenge']['mode']!=='practice' || $s['challenge']['kind']!==$t['kind']){exit(1);}
-    $s['challenge']['target']=$t;$s['challenge']['questions']=SND_Game::questions($t,SND_Data::pool($t['kind']),SND_Data::pool('district'),'presentation:'.$t['id']);SND_Game::persist($a['token'],$s);echo wp_json_encode(array('target'=>$t['id']));
+    $pool=SND_Data::pool($t['kind']);if($t['id']==='m-beograd' && in_array('m-beograd',SND_Data::retired_ids(),true)){$seed=require SND_DIR.'data/territories.php';$pool=array();foreach($seed['territories'] as $row){if($row['kind']==='municipality'){$pool[$row['id']]=$row;}}$s['challenge']['catalog']=$pool;}
+    $s['challenge']['target']=$t;$s['challenge']['questions']=SND_Game::questions($t,$pool,SND_Data::pool('district'),'presentation:'.$t['id']);SND_Game::persist($a['token'],$s);echo wp_json_encode(array('target'=>$t['id']));
 }elseif($op==='mail'){echo wp_json_encode(get_option('snd_http_mail'));
 }elseif($op==='settings'){echo wp_json_encode(SND_Settings::all());
 }elseif($op==='cleanup'){

@@ -41,10 +41,11 @@ final class SND_Game {
     }
 
     public static function geometry_sources($territories) {
-        $kim=false;$other=false;
-        foreach($territories as $t){if(($t['region']??'')==='Kosovo i Metohija'){$kim=true;}else{$other=true;}}
+        $kim=false;$other=false;$extra=array();
+        foreach($territories as $t){if(!empty($t['boundary_source'])){$extra[$t['boundary_source']]=($t['parent_id']??'')==='m-beograd'?'MRE — granice beogradskih gradskih opština':'Granice teritorije';}elseif(($t['region']??'')==='Kosovo i Metohija'){$kim=true;}else{$other=true;}}
         $out=array();
         if($kim){$out[]=array('label'=>'MRE — granice Kosova i Metohije','url'=>'https://kro.mre.gov.rs/arcgis/rest/services/IMIS/MINING_PUBLIC/MapServer');}
+        foreach($extra as $url=>$label){$out[]=array('label'=>$label,'url'=>$url);}
         if($other){$out[]=array('label'=>'geoBoundaries / OpenStreetMap — granice ostalih teritorija','url'=>'https://www.geoboundaries.org/');}
         return $out;
     }
@@ -126,6 +127,8 @@ final class SND_Game {
             $q[] = self::choice_question('membership', 'Koja od ovih opština pripada ovom okrugu?', $inside[0], $outside, $seed . ':membership', 'Opština ' . $inside[0] . ' pripada celini: ' . $target['name'] . ', prema podeli na pet upravnih okruga na Kosovu i Metohiji.', 'https://kro.mre.gov.rs/arcgis/rest/services/IMIS/MINING_PUBLIC/MapServer');
         } elseif ($target['kind'] === 'district' && $target['id'] !== 'rs-00') {
             $q[] = self::choice_question('seat', 'Koje je sedište ovog okruga?', $target['seat'], array_column($districts, 'seat'), $seed . ':seat', 'Sedište okruga je ' . $target['seat'] . '.', $target['region']==='Kosovo i Metohija'?'https://kro.mre.gov.rs/arcgis/rest/services/IMIS/MINING_PUBLIC/MapServer':'https://www.srbija.gov.rs/sekcija/329/okruzi.php');
+        } elseif (($target['parent_id']??'')==='m-beograd') {
+            $q[]=self::choice_question('city_membership','Kom gradu pripada ova gradska opština?','Beograd',array('Novi Sad','Niš','Kragujevac'),$seed.':city','Gradska opština '.$target['name'].' pripada Gradu Beogradu.','https://www.stat.gov.rs/sr-latn/oblasti/registar-prostornih-jedinica-i-gis/administrativno-teritorijalna-podela-i-nstj-nivoi-1-2-3/');
         } elseif ($target['kind'] === 'municipality' && $target['district_id'] !== 'rs-00') {
             $parent = $districts[$target['district_id']];
             $q[] = self::choice_question('district', 'Kojem okrugu pripada ova teritorija?', $parent['name'], array_column($districts, 'name'), $seed . ':district', $target['name'] . ' pripada administrativnoj celini: ' . $parent['name'] . '.', $target['region']==='Kosovo i Metohija'?'https://kro.mre.gov.rs/arcgis/rest/services/IMIS/MINING_PUBLIC/MapServer':'https://www.srbija.gov.rs/sekcija/329/okruzi.php');
