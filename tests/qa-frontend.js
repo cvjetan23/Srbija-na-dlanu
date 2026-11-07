@@ -125,9 +125,9 @@ async function run(){
 
  const fs=require('node:fs'),path=require('node:path');
  const styles=['game.css','app.css'].map(file=>fs.readFileSync(path.join(__dirname,'../srbija-na-dlanu/assets',file),'utf8')).join('\n');
- function lastColor(selector){let color='';for(const rule of styles.matchAll(/([^{}]+)\{([^{}]+)\}/g)){if(rule[1].includes(selector)){const found=/\bcolor:(#[0-9a-f]{6})\b/i.exec(rule[2]);if(found)color=found[1];}}return color;}
- function luminance(hex){const channels=[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16)/255).map(c=>c<=.04045?c/12.92:((c+.055)/1.055)**2.4);return channels.reduce((sum,c,i)=>sum+c*[.2126,.7152,.0722][i],0);}
- for(const selector of ['snd-source','input::placeholder']){const color=lastColor(selector);check(Boolean(color),'Explicit accessible text color '+selector);check(1.05/(luminance(color)+.05)>=4.5,'Minimum readable contrast on white '+selector);}
+ for(const selector of ['snd-source','input::placeholder']){
+  check([...styles.matchAll(/([^{}]+)\{([^{}]+)\}/g)].some(rule=>rule[1].includes(selector) && /\bcolor:var\(--snd-secondary/.test(rule[2])),'Shared readable palette role '+selector);
+ }
 
  console.log('PASS: '+total+' QA frontend regressions.');
 }

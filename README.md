@@ -1,4 +1,4 @@
-# Srbija na dlanu 3.5.1
+# Srbija na dlanu 3.6.0
 
 Zasebna geografska aplikacija unutar WordPress-a: početna, igre za okruge i opštine, baza znanja i nalozi igrača. Sveden prikaz: slika gore, pitanje i odgovori ispod, sa većim slovima.
 
@@ -26,6 +26,14 @@ Zasebna geografska aplikacija unutar WordPress-a: početna, igre za okruge i op�
 Ove stranice imaju svoj kompas, meni, zaglavlje i podnožje, bez zaglavlja i podnožja aktivne teme. Ostali deo sajta zadržava postojeći izgled. Postojeći Elementor podaci početne stranice se ne brišu. Dodatak ne menja globalnu početnu stranicu WordPress-a.
 
 Shortcode `[srbija_na_dlanu]` i dalje radi na drugim WP stranicama; tu se zadržava njihova tema. Za određenu igru koristi `[srbija_na_dlanu kind="district"]` ili `kind="municipality"`.
+
+## Novo u 3.6.0
+
+- Paleta je preuzeta sa glavnog sajta: maslinasta `#6F7C45`, tamna `#171914`, površina `#292C25`, svetla `#EEF0E5`, bela i ivica `#D8DCCB`, uz **Sunrise `#FFD447`**. Sedam osnovnih boja zamenjuje ranije mešanje zelenih i zlatnih nijansi.
+- Ravna dugmad bez donje trake, beli natpisi na maslinastoj i Sunrise akcenti u tamnoj temi. Strelice pokušaja su Sunrise. Tačan odgovor ima Sunrise okvir uz istu pozadinu kao ostali odgovori.
+- Brojevi pokušaja i zvezdica na mapi su manji. Na malim opštinama oznake su pomerene van oblika i povezane linijom; pri promeni širine ostaju iste veličine u pikselima.
+- Reke su diskretna, obojiva SVG maska preko celog ekrana, uključujući velike širine i skrolovanje.
+- **WP → Srbija na dlanu → Podešavanja → Paleta boja**: sedam osnovnih boja i dva dodatna izbora za tamnu temu. Ranije podrazumevane boje prelaze na novu paletu, dok se namerno prilagođene vrednosti čuvaju. Ne menjaju se runde, progres ili bodovi.
 
 ## Novo u 3.5.0
 

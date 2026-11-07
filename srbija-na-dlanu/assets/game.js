@@ -229,7 +229,7 @@
         return `<div class="snd-visual ${s.stage === 'quiz' ? 'snd-visual-small' : ''}"><svg class="snd-shape" viewBox="0 0 360 360" role="img" aria-label="${s.stage === 'guess' ? 'Obris nepoznate teritorije; sever je gore' : 'Obris teritorije ' + esc(s.territory.name)}"><path d="${esc(s.shape)}"/></svg></div>`;
       }
       const attempts=new Map(s.guesses.map((g,i)=>[g.id,{...g,number:i+1}]));
-      return `<div class="snd-visual snd-visual-context"><svg class="snd-context-map" viewBox="0 0 600 800" role="img" aria-label="Položaj teritorije ${esc(s.territory.name)} na mapi Srbije"><g class="snd-map-base">${this.outline()}</g>${(s.map || []).map(t => `<path class="${t.id === s.territory.id ? 'snd-map-target' : attempts.has(t.id) ? 'snd-map-last' : 'snd-map-cell'}" data-map-region="${esc(t.id)}" d="${esc(t.map_path)}"/>`).join('')}<g class="snd-map-markers" aria-hidden="true">${s.guesses.map((g,i)=>`<g data-map-attempt="${esc(g.id)}" class="${g.correct?'is-correct':''}" visibility="hidden"><line/><circle r="22"/><text text-anchor="middle" dy=".35em">${i+1}</text></g>`).join('')}${!s.solved?`<g data-map-answer="${esc(s.territory.id)}" class="is-target" visibility="hidden"><line/><circle r="27"/><path class="snd-target-symbol" d="m0-13 4 8 9 1-7 6 2 9-8-4-8 4 2-9-7-6 9-1Z"/></g>`:''}</g></svg><aside class="snd-target-answer"><span>Zadata teritorija</span><strong>${esc(s.territory.name)}</strong></aside><ol class="snd-map-caption" aria-label="Prethodni pokušaji">${s.guesses.map((g,i)=>`<li class="${g.correct?'snd-legend-target':'snd-legend-last'}"><span class="snd-map-number" aria-hidden="true">${i+1}</span>${esc(g.name)}</li>`).join('')}</ol></div>`;
+      return `<div class="snd-visual snd-visual-context"><svg class="snd-context-map" data-map-kind="${esc(s.kind)}" viewBox="0 0 600 800" role="img" aria-label="Položaj teritorije ${esc(s.territory.name)} na mapi Srbije"><g class="snd-map-base">${this.outline()}</g>${(s.map || []).map(t => `<path class="${t.id === s.territory.id ? 'snd-map-target' : attempts.has(t.id) ? 'snd-map-last' : 'snd-map-cell'}" data-map-region="${esc(t.id)}" d="${esc(t.map_path)}"/>`).join('')}<g class="snd-map-markers" aria-hidden="true">${s.guesses.map((g,i)=>`<g data-map-attempt="${esc(g.id)}" class="${g.correct?'is-correct':''}" visibility="hidden"><line/><circle r="22"/><text text-anchor="middle" dy=".35em">${i+1}</text></g>`).join('')}${!s.solved?`<g data-map-answer="${esc(s.territory.id)}" class="is-target" visibility="hidden"><line/><circle r="27"/><path class="snd-target-symbol" d="m0-13 4 8 9 1-7 6 2 9-8-4-8 4 2-9-7-6 9-1Z"/></g>`:''}</g></svg><aside class="snd-target-answer"><span>Zadata teritorija</span><strong>${esc(s.territory.name)}</strong></aside><ol class="snd-map-caption" aria-label="Prethodni pokušaji">${s.guesses.map((g,i)=>`<li class="${g.correct?'snd-legend-target':'snd-legend-last'}"><span class="snd-map-number" aria-hidden="true">${i+1}</span>${esc(g.name)}</li>`).join('')}</ol></div>`;
     }
     panel() {
       const s = this.state;
@@ -305,28 +305,42 @@
     }
     mapAttempts() {
       const svg=this.root.querySelector('.snd-context-map');if(!svg)return;
-      const placed=[];
+      const matrix=svg.getScreenCTM(),scale=matrix?Math.hypot(matrix.a,matrix.b):.5;
+      if(!scale)return;
+      const compact=this.state.kind==='municipality',placed=[];
       [...svg.querySelectorAll('[data-map-attempt],[data-map-answer]')].sort((a,b)=>Number(b.hasAttribute('data-map-answer'))-Number(a.hasAttribute('data-map-answer'))).forEach(marker=>{
         const shape=svg.querySelector(`[data-map-region="${(marker.dataset.mapAttempt || marker.dataset.mapAnswer)}"]`);if(!shape || typeof shape.getBBox!=='function')return;
+        const answer=marker.hasAttribute('data-map-answer'),radius=(compact?(answer?8:6):(answer?11:9))/scale;
+        marker.querySelector('circle').setAttribute('r',radius);
+        const text=marker.querySelector('text');if(text)text.style.fontSize=(compact?9:11)/scale+'px';
+        const star=marker.querySelector('.snd-target-symbol');if(star)star.setAttribute('transform',`scale(${radius/22})`);
         const b=shape.getBBox(),center={x:b.x+b.width/2,y:b.y+b.height/2},candidates=[];
         for(let row=1;row<12;row++)for(let col=1;col<12;col++){
-          const p={x:b.x+b.width*col/12,y:b.y+b.height*row/12};
-          const probe=svg.createSVGPoint();probe.x=p.x;probe.y=p.y;
-          if(typeof shape.isPointInFill!=='function' || shape.isPointInFill(probe))candidates.push(p);
+          const point={x:b.x+b.width*col/12,y:b.y+b.height*row/12};
+          const probe=svg.createSVGPoint();probe.x=point.x;probe.y=point.y;
+          if(typeof shape.isPointInFill!=='function' || shape.isPointInFill(probe))candidates.push(point);
         }
         candidates.sort((a,b)=>Math.hypot(a.x-center.x,a.y-center.y)-Math.hypot(b.x-center.x,b.y-center.y));
-        const origin=candidates[0] || center;let point=origin;
-        for(let ring=0;ring<6;ring++){
-          const choices=ring===0?[origin]:Array.from({length:12},(_,i)=>({x:origin.x+Math.cos(i*Math.PI/6)*ring*28,y:origin.y+Math.sin(i*Math.PI/6)*ring*28}));
-          const free=choices.find(p=>p.x>=24 && p.x<=576 && p.y>=24 && p.y<=776 && placed.every(other=>Math.hypot(p.x-other.x,p.y-other.y)>=50));
+        const origin=candidates[0] || center,small=Math.min(b.width,b.height)<radius*3;
+        const outside=p=>p.x+radius<b.x || p.x-radius>b.x+b.width || p.y+radius<b.y || p.y-radius>b.y+b.height;
+        let point=origin;
+        for(let ring=0;ring<12;ring++){
+          const distance=(small?Math.max(b.width,b.height)/2+radius+4/scale:0)+ring*(radius*2+3/scale);
+          const choices=ring===0&&!small?[origin]:Array.from({length:24},(_,i)=>({x:origin.x+Math.cos(i*Math.PI/12)*distance,y:origin.y+Math.sin(i*Math.PI/12)*distance}));
+          const free=choices.find(p=>p.x>=radius+3 && p.x<=597-radius && p.y>=radius+3 && p.y<=797-radius && (!small || outside(p)) && placed.every(other=>Math.hypot(p.x-other.x,p.y-other.y)>=radius+other.radius+3/scale));
           if(free){point=free;break;}
         }
-        placed.push(point);marker.setAttribute('transform',`translate(${point.x} ${point.y})`);marker.removeAttribute('visibility');
-        const line=marker.querySelector('line');line.setAttribute('x2',origin.x-point.x);line.setAttribute('y2',origin.y-point.y);
+        placed.push({...point,radius});marker.setAttribute('transform',`translate(${point.x} ${point.y})`);marker.removeAttribute('visibility');
+        const line=marker.querySelector('line'),dx=origin.x-point.x,dy=origin.y-point.y,distance=Math.hypot(dx,dy);
+        line.setAttribute('x1',distance>radius?dx*radius/distance:0);line.setAttribute('y1',distance>radius?dy*radius/distance:0);
+        line.setAttribute('x2',dx);line.setAttribute('y2',dy);
       });
     }
     bind() {
+      if(this.mapResize)this.mapResize.disconnect();
       this.mapAttempts();
+      const map=this.root.querySelector('.snd-context-map');
+      if(map && typeof ResizeObserver!=='undefined'){this.mapResize=new ResizeObserver(()=>this.mapAttempts());this.mapResize.observe(map);}
       this.root.querySelectorAll('[data-zoom]').forEach(button=>button.addEventListener('click',event=>{event.preventDefault();if(!this.busy)this.zoomFlag(button.dataset.zoom);}));
       this.root.querySelectorAll('[data-cmd]').forEach(b => b.addEventListener('click', async event => {
         const command = b.dataset.cmd;

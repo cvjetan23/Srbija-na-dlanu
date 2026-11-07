@@ -6,7 +6,8 @@ final class SND_Settings {
     public static function defaults() {
         return array(
             'app_name'=>'Srbija na dlanu','default_language'=>'sr','languages'=>array('sr','en','de','ru'),
-            'default_theme'=>'auto','theme_switch'=>true,'primary_color'=>'#355d3d','dark_accent'=>'#a5c797','highlight_color'=>'#FFD447','dark_button_color'=>'#35513d','river_background'=>true,'font_scale'=>100,
+            'default_theme'=>'auto','theme_switch'=>true,'primary_color'=>'#6f7c45','dark_accent'=>'#eef0e5','highlight_color'=>'#FFD447','dark_button_color'=>'#6f7c45',
+            'ink_color'=>'#171914','surface_color'=>'#ffffff','pale_color'=>'#eef0e5','border_color'=>'#d8dccb','dark_surface_color'=>'#292c25','river_background'=>true,'font_scale'=>100,
             'district_enabled'=>true,'municipality_enabled'=>true,'daily_enabled'=>true,'practice_enabled'=>true,
             'max_guesses'=>6,'hint_after'=>3,'hint_enabled'=>true,'source_help_enabled'=>true,'media_fallback'=>true,
             'rounds'=>array('population','administration','flag','landmark'),'show_sources'=>true,
@@ -15,7 +16,16 @@ final class SND_Settings {
         );
     }
     public static function all() {
-        if(self::$cache===null){self::$cache=array_merge(self::defaults(),(array)get_option('snd_settings',array()));}
+        if(self::$cache===null){
+            $stored=(array)get_option('snd_settings',array());
+            // Upgrade the old stock palette, while retaining deliberately customized colors.
+            if(empty($stored['palette_version'])){
+                foreach(array('primary_color'=>'#355d3d','dark_accent'=>'#a5c797','dark_button_color'=>'#35513d') as $key=>$old){
+                    if(isset($stored[$key]) && strtolower($stored[$key])===$old){unset($stored[$key]);}
+                }
+            }
+            self::$cache=array_merge(self::defaults(),$stored);
+        }
         return self::$cache;
     }
     public static function get($key,$fallback=null) {
@@ -23,9 +33,23 @@ final class SND_Settings {
         $all=self::all();return $all[$key]??$fallback;
     }
     public static function reset(){self::$cache=null;}
+    public static function color_fields() {
+        return array('primary_color'=>'Maslinasta — glavna boja i oblici',
+            'highlight_color'=>'Sunrise — akcenti, strelice i tačni odgovori',
+            'ink_color'=>'Tamna — pozadina tamne teme i tekst svetle',
+            'dark_surface_color'=>'Tamna površina — kartice i polja',
+            'surface_color'=>'Bela — svetle kartice i tekst tamne teme',
+            'pale_color'=>'Svetla — pozadina i sporedni tekst',
+            'border_color'=>'Svetla ivica — razdelnici i mapa',
+            'dark_accent'=>'Sporedni tekst (tamna tema)',
+            'dark_button_color'=>'Pozadina glavnih dugmadi (tamna tema)');
+    }
     public static function foreground($color) {
         if(strlen($color)===4){$color='#'.$color[1].$color[1].$color[2].$color[2].$color[3].$color[3];}$rgb=sscanf($color,'#%02x%02x%02x');$l=0;foreach(array(.2126,.7152,.0722) as $i=>$weight){$v=($rgb[$i]??0)/255;$l+=($v<=.04045?$v/12.92:pow(($v+.055)/1.055,2.4))*$weight;}
-        return $l>.179?'#101810':'#ffffff';
+        // Prefer the requested white label whenever it meets WCAG AA. Compare
+        // against the actual dark foreground, rather than treating it as black.
+        $white=1.05/($l+.05);$dark=($l+.05)/.0582;
+        return $white>=4.5 || $white>=$dark?'#ffffff':'#101810';
     }
     public static function validate($input) {
         $input=is_array($input)?$input:array();$out=self::defaults();
@@ -36,7 +60,8 @@ final class SND_Settings {
         $out['default_language']=in_array($input['default_language']??'',$out['languages'],true)?$input['default_language']:$out['languages'][0];
         $out['default_theme']=in_array($input['default_theme']??'',array('light','dark','auto'),true)?$input['default_theme']:'auto';
         foreach(array('theme_switch','district_enabled','municipality_enabled','daily_enabled','practice_enabled','hint_enabled','source_help_enabled','media_fallback','show_sources','analytics_enabled','guest_analytics','erase_deleted_users','ranking_enabled','river_background','flag_fallback') as $key){$out[$key]=!empty($input[$key]);}
-        foreach(array('primary_color','dark_accent','highlight_color','dark_button_color') as $key){$out[$key]=sanitize_hex_color($input[$key]??'')?:$out[$key];}
+        foreach(array_keys(self::color_fields()) as $key){$out[$key]=sanitize_hex_color($input[$key]??'')?:$out[$key];}
+        $out['palette_version']=1;
         $out['points_territory']=max(0,min(100,(int)($input['points_territory']??60)));
         $out['points_step']=max(0,min(100,(int)($input['points_step']??6)));
         $out['points_hint']=max(0,min(100,(int)($input['points_hint']??10)));
