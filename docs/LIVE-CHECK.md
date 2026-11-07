@@ -1,4 +1,22 @@
-# Produkcija — verzija 3.1.0
+# Produkcija — verzija 3.2.0
+
+Verzija **3.2.0 je postavljena i aktivna** na https://cvjetan.dev/srbija-na-dlanu/ — 7. novembar 2026. ZIP je zamenjen standardnim WP obrascem sa stvarnim nonce-om; WordPress je potvrdio uspešno ažuriranje.
+
+- Proveren izvor: `da038b59305ac6c83cb055c09c2cdcd3443c86aa`. Proveren izvor i reproducibilni paket: `07e8cb5c871bd6fa114ed571ad33e58fbce25458`. Svih 148 datoteka grane poređeno je sa lokalnim izvorom po Git blob SHA i veličini.
+- ZIP SHA256: `6527251d8d266d28438e5e9dd3ca0532f103974d1527bc5fea0adcea16c64a6d`; 7.889.271 bajt i 121 datoteka dodatka.
+- [GitHub Actions za izdanje](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/42355736395) prošao je sa MySQL 8, WordPress 7.1.4, PHP 8.3.6, Autoptimize i Slim SEO. Prošla je i [provera na main](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/42355974248).
+- Prošlo je **1.000 javnih produkcijskih HTTP tvrdnji**: pet pogleda na četiri jezika, metapodaci, no-store, odvojeno zaglavlje/podnožje, meni bez oznaka Jezik/Tema, kompas za učitavanje, prikaz i tačne vrednosti tabela za Beograd, Šumadijski i svih pet okruga KiM, kao i oblici i linkovi opština. Broj tvrdnji nije broj nezavisnih scenarija ili uređaja.
+- `game.js`, `ui.js`, `library.js`, `themes.css`, `atlas.css` i `motion.css` na produkciji poklapaju se po bajtovima sa proverenim paketom. API vraća 3.2.0, 30 okružnih celina i 174 opštine/grada. Nema izmišljenog popisa za KiM.
+- Još **devet produkcijskih HTTP tvrdnji** proverilo je WP AJAX bootstrap/start/action/resume, no-store, idempotentan start, odbijanje ponovljenog poteza i završetak. Napravljeno je jedno gostujuće vežbanje; progres postojećih naloga nije menjan tim testom. Raniji dijagnostički HTTP/2 spot-check takođe je napravio gostujuće vežbanje.
+- Svih pet WP prikaza dodatka (Analitika, Igrači, Partije, Podešavanja, Prevodi) vraća 200 i sadržaj bez PHP grešaka. Administratorska sesija odjavljena je nakon provera.
+
+Lokalno i u MySQL CI-ju prošlo je **113 provera u stvarnom Chromium-u**. Obuhvaćeni su klikovi na SVG, četiri jezika, teme, tastatura/dodir, prikazi 320/390/768/1440 px, tabele, reduced motion, stvarna WP prijava i odgovor izgubljen nakon prihvaćenog poteza. Rezervni zahtev odbijen je zbog stare revizije, zatim je nastavak vratio prihvaćen potez bez lažne greške i uz jedan upis rezultata. Snimci tabela i mobilnog prikaza pregledani su. Fizički telefon i produkcijska isporuka e-pošte nisu proveravani.
+
+Produkcijski Chromium kroz Cloud proxy nije mogao da potvrdi lanac TLS sertifikata (`ERR_CERT_AUTHORITY_INVALID`); TLS provera nije isključivana. Zato su produkcijske provere izvršene HTTP klijentom sa uključenom TLS proverom, uz poređenje stvarnih resursa sa paketom proverenim u lokalnom i CI Chromium-u.
+
+Povremeni `ERR_HTTP2_PROTOCOL_ERROR` sa korisnikovog snimka nije ponovljen u produkcijskom spot-check-u: `giveup` i `finish` vratili su HTTP/2 200. Verzija dodaje bezbedan oporavak kroz nativni WP kanal; ne menja HTTP/2 konfiguraciju hostinga.
+
+# Prethodna produkcijska provera — verzija 3.1.0
 
 Verzija **3.1.0 je postavljena i aktivna** na https://cvjetan.dev/srbija-na-dlanu/ — 6. novembar 2026. Paket je zamenjen kroz standardni WP obrazac i potvrđeno je uspešno ažuriranje. Ostali dodaci i progres nisu menjani.
 
