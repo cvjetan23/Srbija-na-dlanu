@@ -4,7 +4,7 @@ Zasebna geografska aplikacija unutar WordPress-a: početna, igre za okruge i op�
 
 **[Preuzmi instalacioni ZIP](https://github.com/cvjetan23/Srbija-na-dlanu/raw/refs/heads/main/dist/srbija-na-dlanu.zip)** · [Instalacija](srbija-na-dlanu/INSTALACIJA.md) · [Provere](docs/PROVERA.md) · [Zastave i licence](srbija-na-dlanu/FLAGS.md)
 
-**Verzija 3.7.0 postavljena je i aktivna na [cvjetan.dev/srbija-na-dlanu](https://cvjetan.dev/srbija-na-dlanu/).** Nova paleta „Šuma i sunce“ spaja borovu, šumsku i žad zelenu, toplu svetlu podlogu i Sunrise. Proverene su obe teme, obe igre, zastave, mobilni prevodi i šest administratorskih prikaza. [Izbor palete i izvori](docs/PALETA-3.7.md) · [Produkcijska provera](docs/LIVE-CHECK.md).
+**Verzija 3.8.0 postavljena je i aktivna na [cvjetan.dev/srbija-na-dlanu](https://cvjetan.dev/srbija-na-dlanu/).** Glavne akcije i filteri imaju zajednički izgled. Tačan odgovor je zelen, izabrani netačan Sunrise, a lupica stoji preko slike zastave bez teksta. Proverene su obe teme, obe igre, mobilni prevodi i šest administratorskih prikaza. [Paleta i izvori](docs/PALETA-3.7.md) · [Produkcijska provera](docs/LIVE-CHECK.md).
 
 ## Instalacija i ažuriranje
 

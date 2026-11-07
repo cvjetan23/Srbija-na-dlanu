@@ -1,4 +1,16 @@
-# Provera verzije 3.7.0
+# Provera verzije 3.8.0
+
+**Verzija 3.8.0 je postavljena i proverena na produkciji.** Prošle su [provere konačne grane](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/42400382241) i [main](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/42400877778). Svih **167 datoteka** proverenog paketa upoređeno je sa lokalnim izvorom po Git blob SHA i veličini. Završni commit menja samo dokumentaciju.
+
+- **33.197 WordPress**, **141 JavaScript** i **332 Chromium tvrdnje** u CI-ju. Provere zajedničkih akcija obuhvataju početnu, igru, formular prijave, bazu znanja i rang listu u obe teme: isti font 18 px, minimalna visina 50 px, radijus 12 px, zelena podloga i beli tekst.
+- Tekstualni i slikovni odgovori imaju zelenu popunu za tačan i Sunrise `#FFD447` za izabrani netačan odgovor, uz različite SVG oznake. Neutralni odgovori i same slike se ne prebojavaju. Preskakanje ima zasebno stanje.
+- Lupica je preko slike zastave, bez vidljivog natpisa, sa pristupačnim nazivom. Odvojena je od dugmeta za odgovor: uvećanje ne šalje potez, radi pre i posle odgovora, Escape i zatvaranje vraćaju fokus.
+- Produkcija: **1.824 javne HTTP i 77 Chromium tvrdnji**. Provereni su zajednički stilovi, obe teme, zastave i obojeni odgovori, uvećanje, mobilna širina 320 px u četiri jezika, ceo ekran pozadine, male oznake mape, obe rang liste, bodovi, sve beogradske opštine i KiM.
+- Šest administratorskih prikaza je zdravo; boje, runde, pokušaji i bodovanje su očuvani. Kreirane su dve gostujuće partije vežbanja; nije upisivan novi rezultat niti menjan progres naloga za održavanje. Administratorska sesija je odjavljena i zatvorena.
+
+[Detaljna produkcijska evidencija](LIVE-CHECK.md). Broj tvrdnji nije broj nezavisnih scenarija; fizički telefon i dostava e-pošte nisu deo ove provere.
+
+# Prethodna provera verzije 3.7.0
 
 **Verzija 3.7.0 je postavljena i proverena na produkciji.** Prošle su [provere konačne grane](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/42391198247) i [main](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/42391515313). Svih **167 datoteka** proverene grane i paketa upoređeno je sa lokalnim izvorom po Git blob SHA i veličini.
 
