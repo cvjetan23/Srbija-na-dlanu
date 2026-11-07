@@ -1,4 +1,15 @@
-# Provera verzije 3.5.0
+# Provera verzije 3.6.0
+
+**Paket 3.6.0 je postavljen na produkciju i proveren.** Prošle su [provere izdvojene grane](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/42388064667) i [main](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/42388489304). Svih 165 datoteka proverenog paketa/grane poređeno je sa lokalnim izvorom po Git blob SHA i veličini. Završna dokumentacija ne menja dodatak ili ZIP.
+
+- **33.194 WordPress tvrdnje** u CI-ju, uključujući 23 nove o migraciji palete, sanitizaciji svih devet polja, očuvanju pravila/prilagođenih boja i belim natpisima sa dovoljnim kontrastom.
+- **141 JavaScript tvrdnja** i **307 tvrdnji u stvarnom Chromium-u**, lokalno i u CI-ju: 98 atlas, 15 polish, 56 presentation, 57 update34, 50 ranking i 31 nova Sunrise provera. Novi tok uključuje nativno čuvanje boja kroz WP obrazac i stvarnu promenu javnih površina, bez promene igre.
+- Lokalno su vizuelno pregledani početna u obe teme, ceo ekran 2560 px, mobilni prikaz i rezultati malih beogradskih opština sa pomerenim brojevima, kao i zastave sa Sunrise okvirom i istom pozadinom ostalih opcija.
+- Produkcija: **1.824 javne HTTP tvrdnje**, **61 Chromium tvrdnja**, dve gostujuće partije (okrug i opštine), svi jezici i šest administratorskih prikaza. Administratorski nalog je odjavljen i sesija zatvorena. Nisu dodavani bodovi nalogu za održavanje.
+
+[Pojedinačni elementi i ispravke](PREGLED-3.6.md) · [Produkcijska evidencija i granice provere](LIVE-CHECK.md).
+
+# Prethodna provera verzije 3.5.0
 
 **Konačni paket je 3.5.1 i postavljen je na produkciju.** Ispravka je ograničena na prostor nativnog polja meseca i osvežavanje verzije resursa. Posle nje ponovo su prošli kompletna MySQL/Chromium provera grane i main, 1.824 javne HTTP tvrdnje i 21 nova produkcijska Chromium tvrdnja bez novih partija. Pregledan je najduži naziv meseca na 320 px u četiri jezika. Pre ispravke proverene su još 67 produkcijskih HTTP i 46 Chromium tvrdnji, tri gostujuće partije i jedan stvaran upis bodova tehničkog naloga (70/100), uz nastavak bez dupliranja i skrivanje rezultata sa javne liste. Backend bodovanja nije menjan ispravkom 3.5.1. [Produkcijska evidencija](LIVE-CHECK.md).
 

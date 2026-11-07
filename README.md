@@ -4,7 +4,7 @@ Zasebna geografska aplikacija unutar WordPress-a: početna, igre za okruge i op�
 
 **[Preuzmi instalacioni ZIP](https://github.com/cvjetan23/Srbija-na-dlanu/raw/refs/heads/main/dist/srbija-na-dlanu.zip)** · [Instalacija](srbija-na-dlanu/INSTALACIJA.md) · [Provere](docs/PROVERA.md) · [Zastave i licence](srbija-na-dlanu/FLAGS.md)
 
-**Verzija 3.5.1 postavljena je i aktivna na [cvjetan.dev/srbija-na-dlanu](https://cvjetan.dev/srbija-na-dlanu/).** Proverene su obe igre, zastave, bodovi, oba tipa rang liste, privatnost, šest administratorskih prikaza i mobilni/desktop prikaz na četiri jezika. Prošla je i stvarna bodovana partija tehničkog naloga, skrivena sa javne liste. [Evidencija i granice provere](docs/LIVE-CHECK.md) · [Pregled svakog elementa i ispravke](docs/PREGLED-3.5.md).
+**Verzija 3.6.0 postavljena je i aktivna na [cvjetan.dev/srbija-na-dlanu](https://cvjetan.dev/srbija-na-dlanu/).** Zadržana je paleta glavnog sajta uz Sunrise #FFD447; uređeni su dugmad, strelice, tačni odgovori, pozadina i oznake na mapama. Provereni su obe igre, zastave i uvećanje, baza znanja, rang liste, četiri jezika i šest administratorskih prikaza. [Produkcijska evidencija](docs/LIVE-CHECK.md) · [Pregled elemenata 3.6](docs/PREGLED-3.6.md).
 
 ## Instalacija i ažuriranje
 
