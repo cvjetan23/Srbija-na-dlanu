@@ -6,6 +6,8 @@ Novi `tests/belgrade.php` prošao je sa **354 tvrdnje**: sve geometrije, svih 17
 
 Sve ranije PHP i JavaScript provere ponovo su prošle na proširenoj bazi, uz 301 lokalnu HTTP tvrdnju za nativnu prijavu, naloge, pravila, administraciju, izvoz i privatnost. WordPress ne zahteva dodatni backend ili GIS biblioteke; Shapely/pyproj koriste se samo pri pripremi ugrađenih granica.
 
+Verzija 3.4.0 postavljena je na produkciju. Prošle su 1.334 HTTP tvrdnje i 25 tvrdnji u stvarnom Chromium-u sa uključenom TLS proverom, na širinama 1440 i 320 px. Provereni su početna, pravila, beogradske opštine, Vračar, stvarni potezi, sve četiri dodatne runde i uvećanje zastave pre i posle odgovora. Svih pet administratorskih prikaza radi; sesija je odjavljena. Napravljena su tri gostujuća vežbanja, bez izmene progresa postojećih naloga. Prošle su GitHub Actions provere izdvojene grane i main. [Produkcijska evidencija 3.4.0](LIVE-CHECK.md).
+
 # Provera verzije 3.3.0
 
 Novi `tests/presentation.php` proverava sve ponuđene nazive fotografisanih znamenitosti na četiri jezika, jedinstvene opcije, nepromenjene identifikatore, skrivanje rešenja do odgovora, zvanično ime posle odgovora, sanitizaciju novih polja i ikonicu naloga. Lokalno je prošlo 2.530 tvrdnji.

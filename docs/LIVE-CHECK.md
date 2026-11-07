@@ -1,4 +1,22 @@
-# Produkcija — verzija 3.3.0
+# Produkcija — verzija 3.4.0
+
+Verzija **3.4.0 je postavljena i aktivna** na https://cvjetan.dev/srbija-na-dlanu/ — 7. novembar 2026. WordPress je potvrdio uspešno ažuriranje kroz standardni obrazac za zamenu dodatka.
+
+- Proveren izvor: `08fa7f34f402e665352464c1511553964dc4877a`. Proveren izvor i paket: `8e67603db9230db23a22f7594eeb13431448136d`. Svih 155 datoteka proverene grane poređeno je sa lokalnim izvorom po Git blob SHA i veličini.
+- ZIP SHA256: `25978f4344c266d7f0991635ba1b57405a7928a3b2c0915429ba49613ab700d6`; 7.928.931 bajt i 123 datoteke dodatka.
+- Prošle su [GitHub Actions provere izdvojene grane](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/42365028170) i [main](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/42365500983), sa WordPress 7.1.4, PHP 8.3.6, MySQL 8, Autoptimize i Slim SEO. Lokalno i u CI-ju prošlo je 226 tvrdnji u stvarnom Chromium-u.
+- Prošlo je **1.270 javnih HTTP tvrdnji**: pet pogleda na četiri jezika, skraćen uvod, četiri ilustrovana pravila pre baze znanja, istaknute akcije Igraj, metapodaci i privatni keš, tačne tabele i mape Beograda, Šumadijskog i svih pet okruga KiM, kao i svih 17 novih beogradskih opština sa stanovništvom i izvorima. Stari link `?opstina=m-beograd` vraća 301 ka detalju Beograda sa 17 opština.
+- Produkcijski resursi poklapaju se po bajtovima sa proverenim paketom. API vraća 3.4.0, 30 okružnih celina i **190 aktivnih opština/gradova/gradskih opština**, bez dvostrukog prikaza celog Beograda. Kosovo i Metohija ostaju obuhvaćeni; nije dodat izmišljeni Popis RZS 2022.
+- Još **64 HTTP tvrdnje** proverile su dva gostujuća vežbanja. Okrug: tri promašaja i tačan četvrti odgovor, sve četiri dodatne runde (uključujući zastavu i znamenitost), pregled i nastavak. Opštine: katalog sa svih 17 novih identifikatora, pokušaj Vračar, završna mapa sa 190 teritorija, završetak i nastavak. Provereni su REST i WP AJAX, idempotentan start, odbijanje ponovljenog poteza i oporavak stanja.
+- Prošlo je **25 tvrdnji u stvarnom produkcijskom Chromium-u**, sa uključenom TLS proverom i normalnom proxy konfiguracijom. Na širinama 1440 i 320 px provereni su početna i pravila, meni i nalog, mapa/tabela Beograda, klik na Vračar i njegovih 55.406 stanovnika, unos iznad pokušaja, stvarni potezi, otkrivanje i sve četiri dodatne runde. Uvećanje zastave radi pre i posle odgovora, bez slanja poteza; Escape vraća fokus. Kružna kvačica je SVG uz naziv. Nije bilo grešaka aplikacije u ovom toku.
+- Pregledani su produkcijski snimci početne u tamnoj temi, pitanja sa zastavama i oznakama, uvećane zastave na mobilnoj širini, detalja Vračara i rezultata. Dodatnih 57 lokalnih/CI Chromium tvrdnji pokriva jače isticanje zadatog okruga i njegove posebne oznake uz svih šest promašaja, četiri jezika, kontrast, stare partije i dobrovoljni prelazak na novo vežbanje.
+- Svih pet administratorskih prikaza (Analitika, Igrači, Partije, Podešavanja, Prevodi) vraća 200 bez PHP grešaka. Administratorska sesija je odjavljena nakon provera.
+
+Produkcijske provere napravile su **tri gostujuća vežbanja**: dva HTTP klijentom i jedno kroz Chromium. Progres postojećih naloga i podešavanja nisu menjani testovima. Započete i pripremljene dnevne partije čuvaju raniji katalog; nove opštine dostupne su u novim partijama. Ovo je provereno i na izdvojenoj instalaciji sa 354 backend tvrdnje za beogradske opštine, istoriju, prilagođene podatke i stare dnevne partije.
+
+Fizički telefon i produkcijska isporuka e-pošte nisu proveravani. Broj tvrdnji nije broj nezavisnih scenarija ili uređaja. Ranija ograničenja produkcijskog Chromium-a, navedena ispod za prethodne verzije, ne odnose se na ovu proveru 3.4.0.
+
+# Prethodna produkcijska provera — verzija 3.3.0
 
 Verzija **3.3.0 je postavljena i aktivna** na https://cvjetan.dev/srbija-na-dlanu/ — 7. novembar 2026. WordPress je potvrdio uspešno ažuriranje kroz standardni obrazac za zamenu dodatka.
 
