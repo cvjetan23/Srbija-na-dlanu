@@ -1,4 +1,16 @@
-# Provera verzije 3.6.0
+# Provera verzije 3.7.0
+
+**Verzija 3.7.0 je postavljena i proverena na produkciji.** Prošle su [provere konačne grane](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/42391198247) i [main](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/42391515313). Svih **167 datoteka** proverene grane i paketa upoređeno je sa lokalnim izvorom po Git blob SHA i veličini.
+
+- **33.197 WordPress**, **141 JavaScript** i **314 Chromium tvrdnji** u CI-ju. Osvežena provera palete ima 26 serverskih i 38 browser tvrdnji: migracija obe stare palete, očuvanje prilagođenih boja kao celine, nativno čuvanje boja, vraćanje predloženih boja, odbijanje pogrešnog nonce-a i očuvanje pravila, bodovanja i registracije.
+- Na 320 px pronađeno je pomeranje početne od 8 px na nemačkom i 3 px na ruskom. Razmak i širina dugmeta su ispravljeni; sve četiri jezičke verzije sada imaju posebnu proveru na toj širini.
+- Vizuelno su pregledani početna u obe teme, zastave sa označenim odgovorima i mapa sitnih opština. Proveren kontrast belog natpisa prema podrazumevanom zelenom dugmetu je 6,39:1.
+- Produkcija: **1.824 javne HTTP i 66 Chromium tvrdnji**. Proverene su obe teme, geometrija, nalog/meni, obe igre, zastave i uvećanje, rang liste, četiri jezika i mobilni prikaz. Dve gostujuće partije; nijedna nova bodovana partija naloga za održavanje.
+- Šest administratorskih prikaza je zdravo; potvrđene su nove boje, četiri dodatne runde, šest pokušaja i bodovanje 60/6/10. Administratorska sesija je odjavljena i zatvorena.
+
+[Paleta, izvori i kontrast](PALETA-3.7.md) · [Detaljna evidencija](LIVE-CHECK.md).
+
+# Prethodna provera verzije 3.6.0
 
 **Paket 3.6.0 je postavljen na produkciju i proveren.** Prošle su [provere izdvojene grane](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/42388064667) i [main](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/42388489304). Svih 165 datoteka proverenog paketa/grane poređeno je sa lokalnim izvorom po Git blob SHA i veličini. Završna dokumentacija ne menja dodatak ili ZIP.
 

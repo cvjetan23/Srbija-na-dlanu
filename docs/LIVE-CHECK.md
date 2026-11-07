@@ -1,4 +1,18 @@
-# Produkcija — verzija 3.6.0
+# Produkcija — verzija 3.7.0
+
+Verzija **3.7.0 je postavljena i aktivna** na https://cvjetan.dev/srbija-na-dlanu/ — 7. novembar 2026. Nativni WordPress upload potvrdio je uspešno ažuriranje i očekivani hash paketa. Nova paleta „Šuma i sunce“ primenjena je na obe teme.
+
+- Proveren izvor: `8680a780b974181b0d84a4bb521c4d8d82d745db`. Proveren paket: `a3d7614b17ecf91936fd59a5f5b1bc0269df06f3`, stablo `69b98b695434004f8d3fa130d84fefe7e12d2a87`. Svih **167 datoteka** proverene grane i ZIP-a odgovara lokalnom izvoru po Git blob SHA i veličini.
+- ZIP SHA256: `a4fec079d3d6104594e6c13448f03946686602f231b2fd411f893574704b2a14`; **7.953.090 bajtova i 127 datoteka dodatka**. Završni dokumentacioni commit ne menja dodatak ili ZIP.
+- Prošle su [GitHub Actions provere konačne grane](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/42391198247) i [main](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/42391515313): WordPress 7.1.4, PHP 8.3.6, MySQL 8.0.46, Autoptimize, Slim SEO; 33.197 WordPress, 141 JavaScript i 314 Chromium tvrdnji. Raniji kandidat takođe je prošao CI, a konačni dodatno ispravlja duge prevode dugmadi na mobilnoj početnoj.
+- **1.824 javne HTTP tvrdnje** pokrivaju šest pogleda na četiri jezika, oba tipa rang liste sa svim periodima/igrama, baze znanja i tabele, beogradske opštine i KiM, metapodatke, no-store i tačne postavljene CSS/JS/SVG bajtove. API vraća verziju 3.7.0, 30 okružnih celina i 190 opština/gradova/gradskih opština.
+- **66 produkcijskih Chromium tvrdnji**: borova i topla svetla pozadina, zeleni CTA sa belim natpisom i malim Sunrise detaljem, ceo ekran reka na 2560 px i pri skrolovanju, pravila, četiri mobilna prevoda početne, Beograd/Vračar, potezi bez posvetljivanja table, dodatne runde sa zastavama, uvećanje bez odgovora, Escape/fokus i zatvaranje na telefonu, ispravan odgovor sa istom površinom, bodovi, obe rang liste i četiri jezika. Opštine imaju mali broj/zvezdicu pri promeni širine, uključuju svih 17 beogradskih opština. Nema JavaScript izuzetaka; TLS provera uključena.
+- Svih **šest administratorskih prikaza** vraća 200 bez PHP grešaka. Potvrđene su sve nove boje, četiri uključene runde, šest pokušaja i težine 60/6/10. Nova kontrola vraća samo predložene boje; njeno stvarno čuvanje i očuvanje ostalih podešavanja provereni su na izdvojenom WP-u.
+- Posle postavljanja pregledani su produkcijski snimci obe teme i toka igre. Kreirane su **dve gostujuće partije vežbanja**, bez novih rezultata ili promena progresa drugih naloga. Administratorska sesija za održavanje odjavljena je i zatvorena.
+
+Istraživanje izbora boja i njihove uloge: [PALETA-3.7.md](PALETA-3.7.md). Fizički telefon i produkcijska isporuka e-pošte nisu deo ove provere. Broj tvrdnji nije broj nezavisnih scenarija.
+
+# Prethodna produkcija — verzija 3.6.0
 
 Verzija **3.6.0 je postavljena i aktivna** na https://cvjetan.dev/srbija-na-dlanu/ — 7. novembar 2026. Nativni WP obrazac potvrdio je uspešno ažuriranje dodatka. Zadržana je paleta glavnog sajta uz Sunrise.
 
