@@ -42,18 +42,36 @@
       this.selected = null; this.error = ''; this.ready = this.boot();
     }
     async request(route, body) {
-      const controller = new AbortController(); const timer = setTimeout(() => controller.abort(), 20000);
-      try {
-        const headers = body ? { 'Content-Type': 'application/json' } : {};
-        if (this.account.authenticated) headers['X-WP-Nonce'] = this.account.nonce;
-        if(document.documentElement && document.documentElement.dataset.sndTheme)headers['X-SND-Theme']=document.documentElement.dataset.sndTheme;
-        let address=this.api+route;const lang=L.config().language || this.root.dataset.lang || 'sr';if(lang!=='sr')address+=(address.includes('?')?'&':'?')+'lang='+encodeURIComponent(lang);
-        const response = await fetch(address, { method: body ? 'POST' : 'GET', credentials: 'same-origin', cache: 'no-store', headers, body: body ? JSON.stringify(body) : undefined, signal: controller.signal });
-        let data; try { data = await response.json(); } catch (_) { throw new Error('Igra nije mogla da učita odgovor. Osveži stranicu ili pokušaj ponovo za nekoliko trenutaka.'); }
-        if (!response.ok) { const e = new Error(data.code === 'rest_cookie_invalid_nonce' ? 'Prijava je istekla. Osveži stranicu i ponovo se prijavi.' : data.message || 'Zahtev nije uspeo. Pokušaj ponovo.'); e.code = data.code; throw e; }
-        return data;
-      } catch (e) { if (e.name === 'AbortError') { throw new Error(L.text('Odgovor kasni. Pokušaj ponovo; prethodni potez će biti sačuvan ako je obrađen.')); } e.message=L.text(e.message);throw e; }
-      finally { clearTimeout(timer); }
+      if(route==='start' && body && !body.request_id){
+        const bytes=new Uint8Array(16);if(typeof crypto!=='undefined' && crypto.getRandomValues)crypto.getRandomValues(bytes);else for(let i=0;i<bytes.length;i++)bytes[i]=Math.floor(Math.random()*256);
+        body={...body,request_id:[...bytes].map(n=>n.toString(16).padStart(2,'0')).join('')};
+      }
+      const perform=async ajax=>{
+        const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),20000);
+        try{
+          const headers=body?{'Content-Type':'application/json'}:{};
+          if(this.account.authenticated)headers['X-WP-Nonce']=this.account.nonce;
+          if(document.documentElement && document.documentElement.dataset.sndTheme)headers['X-SND-Theme']=document.documentElement.dataset.sndTheme;
+          const lang=L.config().language || this.root.dataset.lang || 'sr';let address=this.api+route,payload=body?JSON.stringify(body):undefined;
+          if(ajax){
+            address=this.root.dataset.ajax;const fields=new URLSearchParams({action:'snd_game',route,payload:JSON.stringify(body || {})});
+            if(this.account.authenticated)fields.set('_wpnonce',this.account.nonce);
+            payload=fields.toString();headers['Content-Type']='application/x-www-form-urlencoded;charset=UTF-8';
+          }
+          if(lang!=='sr')address+=(address.includes('?')?'&':'?')+'lang='+encodeURIComponent(lang);
+          const response=await fetch(address,{method:ajax || body?'POST':'GET',credentials:'same-origin',cache:'no-store',headers,body:payload,signal:controller.signal});
+          let data;try{data=await response.json();}catch(_){const e=new Error('Igra nije mogla da učita odgovor. Osveži stranicu ili pokušaj ponovo za nekoliko trenutaka.');e.networkFailure=true;throw e;}
+          if(!response.ok){const e=new Error(data.code==='rest_cookie_invalid_nonce'?'Prijava je istekla. Osveži stranicu i ponovo se prijavi.':data.message || 'Zahtev nije uspeo. Pokušaj ponovo.');e.code=data.code;throw e;}
+          return data;
+        }catch(e){if(!e.code)e.networkFailure=true;throw e;}finally{clearTimeout(timer);}
+      };
+      try{
+        if(this.ajaxTransport)return await perform(true);
+        try{return await perform(false);}catch(e){if(!e.networkFailure || !this.root.dataset.ajax)throw e;this.ajaxTransport=true;try{return await perform(true);}catch(fallback){fallback.networkFailure=true;throw fallback;}}
+      }catch(e){
+        if(e.networkFailure && !e.code)e.message=L.t('Veza je prekinuta. Proveri internet i pokušaj ponovo.');else e.message=L.text(e.message);
+        throw e;
+      }
     }
     key(guest = false,date = this.info.date) { return `session:v2:${!guest && this.account.authenticated ? 'user-' + this.account.user.id : 'guest'}:${this.mode}:${this.kind}:${this.mode === 'daily' ? date : 'practice'}`; }
     async refreshDay() {
@@ -122,19 +140,19 @@
     }
     async action(action, value) {
       if (this.busy) return;
-      this.busy = true; this.error = ''; this.setBusy(true);
+      this.busy = true; this.error = ''; this.setBusy(true);const beforeRevision=this.state.revision;
       try { this.accept(await this.request('action', { token: this.token, revision: this.state.revision, action, value })); }
       catch (e) {
         this.error = e.message;
         // Recover a committed request after a timeout, duplicate tab, or lost response.
         if (!['snd_new_day', 'snd_expired', 'snd_token','snd_owner','rest_cookie_invalid_nonce'].includes(e.code)) {
-          try { this.accept(await this.request('resume', { token: this.token })); } catch (_) {}
+          try { this.accept(await this.request('resume', { token: this.token }));if(e.networkFailure && this.state.revision>beforeRevision)this.error=''; } catch (_) {}
         } else { this.setRecovery(e); }
       }
       finally { this.busy = false; this.render(); this.focusPanel(); }
     }
     setBusy(on) {
-      this.root.setAttribute('aria-busy', on ? 'true' : 'false');
+      this.root.setAttribute('aria-busy', on ? 'true' : 'false');const loader=this.root.querySelector('.snd-game-loading');if(loader)loader.hidden=!on;
       this.root.querySelectorAll('button[data-cmd], .snd-option').forEach(b => { if (on) { b.dataset.wasDisabled = b.disabled ? '1' : '0'; b.disabled = true; } else if (b.dataset.wasDisabled !== undefined) { b.disabled = b.dataset.wasDisabled === '1'; delete b.dataset.wasDisabled; } });
     }
     async switchGame(kind, mode) {
@@ -180,7 +198,7 @@
           ${this.fixedKind ? '' : `<div class="snd-tabs" role="group" aria-label="Izaberi igru"><button class="${isDistrict ? 'is-active' : ''}" data-cmd="district" aria-pressed="${isDistrict}">Okruzi</button><button class="${!isDistrict ? 'is-active' : ''}" data-cmd="municipality" aria-pressed="${!isDistrict}">Opštine i gradovi</button></div>`}
           <div class="snd-mode" role="group" aria-label="Režim igre"><button class="${s.mode === 'daily' ? 'is-active' : ''}" data-cmd="daily" aria-pressed="${s.mode === 'daily'}" ${this.info.config && !this.info.config.daily_enabled?'hidden':''}>Dnevni izazov</button><button class="${s.mode === 'practice' ? 'is-active' : ''}" data-cmd="practice" aria-pressed="${s.mode === 'practice'}" ${this.info.config && !this.info.config.practice_enabled?'hidden':''}>Vežbanje</button></div>
         </nav>
-        <div class="snd-board">${this.visual()}<section class="snd-panel" tabindex="-1" aria-label="Trenutna runda">${this.panel()}</section></div>
+        <div class="snd-game-loading" role="status" hidden>${L.config().loader || ''}<span class="snd-sr-only">Učitavanje…</span></div><div class="snd-board">${this.visual()}<section class="snd-panel" tabindex="-1" aria-label="Trenutna runda">${this.panel()}</section></div>
         <div class="snd-error" role="alert" ${this.error ? '' : 'hidden'}>${esc(this.error)}${this.recovery ? `<button data-cmd="${esc(this.recovery.command)}">${esc(this.recovery.label)}</button>` : ''}</div>
         ${this.canSave === false && !this.account.authenticated ? '<p class="snd-storage-note">Pregledač ne dozvoljava čuvanje partije i statistike.</p>' : ''}
         ${this.notice ? `<p class="snd-notice" role="status">${esc(this.notice)}</p>` : ''}
@@ -188,6 +206,7 @@
         ${L.config().show_sources===false?'':'<footer class="snd-footer"><button data-cmd="sources">Obuhvat i izvori</button></footer>'}
         <div class="snd-modal-host"></div><div class="snd-announcer" aria-live="polite" aria-atomic="true"></div>`);
       this.bind();
+      const panel=this.root.querySelector('.snd-panel');if(panel && panel.animate && !(typeof matchMedia==='function' && matchMedia('(prefers-reduced-motion: reduce)').matches))panel.animate([{opacity:.25,transform:'translateY(5px)'},{opacity:1,transform:'translateY(0)'}],{duration:200,easing:'ease-out'});
       const live=this.root.querySelector('.snd-announcer');
       if(live){const message=s.stage==='quiz'?L.t('Runda {round} od {total}: {title}',{round:s.question_index+2,total:s.question_count+1,title:s.question.title}):L.text(s.stage==='complete'?'Partija je završena.':s.stage==='reveal'?'Teritorija je otkrivena.':'Prepoznaj teritoriju.');setTimeout(()=>{if(this.root.querySelector('.snd-announcer')===live)live.textContent=message;},50);}
       if (this.busy) this.setBusy(true);

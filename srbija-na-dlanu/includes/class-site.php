@@ -81,15 +81,15 @@ final class SND_Site {
     }
     private static function preferences() {
         $languages=SND_I18n::languages();$lang=SND_I18n::lang();$base=self::preference_url();
-        echo '<div class="snd-preferences" role="group" aria-label="Podešavanja prikaza"><div class="snd-preference-group"><span class="snd-preference-label">Jezik</span><details class="snd-language-picker"><summary aria-label="'.esc_attr(SND_I18n::t('Izaberi jezik')).'">'.self::preference_icon('globe').'<span data-snd-original>'.esc_html($languages[$lang]).'</span><svg class="snd-picker-chevron" viewBox="0 0 16 16" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></summary><div class="snd-language-options">';
+        echo '<div class="snd-preferences" role="group" aria-label="Podešavanja prikaza"><div class="snd-preference-group"><details class="snd-language-picker"><summary aria-label="'.esc_attr(SND_I18n::t('Izaberi jezik')).'">'.self::preference_icon('globe').'<span data-snd-original>'.esc_html($languages[$lang]).'</span><svg class="snd-picker-chevron" viewBox="0 0 16 16" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></summary><div class="snd-language-options">';
         foreach($languages as $code=>$label){if(!in_array($code,SND_Settings::get('languages'),true)){continue;}
             echo '<a href="'.esc_url(SND_I18n::url($base,$code)).'" lang="'.esc_attr($code==='sr'?'sr-Latn':$code).'" data-language="'.esc_attr($code).'"'.($code===$lang?' aria-current="true"':'').'><span class="snd-language-code" aria-hidden="true">'.esc_html(strtoupper($code)).'</span><span data-snd-original>'.esc_html($label).'</span><span class="snd-language-check" aria-hidden="true">'.($code===$lang?'✓':'').'</span></a>';
         }
         echo '</div></details></div>';
         if(SND_Settings::get('theme_switch')){
-            echo '<div class="snd-preference-group"><span class="snd-preference-label">Tema</span><form class="snd-theme-options" method="get" action="'.esc_url(self::canonical()).'" aria-label="Tema">';
+            echo '<div class="snd-preference-group"><form class="snd-theme-options" method="get" action="'.esc_url(self::canonical()).'" aria-label="Tema">';
             $args=array();parse_str(wp_parse_url($base,PHP_URL_QUERY)?:'',$args);foreach($args as $key=>$value){if(is_scalar($value)){echo '<input type="hidden" name="'.esc_attr($key).'" value="'.esc_attr($value).'">';}}
-            foreach(array('light'=>array('Svetla tema','sun'),'dark'=>array('Tamna tema','moon'),'auto'=>array('Prema uređaju','monitor')) as $key=>$entry){echo '<button type="submit" name="snd_theme" value="'.$key.'" data-snd-theme-choice="'.$key.'" aria-pressed="'.(SND_I18n::theme()===$key?'true':'false').'" aria-label="'.esc_attr(SND_I18n::t($entry[0])).'" title="'.esc_attr(SND_I18n::t($entry[0])).'">'.self::preference_icon($entry[1]).($key==='auto'?'<span>Auto</span>':'').'</button>';}
+            foreach(array('light'=>array('Svetla tema','sun'),'dark'=>array('Tamna tema','moon'),'auto'=>array('Prema uređaju','monitor')) as $key=>$entry){echo '<button type="submit" name="snd_theme" value="'.$key.'" data-snd-theme-choice="'.$key.'" aria-pressed="'.(SND_I18n::theme()===$key?'true':'false').'" aria-label="'.esc_attr(SND_I18n::t($entry[0])).'" title="'.esc_attr(SND_I18n::t($entry[0])).'">'.self::preference_icon($entry[1]).'</button>';}
             echo '</form></div>';
         }
         echo '</div>';
@@ -103,7 +103,10 @@ final class SND_Site {
     }
     public static function game_root($atts=array()) {
         snd_enqueue_game_assets();$id=wp_unique_id('snd-');$kind=in_array($atts['kind']??'',array('district','municipality'),true)?$atts['kind']:'';
-        return '<div id="'.esc_attr($id).'" class="snd-game" lang="'.esc_attr(SND_I18n::html_lang()).'" data-api="'.esc_url(rest_url('srbija-na-dlanu/v1/')).'" data-assets="'.esc_url(SND_URL.'assets/').'" data-ajax="'.esc_url(admin_url('admin-ajax.php')).'" data-login="'.esc_url(self::url('login')).'" data-account="'.esc_url(self::url('account')).'" data-kind="'.esc_attr($kind).'" data-district-url="'.esc_url(self::url('district')).'" data-municipality-url="'.esc_url(self::url('municipality')).'" data-regions-url="'.esc_url(add_query_arg('podela','regioni',self::url('library'))).'" data-lang="'.esc_attr(SND_I18n::lang()).'" data-shell="'.(self::view()?'1':'0').'"><div class="snd-loading" role="status">Učitavanje igre…</div><noscript>Za igranje uključi JavaScript.</noscript></div>';
+        return '<div id="'.esc_attr($id).'" class="snd-game" lang="'.esc_attr(SND_I18n::html_lang()).'" data-api="'.esc_url(rest_url('srbija-na-dlanu/v1/')).'" data-assets="'.esc_url(SND_URL.'assets/').'" data-ajax="'.esc_url(admin_url('admin-ajax.php')).'" data-login="'.esc_url(self::url('login')).'" data-account="'.esc_url(self::url('account')).'" data-kind="'.esc_attr($kind).'" data-district-url="'.esc_url(self::url('district')).'" data-municipality-url="'.esc_url(self::url('municipality')).'" data-regions-url="'.esc_url(add_query_arg('podela','regioni',self::url('library'))).'" data-lang="'.esc_attr(SND_I18n::lang()).'" data-shell="'.(self::view()?'1':'0').'"><div class="snd-loading" role="status">'.self::loader().'Učitavanje igre…</div><noscript>Za igranje uključi JavaScript.</noscript></div>';
+    }
+    public static function loader() {
+        return '<span class="snd-compass-loader" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="19" stroke="currentColor" stroke-width="1.5"/><path d="M24 1v8m0 30v8M1 24h8m30 0h8" stroke="currentColor" stroke-width="1.5"/><g class="snd-loader-needle"><path d="m32 16-5.5 10.5L16 32l5.5-10.5L32 16Z" fill="currentColor"/></g></svg></span>';
     }
     public static function silhouette($territory,$class='') {return '<svg class="snd-atlas-shape '.esc_attr($class).'" viewBox="0 0 360 360" role="img" aria-label="Obris: '.esc_attr($territory['name']).'"><path d="'.esc_attr($territory['path']).'"/></svg>';}
     public static function content() {

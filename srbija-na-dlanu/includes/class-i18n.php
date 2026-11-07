@@ -160,8 +160,9 @@ final class SND_I18n {
     }
     public static function enqueue() {
         wp_enqueue_script('snd-i18n',SND_URL.'assets/i18n.js',array(),SND_VERSION,true);
+        wp_enqueue_style('snd-motion',SND_URL.'assets/motion.css',array(),SND_VERSION);
         static $done=false;if($done){return;}$done=true;
-        $config=SND_Settings::public_config();$config['dictionary']=self::catalog();$config['api']=rest_url('srbija-na-dlanu/v1/');$config['ajax']=admin_url('admin-ajax.php');$config['view']=SND_Site::view();$config['cookie_path']=wp_parse_url(home_url('/'),PHP_URL_PATH)?:'/';
+        $config=SND_Settings::public_config();$config['loader']=SND_Site::loader();$config['dictionary']=self::catalog();$config['api']=rest_url('srbija-na-dlanu/v1/');$config['ajax']=admin_url('admin-ajax.php');$config['view']=SND_Site::view();$config['cookie_path']=wp_parse_url(home_url('/'),PHP_URL_PATH)?:'/';
         wp_add_inline_script('snd-i18n','window.SND_CONFIG='.wp_json_encode($config,JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS|JSON_HEX_QUOT).';','before');
     }
     public static function head() {
@@ -171,7 +172,7 @@ final class SND_I18n {
         if($switch && !isset($_GET['snd_theme'])){$script.='var saved;try{saved=localStorage.getItem("snd:theme");}catch(e){}p=saved||((document.cookie.match(/(?:^|; )snd_theme=(light|dark|auto)(?:;|$)/)||[])[1])||p;';}
         $script.='if(["light","dark","auto"].indexOf(p)<0)p="auto";document.documentElement.dataset.sndTheme=p==="auto"?(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"):p;document.documentElement.dataset.sndPreference=p;})();';
         echo '<script data-noptimize="1">'.$script.'</script>';
-        echo '<style id="snd-custom-colors">.snd-app{--snd-accent:'.esc_html(SND_Settings::get('primary_color')).';--snd-on-accent:'.SND_Settings::foreground(SND_Settings::get('primary_color')).';--snd-on-dark-accent:'.SND_Settings::foreground(SND_Settings::get('dark_accent')).';--snd-dark-accent:'.esc_html(SND_Settings::get('dark_accent')).';--snd-font-scale:'.((int)SND_Settings::get('font_scale')/100).';}</style>';
+        echo '<style id="snd-custom-colors">@view-transition{navigation:auto}.snd-app{--snd-accent:'.esc_html(SND_Settings::get('primary_color')).';--snd-on-accent:'.SND_Settings::foreground(SND_Settings::get('primary_color')).';--snd-on-dark-accent:'.SND_Settings::foreground(SND_Settings::get('dark_accent')).';--snd-dark-accent:'.esc_html(SND_Settings::get('dark_accent')).';--snd-font-scale:'.((int)SND_Settings::get('font_scale')/100).';}</style>';
         foreach(SND_Settings::get('languages') as $lang){echo '<link rel="alternate" hreflang="'.esc_attr($lang==='sr'?'sr-Latn':$lang).'" href="'.esc_url(self::url(SND_Site::canonical(),$lang)).'">';}
     }
     public static function rest($response,$server,$request) {

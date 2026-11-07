@@ -17,7 +17,11 @@ try{
         atlas_ok(strpos($html,'geoBoundaries')===false,'No implementation details in map flow');
         foreach($districts as $district){$_GET=array('okrug'=>$district['id']);$html=atlas_html();$x=atlas_dom($html);$members=SND_Atlas::members($district);
             atlas_ok($x->query('//a[@data-territory]')->length===count($members),'District map has exactly its municipalities '.$district['id']);
-            atlas_ok($x->query('//ul[contains(@class,"snd-member-list")]/li/a')->length===count($members),'Municipality list remains clickable '.$district['id']);
+            atlas_ok($x->query('//table[contains(@class,"snd-member-table")]/tbody/tr/th/a')->length===count($members),'Municipality list remains clickable '.$district['id']);
+            foreach($members as $m){$row=$x->query('//a[@data-atlas-item="'.$m['id'].'"]/ancestor::tr')->item(0);$cells=$x->query('./td',$row);
+                atlas_ok(trim($cells->item(0)->textContent)===(!empty($m['population'])?SND_I18n::number($m['population']):SND_I18n::t('Nema podatka')),'Table population matches source '.$m['id'].' '.$lang);
+                atlas_ok(trim($cells->item(1)->textContent)===(!empty($m['population']) && !empty($m['year'])?(string)$m['year']:'—'),'Table census year matches source '.$m['id'].' '.$lang);
+            }
             $expected=array_keys($members);$ids=array();foreach($x->query('//a[@data-territory]') as $a){$id=$a->getAttribute('data-territory');$ids[]=$id;parse_str(parse_url(html_entity_decode($a->getAttribute('href')),PHP_URL_QUERY),$args);atlas_ok(isset($members[$id]) && $args['okrug']===$district['id'] && $args['opstina']===$id && $args['lang']===$lang,'Map link keeps true parent and locale');}
             sort($ids);sort($expected);atlas_ok($ids===$expected,'No unrelated municipality on district map');
             $box=array_map('floatval',explode(' ',SND_Atlas::viewbox(array_merge(array($district),array_values($members)))));atlas_ok(count($box)===4 && $box[2]>0 && $box[3]>0 && $box[2]*$box[3]<600*800,'District map fitted on server');

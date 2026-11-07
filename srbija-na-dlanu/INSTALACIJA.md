@@ -1,4 +1,4 @@
-# Instalacija i ažuriranje na 3.1.0
+# Instalacija i ažuriranje na 3.2.0
 
 1. Preuzmi instalacioni `srbija-na-dlanu.zip` iz direktorijuma `dist` repozitorijuma.
 2. WordPress → **Dodaci → Dodaj novi → Otpremi dodatak**. Izaberi ZIP, instaliraj; pri ažuriranju potvrdi **Zameni postojeći dodatak**. Aktiviraj ako je potrebno.
@@ -29,7 +29,7 @@ JSON izvoz sadrži geometriju, podatke i trenutnu bazu zastava. Pre uvoza uzmi r
 
 - Izuzmi svih šest stranica aplikacije, REST rute `srbija-na-dlanu/v1/*` i AJAX `snd_session` iz keširanja. Ne keširaj HTML prijavljenih korisnika. API vraća `no-store`.
 - Dozvoli JSON POST zahteve i zaglavlje `X-WP-Nonce`. Ako igra ne može da proveri prijavu, proveri da hosting ne blokira `admin-ajax.php?action=snd_session`.
-- Stari izgled: očisti Autoptimize, keš stranice/CDN-a i osveži pregledač. Resursi imaju verziju 3.1.0.
+- Stari izgled: očisti Autoptimize, keš stranice/CDN-a i osveži pregledač. Resursi imaju verziju 3.2.0.
 - Greška 404 na novim stranicama: **Podešavanja → Permalinks → Sačuvaj izmene**, pa proveri pravila servera.
 - Link za lozinku nije stigao: proveri WP dostavu pošte/spam. Korisnik može ponovo zatražiti lozinku preko aplikacije.
 - Brisanje podataka pregledača briše gostujuću statistiku. Statistika prijavljenog naloga ostaje u WP bazi.
@@ -74,3 +74,12 @@ Baza znanja prvo prikazuje mapu Srbije. Klik na okrug otvara njegovu mapu sa op�
 Izbor jezika u zaglavlju prikazuje pun naziv aktivnog jezika; otvaranjem se vide svi omogućeni jezici. Pored njega su dugmad sa suncem, mesecom i automatskim izborom teme. Podrazumevani jezik, omogućeni jezici, tema i pravo korisnika da je menja i dalje se podešavaju kroz Podešavanja dodatka. Menjanje jezika čuva trenutno otvorenu opštinu/okrug i režim igre.
 
 Nisu potrebne nove WP stranice ili dodatni API ključevi. Detalji koriste postojeću Bazu znanja sa parametrima `okrug` i `opstina`. Nakon zamene dodatka otvori administraciju i očisti keš.
+
+
+## Tabele, animacije i veza u 3.2.0
+
+Spisak opština sada je tabela sa nazivom, brojem stanovnika i godinom popisa. Podaci ostaju oni iz urednika teritorija. Za Kosovo i Metohiju, gde podaci Popisa RZS 2022. ne postoje, prikazuje se jasna oznaka umesto izmišljenog broja.
+
+Učitavanje prikazuje animirani kompas. Promena jezika, pitanja i teme ima blag prelaz; smanjeno kretanje u podešavanjima uređaja isključuje animacije. Bez JavaScript-a rade izvorni linkovi i obrazac teme.
+
+Ako se REST veza prekine (npr. prikazani HTTP/2 problem), klijent pokušava isti zahtev kroz `admin-ajax.php` sa akcijom `snd_game`. Vlasništvo, REST nonce prijavljenog korisnika, ograničenje zahteva i zaključavanje poteza ostaju isti. Jedna revizija prihvata samo jedan potez, a početak koristi request_id za povrat izgubljenog odgovora. Potrebno je dozvoliti JSON i form POST zahteve prema standardnom WP AJAX endpointu.

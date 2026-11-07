@@ -5,6 +5,7 @@
   function apply(choice,remember){
     if(!['light','dark','auto'].includes(choice))choice=cfg.theme||'auto';
     if(!cfg.theme_switch)choice=cfg.theme||'auto';
+    if(remember){html.classList.add('snd-theme-changing');setTimeout(()=>html.classList.remove('snd-theme-changing'),350);}
     html.dataset.sndPreference=choice;html.dataset.sndTheme=choice==='auto'?(media.matches?'dark':'light'):choice;
     if(remember){try{localStorage.setItem('snd:theme',choice);}catch(_){}document.cookie='snd_theme='+choice+'; Max-Age=31536000; Path='+(cfg.cookie_path||'/')+'; SameSite=Lax'+(location.protocol==='https:'?'; Secure':'');
       if(window.history && window.history.replaceState){const url=new URL(location.href);if(url.searchParams.has('snd_theme')){url.searchParams.delete('snd_theme');window.history.replaceState(null,'',url.href);}}
@@ -20,6 +21,16 @@
     picker.addEventListener('keydown',event=>{if(event.key==='Escape'){picker.open=false;picker.querySelector('summary').focus();}});
     document.addEventListener('click',event=>{if(!picker.contains(event.target))picker.open=false;});
   });
+  const pageLoader=document.getElementById('snd-page-loader');let loadTimer,clearTimer;
+  function loading(on){if(!pageLoader)return;clearTimeout(loadTimer);clearTimeout(clearTimer);if(!on){pageLoader.hidden=true;return;}loadTimer=setTimeout(()=>{pageLoader.hidden=false;},90);clearTimer=setTimeout(()=>{pageLoader.hidden=true;},12000);}
+  document.addEventListener('click',event=>{
+    if(event.defaultPrevented || event.button>0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || !event.target.closest)return;
+    const a=event.target.closest('.snd-app a[href]');if(!a || a.target==='_blank' || a.hasAttribute('download'))return;
+    const url=new URL(a.getAttribute('href'),location.href);if(url.origin!==location.origin || (url.pathname===location.pathname && url.search===location.search && url.hash))return;
+    loading(true);
+  });
+  document.addEventListener('submit',event=>{if(!event.defaultPrevented && event.target.closest && event.target.closest('.snd-app'))loading(true);});
+  window.addEventListener('pageshow',()=>loading(false));
   let nonce='',identity=null,last=Date.now();
   async function session(){
     const target=document.querySelector('.snd-game[data-ajax]');let url=cfg.ajax || target&&target.dataset.ajax;

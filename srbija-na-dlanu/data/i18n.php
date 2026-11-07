@@ -1767,6 +1767,46 @@ return json_decode(<<<'SND_LANGUAGES'
     "de": "{name}: Umriss, Lage im Bezirk {district}, Bevölkerung und Quellen.",
     "ru": "{name}: контур, положение в округе {district}, население и источники."
   },
+  "Opštine i gradovi: {name}": {
+    "en": "Municipalities and cities: {name}",
+    "de": "Gemeinden und Städte: {name}",
+    "ru": "Общины и города: {name}"
+  },
+  "Opština / grad": {
+    "en": "Municipality / city",
+    "de": "Gemeinde / Stadt",
+    "ru": "Община / город"
+  },
+  "Godina popisa": {
+    "en": "Census year",
+    "de": "Jahr der Volkszählung",
+    "ru": "Год переписи"
+  },
+  "Nema podatka": {
+    "en": "Not available",
+    "de": "Keine Angabe",
+    "ru": "Нет данных"
+  },
+  "Broj stanovnika odnosi se na celu teritoriju opštine ili grada.": {
+    "en": "Population refers to the entire municipality or city territory.",
+    "de": "Die Einwohnerzahl bezieht sich auf das gesamte Gebiet der Gemeinde oder Stadt.",
+    "ru": "Численность населения относится ко всей территории общины или города."
+  },
+  "Učitavanje…": {
+    "en": "Loading…",
+    "de": "Wird geladen…",
+    "ru": "Загрузка…"
+  },
+  "Veza je prekinuta. Proveri internet i pokušaj ponovo.": {
+    "en": "The connection was interrupted. Check your internet and try again.",
+    "de": "Die Verbindung wurde unterbrochen. Prüfe deine Internetverbindung und versuche es erneut.",
+    "ru": "Соединение прервано. Проверь интернет и попробуй снова."
+  },
+  "Neispravan zahtev.": {
+    "en": "Invalid request.",
+    "de": "Ungültige Anfrage.",
+    "ru": "Некорректный запрос."
+  },
   "@days_one": {
     "sr": "{count} dan",
     "en": "{count} day",

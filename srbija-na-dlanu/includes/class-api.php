@@ -18,6 +18,25 @@ final class SND_API {
         $r->header('X-Robots-Tag', 'noindex');
         return $r;
     }
+    public static function ajax_request($route,$payload,$nonce='') {
+        if(!in_array($route,array('bootstrap','start','resume','action','claim'),true)){return new WP_REST_Response(array('code'=>'snd_route','message'=>'Nepoznata akcija.'),400);}
+        if(is_user_logged_in() && !wp_verify_nonce($nonce,'wp_rest')){return new WP_REST_Response(array('code'=>'rest_cookie_invalid_nonce','message'=>SND_I18n::t('Prijava je istekla. Osveži stranicu i ponovo se prijavi.')),403);}
+        if(!is_string($payload) || strlen($payload)>16384 || !is_array(json_decode($payload,true))){return new WP_REST_Response(array('code'=>'snd_payload','message'=>'Neispravan zahtev.'),400);}
+        $request=new WP_REST_Request($route==='bootstrap'?'GET':'POST','/srbija-na-dlanu/v1/'.$route);
+        $request->set_header('Content-Type','application/json');$request->set_body($payload);
+        if($nonce){$request->set_header('X-WP-Nonce',$nonce);}
+        $response=rest_ensure_response(rest_do_request($request));
+        return apply_filters('rest_post_dispatch',$response,rest_get_server(),$request);
+    }
+    public static function ajax() {
+        nocache_headers();$origin=$_SERVER['HTTP_ORIGIN']??'';
+        if($origin && wp_parse_url($origin,PHP_URL_HOST)!==wp_parse_url(home_url(),PHP_URL_HOST)){wp_send_json(array('code'=>'snd_origin','message'=>'Neispravan zahtev.'),403);}
+        $route=isset($_POST['route']) && is_string($_POST['route'])?sanitize_key(wp_unslash($_POST['route'])):'';
+        $payload=isset($_POST['payload']) && is_string($_POST['payload'])?wp_unslash($_POST['payload']):'';
+        $nonce=isset($_POST['_wpnonce']) && is_string($_POST['_wpnonce'])?wp_unslash($_POST['_wpnonce']):'';
+        $response=self::ajax_request($route,$payload,$nonce);
+        header('Content-Language: '.SND_I18n::html_lang());wp_send_json($response->get_data(),$response->get_status());
+    }
 
     private static function limit($bucket, $maximum) {
         if(!SND_Rate::allow('game:'.$bucket,$maximum,600,SND_Rate::actor(),max(6000,$maximum*50))){
@@ -35,6 +54,16 @@ final class SND_API {
 
     public static function start($request) {
         $limit = self::limit('start', 60); if (is_wp_error($limit)) { return $limit; }
+        $id=$request->get_param('request_id');
+        if(!is_string($id) || !preg_match('/^[a-f0-9]{32}$/D',$id)){return self::start_game($request);}
+        $key='snd_start_'.hash('sha256',wp_json_encode(array(get_current_user_id(),$id,$request->get_param('kind'),$request->get_param('mode'))));
+        $lease=SND_Lock::acquire($key.'_lock');if(!$lease){return new WP_Error('snd_busy','Partija se još priprema. Pokušaj ponovo.',array('status'=>409));}
+        try{
+            $token=get_transient($key);if($token){$state=SND_Game::load($token);if(!is_wp_error($state) && $state['challenge']['kind']===$request->get_param('kind') && $state['challenge']['mode']===$request->get_param('mode')){return self::game_response($token,$state);}}
+            $result=self::start_game($request);if($result instanceof WP_REST_Response){$data=$result->get_data();if(!empty($data['token'])){set_transient($key,$data['token'],10*MINUTE_IN_SECONDS);}}return $result;
+        }finally{SND_Lock::release($key.'_lock',$lease);}
+    }
+    private static function start_game($request) {
         $kind = $request->get_param('kind'); $mode = $request->get_param('mode');
         if (!in_array($kind, array('district', 'municipality'), true) || !in_array($mode, array('daily', 'practice'), true)) { return new WP_Error('snd_mode', 'Nepoznata igra ili režim.', array('status' => 400)); }
         if(!SND_Settings::get($kind.'_enabled') || !SND_Settings::get($mode.'_enabled')){return new WP_Error('snd_disabled','Nove partije ovog tipa trenutno nisu dostupne.',array('status'=>503));}

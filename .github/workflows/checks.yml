@@ -1,7 +1,7 @@
 name: WordPress checks and package
 on:
   push:
-    branches: [main, feature/v3-1-atlas]
+    branches: [main, feature/v3-2-polish]
   workflow_dispatch:
 concurrency:
   group: wp-checks-${{ github.ref }}
@@ -33,6 +33,7 @@ jobs:
           node --check srbija-na-dlanu/assets/game.js
           node tests/frontend.js
           node tests/v3-frontend.js
+          node tests/transport.js
           if test -f tests/qa-frontend.js; then node tests/qa-frontend.js; fi
       - name: Isolated WordPress
         run: |
@@ -57,6 +58,7 @@ jobs:
           if test -f tests/qa-regressions.php; then php tests/qa-regressions.php; fi
           php tests/v3-features.php
           php tests/atlas-flow.php
+          php tests/transport.php
       - name: Real Chromium map and preference flows
         env:
           WP_ROOT: /tmp/snd-wp
@@ -73,6 +75,7 @@ jobs:
           snd_server_pid=$!
           trap 'kill "$snd_server_pid"' EXIT
           node tests/atlas-browser.cjs
+          node tests/polish-browser.cjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -88,7 +91,7 @@ jobs:
             dist/srbija-na-dlanu.zip
             dist/SHA256SUMS
   package:
-    if: github.ref == 'refs/heads/feature/v3-1-atlas'
+    if: github.ref == 'refs/heads/feature/v3-2-polish'
     needs: check
     runs-on: ubuntu-24.04
     permissions:
@@ -105,5 +108,5 @@ jobs:
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git commit -m "Build verified WordPress installation package"
-            git push origin HEAD:feature/v3-1-atlas
+            git push origin HEAD:feature/v3-2-polish
           fi

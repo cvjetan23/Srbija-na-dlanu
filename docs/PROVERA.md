@@ -1,3 +1,11 @@
+# Provera verzije 3.2.0
+
+Proverene su tabele opština, kompaktni meni i animacije sa reduced-motion podrškom. Novi testovi `tests/transport.js`, `tests/transport.php` i `tests/polish-browser.cjs` proveravaju rezervni WP AJAX kanal, nonce/vlasništvo, idempotentan početak i odgovor izgubljen posle prihvaćenog poteza. Stvarni browser test se prijavljuje kao izolovani Pretplatnik i potvrđuje jedan upis rezultata. Ispravljeno je i same-origin pravilo prijave u Chrome-u.
+
+Lokalno su prošle 113 provera u Chromium-u (98 atlas/meni i 15 tabela/učitavanje/oporavak), 7.608 atlas tvrdnji na četiri jezika, 17 backend i osam JS provera rezervnog kanala, kao i 301 HTTP provera prijave, podešavanja, izvoza i privatnosti. Tabele se porede sa izvornim brojem stanovnika i godinom za svih 174 opštine/grada u sva četiri jezika. Snimci su pregledani za tabelu sa podacima, KiM bez podataka i prikaz širine 320 px. Fizički telefon nije korišćen.
+
+Na prijavljenom HTTP/2 problemu izvršen je produkcijski spot-check: gostujući `giveup` i `finish` vratili su HTTP/2 200. Povremeni kvar sa snimka nije ponovljen u toj proveri; nova verzija dodaje oporavak zahteva i ne tvrdi da menja HTTP/2 konfiguraciju hostinga.
+
 # Provera verzije 3.1.0
 
 [Mapa, promena jezika i teme — tok i provere](ATLAS-3.1.md). Dodato je 6.216 WP tvrdnji za sve okruge/opštine i 98 provera u pravom Chromium-u, uključujući klikove na SVG, tastaturu, dodir, teme i prikaze širine 320, 390, 768 i 1440 px. Fizički telefon nije korišćen. Postojeće provere igre, naloga, analitike i izvoza ponovo se izvršavaju na novom kodu.

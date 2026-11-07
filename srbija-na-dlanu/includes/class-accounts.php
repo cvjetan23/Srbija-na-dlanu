@@ -37,7 +37,9 @@ final class SND_Accounts {
         if (!in_array($view, array('login','account'), true)) { return; }
         nocache_headers();
         if (!defined('DONOTCACHEPAGE')) { define('DONOTCACHEPAGE', true); }
-        header('Referrer-Policy: no-referrer');
+        // Keep same-origin form POSTs identifiable in browsers. Reset keys are
+        // removed from the URL before rendering; external sites get no referrer.
+        header('Referrer-Policy: same-origin');
         if ($view === 'account') {
             if (!is_user_logged_in()) { wp_safe_redirect(SND_Site::url('login')); exit; }
             return;

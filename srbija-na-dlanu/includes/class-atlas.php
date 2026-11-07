@@ -50,10 +50,14 @@ final class SND_Atlas {
         if(!empty($t['landmark']['fact'])){echo '<h2>Jedna zanimljivost</h2><p>'.esc_html(SND_I18n::fact($t)).'</p>';}
         $flag=SND_Flags::for_territory($t);
         if($flag){echo '<h2>'.esc_html(SND_I18n::t('Zastava mesta {place}',array('place'=>SND_I18n::place($flag['name'])))).'</h2><figure class="snd-knowledge-flag"><img src="'.esc_url(SND_Data::image_url($flag['image'])).'" alt="'.esc_attr(SND_I18n::t('Zastava mesta {place}',array('place'=>SND_I18n::place($flag['name'])))).'"><figcaption>'.esc_html($flag['credit'].' · '.$flag['license']).' · <a href="'.esc_url($flag['source']).'" target="_blank" rel="noopener noreferrer">Izvor</a></figcaption></figure>';}
-        echo '<h2>Opštine i gradovi ovog okruga</h2>';self::member_list($district,$t);
+        echo '<h2>Pripadajuće opštine i gradovi</h2>';self::member_list($district,$t);
         echo '<div class="snd-detail-sources"><h2>Izvori</h2><a href="'.esc_url($t['population_source']?:($t['region']==='Kosovo i Metohija'?'https://kro.mre.gov.rs/arcgis/rest/services/IMIS/MINING_PUBLIC/MapServer':'https://www.stat.gov.rs/')).'" target="_blank" rel="noopener noreferrer">Izvor podataka</a> · <a href="'.esc_url($t['region']==='Kosovo i Metohija'?'https://kro.mre.gov.rs/arcgis/rest/services/IMIS/MINING_PUBLIC/MapServer':'https://www.geoboundaries.org/').'" target="_blank" rel="noopener noreferrer">Granice teritorije</a></div><a class="snd-app-button" href="'.esc_url(SND_Site::url('municipality')).'">Igraj opštine i gradove</a></article>';
     }
     public static function member_list($district,$selected=null) {
-        echo '<ul class="snd-member-list">';foreach(self::members($district) as $m){$active=$selected && $m['id']===$selected['id'];echo '<li><a data-atlas-item="'.esc_attr($m['id']).'" href="'.esc_url(self::url($m)).'"'.($active?' aria-current="page"':'').'>'.esc_html(SND_I18n::territory_name($m)).'</a></li>';}echo '</ul>';
+        echo '<div class="snd-table-scroll"><table class="snd-member-table"><caption class="snd-app-sr-only">'.esc_html(SND_I18n::t('Opštine i gradovi: {name}',array('name'=>SND_I18n::territory_name($district)))).'</caption><thead><tr><th scope="col">Opština / grad</th><th scope="col">Stanovništvo</th><th scope="col">Godina popisa</th></tr></thead><tbody>';
+        foreach(self::members($district) as $m){$active=$selected && $m['id']===$selected['id'];$population=!empty($m['population']);
+            echo '<tr'.($active?' class="is-current"':'').'><th scope="row"><a data-atlas-item="'.esc_attr($m['id']).'" href="'.esc_url(self::url($m)).'"'.($active?' aria-current="page"':'').'>'.esc_html(SND_I18n::territory_name($m)).'</a></th><td>'.($population?esc_html(SND_I18n::number($m['population'])):'<span title="'.esc_attr(SND_I18n::t('Nema uporedivog podatka iz Popisa RZS 2022.')).'">Nema podatka</span>').'</td><td>'.($population && !empty($m['year'])?(int)$m['year']:'—').'</td></tr>';
+        }
+        echo '</tbody></table></div><p class="snd-table-note">Broj stanovnika odnosi se na celu teritoriju opštine ili grada.</p>';
     }
 }
