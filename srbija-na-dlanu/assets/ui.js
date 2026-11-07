@@ -22,7 +22,7 @@
     document.addEventListener('click',event=>{if(!picker.contains(event.target))picker.open=false;});
   });
   const pageLoader=document.getElementById('snd-page-loader');let loadTimer,clearTimer;
-  function loading(on){if(!pageLoader)return;clearTimeout(loadTimer);clearTimeout(clearTimer);if(!on){pageLoader.hidden=true;return;}loadTimer=setTimeout(()=>{pageLoader.hidden=false;},90);clearTimer=setTimeout(()=>{pageLoader.hidden=true;},12000);}
+  function loading(on){if(!pageLoader)return;clearTimeout(loadTimer);clearTimeout(clearTimer);if(!on){pageLoader.hidden=true;return;}pageLoader.hidden=false;clearTimer=setTimeout(()=>{pageLoader.hidden=true;},12000);}
   document.addEventListener('click',event=>{
     if(event.defaultPrevented || event.button>0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || !event.target.closest)return;
     const a=event.target.closest('.snd-app a[href]');if(!a || a.target==='_blank' || a.hasAttribute('download'))return;

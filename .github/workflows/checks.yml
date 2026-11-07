@@ -1,7 +1,7 @@
 name: WordPress checks and package
 on:
   push:
-    branches: [main, feature/v3-4-belgrade]
+    branches: [main, feature/v3-5-ranking]
   workflow_dispatch:
 concurrency:
   group: wp-checks-${{ github.ref }}
@@ -61,6 +61,7 @@ jobs:
           php tests/transport.php
           php tests/presentation.php
           php tests/belgrade.php
+          php tests/ranking.php
       - name: Real Chromium map and preference flows
         env:
           WP_ROOT: /tmp/snd-wp
@@ -80,6 +81,7 @@ jobs:
           node tests/polish-browser.cjs
           node tests/presentation-browser.cjs
           node tests/update34-browser.cjs
+          node tests/ranking-browser.cjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -95,7 +97,7 @@ jobs:
             dist/srbija-na-dlanu.zip
             dist/SHA256SUMS
   package:
-    if: github.ref == 'refs/heads/feature/v3-4-belgrade'
+    if: github.ref == 'refs/heads/feature/v3-5-ranking'
     needs: check
     runs-on: ubuntu-24.04
     permissions:
@@ -112,5 +114,5 @@ jobs:
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git commit -m "Build verified WordPress installation package"
-            git push origin HEAD:feature/v3-4-belgrade
+            git push origin HEAD:feature/v3-5-ranking
           fi

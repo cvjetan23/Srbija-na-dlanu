@@ -10,7 +10,7 @@
     remove(key) { try { localStorage.removeItem('snd:v1:' + key); } catch (_) {} }
   };
   const safeUrl = value => { try { const u = new URL(value, location.href); return ['http:', 'https:'].includes(u.protocol) ? esc(u.href) : ''; } catch (_) { return ''; } };
-  const sourceLink = (url, label = 'Izvor podatka ↗') => url ? `<a class="snd-source" href="${safeUrl(url)}" target="_blank" rel="noopener noreferrer">${esc(label)}</a>` : '';
+  const sourceLink = (url, label = 'Izvor podatka ↗') => url ? `<a class="snd-source" href="${safeUrl(url)}" target="_blank" rel="noopener noreferrer"><span>${esc(L.text(label).replace(/\s*↗$/,''))}</span>${icon('external')}</a>` : '';
   const licenseUrl = label => {
     const match = /^CC BY(-SA)? (\d+\.\d+)$/.exec(label || '');
     if (match) return `https://creativecommons.org/licenses/by${match[1] ? '-sa' : ''}/${match[2]}/`;
@@ -26,7 +26,7 @@
     return `<svg class="snd-direction-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20V4m-6 6 6-6 6 6" transform="rotate(${angle} 12 12)"/></svg>`;
   };
   const icon = name => {
-    const paths={help:'<circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 4 2c-1 .6-1.5 1.2-1.5 2.5M12 17h.01"/>',hint:'<path d="M9 18h6m-5 3h4M8.5 14.5a6 6 0 1 1 7 0L15 17H9l-.5-2.5Z"/>',eye:'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/>',next:'<path d="M4 12h16m-6-6 6 6-6 6"/>',finish:'<path d="M5 21V4m0 0c5-4 9 4 14 0v10c-5 4-9-4-14 0"/>',skip:'<path d="m5 4 12 8-12 8V4Zm14 0v16"/>',share:'<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 10.5 6.8-4m-6.8 7 6.8 4"/>',refresh:'<path d="M20 7v5h-5M4 17v-5h5m10.5-1a7.5 7.5 0 0 0-13-5M4.5 13a7.5 7.5 0 0 0 13 5"/>',zoom:'<circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5M7 10.5h7m-3.5-3.5v7"/>',correct:'<path d="m5 12 4 4L19 6"/>',wrong:'<path d="m6 6 12 12M18 6 6 18"/>',sources:'<path d="M12 5v16m0-16c-3-3-7-3-10-1v15c3-2 7-2 10 2 3-4 7-4 10-2V4c-3-2-7-2-10 1Z"/>'};
+    const paths={external:'<path d="M7 17 17 7M7 7h10v10"/>',enter:'<path d="M20 5v6a3 3 0 0 1-3 3H4m5-5-5 5 5 5"/>',help:'<circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 4 2c-1 .6-1.5 1.2-1.5 2.5M12 17h.01"/>',hint:'<path d="M9 18h6m-5 3h4M8.5 14.5a6 6 0 1 1 7 0L15 17H9l-.5-2.5Z"/>',eye:'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/>',next:'<path d="M4 12h16m-6-6 6 6-6 6"/>',finish:'<path d="M5 21V4m0 0c5-4 9 4 14 0v10c-5 4-9-4-14 0"/>',skip:'<path d="m5 4 12 8-12 8V4Zm14 0v16"/>',share:'<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 10.5 6.8-4m-6.8 7 6.8 4"/>',refresh:'<path d="M20 7v5h-5M4 17v-5h5m10.5-1a7.5 7.5 0 0 0-13-5M4.5 13a7.5 7.5 0 0 0 13 5"/>',zoom:'<circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5M7 10.5h7m-3.5-3.5v7"/>',correct:'<path d="m5 12 4 4L19 6"/>',wrong:'<path d="m6 6 12 12M18 6 6 18"/>',sources:'<path d="M12 5v16m0-16c-3-3-7-3-10-1v15c3-2 7-2 10 2 3-4 7-4 10-2V4c-3-2-7-2-10 1Z"/>'};
     return `<svg class="snd-action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${paths[name] || paths.next}</svg>`;
   };
   const nextSuggestionIndex = (active,count,key) => !count ? -1 : active < 0 ? key === 'ArrowUp' ? count - 1 : 0 : (active + (key === 'ArrowDown' ? 1 : -1) + count) % count;
@@ -113,7 +113,7 @@
     async start(fresh) {
       if (this.busy) return;
       this.busy = true; this.error = ''; const requestNumber = ++this.requestNumber;
-      this.root.setAttribute('aria-busy', 'true');
+      this.root.setAttribute('aria-busy', 'true');this.setBusy(true);
       try {
         await this.refreshDay();
         let result;
@@ -160,7 +160,7 @@
       finally { this.busy = false; this.render(); this.focusPanel(); }
     }
     setBusy(on) {
-      this.root.setAttribute('aria-busy', on ? 'true' : 'false');const loader=this.root.querySelector('.snd-game-loading');if(loader)loader.hidden=!on;
+      this.root.setAttribute('aria-busy', on ? 'true' : 'false');const loader=this.root.querySelector('.snd-game-loading'),shared=this.root.dataset.shell==='1' && typeof document.getElementById==='function'?document.getElementById('snd-page-loader'):null;if(shared)shared.hidden=!on;if(loader)loader.hidden=shared?true:!on;
       this.root.querySelectorAll('button[data-cmd], .snd-option, button[data-zoom]').forEach(b => { if (on) { b.dataset.wasDisabled = b.disabled ? '1' : '0'; b.disabled = true; } else if (b.dataset.wasDisabled !== undefined) { b.disabled = b.dataset.wasDisabled === '1'; delete b.dataset.wasDisabled; } });
     }
     async switchGame(kind, mode) {
@@ -206,7 +206,7 @@
           ${this.fixedKind ? '' : `<div class="snd-tabs" role="group" aria-label="Izaberi igru"><button class="${isDistrict ? 'is-active' : ''}" data-cmd="district" aria-pressed="${isDistrict}">Okruzi</button><button class="${!isDistrict ? 'is-active' : ''}" data-cmd="municipality" aria-pressed="${!isDistrict}">Opštine i gradovi</button></div>`}
           <div class="snd-mode" role="group" aria-label="Režim igre"><button class="${s.mode === 'daily' ? 'is-active' : ''}" data-cmd="daily" aria-pressed="${s.mode === 'daily'}" ${this.info.config && !this.info.config.daily_enabled?'hidden':''}>Dnevni izazov</button><button class="${s.mode === 'practice' ? 'is-active' : ''}" data-cmd="practice" aria-pressed="${s.mode === 'practice'}" ${this.info.config && !this.info.config.practice_enabled?'hidden':''}>Vežbanje</button></div>
         </nav>
-        <div class="snd-game-loading" role="status" hidden>${L.config().loader || ''}<span class="snd-sr-only">Učitavanje…</span></div><div class="snd-board">${this.visual()}<section class="snd-panel" tabindex="-1" aria-label="Trenutna runda">${this.panel()}</section></div>
+        <div class="snd-game-loading" role="status" hidden>${L.config().loader || ''}<span class="snd-sr-only">Učitavanje…</span></div>${this.pointsIntro()}<div class="snd-board">${this.visual()}<section class="snd-panel" tabindex="-1" aria-label="Trenutna runda">${this.panel()}</section></div>
         <div class="snd-error" role="alert" ${this.error ? '' : 'hidden'}>${esc(this.error)}${this.recovery ? `<button data-cmd="${esc(this.recovery.command)}">${esc(this.recovery.label)}</button>` : ''}</div>
         ${this.canSave === false && !this.account.authenticated ? '<p class="snd-storage-note">Pregledač ne dozvoljava čuvanje partije i statistike.</p>' : ''}
         ${this.notice ? `<p class="snd-notice" role="status">${esc(this.notice)}</p>` : ''}
@@ -243,7 +243,7 @@
     }
     history() {
       const s = this.state;
-      return `<ol class="snd-history" aria-label="Pokušaji">${Array.from({length:s.max_guesses},(_,i)=>{const g=s.guesses[i];return `<li class="${g?g.correct?'is-correct':'is-played':i===s.guesses.length?'is-empty is-current':'is-empty'}"${!g&&i===s.guesses.length?' aria-current="step"':''}><span class="snd-guess-number">${i+1}</span>${g?`<strong>${esc(g.name)}</strong>${g.correct?'<span class="snd-distance">Pogođeno</span><span class="snd-direction" aria-label="Tačan odgovor">✓</span>':`<span class="snd-distance">${g.km===0?'&lt; 1':g.km} km</span><span class="snd-direction" role="img" aria-label="${esc(g.direction.name)}" title="${esc(g.direction.name)}">${directionIcon(g.direction.arrow)}</span>`}`:`<span class="snd-sr-only">${esc(L.t('Pokušaj {count}: još nije odigran.',{count:i+1}))}</span><span class="snd-empty-line" aria-hidden="true"></span>`}</li>`;}).join('')}</ol>`;
+      return `<ol class="snd-history" aria-label="Pokušaji">${Array.from({length:s.max_guesses},(_,i)=>{const g=s.guesses[i];return `<li class="${g?g.correct?'is-correct':'is-played':i===s.guesses.length?'is-empty is-current':'is-empty'}"${!g&&i===s.guesses.length?' aria-current="step"':''}><span class="snd-guess-number">${i+1}</span>${g?`<strong>${esc(g.name)}</strong>${g.correct?`<span class="snd-distance">Pogođeno</span><span class="snd-direction" aria-label="Tačan odgovor">${icon('correct')}</span>`:`<span class="snd-distance">${g.km===0?'&lt; 1':g.km} km</span><span class="snd-direction" role="img" aria-label="${esc(g.direction.name)}" title="${esc(g.direction.name)}">${directionIcon(g.direction.arrow)}</span>`}`:`<span class="snd-sr-only">${esc(L.t('Pokušaj {count}: još nije odigran.',{count:i+1}))}</span><span class="snd-empty-line" aria-hidden="true"></span>`}</li>`;}).join('')}</ol>`;
     }
     questionOption(q,o,a) {
       const status=a?o.id===q.correct?'is-correct':o.id===a.choice?'is-wrong':'is-muted':'',flag=q.type==='flag';
@@ -287,10 +287,20 @@
       return count;
     }
     previousDay(day) { const d = new Date(day + 'T12:00:00Z'); d.setUTCDate(d.getUTCDate() - 1); return d.toISOString().slice(0,10); }
+    pointsIntro() {
+      const s=this.state,r=s.scoring_rules;if(!r)return '';
+      const base=s.question_count?r.territory:100;
+      return `<div class="snd-rank-intro"><details><summary>Bodovanje: 0–100</summary><p>${esc(L.t('Teritorija: do {base} poena. Svaki naredni pokušaj umanjuje taj deo za {step}.',{base,step:r.step}))} ${esc(L.t('Dodatna pitanja: do {quiz} poena, ravnomerno po tačnom odgovoru.',{quiz:100-base}))} ${esc(L.t('Pomoć pri pogađanju oduzima {hint} poena. Pitanje uz pomoć izvora ne donosi poene.',{hint:r.hint}))}</p><a href="${safeUrl(L.config().ranking_url)}">Rang lista</a></details></div>`;
+    }
+    pointsResult() {
+      const p=this.state.points;if(!p)return '<p class="snd-result-meta">Ova partija je započeta pre uvođenja bodovanja.</p>';
+      const ranked=this.state.rank_eligible;
+      return `<section class="snd-points-result" aria-label="Bodovi"><strong>${p.total}<small> / 100</small></strong><div class="snd-points-breakdown"><span>${esc(L.t('Teritorija: {points}',{points:p.territory}))}</span><span>${esc(L.t('Kviz: {points}',{points:p.quiz}))}</span>${p.penalty?`<span>${esc(L.t('Pomoć: −{points}',{points:p.penalty}))}</span>`:''}</div><p>${ranked?'Rezultat je upisan na rang listu.':this.account.authenticated?'Ova partija ne ulazi u rang listu.':'Za rangiranje se prijavi pre početka nove partije.'} <a href="${safeUrl(L.config().ranking_url)}">Rang lista</a></p></section>`;
+    }
     resultPanel() {
       const s=this.state,stats=kindStats(this.account.authenticated?this.account.progress:storage.get('stats',{}),s.kind);
       const help=s.hint || s.source_help?'Pomoć: korišćena':'Pomoć: nije korišćena',discovered=stats.discovered.filter(id=>!(this.info.retired_ids || []).includes(id));
-      return `<h2>Rezultat</h2><p class="snd-panel-copy">${esc(s.territory.name)}</p><p class="snd-outcome">${esc(outcome(s))}</p><div class="snd-score-grid"><div><span>Teritorija</span><strong class="${s.solved?'':'snd-score-word'}">${s.solved?s.guesses.length+'<small>/'+s.max_guesses+'</small>':s.guesses.length>=s.max_guesses?'Nije pogođeno':'Otkriveno'}</strong></div><div><span>Kviz</span><strong>${s.score}<small>/${s.question_count}</small></strong></div></div><p class="snd-result-meta">${help}${s.mode==='daily'?' · Niz igranja: '+formatDays(this.streak()):''}</p><button class="snd-primary" data-cmd="share">${icon('share')}<span>Podeli rezultat</span></button><button class="snd-secondary" data-cmd="again">${icon('refresh')}<span>${s.mode==='daily'?'Vežbaj':'Nova partija'}</span></button><details class="snd-review"><summary>Odgovori i statistika</summary><p>Upoznato: ${discovered.length}/${this.info.counts[s.kind]} teritorija.</p>${s.review.map(q=>this.reviewItem(q)).join('')}</details>`;
+      return `<h2>Rezultat</h2>${this.pointsResult()}<p class="snd-outcome">${esc(outcome(s))}</p><div class="snd-score-grid"><div><span>Teritorija</span><strong class="${s.solved?'':'snd-score-word'}">${s.solved?s.guesses.length+'<small>/'+s.max_guesses+'</small>':s.guesses.length>=s.max_guesses?'Nije pogođeno':'Otkriveno'}</strong></div><div><span>Kviz</span><strong>${s.score}<small>/${s.question_count}</small></strong></div></div><p class="snd-result-meta">${help}${s.mode==='daily'?' · Niz igranja: '+formatDays(this.streak()):''}</p><button class="snd-primary" data-cmd="share">${icon('share')}<span>Podeli rezultat</span></button><button class="snd-secondary" data-cmd="again">${icon('refresh')}<span>${s.mode==='daily'?'Vežbaj':'Nova partija'}</span></button><details class="snd-review"><summary>Odgovori i statistika</summary><p>Upoznato: ${discovered.length}/${this.info.counts[s.kind]} teritorija.</p>${s.review.map(q=>this.reviewItem(q)).join('')}</details>`;
     }
     mapAttempts() {
       const svg=this.root.querySelector('.snd-context-map');if(!svg)return;
@@ -349,7 +359,7 @@
           matches=found.filter(t=>!guessed.has(t.id)).sort((a,b)=>a.name.localeCompare(b.name,L.config().language==='sr'?'sr-Latn':L.config().language || 'sr-Latn'));
           const alreadyTried=found.length>0 && matches.length===0;
           active = -1; input.removeAttribute('aria-activedescendant');
-          list.innerHTML = L.html(matches.length ? matches.map((t,i) => `<div role="option" id="${this.root.id}-option-${i}" aria-selected="false" data-index="${i}">${esc(t.name)}<span>↵</span></div>`).join('') : `<div class="snd-no-matches">${alreadyTried?'Ovu teritoriju si već pokušao/la.':'Nema rezultata. Probaj drugi naziv.'}</div>`);
+          list.innerHTML = L.html(matches.length ? matches.map((t,i) => `<div role="option" id="${this.root.id}-option-${i}" aria-selected="false" data-index="${i}">${esc(t.name)}<span aria-hidden="true">${icon('enter')}</span></div>`).join('') : `<div class="snd-no-matches">${alreadyTried?'Ovu teritoriju si već pokušao/la.':'Nema rezultata. Probaj drugi naziv.'}</div>`);
           list.hidden = false; input.setAttribute('aria-expanded','true');
           list.querySelectorAll('[role=option]').forEach(option=>option.addEventListener('click',()=>{
             if(gesture && gesture.moved)return;choose(Number(option.dataset.index));
@@ -420,6 +430,7 @@
         s.mode==='daily'?['Dnevni izazov #'+s.number,'·',s.date].join(' '):'Vežbanje',
         [marks,outcome(s),s.solved?s.guesses.length+'/'+s.max_guesses:''].filter(Boolean).join(' '),
         L.t('Kviz {marks} {score}',{marks:review,score:s.score+'/'+s.question_count}),
+        ...(s.points?[L.t('Poeni: {points}/100',{points:s.points.total})]:[]),
         s.hint || s.source_help?'Pomoć: korišćena':'Pomoć: nije korišćena',
         this.shareUrl()
       ];

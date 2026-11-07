@@ -5,3 +5,9 @@ html.snd-theme-changing body.snd-app-body,html.snd-theme-changing .snd-app,html.
 @media(prefers-reduced-motion:reduce){.snd-loader-needle,.snd-app-content{animation:none!important}html.snd-theme-changing *{transition:none!important}::view-transition-old(root),::view-transition-new(root){animation-duration:.001ms!important}}
 
 ::view-transition{pointer-events:none}
+
+/* Full viewport veil with a fixed square compass; no padding can distort it. */
+.snd-page-loader,.snd-game-loading,.snd-loading{position:fixed;inset:0;top:0;left:0;transform:none;z-index:10000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;margin:0;padding:24px;min-height:0;width:auto;height:auto;border:0;border-radius:0;box-shadow:none;background:#12201966;backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);color:var(--snd-text,#26372a);pointer-events:auto}
+.snd-page-loader .snd-compass-loader,.snd-game-loading .snd-compass-loader,.snd-loading .snd-compass-loader{display:grid;place-items:center;box-sizing:border-box;width:88px;height:88px;min-width:88px;min-height:88px;aspect-ratio:1/1;padding:19px;flex:0 0 88px;border:1px solid var(--snd-border,#c7d5be);border-radius:50%;background:var(--snd-surface,#fff);color:var(--snd-text,#26372a);box-shadow:0 8px 35px #0b140d33}
+.snd-compass-loader svg{display:block;width:100%;height:100%;aspect-ratio:1}.snd-loading{font-size:0}.snd-loading>.snd-compass-loader{font-size:initial}.snd-page-loader[hidden],.snd-game-loading[hidden]{display:none!important}
+@media(prefers-reduced-motion:reduce){.snd-page-loader,.snd-game-loading,.snd-loading{backdrop-filter:none;-webkit-backdrop-filter:none}}

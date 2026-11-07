@@ -147,7 +147,7 @@ final class SND_Game {
         } else {
             $q[]=self::nearby_question($target,$pool,$seed,'Zamensko geografsko pitanje: fotografija znamenitosti nije dostupna u bazi.');
         }
-        $flag = SND_Flags::question($target, $seed);
+        $flag = SND_Flags::question($target, $seed, (bool)SND_Settings::get('flag_fallback'));
         if(!$flag){$flag=self::distance_question($target,$pool,$seed.':flag-replacement','Zamensko geografsko pitanje: zastava ovog mesta još nije potvrđena u bazi.');}
         array_splice($q, 2, 0, array($flag));
         return $q;
@@ -170,6 +170,7 @@ final class SND_Game {
         $catalog = array();
         foreach ($pool as $t) { $catalog[$t['id']] = array_intersect_key($t, array_flip(array('id', 'kind', 'name', 'center', 'aliases', 'map_path'))); }
         $challenge = array('date' => $date, 'kind' => $kind, 'mode' => $mode, 'ruleset' => self::RULESET, 'storage_key' => $key, 'number' => max(1, $days + 1), 'target' => $target, 'catalog' => $catalog, 'revision' => $data['revision'], 'questions' => self::questions($target, $pool, $districts, $seed));
+        $challenge['scoring']=SND_Scoring::rules();
         $challenge['options']=SND_Settings::game_options();$slots=array('population','administration','flag','landmark');$selected=array();
         foreach($challenge['questions'] as $i=>$question){if(in_array($slots[$i],$challenge['options']['rounds'],true)){$selected[]=$question;}}$challenge['questions']=$selected;
         if ($mode === 'daily') { add_option($key, $challenge, '', false); return get_option($key); }
@@ -182,6 +183,14 @@ final class SND_Game {
         $token = bin2hex(random_bytes(24));
         $state = array('challenge' => $c, 'stage' => 'guess', 'guesses' => array(), 'hint' => false, 'solved' => false, 'answers' => array(), 'question_index' => 0, 'revision' => 0, 'owner' => get_current_user_id(), 'game_id' => bin2hex(random_bytes(16)), 'recorded' => false,'started_at'=>time(),'activity_log'=>array(array('at'=>gmdate('c'),'action'=>'start')));
         $state['privacy_epoch']=get_current_user_id()?get_user_meta(get_current_user_id(),'snd_privacy_epoch',true):'';
+        $state['scoring']=SND_Scoring::for_challenge($c);
+        // Fresh sessions can restore a real flag round from an older cached day.
+        // Already started sessions keep their questions and answer identifiers.
+        $slots=$c['options']['rounds']??array('population','administration','flag','landmark');$flag_index=array_search('flag',$slots,true);
+        if($flag_index!==false && SND_Settings::get('flag_fallback') && isset($c['questions'][$flag_index]) && $c['questions'][$flag_index]['type']!=='flag'){
+            $flag=SND_Flags::question($c['target'],$c['date'].':'.$c['kind'].':restored-flag',true);if($flag){$state['question_overrides'][$flag_index]=$flag;}
+        }
+        $state['rank_eligible']=SND_Ranking::reserve($state);
         self::persist($token, $state);
         SND_Progress::remember(get_current_user_id(), $kind, $mode, $token);
         return array('token' => $token, 'state' => self::public_state($state));
@@ -274,6 +283,9 @@ final class SND_Game {
             $out['question'] = $q;
         }
         $out['score'] = count(array_filter($s['answers'], function ($a) { return $a['correct']; }));
+        $out['scoring_rules']=$s['scoring']??null;
+        $out['rank_eligible']=!empty($s['rank_eligible']);
+        if($s['stage']==='complete'){$out['points']=SND_Scoring::calculate($s);}
         if ($s['stage'] === 'complete') {
             $out['review'] = array();
             foreach($c['questions'] as $i=>$unused){

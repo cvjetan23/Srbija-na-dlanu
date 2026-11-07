@@ -2058,6 +2058,326 @@ return json_decode(<<<'SND_LANGUAGES'
     "en": "Kosovo and Metohija",
     "de": "Kosovo und Metohija",
     "ru": "Косово и Метохия"
+  },
+  "Rang lista": {
+    "en": "Leaderboard",
+    "de": "Rangliste",
+    "ru": "Рейтинг"
+  },
+  "Svaka partija donosi od 0 do 100 poena.": {
+    "en": "Each game earns between 0 and 100 points.",
+    "de": "Jede Partie bringt 0 bis 100 Punkte.",
+    "ru": "За каждую игру можно получить от 0 до 100 баллов."
+  },
+  "Dnevni izazovi": {
+    "en": "Daily challenges",
+    "de": "Tagesaufgaben",
+    "ru": "Ежедневные задания"
+  },
+  "Opšta rang lista": {
+    "en": "General leaderboard",
+    "de": "Allgemeine Rangliste",
+    "ru": "Общий рейтинг"
+  },
+  "Samo dnevni izazovi: najviše jedan rezultat po igri i danu.": {
+    "en": "Daily challenges only: one result per game type each day.",
+    "de": "Nur Tagesaufgaben: ein Ergebnis je Spielart und Tag.",
+    "ru": "Только ежедневные задания: один результат на каждый вид игры в день."
+  },
+  "Dnevni izazovi i sva vežbanja. Više završenih partija donosi veći zbir.": {
+    "en": "Daily challenges and all practice games. More completed games increase the total.",
+    "de": "Tagesaufgaben und alle Übungsspiele. Mehr abgeschlossene Partien erhöhen die Gesamtpunktzahl.",
+    "ru": "Ежедневные задания и все тренировки. Чем больше завершённых игр, тем выше сумма баллов."
+  },
+  "Dnevna": {
+    "en": "Daily",
+    "de": "Täglich",
+    "ru": "За день"
+  },
+  "Mesečna": {
+    "en": "Monthly",
+    "de": "Monatlich",
+    "ru": "За месяц"
+  },
+  "Večna": {
+    "en": "All time",
+    "de": "Gesamt",
+    "ru": "За всё время"
+  },
+  "Sve igre": {
+    "en": "All games",
+    "de": "Alle Spiele",
+    "ru": "Все игры"
+  },
+  "Mesec": {
+    "en": "Month",
+    "de": "Monat",
+    "ru": "Месяц"
+  },
+  "Datum": {
+    "en": "Date",
+    "de": "Datum",
+    "ru": "Дата"
+  },
+  "Prikaži": {
+    "en": "Show",
+    "de": "Anzeigen",
+    "ru": "Показать"
+  },
+  "Mesto": {
+    "en": "Rank",
+    "de": "Platz",
+    "ru": "Место"
+  },
+  "Igrač": {
+    "en": "Player",
+    "de": "Spieler",
+    "ru": "Игрок"
+  },
+  "Igrač {code}": {
+    "en": "Player {code}",
+    "de": "Spieler {code}",
+    "ru": "Игрок {code}"
+  },
+  "Igrača na listi: {count}": {
+    "en": "Players listed: {count}",
+    "de": "Spieler auf der Liste: {count}",
+    "ru": "Игроков в списке: {count}"
+  },
+  "Poeni ukupno": {
+    "en": "Total points",
+    "de": "Gesamtpunkte",
+    "ru": "Всего баллов"
+  },
+  "Partije": {
+    "en": "Games",
+    "de": "Partien",
+    "ru": "Игры"
+  },
+  "Prosek / 100": {
+    "en": "Average / 100",
+    "de": "Schnitt / 100",
+    "ru": "Среднее / 100"
+  },
+  "Ti": {
+    "en": "You",
+    "de": "Du",
+    "ru": "Вы"
+  },
+  "Prethodna": {
+    "en": "Previous",
+    "de": "Zurück",
+    "ru": "Предыдущая"
+  },
+  "Sledeća": {
+    "en": "Next",
+    "de": "Weiter",
+    "ru": "Следующая"
+  },
+  "Još nema rezultata za ovaj izbor. Odigraj i postavi prvi rezultat.": {
+    "en": "No results for this selection yet. Play and set the first score.",
+    "de": "Noch keine Ergebnisse für diese Auswahl. Spiele und stelle das erste Ergebnis auf.",
+    "ru": "Для этого выбора пока нет результатов. Сыграйте и станьте первым."
+  },
+  "Isti zbir poena znači deljeno mesto. Datum se računa po vremenu u Srbiji.": {
+    "en": "Equal totals share a rank. Dates use Serbia’s time zone.",
+    "de": "Gleiche Punktzahlen teilen sich einen Platz. Es gilt die Zeitzone Serbiens.",
+    "ru": "При равной сумме баллов место делится. Дата определяется по времени Сербии."
+  },
+  "Bodovanje se beleži od {date}. Raniji rezultati ostaju u istoriji.": {
+    "en": "Points are recorded from {date}. Earlier results remain in your history.",
+    "de": "Punkte werden seit {date} erfasst. Frühere Ergebnisse bleiben im Verlauf.",
+    "ru": "Баллы учитываются с {date}. Прежние результаты остаются в истории."
+  },
+  "Rang lista trenutno nije dostupna.": {
+    "en": "The leaderboard is currently unavailable.",
+    "de": "Die Rangliste ist derzeit nicht verfügbar.",
+    "ru": "Рейтинг сейчас недоступен."
+  },
+  "Moj nadimak i privatnost": {
+    "en": "My nickname and privacy",
+    "de": "Mein Spitzname und Datenschutz",
+    "ru": "Мой псевдоним и конфиденциальность"
+  },
+  "Prijavi se za rang listu": {
+    "en": "Sign in to join the leaderboard",
+    "de": "Für die Rangliste anmelden",
+    "ru": "Войти для участия в рейтинге"
+  },
+  "Kako se dobijaju poeni?": {
+    "en": "How do points work?",
+    "de": "Wie werden Punkte vergeben?",
+    "ru": "Как начисляются баллы?"
+  },
+  "Teritorija: do {base} poena. Svaki naredni pokušaj umanjuje taj deo za {step}.": {
+    "en": "Territory: up to {base} points. Each extra guess reduces this part by {step}.",
+    "de": "Gebiet: bis zu {base} Punkte. Jeder weitere Versuch verringert diesen Teil um {step}.",
+    "ru": "Территория: до {base} баллов. Каждая следующая попытка уменьшает эту часть на {step}."
+  },
+  "Dodatna pitanja: do {quiz} poena, ravnomerno po tačnom odgovoru.": {
+    "en": "Bonus questions: up to {quiz} points, shared equally across correct answers.",
+    "de": "Zusatzfragen: bis zu {quiz} Punkte, gleichmäßig auf richtige Antworten verteilt.",
+    "ru": "Дополнительные вопросы: до {quiz} баллов, поровну за каждый верный ответ."
+  },
+  "Pomoć pri pogađanju oduzima {hint} poena. Pitanje uz pomoć izvora ne donosi poene.": {
+    "en": "A guessing hint costs {hint} points. A question answered with source help earns no points.",
+    "de": "Ein Hinweis kostet {hint} Punkte. Eine mit Quellenhilfe beantwortete Frage bringt keine Punkte.",
+    "ru": "Подсказка отнимает {hint} баллов. Ответ с помощью источника баллов не приносит."
+  },
+  "Otkrivena ili nepogođena teritorija donosi 0 poena za taj deo. Preskočeno pitanje donosi 0.": {
+    "en": "A revealed or missed territory earns 0 for that part. Skipped questions earn 0.",
+    "de": "Ein aufgedecktes oder nicht erratenes Gebiet bringt 0 Punkte für diesen Teil. Übersprungene Fragen bringen 0.",
+    "ru": "За раскрытую или неугаданную территорию начисляется 0 баллов. Пропущенный вопрос — 0 баллов."
+  },
+  "Bez dodatnih pitanja teritorija vredi do 100 poena. Ukupan rezultat je uvek između 0 i 100.": {
+    "en": "Without bonus questions, the territory is worth up to 100 points. The final score is always between 0 and 100.",
+    "de": "Ohne Zusatzfragen ist das Gebiet bis zu 100 Punkte wert. Das Ergebnis liegt immer zwischen 0 und 100.",
+    "ru": "Без дополнительных вопросов территория оценивается до 100 баллов. Итог всегда находится между 0 и 100."
+  },
+  "Za plasman se prijavi pre početka partije. Poeni se računaju na serveru i isti rezultat se ne upisuje dva puta.": {
+    "en": "Sign in before starting to qualify. Points are calculated on the server and each result is counted once.",
+    "de": "Melde dich vor Spielbeginn an. Die Punkte werden auf dem Server berechnet und jedes Ergebnis wird nur einmal gezählt.",
+    "ru": "Для участия войдите до начала игры. Баллы рассчитываются на сервере, каждый результат учитывается один раз."
+  },
+  "Promene bodovanja važe za nove partije i buduće dnevne izazove.": {
+    "en": "Scoring changes apply to new games and future daily challenges.",
+    "de": "Änderungen gelten für neue Partien und zukünftige Tagesaufgaben.",
+    "ru": "Изменения действуют для новых игр и будущих ежедневных заданий."
+  },
+  "Rang lista i javni nadimak": {
+    "en": "Leaderboard and public nickname",
+    "de": "Rangliste und öffentlicher Spitzname",
+    "ru": "Рейтинг и публичный псевдоним"
+  },
+  "Na listi se prikazuje samo nadimak. E-pošta i korisničko ime nisu javni.": {
+    "en": "Only your nickname is shown. Email and login name stay private.",
+    "de": "Nur dein Spitzname wird angezeigt. E-Mail und Anmeldename bleiben privat.",
+    "ru": "В списке отображается только псевдоним. Почта и имя для входа не публикуются."
+  },
+  "Podešavanja rang liste su sačuvana.": {
+    "en": "Leaderboard settings saved.",
+    "de": "Ranglisten-Einstellungen gespeichert.",
+    "ru": "Настройки рейтинга сохранены."
+  },
+  "Javni nadimak": {
+    "en": "Public nickname",
+    "de": "Öffentlicher Spitzname",
+    "ru": "Публичный псевдоним"
+  },
+  "Sakrij moje rezultate sa javne rang liste": {
+    "en": "Hide my scores from the public leaderboard",
+    "de": "Meine Ergebnisse in der öffentlichen Rangliste verbergen",
+    "ru": "Скрыть мои результаты в публичном рейтинге"
+  },
+  "Sačuvaj": {
+    "en": "Save",
+    "de": "Speichern",
+    "ru": "Сохранить"
+  },
+  "Otvori rang listu": {
+    "en": "Open leaderboard",
+    "de": "Rangliste öffnen",
+    "ru": "Открыть рейтинг"
+  },
+  "Bodovanje: 0–100": {
+    "en": "Scoring: 0–100",
+    "de": "Punkte: 0–100",
+    "ru": "Баллы: 0–100"
+  },
+  "Bodovi": {
+    "en": "Points",
+    "de": "Punkte",
+    "ru": "Баллы"
+  },
+  "Teritorija: {points}": {
+    "en": "Territory: {points}",
+    "de": "Gebiet: {points}",
+    "ru": "Территория: {points}"
+  },
+  "Kviz: {points}": {
+    "en": "Quiz: {points}",
+    "de": "Quiz: {points}",
+    "ru": "Викторина: {points}"
+  },
+  "Pomoć: −{points}": {
+    "en": "Hint: −{points}",
+    "de": "Hinweis: −{points}",
+    "ru": "Подсказка: −{points}"
+  },
+  "Rezultat je upisan na rang listu.": {
+    "en": "Your result is on the leaderboard.",
+    "de": "Dein Ergebnis steht auf der Rangliste.",
+    "ru": "Результат добавлен в рейтинг."
+  },
+  "Za rangiranje se prijavi pre početka nove partije.": {
+    "en": "For ranking, sign in before starting a new game.",
+    "de": "Für die Rangliste vor Beginn einer neuen Partie anmelden.",
+    "ru": "Для рейтинга войдите до начала новой игры."
+  },
+  "Ova partija je započeta pre uvođenja bodovanja.": {
+    "en": "This game started before points were introduced.",
+    "de": "Diese Partie begann vor Einführung der Punkte.",
+    "ru": "Эта игра началась до введения баллов."
+  },
+  "Poeni: {points}/100": {
+    "en": "Points: {points}/100",
+    "de": "Punkte: {points}/100",
+    "ru": "Баллы: {points}/100"
+  },
+  "Bodovi još nisu sačuvani. Pokušaj ponovo.": {
+    "en": "Points have not been saved yet. Please try again.",
+    "de": "Die Punkte wurden noch nicht gespeichert. Versuche es erneut.",
+    "ru": "Баллы ещё не сохранены. Попробуйте снова."
+  },
+  "Lokalna zastava nije potvrđena; pogodi zastavu sedišta ove administrativne celine.": {
+    "en": "The local flag is unverified; identify the flag of this administrative area’s seat.",
+    "de": "Die lokale Flagge ist nicht bestätigt; erkenne die Flagge des Verwaltungssitzes.",
+    "ru": "Местный флаг не подтверждён; угадайте флаг административного центра."
+  },
+  "Lokalna zastava nije potvrđena; ovo je dodatno pitanje o drugom mestu navedenom u naslovu.": {
+    "en": "The local flag is unverified; this bonus question asks about the other place named above.",
+    "de": "Die lokale Flagge ist nicht bestätigt; diese Zusatzfrage betrifft den oben genannten anderen Ort.",
+    "ru": "Местный флаг не подтверждён; вопрос относится к другому месту, указанному в заголовке."
+  },
+  "Dnevni izazovi i opšta rang lista: dnevni, mesečni i ukupni rezultati igrača.": {
+    "en": "Daily challenges and a general leaderboard: daily, monthly and all-time player scores.",
+    "de": "Tagesaufgaben und allgemeine Rangliste: tägliche, monatliche und gesamte Spielergebnisse.",
+    "ru": "Ежедневные задания и общий рейтинг: результаты за день, месяц и всё время."
+  },
+  "Vrsta rang liste": {
+    "en": "Leaderboard type",
+    "de": "Art der Rangliste",
+    "ru": "Вид рейтинга"
+  },
+  "Period rang liste": {
+    "en": "Leaderboard period",
+    "de": "Zeitraum der Rangliste",
+    "ru": "Период рейтинга"
+  },
+  "Igra na rang listi": {
+    "en": "Leaderboard game",
+    "de": "Spiel der Rangliste",
+    "ru": "Игра в рейтинге"
+  },
+  "Stranice rang liste": {
+    "en": "Leaderboard pages",
+    "de": "Seiten der Rangliste",
+    "ru": "Страницы рейтинга"
+  },
+  "Rang lista igrača": {
+    "en": "Player leaderboard",
+    "de": "Spielerrangliste",
+    "ru": "Рейтинг игроков"
+  },
+  "Ova partija ne ulazi u rang listu.": {
+    "en": "This game does not count toward the leaderboard.",
+    "de": "Diese Partie zählt nicht für die Rangliste.",
+    "ru": "Эта игра не учитывается в рейтинге."
+  },
+  "Partije: {games} · Prosek: {average}": {
+    "en": "Games: {games} · Average: {average}",
+    "de": "Partien: {games} · Schnitt: {average}",
+    "ru": "Игры: {games} · Среднее: {average}"
   }
 }
 SND_LANGUAGES

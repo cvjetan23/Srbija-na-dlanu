@@ -27,8 +27,15 @@ final class SND_Flags {
         if (!$out['name'] || !$out['credit'] || !$out['license'] || !$out['source']) { return new WP_Error('snd_flag_source', 'Zastava mora imati naziv mesta, autora, licencu i izvor.'); }
         return $out;
     }
-    public static function question($target, $seed) {
+    public static function question($target, $seed, $fallback=false) {
         $flag = self::for_territory($target);
+        $subtitle=$target['kind']==='district'?'Zastava grada-sedišta ovog okruga.':'Zastava ove opštine ili grada.';
+        if(!$flag && $fallback){
+            $districts=SND_Data::pool('district');$district=$target['kind']==='district'?$target:($districts[$target['district_id']??'']??null);
+            if($district){$flag=self::for_territory($district);}
+            if($flag){$subtitle='Lokalna zastava nije potvrđena; pogodi zastavu sedišta ove administrativne celine.';}
+            else{$available=SND_Game::ordered(self::all(),$seed.':verified-flag');$flag=$available?reset($available):null;$subtitle='Lokalna zastava nije potvrđena; ovo je dodatno pitanje o drugom mestu navedenom u naslovu.';}
+        }
         if (!$flag) { return null; }
         $others = array_filter(self::all(), function ($other) use ($flag) { return $other['name'] !== $flag['name'] && $other['image'] !== $flag['image']; });
         $others = SND_Game::ordered($others, $seed . ':flag-decoys');
@@ -42,6 +49,6 @@ final class SND_Flags {
             $sources[] = array('label' => 'Zastava ' . chr(65 + $i), 'credit' => $value['credit'], 'license' => $value['license'], 'source' => $value['source']);
             if ($value['name'] === $flag['name']) { $correct = $id; }
         }
-        return array('type' => 'flag', 'correct_label'=>'Zastava mesta '.$flag['name'], 'title' => 'Koja je zastava mesta „' . $flag['name'] . '“?', 'subtitle' => $target['kind'] === 'district' ? 'Zastava grada-sedišta ovog okruga.' : 'Zastava ove opštine ili grada.', 'options' => $options, 'correct' => $correct, 'explanation' => 'Prikazana je zastava mesta ' . $flag['name'] . '.', 'source' => $flag['source'], 'credits' => $sources);
+        return array('type' => 'flag', 'i18n_data'=>array('place'=>$flag['name']), 'correct_label'=>'Zastava mesta '.$flag['name'], 'title' => 'Koja je zastava mesta „' . $flag['name'] . '“?', 'subtitle' => $subtitle, 'options' => $options, 'correct' => $correct, 'explanation' => 'Prikazana je zastava mesta ' . $flag['name'] . '.', 'source' => $flag['source'], 'credits' => $sources);
     }
 }

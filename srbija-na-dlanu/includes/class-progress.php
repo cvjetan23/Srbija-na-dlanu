@@ -23,7 +23,9 @@ final class SND_Progress {
     }
     public static function record(&$state) {
         $user_id = (int) ($state['owner'] ?? 0);
-        if (!$user_id || $state['stage'] !== 'complete' || !empty($state['recorded'])) { return true; }
+        if (!$user_id || $state['stage'] !== 'complete') { return true; }
+        $ranking=SND_Ranking::complete($state);if(is_wp_error($ranking)){return $ranking;}
+        if(!empty($state['recorded'])){return true;}
         $lock = 'snd_progress_lock_' . $user_id;
         $lease=SND_Lock::acquire($lock);
         if (!$lease) { return new WP_Error('snd_progress_busy', 'Rezultat se još čuva. Pokušaj ponovo.', array('status' => 409)); }
@@ -33,6 +35,7 @@ final class SND_Progress {
             if (in_array($id, $p['completed_games'], true)) { $state['recorded'] = true; return true; }
             $correct = count(array_filter($state['answers'], function ($a) { return !empty($a['correct']); }));
             $result = array('date' => $c['date'], 'territory' => $c['target']['id'], 'name' => $c['target']['name'], 'solved' => $state['solved'], 'guesses' => count($state['guesses']), 'score' => $correct, 'question_count' => count($c['questions']), 'hint' => !empty($state['hint']) || !empty($state['source_help']), 'ruleset' => $c['ruleset'] ?? 1);
+            $points=SND_Scoring::calculate($state);if($points){$result['points']=$points['total'];}
             $count = true;
             if ($c['mode'] === 'daily') {
                 if (isset($p['days'][$c['date']])) {

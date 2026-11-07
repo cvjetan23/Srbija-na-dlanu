@@ -2,7 +2,7 @@
 
 U paketu 2.0.0 nalaze se 52 slike zastava gradova/opština. Pokrivaju 17 okružnih sedišta i 52 opštine/grada (69 od 204 teritorije).
 
-Za okrug se pita zastava njegovog grada-sedišta, a ne zastava samog okruga. Za mesta bez proverene slike prikazuje se jasno označeno zamensko geografsko pitanje. Nijedna teritorija se zbog toga ne izostavlja iz igre, uključujući Kosovo i Metohiju. Prisustvo simbola u izvoru ne predstavlja pravno tumačenje njegovog važenja; proveri statut lokalne samouprave pre službene upotrebe.
+Za okrug se pita zastava njegovog grada-sedišta, a ne zastava samog okruga. Od 3.5.0, za mesta bez potvrđene lokalne zastave podrazumevano se pita potvrđena zastava sedišta administrativne celine, a ako ni ona nije dostupna — drugog mesta, jasno navedenog u naslovu. Podnaslov objašnjava zamenu: tuđa zastava se ne pripisuje traženoj opštini. Administrator može isključiti tu zamenu; tehnički neuspeh učitavanja slike i dalje može ponuditi geografsko pitanje. Ranije započete partije čuvaju svoja pitanja. Nijedna teritorija se zbog toga ne izostavlja iz igre, uključujući Kosovo i Metohiju. Prisustvo simbola u izvoru ne predstavlja pravno tumačenje njegovog važenja; proveri statut lokalne samouprave pre službene upotrebe.
 
 Izvor izbora: [Wikimedia Commons — Flags of municipalities of Serbia](https://commons.wikimedia.org/wiki/Flags_of_municipalities_of_Serbia), pregledano 6. novembra 2026. Istorijski simboli, predlozi i prazne zamenske slike iz galerije nisu uključeni.
 

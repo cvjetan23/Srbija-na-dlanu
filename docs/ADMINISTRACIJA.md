@@ -28,3 +28,13 @@ Od verzije 3.3.0, uređivanje teritorije uključuje poseban naziv znamenitosti u
 
 
 Od 3.4.0 u sadržaju su i sve beogradske gradske opštine; mogu se zasebno uređivati i isključivati. Raniji ceo Beograd (`m-beograd`) označen je kao istorijski zapis i ostaje radi prethodnih rezultata. U aktuelnoj opštinskoj igri je 190 teritorija. Ugrađene opštine dopunjuju i stariji JSON sadržaj, uz očuvane lokalne izmene; ako treba da se neka ne igra, isključi je umesto brisanja iz starije baze. Tekstovi ilustrovanih pravila i uvećanja zastava uređuju se kroz Prevode, a broj pokušaja u pravilima prati Podešavanja.
+
+## Bodovanje i rang lista (3.5.0)
+
+Nova javna stranica je `/srbija-na-dlanu/rang-lista/`, dostupna i iz menija. Prvi izbor je između Dnevnih izazova i Opšte rang liste. Zatim se biraju dan/mesec/sve vreme i sve igre/okruzi/opštine. Dnevna lista izazova računa prvi rezervisani završeni rezultat naloga po vrsti igre i datumu; opšta sabira i sva završena vežbanja. Jednaki zbirovi dele mesto. Veći broj odigranih vežbanja znači više mogućih poena na opštoj listi.
+
+Podešavanja sadrže maksimum za teritoriju (60), umanjenje za dodatni pokušaj (6), pomoć (10) i uključivanje rang liste. Dodatna pitanja dele ostatak do 100; preskakanje i pomoć izvora donose 0 za to pitanje. Prikaz izvora posle odgovora ne umanjuje rezultat. Ako nema dodatnih pitanja, teritorija vredi 100. Politika se zamrzava u novoj partiji i dnevnom izazovu. Nema nagrade za brzinu ni naknadnog bodovanja starih partija. Gostujuća partija preuzeta na nalog čuva progres, ali ne ulazi naknadno u rang listu.
+
+Podmeni Rang lista prikazuje i skrivene naloge, njihove javne nadimke, bodove, broj partija i prosek, uz filtere i CSV izvoz. Javna stranica ne otkriva ID, e-poštu ili korisničko ime. Podrazumevani nadimak je pseudonim; igrač na svom nalogu može upisati nadimak i sakriti sve rezultate. Tabela bodova se čuva nezavisno od analitike. WP privatni izvoz obuhvata rezultate i javni profil; brisanje privatnih podataka ili WP naloga uklanja rang rezultate. Dnevno čišćenje uklanja samo nezavršene rezervacije starije od 31 dana.
+
+U Izgledu se podešavaju žuti akcent (podrazumevano #FFD447), boja pozadine dugmadi u tamnoj temi i dekorativna pozadina reka. Beli tekst ostaje na dugmadima tamne teme; izaberi dovoljno tamnu pozadinu zbog čitljivosti.

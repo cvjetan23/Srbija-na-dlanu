@@ -4,7 +4,7 @@ Tags: geography, quiz, serbia, education
 Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 3.4.0
+Stable tag: 3.5.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,13 +12,13 @@ Zasebna geografska aplikacija u WordPress-u: igre, baza znanja i nalozi.
 
 == Opis ==
 
-* Sopstveni kompas i meni, početna, Okruzi, Opštine, Baza znanja, Prijava i Moj nalog.
+* Sopstveni kompas i meni, početna, Okruzi, Opštine, Baza znanja, Rang lista, Prijava i Moj nalog.
 * Bez zaglavlja/podnožja teme na stranicama aplikacije; ostale stranice sajta zadržavaju temu.
 * Sveden prikaz sa većim slovima: slika gore, pitanje/odgovori ispod.
 * 29 upravnih okruga i Grad Beograd, 190 opština/gradova i gradskih opština (17 u Beogradu), uključujući pet okruga i 29 opština Kosova i Metohije.
 * Podesiv broj pokušaja i pomoć; podrazumevano šest pokušaja i pomoć posle trećeg promašaja.
 * Četiri dodatna pitanja: stanovništvo/položaj, geografija, zastava i znamenitost/prostorni izazov.
-* 52 lokalne zastave pokrivaju 17 sedišta okruga i 51 opštinu/grad (68 aktivnih teritorija). Za mesta bez zastave koristi se označeno geografsko pitanje.
+* 52 lokalne zastave pokrivaju 17 sedišta okruga i 51 opštinu/grad (68 aktivnih teritorija). Za mesta bez lokalne zastave podrazumevano se pita potvrđena zastava sedišta ili drugog jasno imenovanog mesta.
 * 30 lokalnih fotografija sa autorima i licencama.
 * Interaktivna mapa Srbije, mapa okruga sa opštinama, detalj opštine, pretraga i spiskovi ispod mapa.
 * Standardni WP korisnici, prijava, registracija Pretplatnika, postavljanje/promena lozinke preko WP e-pošte.
@@ -52,6 +52,15 @@ Detaljna analitika se od 3.0.0 čuva u dve tabele iste WP baze: {prefix}snd_game
 Kod: GPL-2.0-or-later. Geografija/fotografije: SOURCES.md i DATA-LICENSE.md. Zastave: FLAGS.md. Za dopunske granice Kosova i Metohije javni geografski servis nije naveo posebnu licencu za redistribuciju. Karte služe igri. Deaktivacija ne briše sadržaj i rezultate.
 
 == Changelog ==
+
+= 3.5.0 =
+* Bodovanje 0–100 na serveru, zamrznuta pravila i zaštita od ponovljenog upisa.
+* Odvojene liste Dnevni izazovi i Opšta rang lista; dnevni, mesečni i ukupni pregled, zajedno i po igrama.
+* Javni nadimak i skrivanje plasmana na nalogu, administracija i CSV izvoz bodova, WP privatnost.
+* Kružni kompas sa pozadinom i slojem preko cele stranice; kompaktnija slikovna pravila.
+* Beli natpisi dugmadi u tamnoj temi, diskretni žuti akcenti #FFD447 i SVG reka iz Natural Earth podataka.
+* Stvarna runda zastava i kada lokalna zastava nije potvrđena, uz jasno imenovano mesto i uvećanje.
+
 
 = 3.4.0 =
 * Istaknuta dugmad Igraj i ilustrovana pravila pre baze znanja.

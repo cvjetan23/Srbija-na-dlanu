@@ -97,7 +97,7 @@ final class SND_Analytics {
                 'technical_replacement'=>!empty($s['technical_replacements'][$i]));
         }
         return array('guesses'=>$s['guesses'],'questions'=>$questions,'activity'=>array_slice($s['activity_log']??array(),-100),
-            'ruleset'=>$c['ruleset']??1,'legacy'=>empty($s['started_at']));
+            'ruleset'=>$c['ruleset']??1,'legacy'=>empty($s['started_at']),'points'=>SND_Scoring::calculate($s),'rank_eligible'=>!empty($s['rank_eligible']));
     }
     public static function capture($s) {
         $user_id=(int)($s['owner']??0);if(!self::enabled($user_id) || empty($s['challenge']) || empty($s['game_id'])){return;}
@@ -192,7 +192,9 @@ final class SND_Analytics {
     public static function privacy_export($email,$page=1) {
         $u=get_user_by('email',$email);if(!$u){return array('data'=>array(),'done'=>true);}global $wpdb;$data=array();$page=max(1,(int)$page);
         if($page===1){$data[]=array('group_id'=>'snd-progress','group_label'=>'Srbija na dlanu — progres','item_id'=>'snd-progress-'.$u->ID,'data'=>array(array('name'=>'Progres','value'=>wp_json_encode(SND_Progress::summary($u->ID),JSON_UNESCAPED_UNICODE))));}
-        $done=true;
+        if($page===1 && SND_Ranking::ready()){$data[]=array('group_id'=>'snd-rank','group_label'=>'Srbija na dlanu — rang lista','item_id'=>'snd-rank-profile-'.$u->ID,'data'=>array(array('name'=>'Javni profil','value'=>wp_json_encode(get_user_meta($u->ID,'snd_rank_profile',true),JSON_UNESCAPED_UNICODE))));}
+        if(SND_Ranking::ready()){$rank=$wpdb->get_results($wpdb->prepare('SELECT game_id,kind,mode,played_on,points,territory_points,quiz_points,penalty,hidden,completed_at,policy FROM '.SND_Ranking::table().' WHERE user_id=%d ORDER BY id LIMIT 100 OFFSET %d',$u->ID,($page-1)*100),ARRAY_A);foreach($rank as $row){$data[]=array('group_id'=>'snd-rank','group_label'=>'Srbija na dlanu — rang lista','item_id'=>'snd-rank-'.$row['game_id'],'data'=>array(array('name'=>'Bodovanje','value'=>wp_json_encode($row,JSON_UNESCAPED_UNICODE))));}}
+        $done=empty($rank)||count($rank)<100;
         if(self::ready()){foreach(array(self::games_table()=>'partija',self::events_table()=>'aktivnost') as $table=>$type){
             $rows=$wpdb->get_results($wpdb->prepare("SELECT * FROM $table WHERE user_id=%d ORDER BY id LIMIT 100 OFFSET %d",$u->ID,($page-1)*100),ARRAY_A);if(count($rows)===100){$done=false;}
             foreach($rows as $row){unset($row['actor_hash']);$data[]=array('group_id'=>'snd-'.$type,'group_label'=>'Srbija na dlanu — '.$type,'item_id'=>'snd-'.$type.'-'.$row['id'],'data'=>array(array('name'=>'Podaci','value'=>wp_json_encode($row,JSON_UNESCAPED_UNICODE))));}
@@ -201,6 +203,7 @@ final class SND_Analytics {
     public static function privacy_erase($email,$page=1) {
         $u=get_user_by('email',$email);if(!$u){return array('items_removed'=>false,'items_retained'=>false,'messages'=>array(),'done'=>true);}global $wpdb;
         if(self::ready()){foreach(array(self::games_table(),self::events_table()) as $table){$wpdb->delete($table,array('user_id'=>$u->ID));}}
+        SND_Ranking::delete_user($u->ID);
         foreach(array('district','municipality') as $kind){foreach(array('daily','practice') as $mode){$slot=SND_Progress::slot($kind,$mode);$token=get_user_meta($u->ID,$slot,true);if(is_string($token) && preg_match('/^[a-f0-9]{48}$/D',$token)){delete_transient('snd_session_'.$token);}delete_user_meta($u->ID,$slot);}}
         update_user_meta($u->ID,'snd_privacy_epoch',bin2hex(random_bytes(16)));delete_user_meta($u->ID,'snd_progress_v2');return array('items_removed'=>true,'items_retained'=>false,'messages'=>array(),'done'=>true);
     }

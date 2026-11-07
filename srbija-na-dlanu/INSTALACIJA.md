@@ -1,8 +1,8 @@
-# Instalacija i ažuriranje na 3.4.0
+# Instalacija i ažuriranje na 3.5.0
 
 1. Preuzmi instalacioni `srbija-na-dlanu.zip` iz direktorijuma `dist` repozitorijuma.
 2. WordPress → **Dodaci → Dodaj novi → Otpremi dodatak**. Izaberi ZIP, instaliraj; pri ažuriranju potvrdi **Zameni postojeći dodatak**. Aktiviraj ako je potrebno.
-3. Otvori administraciju. Automatska migracija priprema početnu `/srbija-na-dlanu/` i podstranice `okruzi/`, `opstine/`, `baza-znanja/`, `prijava/`, `nalog/`.
+3. Otvori administraciju. Automatska migracija priprema početnu `/srbija-na-dlanu/` i podstranice `okruzi/`, `opstine/`, `baza-znanja/`, `rang-lista/`, `prijava/`, `nalog/`.
 4. Očisti Autoptimize i keš stranica/CDN-a. Proveri sve linkove menija, obe igre, prijavu i e-poštu.
 
 Aplikacija koristi sopstveni šablon sa kompasom i menijem. Na ovim stranicama nema zaglavlja/podnožja glavnog sajta ni administratorske trake. Ostale WP stranice zadržavaju temu. Postojeća početna stranica se prepoznaje po putanji; njen sadržaj i Elementor metapodaci se ne brišu. Dodatak ne menja globalnu WP početnu stranicu. Koristi standardne WP permalinke; sa lepim permalinkovima putanje su kao gore.
@@ -94,3 +94,9 @@ Dodaje se svih 17 gradskih opština, uključujući Vračar, Zvezdaru, Novi Beogr
 Dodatak dopunjuje i ranije sačuvane/uvežene baze bez prepisivanja postojećih lokalnih izmena. Svaka nova opština može se zasebno isključiti u uređivaču teritorija. Ako se isključe svih 17, vraća se raniji obuhvat sa celim Beogradom. JSON izvoz uključuje nove opštine, njihove izvore i matičnu celinu. Zapis `m-beograd` čuva istoriju i prethodne partije i u administraciji je označen kao istorijski.
 
 Već započeta i pripremljena dnevna partija ne menja geometriju, pitanja ili identifikatore. Beogradske opštine dostupne su u novim partijama vežbanja i novim dnevnim izazovima. Starija započeta partija nudi jasno dugme za novo vežbanje sa dodatim opštinama; bez tog izbora se ne resetuje. Staro dostignuće za ceo Beograd ostaje u istoriji, ali se ne računa kao rešenih 17 opština.
+
+## Bodovi i rang lista od 3.5.0
+
+Administratorsko otvaranje posle ažuriranja pravi stranicu `rang-lista/` i tabelu `wp_snd_ranking` (prefiks prati WP instalaciju). Tabela ne zavisi od analitike i njenog roka čuvanja. Preuzimanje istog rezultata ne duplira poene; prvi dnevni pokušaj naloga/igre/datuma rezerviše mesto za taj dan. Vežbanja ulaze samo u opštu listu. Rezultati se beleže od instalacije verzije; stare sažete istorije nemaju izmišljene poene.
+
+Podešavanja su u Srbija na dlanu → Podešavanja → Bodovanje i rang lista. Maksimum za teritoriju, umanjenje za pokušaj i pomoć mogu se menjati; ostatak do 100 deli se na dodatna pitanja. Bez njih teritorija vredi 100. Već pripremljena dnevna pravila i započete partije ostaju nepromenjeni. Javno se prikazuje izabrani nadimak ili pseudonim, uz mogućnost skrivanja na nalogu. E-pošta i WP korisničko ime nisu javni.

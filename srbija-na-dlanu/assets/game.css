@@ -166,3 +166,5 @@
 .snd-game .snd-modal-close{display:grid;place-items:center;width:44px;height:44px;min-height:44px;top:5px;right:5px;color:var(--snd-text,#26372a)}.snd-game .snd-modal-close .snd-action-icon{width:23px;height:23px}.snd-game .snd-flag-modal h2{margin-right:40px}html[data-snd-theme=dark] .snd-app .snd-game .snd-flag-credits,html[data-snd-theme=dark] .snd-app .snd-game .snd-review,html[data-snd-theme=dark] .snd-app .snd-game .snd-result-meta,html[data-snd-theme=dark] .snd-app .snd-game .snd-score-grid span,html[data-snd-theme=dark] .snd-app .snd-game .snd-score-grid small{color:var(--snd-secondary,#d0e6c2)}
 
 .snd-game .snd-update-notice{margin:20px 0 0;padding:14px 16px;border:1px solid var(--snd-border,#c7d5be);border-radius:7px;background:var(--snd-soft,#edf3e8);color:var(--snd-text,#26372a);font-size:14px}.snd-game .snd-update-notice .snd-text-button{font-size:14px;margin-top:7px}
+
+.snd-source .snd-action-icon{width:14px;height:14px;vertical-align:middle;margin-left:3px}.snd-direction>.snd-action-icon{width:22px;height:22px}

@@ -1,4 +1,4 @@
-# Srbija na dlanu 3.4
+# Srbija na dlanu 3.5
 
 Zasebna geografska aplikacija unutar WordPress-a: početna, igre za okruge i opštine, baza znanja i nalozi igrača. Sveden prikaz: slika gore, pitanje i odgovori ispod, sa većim slovima.
 
@@ -19,12 +19,23 @@ Zasebna geografska aplikacija unutar WordPress-a: početna, igre za okruge i op�
 | Okruzi | `/srbija-na-dlanu/okruzi/` |
 | Opštine i gradovi | `/srbija-na-dlanu/opstine/` |
 | Baza znanja | `/srbija-na-dlanu/baza-znanja/` |
+| Rang lista | `/srbija-na-dlanu/rang-lista/` |
 | Prijava / registracija / lozinka | `/srbija-na-dlanu/prijava/` |
 | Moj nalog | `/srbija-na-dlanu/nalog/` |
 
 Ove stranice imaju svoj kompas, meni, zaglavlje i podnožje, bez zaglavlja i podnožja aktivne teme. Ostali deo sajta zadržava postojeći izgled. Postojeći Elementor podaci početne stranice se ne brišu. Dodatak ne menja globalnu početnu stranicu WordPress-a.
 
 Shortcode `[srbija_na_dlanu]` i dalje radi na drugim WP stranicama; tu se zadržava njihova tema. Za određenu igru koristi `[srbija_na_dlanu kind="district"]` ili `kind="municipality"`.
+
+## Novo u 3.5.0
+
+- Bodovanje svake nove partije od 0 do 100. Podrazumevano: do 60 za teritoriju, −6 za dodatni pokušaj, do 40 za kviz, −10 za pomoć pri pogađanju. Odgovor uz pomoć izvora ne donosi poene za to pitanje.
+- **Rang lista** ima dve odvojene celine: **Dnevni izazovi** (jedan rezultat po igri i danu) i **Opšta rang lista** (izazovi i sva vežbanja). Obe imaju dnevni, mesečni i ukupni pregled, za sve igre ili odvojeno za okruge/opštine. Poeni na listi su zbir; svaka pojedinačna partija ima najviše 100.
+- Za plasman je potrebna prijava pre početka partije. Gost vidi bodove i zadržava progres pri prijavi, ali se rezultat ne rangira naknadno. Ranije partije se ne preračunavaju. Nadimak je podrazumevano pseudonim; na nalogu može da se izmeni ili sakrije javni plasman.
+- Bodovi se čuvaju nezavisno od analitike, bez njenog roka brisanja. U WP administraciji postoje pregled, podešavanje bodovanja i CSV izvoz. Brisanje/izvoz ličnih podataka uključuje rang listu.
+- Brojevi pravila su na ilustracijama, a kartice prate dužinu teksta. Loader je pravilan krug sa pozadinom, preko zatamnjenog sloja na celoj stranici.
+- Tamna tema koristi bela slova na tamnozelenim dugmadima i male akcente **#FFD447**. Diskretna pozadina ima stvarne linije Dunava, Save, Drine, Morave i Tise iz javnih Natural Earth podataka; može se isključiti.
+- Podrazumevana runda zastava ostaje za svaku teritoriju: ako lokalna nije potvrđena, pita se zastava sedišta ili drugog jasno imenovanog mesta. Ne pripisuje se tuđa zastava opštini. Postojeće aktivne partije zadržavaju pitanja; nove partije dobijaju obnovljenu rundu.
 
 ## Novo u 3.4.0
 
@@ -77,7 +88,7 @@ Ispravke dva QA izveštaja obuhvataju deljene linkove sa režimom/datumom, tasta
 
 [Detaljno: nalaz → ispravka → provera](docs/QA-ISPRAVKE.md). Postojeći podaci, 30 okružnih celina, 174 opštine/grada i Kosovo i Metohija ostaju sačuvani. Banka od 30 fotografija i 52 zastave nije proširivana ovom ispravkom; uputstvo i oznake sada dosledno opisuju geografske zamene.
 
-**Ovaj repozitorijum sadrži paket 3.4.0.** Novi kod i paket proveravaju se u izdvojenoj GitHub Actions instalaciji sa Autoptimize i Slim SEO dodacima. Za 3.4.0 izvršen je pregled i funkcionalna provera u Chromium-u, sa prikazima širine 320, 390, 768 i 1440 piksela; fizički telefon nije korišćen.
+**Ovaj repozitorijum sadrži paket 3.5.0.** Novi kod i paket proveravaju se u izdvojenoj GitHub Actions instalaciji sa Autoptimize i Slim SEO dodacima. Za 3.4.0 izvršen je pregled i funkcionalna provera u Chromium-u, sa prikazima širine 320, 390, 768 i 1440 piksela; fizički telefon nije korišćen.
 
 ## Sadržaj i igra
 
@@ -85,7 +96,7 @@ Ispravke dva QA izveštaja obuhvataju deljene linkove sa režimom/datumom, tasta
 - **190 opština, gradova i gradskih opština**, sa 17 gradskih opština Beograda i Kosovom i Metohijom.
 - Stvarne siluete, podrazumevano šest pokušaja (podesivo), udaljenost i strelica od odgovora ka traženoj teritoriji.
 - Posle otkrivanja podrazumevano slede **četiri dodatna pitanja** (runde su podesive): stanovništvo/položaj, administrativna geografija, zastava i znamenitost/prostorni izazov.
-- **52 lokalne zastave** pokrivaju 17 okružnih sedišta i 51 opštinu/grad: ukupno 68 od 220 aktivnih teritorija. Za ostala mesta koristi se jasno označeno geografsko pitanje. Zastava okružnog sedišta nije predstavljena kao zastava okruga.
+- **52 lokalne zastave** pokrivaju 17 okružnih sedišta i 51 opštinu/grad: ukupno 68 od 220 aktivnih teritorija. Za ostala mesta podrazumevano se pita potvrđena zastava sedišta ili drugog jasno imenovanog mesta, uz objašnjenje zamene. Zastava okružnog sedišta nije predstavljena kao zastava okruga.
 - **30 lokalnih fotografija znamenitosti**, sa autorima, licencama i izvorima.
 - Isti dnevni zadatak za sve, promena u ponoć po vremenu u Srbiji; nasumično vežbanje, nastavak i deljenje rezultata bez rešenja.
 - Pretraga prihvata latinicu, ćirilicu i unos bez kvačica.

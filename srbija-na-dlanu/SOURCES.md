@@ -62,3 +62,7 @@ Autor i licenca fotografije ostaju vidljivi pre odgovora. Puni izvor, koji naziv
 - MRE sloj 4, filter `Region_DOM_ID=15`, svih 17 opština: https://kro.mre.gov.rs/arcgis/rest/services/IMIS/MINING_PUBLIC/MapServer/4 . U preuzetim metapodacima nije navedena posebna licenca za redistribuciju; vidi DATA-LICENSE.md.
 - RZS Popis 2022, beogradski blok tabele: https://popis2022.stat.gov.rs/media/31323/0_ukupan-broj-stanovnika.xlsx . Palilula: 182.624 (Beograd), a ne 69.811 (Niš). Stari grad: 44.737. Zbir 17 opština: 1.681.405.
 - Dopuna: `data/belgrade-municipalities.php`; generator: `tools/build-belgrade.py`. Svaka gradska opština nosi `parent_id=m-beograd` i `district_id=rs-00`. Aktivna podela koristi 190 opštinskih teritorija, sa istim nacionalnim zbirom 6.647.003 i bez izmišljenog popisa za KiM.
+
+## Dekorativna pozadina reka (3.5.0)
+
+`assets/rivers.svg`: stvarne linije Dunava, Save, Drine, Morave i Tise iz [Natural Earth 1:10m Rivers + Lake Centerlines](https://www.naturalearthdata.com/downloads/10m-physical-vectors/10m-rivers-lake-centerlines/), [izvorni GeoJSON](https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_10m_rivers_lake_centerlines.geojson). Podaci su javni domen: [Natural Earth terms](https://www.naturalearthdata.com/about/terms-of-use/). Preuzeto 7. novembra 2026. Linije su isečene i pojednostavljene samo za dekorativni kontekst, bez državnih ili administrativnih granica; SVG nije karta za navigaciju. Ponovljiva priprema: `tools/build-rivers.py` uz Shapely. Dodatku nije potrebna GIS biblioteka.

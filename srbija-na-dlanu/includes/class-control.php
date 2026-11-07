@@ -7,7 +7,7 @@ final class SND_Control {
         if($action){check_admin_referer($action);}
     }
     public static function menu() {
-        foreach(array('analytics'=>'Analitika','players'=>'Igrači','games'=>'Partije','settings'=>'Podešavanja','translations'=>'Prevodi') as $key=>$label){
+        foreach(array('analytics'=>'Analitika','players'=>'Igrači','games'=>'Partije','settings'=>'Podešavanja','translations'=>'Prevodi','ranking'=>'Rang lista') as $key=>$label){
             add_submenu_page('srbija-na-dlanu',$label,$label,'manage_options','snd-'.$key,array(__CLASS__,$key));
         }
     }
@@ -17,7 +17,7 @@ final class SND_Control {
     private static function url($page,$args=array()) {return add_query_arg(array_merge(array('page'=>'snd-'.$page),$args),admin_url('admin.php'));}
     private static function begin($title) {
         self::guard();echo '<div class="wrap snd-control"><h1>'.esc_html($title).'</h1><nav class="snd-admin-nav">';
-        foreach(array('analytics'=>'Analitika','players'=>'Igrači','games'=>'Partije','settings'=>'Podešavanja','translations'=>'Prevodi') as $key=>$label){echo '<a class="button" href="'.esc_url(self::url($key)).'">'.esc_html($label).'</a> ';}
+        foreach(array('analytics'=>'Analitika','players'=>'Igrači','games'=>'Partije','settings'=>'Podešavanja','translations'=>'Prevodi','ranking'=>'Rang lista') as $key=>$label){echo '<a class="button" href="'.esc_url(self::url($key)).'">'.esc_html($label).'</a> ';}
         echo '<a class="button" href="'.esc_url(admin_url('admin.php?page=srbija-na-dlanu')).'">Teritorije i slike</a></nav>';
         if(isset($_GET['saved'])){echo '<div class="notice notice-success"><p>Izmene su sačuvane.</p></div>';}
     }
@@ -31,20 +31,36 @@ final class SND_Control {
         echo '</select><p class="description">Jezik iz linka ili izbor posetioca ima prednost. Ako podrazumevani jezik isključiš, koristi se prvi dostupan.</p></td></tr><tr><th>Podrazumevana tema</th><td><select name="settings[default_theme]">';
         foreach(array('auto'=>'Prema uređaju','light'=>'Svetla','dark'=>'Tamna') as $key=>$name){echo '<option value="'.$key.'" '.selected($key,$s['default_theme'],false).'>'.esc_html($name).'</option>';}
         echo '</select>';self::checkbox('theme_switch','Dozvoli igraču da promeni temu',$s['theme_switch']);echo '</td></tr>';
-        foreach(array('primary_color'=>'Glavna boja (svetla tema)','dark_accent'=>'Naglašena boja (tamna tema)') as $key=>$label){echo '<tr><th>'.esc_html($label).'</th><td><input type="color" name="settings['.$key.']" value="'.esc_attr($s[$key]).'"></td></tr>';}
+        foreach(array('primary_color'=>'Glavna boja (svetla tema)','dark_accent'=>'Naglašena zelena (tamna tema)','dark_button_color'=>'Pozadina dugmadi (tamna tema)','highlight_color'=>'Akcent detalji') as $key=>$label){echo '<tr><th>'.esc_html($label).'</th><td><input type="color" name="settings['.$key.']" value="'.esc_attr($s[$key]).'"></td></tr>';}
+        echo '<tr><th>Pozadina reka</th><td>';self::checkbox('river_background','Diskretna SVG pozadina sa rekama Srbije',$s['river_background']);echo '</td></tr>';
         echo '<tr><th>Veličina teksta</th><td><input type="number" name="settings[font_scale]" min="90" max="140" value="'.(int)$s['font_scale'].'"> % (90–140)</td></tr></table><h2>Pravila i sadržaj</h2><p>Promene pravila važe za nove partije vežbanja i buduće dnevne izazove. Već započete partije zadržavaju svoja pravila.</p><fieldset>';
         foreach(array('district_enabled'=>'Igra za okruge','municipality_enabled'=>'Igra za opštine i gradove','daily_enabled'=>'Dnevni izazov','practice_enabled'=>'Vežbanje') as $key=>$label){self::checkbox($key,$label,$s[$key]);}
         echo '</fieldset><table class="form-table"><tr><th>Broj pokušaja</th><td><input type="number" name="settings[max_guesses]" min="2" max="12" value="'.(int)$s['max_guesses'].'"></td></tr><tr><th>Pomoć pri pogađanju</th><td>';self::checkbox('hint_enabled','Omogući pomoć',$s['hint_enabled']);
         echo '<label>Posle <input type="number" name="settings[hint_after]" min="1" max="11" value="'.(int)$s['hint_after'].'"> promašaja</label></td></tr><tr><th>Dodatne runde</th><td>';
         foreach(array('population'=>'Stanovništvo / položaj','administration'=>'Administrativna geografija','flag'=>'Zastava / geografska zamena','landmark'=>'Znamenitost / geografska zamena') as $key=>$label){echo '<label class="snd-check"><input type="checkbox" name="settings[rounds][]" value="'.$key.'" '.checked(in_array($key,$s['rounds'],true),true,false).'> '.esc_html($label).'</label>';}
         echo '<p class="description">Bez izabranih dodatnih rundi igra se samo pogađanje teritorije.</p></td></tr><tr><th>Slike i izvori</th><td>';
-        foreach(array('source_help_enabled'=>'Izvor fotografije kao označena pomoć pre odgovora','media_fallback'=>'Zamensko pitanje kada slika nije učitana','show_sources'=>'Dugme „Obuhvat i izvori“') as $key=>$label){self::checkbox($key,$label,$s[$key]);}
+        foreach(array('source_help_enabled'=>'Izvor fotografije kao označena pomoć pre odgovora','media_fallback'=>'Zamensko pitanje kada slika nije učitana','show_sources'=>'Dugme „Obuhvat i izvori“','flag_fallback'=>'Kada nema lokalne zastave, ponudi potvrđenu zastavu sedišta ili drugog jasno imenovanog mesta') as $key=>$label){self::checkbox($key,$label,$s[$key]);}
         echo '<p class="description">Autor, licenca i izvori uz odgovor ostaju prikazani zbog pripisivanja i provere podataka.</p></td></tr><tr><th>Nalozi</th><td>';self::checkbox('registration_enabled','Dozvoli registraciju novih igrača',SND_Settings::get('registration_enabled'));
-        echo '<p class="description">Novi igrači dobijaju WP ulogu Pretplatnik. Postojeći nalozi mogu da se prijave i kada je registracija isključena.</p></td></tr></table><h2>Analitika i čuvanje podataka</h2>';
+        echo '<p class="description">Novi igrači dobijaju WP ulogu Pretplatnik. Postojeći nalozi mogu da se prijave i kada je registracija isključena.</p></td></tr></table>';self::ranking_settings($s);echo '<h2>Analitika i čuvanje podataka</h2>';
         foreach(array('analytics_enabled'=>'Beleži analitiku i detaljnu istoriju partija','guest_analytics'=>'Beleži i anonimne goste','erase_deleted_users'=>'Obriši analitiku igrača prilikom brisanja njegovog WP naloga') as $key=>$label){self::checkbox($key,$label,$s[$key]);}
         echo '<p><label>Čuvaj detaljnu analitiku <input type="number" name="settings[retention_days]" min="0" max="3650" value="'.(int)$s['retention_days'].'"> dana (0 = bez automatskog brisanja, inače 7–3650).</label></p><p class="description">Čišćenje radi dnevno kroz WP-Cron. Progres na nalogu se čuva nezavisno od roka za analitiku. Kada brisanje pri uklanjanju naloga isključiš, istorija se anonimizuje. Ne čuvaju se sirove IP adrese, lozinke, kolačići ili sadržaj URL upita; za preporuke se čuva samo domen.</p>';
         submit_button('Sačuvaj podešavanja');echo '</form><hr><h2>Izvoz i brisanje analitike</h2><p>Izvoz je dostupan i uz filtere na stranici Analitika. Brisanje ovde uklanja samo tabele analitike, a progres i WP nalozi ostaju sačuvani.</p>';self::form('snd_analytics_clear');
         echo '<label><input type="checkbox" name="confirm" value="1" required> Potvrđujem brisanje celokupne detaljne analitike.</label>';submit_button('Obriši analitiku','delete');echo '</form></div>';
+    }
+    private static function ranking_settings($s) {
+        echo '<h2>Bodovanje i rang lista</h2>';self::checkbox('ranking_enabled','Omogući rang liste i upis bodova za nove partije',$s['ranking_enabled']);
+        echo '<p>Dve odvojene liste: Dnevni izazovi i Opšta rang lista (izazovi + vežbanje). Svaka ima dnevni, mesečni i ukupni pregled, zajedno i po igrama. Rezultati se čuvaju nezavisno od analitike. Promene važe za nove partije i buduće dnevne izazove.</p><table class="form-table">';
+        foreach(array('points_territory'=>'Maksimum za teritoriju (ostatak do 100 deli se na pitanja)','points_step'=>'Umanjenje za svaki dodatni pokušaj','points_hint'=>'Umanjenje za pomoć pri pogađanju') as $key=>$label){echo '<tr><th>'.esc_html($label).'</th><td><input type="number" min="0" max="100" name="settings['.$key.']" value="'.(int)$s[$key].'"></td></tr>';}
+        echo '</table><p>Bez dodatnih pitanja teritorija vredi 100. Izvor kao pomoć isključuje poene samo za to pitanje. Zbir je ograničen na 0–100. Ranije partije ne dobijaju naknadno izmišljene bodove. Javno se prikazuje nadimak, a igrač može sakriti svoj plasman na nalogu.</p>';
+    }
+    public static function ranking() {
+        self::begin('Rang lista');$f=SND_Ranking::filters();echo '<form method="get" class="snd-filters"><input type="hidden" name="page" value="snd-ranking">';
+        foreach(array('board'=>array('daily'=>'Dnevni izazovi','general'=>'Opšta rang lista'),'period'=>array('day'=>'Dnevna','month'=>'Mesečna','all'=>'Večna'),'game'=>array(''=>'Sve igre','district'=>'Okruzi','municipality'=>'Opštine i gradovi')) as $key=>$values){echo '<select name="'.$key.'">';foreach($values as $v=>$label){echo '<option value="'.esc_attr($v).'" '.selected($v,$f[$key],false).'>'.esc_html($label).'</option>';}echo '</select>';}
+        echo '<input type="date" name="rank_date" value="'.esc_attr($f['rank_date']).'"><input type="month" name="rank_month" value="'.esc_attr($f['rank_month']).'"><button class="button">Prikaži</button></form><p>Administratorski pregled uključuje i skrivene igrače. Javna lista ih ne prikazuje. Nezavršene partije nisu na listi.</p>';$r=SND_Ranking::results($f,true);
+        echo '<table class="widefat striped"><thead><tr><th>Mesto</th><th>Nalog</th><th>Javni nadimak</th><th>Poeni</th><th>Partije</th><th>Dnevni izazovi</th><th>Prosek / 100</th></tr></thead><tbody>';
+        foreach($r['rows'] as $row){echo '<tr><td>'.(int)$row['rank'].'</td><td>'.esc_html(self::user_label($row['user_id'])).'</td><td>'.esc_html($row['alias']).'</td><td>'.(int)$row['total'].'</td><td>'.(int)$row['games'].'</td><td>'.(int)$row['daily_games'].'</td><td>'.esc_html(round($row['average'],1)).'</td></tr>';}
+        if(!$r['rows']){echo '<tr><td colspan="7">Nema rezultata za ovaj izbor.</td></tr>';}echo '</tbody></table><p>Stranica '.$r['page'].' / '.$r['pages'].'</p>';foreach(array(-1=>'Prethodna',1=>'Sledeća') as $delta=>$label){$page=$r['page']+$delta;if($page>0 && $page<=$r['pages']){echo '<a class="button" href="'.esc_url(self::url('ranking',array_merge($f,array('rank_page'=>$page)))).'">'.$label.'</a> ';}}
+        $url=wp_nonce_url(add_query_arg(array_merge($f,array('action'=>'snd_ranking_export')),admin_url('admin-post.php')),'snd_ranking_export');echo '<p><a class="button" href="'.esc_url($url).'">Izvezi bodovane partije (CSV)</a></p></div>';
     }
     public static function save() {
         self::guard('snd_control_save');$input=wp_unslash($_POST['settings']??array());$s=SND_Settings::validate($input);

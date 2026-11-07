@@ -10,6 +10,7 @@ defined('ABSPATH') || exit;
 <body <?php body_class('snd-app-body'); ?>>
 <?php wp_body_open(); ?>
 <div class="snd-app">
+<?php if(SND_Settings::get('river_background')): ?><div class="snd-river-background" aria-hidden="true"></div><?php endif; ?>
 <div id="snd-page-loader" class="snd-page-loader" role="status" hidden><?php echo SND_Site::loader(); ?><span class="snd-app-sr-only"><?php echo esc_html(SND_I18n::t('Učitavanje…')); ?></span></div>
 <?php ob_start();SND_Site::header();echo SND_I18n::html(ob_get_clean()); ?>
 <main id="snd-content" class="snd-app-content snd-view-<?php echo esc_attr(SND_Site::view()); ?>">

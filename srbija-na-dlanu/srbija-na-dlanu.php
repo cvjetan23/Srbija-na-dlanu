@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Srbija na dlanu
  * Description: Dnevna geografska igra i vežbanje za okruge, opštine i gradove. Shortcode: [srbija_na_dlanu]
- * Version: 3.4.0
+ * Version: 3.5.0
  * Requires at least: 6.2
  * Requires PHP: 7.4
  * Author: Srbija na dlanu
@@ -11,7 +11,7 @@
  */
 
 defined('ABSPATH') || exit;
-define('SND_VERSION', '3.4.0');
+define('SND_VERSION', '3.5.0');
 define('SND_DIR', plugin_dir_path(__FILE__));
 define('SND_URL', plugin_dir_url(__FILE__));
 
@@ -20,6 +20,8 @@ require_once SND_DIR . 'includes/class-lock.php';
 require_once SND_DIR . 'includes/class-rate.php';
 require_once SND_DIR . 'includes/class-data.php';
 require_once SND_DIR . 'includes/class-settings.php';
+require_once SND_DIR . 'includes/class-scoring.php';
+require_once SND_DIR . 'includes/class-ranking.php';
 require_once SND_DIR . 'includes/class-i18n.php';
 require_once SND_DIR . 'includes/class-flags.php';
 require_once SND_DIR . 'includes/class-game.php';
@@ -66,6 +68,7 @@ add_action('wp_ajax_snd_game',array('SND_API','ajax'));
 add_action('wp_ajax_nopriv_snd_game',array('SND_API','ajax'));
 function snd_enqueue_game_assets() {
     SND_I18n::enqueue();
+    wp_enqueue_style('snd-ranking',SND_URL.'assets/ranking.css',array('snd-game'),SND_VERSION);
     wp_enqueue_style('snd-game', SND_URL . 'assets/game.css', array(), SND_VERSION);
     wp_enqueue_script('snd-game', SND_URL . 'assets/game.js', array('snd-i18n'), SND_VERSION, true);
 }
@@ -108,7 +111,7 @@ add_action('snd_cleanup', array('SND_Game', 'cleanup'));
 // Autoptimize recognizes data-noptimize before rewriting template literals.
 // Keep our tested JavaScript and small styles intact without changing the site.
 function snd_preserve_asset_tag($tag,$handle) {
-    if(!in_array($handle,array('snd-game','snd-app','snd-library','snd-i18n','snd-ui','snd-themes','snd-atlas','snd-motion'),true)){return $tag;}
+    if(!in_array($handle,array('snd-game','snd-app','snd-library','snd-i18n','snd-ui','snd-themes','snd-atlas','snd-motion','snd-ranking'),true)){return $tag;}
     return '<!--noptimize-->'.preg_replace('/<(script|link)\b/','<$1 data-noptimize="1"',$tag,1).'<!--/noptimize-->';
 }
 add_filter('script_loader_tag','snd_preserve_asset_tag',10,2);
@@ -120,13 +123,16 @@ add_action('admin_post_snd_control_save',array('SND_Control','save'));
 add_action('admin_post_snd_translation_save',array('SND_Control','save_translations'));
 add_action('admin_post_snd_analytics_export',array('SND_Control','export'));
 add_action('admin_post_snd_analytics_clear',array('SND_Control','clear'));
+add_action('admin_post_snd_ranking_export',array('SND_Ranking','export'));
 add_action('template_redirect',array('SND_I18n','prepare'),-1);
 add_action('wp_head',array('SND_I18n','head'),0);
 add_filter('rest_post_dispatch',array('SND_I18n','rest'),20,3);
 add_filter('rest_post_dispatch',array('SND_Analytics','rest_errors'),30,3);
 add_action('snd_cleanup',array('SND_Analytics','clean'));
+add_action('snd_cleanup',array('SND_Ranking','clean'));
 add_action('snd_analytics_backfill',array('SND_Analytics','backfill'));
 add_action('deleted_user',array('SND_Analytics','delete_user'));
+add_action('deleted_user',array('SND_Ranking','delete_user'));
 add_filter('wp_privacy_personal_data_exporters',array('SND_Analytics','privacy_exporters'));
 add_filter('wp_privacy_personal_data_erasers',array('SND_Analytics','privacy_erasers'));
 add_action('snd_player_registered',function($id){SND_Analytics::event('registration',array('view'=>'login'),$id);});

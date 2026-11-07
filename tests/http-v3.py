@@ -38,9 +38,9 @@ try:
    status,url,h,html=guest.get(APP+path+'?lang='+lang);s=BeautifulSoup(html,'html.parser')
    check(status==200 and not re.search(r'<b>(Warning|Notice|Fatal error)',html),'Clean localized page '+lang+' '+path)
    check(s.html['lang']==('sr-Latn' if lang=='sr' else lang),'HTML locale');check('no-store' in h.get('Cache-Control',''),'Locale page uncached')
-   check(bool(s.select_one('.snd-app-header .snd-compass')) and len(s.select('.snd-app-nav a'))==4 and bool(s.select_one('.snd-app-header>a:last-child.snd-account-link svg')),'Standalone header, compass and separate account icon')
+   check(bool(s.select_one('.snd-app-header .snd-compass')) and len(s.select('.snd-app-nav a'))==5 and bool(s.select_one('.snd-app-header>a:last-child.snd-account-link svg')),'Standalone header, compass and separate account icon')
    check(len(s.select('a[data-language]'))==4 and len(s.select('button[data-snd-theme-choice]'))==3,'Four languages and three themes')
-   check('themes.css?ver=3.4.0' in html and 'ui.js?ver=3.4.0' in html,'Theme and preferences assets loaded')
+   check('themes.css?ver=3.5.0' in html and 'ui.js?ver=3.5.0' in html,'Theme and preferences assets loaded')
    check(len(s.select('link[hreflang]'))==4 and len(s.head.select('title'))==1,'Localized metadata without duplicate title')
    check(all('lang='+lang in a.get('href','') for a in s.select('.snd-app-nav a')),'Menu preserves language')
    if path=='baza-znanja/':check(s.h1.get_text()==title and len(s.select('.snd-district-card'))==30,'Knowledge base translated with all districts')
@@ -56,7 +56,7 @@ try:
  second=Client();second.form(APP+'prijava/?lang=ru',{'login':'snd-http-a','password':password});check(second.session()['progress']['district']['practice_count']==1,'Progress survives language and device change');check(second.api('resume',{'token':g['token']},'ru')[0]==200,'Same account can resume in another language')
  outsider=Client();outsider.form(APP+'prijava/?lang=de',{'login':'snd-http-b','password':password});check(outsider.api('resume',{'token':g['token']},'de')[0]==403,'Other account denied');check(outsider.get('/wp-admin/admin.php?page=snd-players')[0]==403,'Player administration denied to subscriber')
  admin=Client();admin.form(APP+'prijava/?lang=sr',{'login':'snd-http-admin','password':password})
- for page in ('analytics','players','games','settings','translations'):
+ for page in ('analytics','players','games','settings','translations','ranking'):
   status,url,h,html=admin.get('/wp-admin/admin.php?page=snd-'+page);check(status==200 and 'snd-control' in html and not re.search(r'<b>(Warning|Fatal error)',html),'Actual admin page '+page+' status='+str(status)+' '+BeautifulSoup(html,'html.parser').get_text(' ',strip=True)[-500:])
  status,url,h,html=admin.get('/wp-admin/admin.php?page=snd-settings');s=BeautifulSoup(html,'html.parser');form=s.select_one('form input[value=snd_control_save]').parent
  fields={i['name']:i.get('value','') for i in form.select('input') if i.get('name') and (i.get('type')!='checkbox' or i.has_attr('checked'))};fields.update({'settings[languages][]':['sr','en','de','ru'],'settings[rounds][]':[],'settings[max_guesses]':'3','settings[hint_after]':'1','settings[default_theme]':'dark','settings[default_language]':'en'})

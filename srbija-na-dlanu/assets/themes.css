@@ -74,3 +74,17 @@ html[data-snd-theme=dark] .snd-app .snd-app-button:hover,html[data-snd-theme=dar
 /* A quiet language item next to the menu, with icon-only theme choices. */
 .snd-app .snd-preferences{align-items:center;padding-left:20px;border-left:1px solid var(--snd-border);gap:16px}.snd-language-picker{min-width:125px}.snd-language-picker summary,.snd-language-picker[open] summary{border:0;border-radius:0;box-shadow:none;background:transparent;padding:8px 2px;min-height:44px;font-weight:500}.snd-language-picker summary:hover{color:var(--snd-accent)}.snd-language-options{top:calc(100% + 6px)}
 @media(max-width:560px){.snd-app .snd-preferences{padding-left:0;border-left:0;gap:22px}.snd-language-picker{min-width:130px}}
+
+/* White button labels in the dark theme; yellow appears only in small accents. */
+html[data-snd-theme=dark] .snd-app .snd-app-button,html[data-snd-theme=dark] .snd-app .snd-game .snd-primary,html[data-snd-theme=dark] .snd-app .snd-home-game .snd-card-action{background:var(--snd-dark-button,#35513d);border-color:var(--snd-highlight,#FFD447);color:#fff!important}
+html[data-snd-theme=dark] .snd-app .snd-home-game .snd-card-action{border:1px solid var(--snd-highlight,#FFD447)}
+html[data-snd-theme=dark] .snd-home-game .snd-card-action svg{color:var(--snd-highlight,#FFD447)}
+html[data-snd-theme=dark] .snd-app .snd-app-button:hover,html[data-snd-theme=dark] .snd-app .snd-game .snd-primary:hover:not(:disabled),html[data-snd-theme=dark] .snd-home-game:hover .snd-card-action{background:var(--snd-dark-button,#35513d);filter:brightness(1.12)}
+html[data-snd-theme=dark] .snd-app .snd-button-outline{background:transparent;color:#fff!important;border-color:var(--snd-border)}
+html[data-snd-theme=dark] .snd-app .snd-game .snd-primary:disabled{background:#304337;color:#e7efdf!important;border-color:#52634a}
+html[data-snd-theme=dark] .snd-app .snd-game .snd-tabs .is-active{background:var(--snd-dark-button,#35513d);color:#fff}
+.snd-app-nav a[aria-current=page]{border-bottom-color:var(--snd-highlight,#FFD447)!important}.snd-home-game .snd-card-action{box-shadow:inset 0 -3px var(--snd-highlight,#FFD447)}
+html[data-snd-theme=dark] .snd-app .snd-rule-number{color:var(--snd-highlight,#FFD447);border-color:var(--snd-highlight,#FFD447)}
+html[data-snd-theme=dark] .snd-river-background{opacity:.13}
+
+html[data-snd-theme=dark] .snd-app .snd-game .snd-score-grid strong{color:#fff}html[data-snd-theme=dark] .snd-app .snd-game .snd-score-grid strong small{color:var(--snd-secondary,#d0e6c2)}
