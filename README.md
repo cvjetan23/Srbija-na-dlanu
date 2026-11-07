@@ -1,4 +1,4 @@
-# Srbija na dlanu 3.6.0
+# Srbija na dlanu 3.7.0
 
 Zasebna geografska aplikacija unutar WordPress-a: početna, igre za okruge i opštine, baza znanja i nalozi igrača. Sveden prikaz: slika gore, pitanje i odgovori ispod, sa većim slovima.
 
@@ -26,6 +26,13 @@ Zasebna geografska aplikacija unutar WordPress-a: početna, igre za okruge i op�
 Ove stranice imaju svoj kompas, meni, zaglavlje i podnožje, bez zaglavlja i podnožja aktivne teme. Ostali deo sajta zadržava postojeći izgled. Postojeći Elementor podaci početne stranice se ne brišu. Dodatak ne menja globalnu početnu stranicu WordPress-a.
 
 Shortcode `[srbija_na_dlanu]` i dalje radi na drugim WP stranicama; tu se zadržava njihova tema. Za određenu igru koristi `[srbija_na_dlanu kind="district"]` ili `kind="municipality"`.
+
+## Novo u 3.7.0
+
+- **Šuma i sunce**: nova samostalna paleta inspirisana prirodom, sa borovom i žad zelenom, toplom svetlom podlogom i Sunrise akcentom. [Istraživanje, HEX vrednosti i kontrast](docs/PALETA-3.7.md).
+- Sedam osnovnih boja sa jasnim ulogama: mirna podloga, odvojene površine, čitljiv tekst i istaknute akcije. Dugmad imaju bele natpise sa kontrastom 6,39:1; Sunrise je mali, prepoznatljiv detalj.
+- Diskretnije reke, blaže ivice kartica i jače granice interaktivnih polja. Ispravni odgovori zadržavaju svoju površinu.
+- **WP → Srbija na dlanu → Podešavanja → Vrati predložene boje** obnavlja samo paletu. Pravila, jezici, registracija i bodovi se ne resetuju. Prilagođene palete se čuvaju kao celina.
 
 ## Novo u 3.6.0
 

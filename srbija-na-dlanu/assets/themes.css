@@ -1,46 +1,47 @@
-/* Seven shared colors from cvjetan.dev, including Sunrise. Settings supply the primitives. */
-.snd-app,:root{--snd-bg:var(--snd-pale,#eef0e5);--snd-surface:var(--snd-white,#fff);--snd-soft:var(--snd-pale,#eef0e5);--snd-text:var(--snd-deep,#171914);--snd-secondary:var(--snd-panel,#292c25);--snd-border:var(--snd-edge,#d8dccb);--snd-shape:var(--snd-brand,#6f7c45);--snd-accent:var(--snd-brand,#6f7c45);--snd-direction:var(--snd-brand,#6f7c45)}
+/* Forest & sunlight: seven base colors, semantic surfaces and deliberate accents. */
+.snd-app,:root{--snd-bg:var(--snd-pale,#f4f7ed);--snd-surface:var(--snd-white,#fff);--snd-soft:var(--snd-pale,#f4f7ed);--snd-text:var(--snd-deep,#102a26);--snd-secondary:var(--snd-brand,#2d6a4f);--snd-border:color-mix(in srgb,var(--snd-edge,#95d5b2) 38%,var(--snd-white,#fff));--snd-control-border:var(--snd-brand,#2d6a4f);--snd-correct:var(--snd-brand,#2d6a4f);--snd-shape:var(--snd-brand,#2d6a4f);--snd-accent:var(--snd-brand,#2d6a4f);--snd-direction:var(--snd-brand,#2d6a4f)}
 html[data-snd-theme=dark]{color-scheme:dark}
-html[data-snd-theme=dark],html[data-snd-theme=dark] .snd-app{--snd-bg:var(--snd-deep,#171914);--snd-surface:var(--snd-panel,#292c25);--snd-soft:var(--snd-panel,#292c25);--snd-text:var(--snd-white,#fff);--snd-secondary:var(--snd-dark-accent,#eef0e5);--snd-border:var(--snd-brand,#6f7c45);--snd-shape:var(--snd-edge,#d8dccb);--snd-accent:var(--snd-dark-accent,#eef0e5);--snd-direction:var(--snd-highlight,#FFD447)}
+html[data-snd-theme=dark],html[data-snd-theme=dark] .snd-app{--snd-bg:var(--snd-deep,#102a26);--snd-surface:var(--snd-panel,#1a3c34);--snd-soft:var(--snd-panel,#1a3c34);--snd-text:var(--snd-white,#fff);--snd-secondary:var(--snd-dark-accent,#95d5b2);--snd-border:color-mix(in srgb,var(--snd-edge,#95d5b2) 22%,var(--snd-panel,#1a3c34));--snd-control-border:color-mix(in srgb,var(--snd-edge,#95d5b2) 62%,var(--snd-panel,#1a3c34));--snd-correct:var(--snd-highlight,#FFD447);--snd-shape:var(--snd-edge,#95d5b2);--snd-accent:var(--snd-dark-accent,#95d5b2);--snd-direction:var(--snd-highlight,#FFD447)}
 body.snd-app-body{background:var(--snd-bg)!important;color:var(--snd-text)!important}
 .snd-app{font-size:calc(18px * var(--snd-font-scale,1))}
 .snd-app-header{flex-wrap:wrap;column-gap:24px;row-gap:14px}.snd-app-brand{margin-right:auto}
-.snd-app-nav a{font-size:calc(16px * var(--snd-font-scale,1))}.snd-app-nav a[aria-current=page]{border-bottom-color:var(--snd-highlight,#FFD447)}
-.snd-app .snd-game{--snd-ink:var(--snd-text);--snd-muted:var(--snd-secondary);--snd-line:var(--snd-border);--snd-green:var(--snd-brand,#6f7c45);background:transparent;color:var(--snd-text);font-size:calc(18px * var(--snd-font-scale,1))}
+.snd-app-nav a{font-size:calc(16px * var(--snd-font-scale,1))}.snd-app-nav a[aria-current=page]{border-bottom-color:var(--snd-direction);font-weight:650}
+.snd-app .snd-game{--snd-ink:var(--snd-text);--snd-muted:var(--snd-secondary);--snd-line:var(--snd-border);--snd-green:var(--snd-brand,#2d6a4f);background:transparent;color:var(--snd-text);font-size:calc(18px * var(--snd-font-scale,1))}
 .snd-app .snd-game .snd-panel-copy,.snd-app .snd-game .snd-option{font-size:calc(17px * var(--snd-font-scale,1))}.snd-app .snd-game .snd-search-wrap input{font-size:calc(18px * var(--snd-font-scale,1))}
 html[data-snd-theme=dark] .snd-app .snd-game{color-scheme:dark}
 .snd-app a,.snd-app .snd-app-brand,.snd-app .snd-app-nav a{color:var(--snd-text)!important}
 .snd-app .snd-home-game,.snd-app .snd-district-card,.snd-app .snd-auth-card,.snd-app .snd-progress-card,.snd-app .snd-facts{color:var(--snd-text)!important;background:var(--snd-surface);border-color:var(--snd-border)}
 .snd-app .snd-home-game:hover,.snd-app .snd-district-card:hover{border-color:var(--snd-accent)}
 .snd-app .snd-home-library,.snd-app .snd-detail-note,.snd-app .snd-auth-notice{background:var(--snd-soft);color:var(--snd-text);border-color:var(--snd-border)}
-.snd-app input:not([type=checkbox]),.snd-app select,.snd-app textarea{background:var(--snd-surface);color:var(--snd-text);border-color:var(--snd-brand,#6f7c45)}
+.snd-app input:not([type=checkbox]),.snd-app select,.snd-app textarea{background:var(--snd-surface);color:var(--snd-text);border-color:var(--snd-control-border)}
 .snd-app input::placeholder{color:var(--snd-secondary)!important;opacity:1}
-.snd-app .snd-app-button,.snd-app .snd-game .snd-primary,.snd-app .snd-home-game .snd-card-action{background:var(--snd-brand,#6f7c45);color:var(--snd-on-accent,#fff)!important;border:1px solid var(--snd-brand,#6f7c45);box-shadow:none;filter:none}
-html[data-snd-theme=dark] .snd-app .snd-app-button,html[data-snd-theme=dark] .snd-app .snd-game .snd-primary,html[data-snd-theme=dark] .snd-app .snd-home-game .snd-card-action{background:var(--snd-dark-button,#6f7c45);color:var(--snd-on-dark-button,#fff)!important;border-color:var(--snd-highlight,#FFD447)}
-.snd-app .snd-home-game .snd-card-action{min-width:132px;min-height:48px;padding:10px 22px;border-radius:6px;font-size:18px;font-weight:650}
-.snd-app .snd-home-game:hover .snd-card-action,.snd-app .snd-app-button:hover,.snd-app .snd-game .snd-primary:hover:not(:disabled){box-shadow:none;filter:none;text-decoration:underline!important;text-underline-offset:4px}
-html[data-snd-theme=dark] .snd-app .snd-home-game .snd-card-action svg,html[data-snd-theme=dark] .snd-app .snd-primary .snd-action-icon{color:var(--snd-highlight,#FFD447)}
+.snd-app .snd-app-button,.snd-app .snd-game .snd-primary,.snd-app .snd-home-game .snd-card-action{background:var(--snd-brand,#2d6a4f);color:var(--snd-on-accent,#fff)!important;border:1px solid var(--snd-brand,#2d6a4f);box-shadow:none;filter:none}
+html[data-snd-theme=dark] .snd-app .snd-app-button,html[data-snd-theme=dark] .snd-app .snd-game .snd-primary,html[data-snd-theme=dark] .snd-app .snd-home-game .snd-card-action{background:var(--snd-dark-button,#2d6a4f);color:var(--snd-on-dark-button,#fff)!important;border-color:var(--snd-control-border)}
+.snd-app .snd-home-game .snd-card-action{min-width:158px;min-height:50px;padding:11px 20px;border-radius:12px;font-size:18px;font-weight:700}
+.snd-app .snd-home-game:hover .snd-card-action,.snd-app .snd-app-button:hover,.snd-app .snd-game .snd-primary:hover:not(:disabled){box-shadow:none;filter:none;border-color:var(--snd-direction);text-decoration:none!important}
+.snd-app .snd-home-game .snd-card-action svg{width:26px;height:26px;padding:4px;border-radius:50%;background:var(--snd-highlight,#FFD447);color:var(--snd-deep,#102a26)}
+html[data-snd-theme=dark] .snd-app .snd-primary .snd-action-icon{color:var(--snd-highlight,#FFD447)}
 .snd-app .snd-button-outline{background:transparent!important;color:var(--snd-text)!important;border-color:var(--snd-border)}
 .snd-app .snd-game .snd-primary:disabled{background:var(--snd-surface);color:var(--snd-secondary)!important;border:1px solid var(--snd-border);opacity:.65}
 .snd-app .snd-game .snd-option,.snd-app .snd-game .snd-secondary,.snd-app .snd-game .snd-history li,.snd-app .snd-game .snd-suggestions,.snd-app .snd-game .snd-modal,.snd-app .snd-game .snd-explanation,.snd-app .snd-game .snd-hint,.snd-app .snd-game .snd-notice,.snd-app .snd-game .snd-media-error,.snd-app .snd-game .snd-flag-card{background:var(--snd-surface);color:var(--snd-text);border-color:var(--snd-border)}
 .snd-app .snd-game .snd-option:hover:not(:disabled),.snd-app .snd-game .snd-suggestions>[role=option]:hover,.snd-app .snd-game .snd-suggestions>[aria-selected=true]{background:var(--snd-soft);border-color:var(--snd-accent)}
-.snd-app .snd-game .snd-option.is-correct,.snd-app .snd-game .snd-history .is-correct,.snd-app .snd-game .snd-explanation.is-correct,.snd-app .snd-game .snd-flag-card.is-correct{background:var(--snd-surface);color:var(--snd-text);border:2px solid var(--snd-highlight,#FFD447)}
+.snd-app .snd-game .snd-option.is-correct,.snd-app .snd-game .snd-history .is-correct,.snd-app .snd-game .snd-explanation.is-correct,.snd-app .snd-game .snd-flag-card.is-correct{background:var(--snd-surface);color:var(--snd-text);border:2px solid var(--snd-correct)}
 .snd-app .snd-game .snd-option.is-wrong,.snd-app .snd-game .snd-flag-card.is-wrong{background:var(--snd-surface);color:var(--snd-text);border-color:var(--snd-secondary)}
-.snd-app .snd-game .snd-answer-badge.is-correct{background:transparent;color:var(--snd-direction);border:1.5px solid var(--snd-highlight,#FFD447)}
+.snd-app .snd-game .snd-answer-badge.is-correct{background:transparent;color:var(--snd-direction);border:1.5px solid var(--snd-correct)}
 .snd-app .snd-game .snd-answer-badge.is-wrong{background:transparent;color:var(--snd-text);border:1px solid var(--snd-secondary)}
 .snd-app .snd-game .snd-flag-card .snd-flag-option{border:0;background:transparent;color:var(--snd-text)}
 .snd-app .snd-game .snd-direction{color:var(--snd-direction)}
 .snd-app .snd-game .snd-mode .is-active,.snd-app .snd-game .snd-tabs{background:var(--snd-soft);color:var(--snd-text)}
-.snd-app .snd-game .snd-tabs .is-active{background:var(--snd-brand,#6f7c45);color:var(--snd-on-accent,#fff)}
+.snd-app .snd-game .snd-tabs .is-active{background:var(--snd-brand,#2d6a4f);color:var(--snd-on-accent,#fff)}
 .snd-app .snd-game .snd-shape path{fill:var(--snd-shape)}
-.snd-app .snd-game .snd-map-base path,.snd-app .snd-game .snd-map-cell{fill:var(--snd-soft);stroke:var(--snd-border)}
+.snd-app .snd-game .snd-map-base path,.snd-app .snd-game .snd-map-cell{fill:var(--snd-soft);stroke:var(--snd-control-border)}
 .snd-app .snd-game .snd-map-target{fill:var(--snd-shape);stroke:var(--snd-highlight,#FFD447);stroke-width:2;vector-effect:non-scaling-stroke}
-.snd-app .snd-game .snd-map-last{fill:var(--snd-highlight,#FFD447);stroke:var(--snd-brand,#6f7c45)}
+.snd-app .snd-game .snd-map-last{fill:var(--snd-highlight,#FFD447);stroke:var(--snd-brand,#2d6a4f)}
 .snd-app .snd-map-markers circle,.snd-app .snd-map-markers .is-correct circle,.snd-app .snd-map-markers .is-target circle{fill:var(--snd-surface);stroke:var(--snd-highlight,#FFD447);stroke-width:1.2}
 .snd-app .snd-map-markers text,.snd-app .snd-map-markers .is-correct text{fill:var(--snd-text)}
 .snd-app .snd-map-markers .snd-target-symbol{fill:var(--snd-direction)}
-.snd-app .snd-game .snd-map-caption .snd-map-number,.snd-app .snd-game .snd-map-caption .snd-legend-target .snd-map-number{border-color:var(--snd-highlight,#FFD447)}
-.snd-app .snd-game .snd-target-answer{border-color:var(--snd-highlight,#FFD447);background:var(--snd-surface)}
+.snd-app .snd-game .snd-map-caption .snd-map-number,.snd-app .snd-game .snd-map-caption .snd-legend-target .snd-map-number{border-color:var(--snd-correct)}
+.snd-app .snd-game .snd-target-answer{border-color:var(--snd-correct);background:var(--snd-surface)}
 .snd-app .snd-rule-number{color:var(--snd-text);border-color:var(--snd-border)}
 html[data-snd-theme=dark] .snd-app .snd-rule-number{color:var(--snd-highlight,#FFD447)}
 .snd-app .snd-game .snd-score-grid strong{color:var(--snd-text)}
@@ -54,8 +55,8 @@ html[data-snd-theme=dark] .snd-app .snd-rule-number{color:var(--snd-highlight,#F
 .snd-preference-group{display:flex;flex-direction:column;gap:5px}.snd-preference-label{font-size:12px;line-height:1.3;font-weight:650;color:var(--snd-secondary);letter-spacing:.04em}
 .snd-language-picker{position:relative;z-index:30;min-width:148px}.snd-language-picker summary{display:flex;align-items:center;gap:9px;min-height:43px;padding:9px 12px;list-style:none;cursor:pointer;border:1px solid var(--snd-border);border-radius:8px;background:var(--snd-surface);font-size:15px;line-height:1.4;color:var(--snd-text);font-weight:600;user-select:none}.snd-language-picker summary::-webkit-details-marker{display:none}.snd-language-picker[open] summary{border-color:var(--snd-accent)}
 .snd-preference-icon{display:block;width:21px;height:21px;flex-shrink:0}.snd-picker-chevron{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.7;margin-left:auto;transition:transform .15s}.snd-language-picker[open] .snd-picker-chevron{transform:rotate(180deg)}
-.snd-language-options{position:absolute;right:0;top:calc(100% + 8px);width:230px;padding:6px;border:1px solid var(--snd-border);border-radius:10px;background:var(--snd-surface);box-shadow:0 12px 35px color-mix(in srgb,var(--snd-deep,#171914) 12%,transparent)}.snd-app .snd-language-options a{display:flex;align-items:center;gap:12px;min-height:49px;padding:9px 11px;border-radius:6px;color:var(--snd-text);font-size:16px}.snd-app .snd-language-options a:hover,.snd-app .snd-language-options a[aria-current=true]{background:var(--snd-soft)}.snd-language-code{display:grid;place-items:center;min-width:32px;height:28px;border:1px solid var(--snd-border);border-radius:5px;font-size:11px;font-weight:750;letter-spacing:.04em;color:var(--snd-secondary)}.snd-language-check{margin-left:auto;color:var(--snd-accent);font-weight:750}
-.snd-app .snd-theme-options{display:flex;align-items:center;gap:3px;margin:0;padding:3px;min-height:43px;border:1px solid var(--snd-border);border-radius:8px;background:var(--snd-soft)}.snd-app .snd-theme-options button{display:flex;align-items:center;justify-content:center;gap:4px;border:0;border-radius:5px;min-width:35px;min-height:35px;padding:6px;background:transparent;color:var(--snd-secondary);font:inherit;cursor:pointer}.snd-theme-options button>span{font-size:10px;font-weight:700}.snd-app .snd-theme-options button[aria-pressed=true]{background:var(--snd-surface);color:var(--snd-text);box-shadow:0 1px 4px color-mix(in srgb,var(--snd-deep,#171914) 12%,transparent)}.snd-app .snd-theme-options button:hover{color:var(--snd-text);background:var(--snd-surface)}.snd-language-picker summary:focus-visible{outline:3px solid var(--snd-accent);outline-offset:3px}
+.snd-language-options{position:absolute;right:0;top:calc(100% + 8px);width:230px;padding:6px;border:1px solid var(--snd-border);border-radius:10px;background:var(--snd-surface);box-shadow:0 12px 35px color-mix(in srgb,var(--snd-deep,#102a26) 12%,transparent)}.snd-app .snd-language-options a{display:flex;align-items:center;gap:12px;min-height:49px;padding:9px 11px;border-radius:6px;color:var(--snd-text);font-size:16px}.snd-app .snd-language-options a:hover,.snd-app .snd-language-options a[aria-current=true]{background:var(--snd-soft)}.snd-language-code{display:grid;place-items:center;min-width:32px;height:28px;border:1px solid var(--snd-border);border-radius:5px;font-size:11px;font-weight:750;letter-spacing:.04em;color:var(--snd-secondary)}.snd-language-check{margin-left:auto;color:var(--snd-accent);font-weight:750}
+.snd-app .snd-theme-options{display:flex;align-items:center;gap:3px;margin:0;padding:3px;min-height:43px;border:1px solid var(--snd-border);border-radius:8px;background:var(--snd-soft)}.snd-app .snd-theme-options button{display:flex;align-items:center;justify-content:center;gap:4px;border:0;border-radius:5px;min-width:35px;min-height:35px;padding:6px;background:transparent;color:var(--snd-secondary);font:inherit;cursor:pointer}.snd-theme-options button>span{font-size:10px;font-weight:700}.snd-app .snd-theme-options button[aria-pressed=true]{background:var(--snd-surface);color:var(--snd-text);box-shadow:0 1px 4px color-mix(in srgb,var(--snd-deep,#102a26) 12%,transparent)}.snd-app .snd-theme-options button:hover{color:var(--snd-text);background:var(--snd-surface)}.snd-language-picker summary:focus-visible{outline:3px solid var(--snd-accent);outline-offset:3px}
 @media(max-width:1080px) and (min-width:561px){.snd-app-header .snd-app-nav{order:3;justify-content:center;width:100%}.snd-app .snd-preferences{margin-left:auto}.snd-app-brand{margin-right:0}}
 @media(max-width:560px){.snd-app-header{display:grid;grid-template-columns:1fr;justify-items:center;gap:18px}.snd-app .snd-app-brand{margin:0}.snd-app-header .snd-app-nav{order:3;justify-content:center;width:100%;gap:4px 17px}.snd-app .snd-preferences{width:auto;justify-content:center;gap:22px}.snd-language-picker{min-width:148px}.snd-language-picker summary{min-height:44px}.snd-app .snd-theme-options{min-height:44px}.snd-app .snd-theme-options button{min-height:36px}.snd-language-options{left:0;right:auto;width:min(260px,calc(100vw - 40px))}}
 @media(max-width:560px){.snd-app .snd-theme-options{min-height:48px}.snd-app .snd-theme-options button{min-width:40px;min-height:40px}.snd-language-picker summary{min-height:48px}}
@@ -67,3 +68,14 @@ html[data-snd-theme=dark] .snd-app .snd-rule-number{color:var(--snd-highlight,#F
 
 .snd-app .snd-theme-options{background:var(--snd-bg)}.snd-app .snd-theme-options button[aria-pressed=true]{box-shadow:inset 0 0 0 1px var(--snd-highlight,#FFD447)}
 @media(max-width:560px){.snd-app .snd-home-game .snd-card-action{min-width:0;max-width:100%;padding:10px 12px}}
+
+/* Quiet containers; stronger boundaries on controls and clear keyboard focus. */
+.snd-app .snd-home-game{border-radius:18px}
+.snd-app .snd-home-library,.snd-app .snd-home-rules li{border-radius:12px}
+.snd-app .snd-game .snd-search-wrap input,.snd-app .snd-game .snd-option,.snd-app .snd-game .snd-secondary,.snd-app .snd-game .snd-flag-card{border-color:var(--snd-control-border)}
+.snd-app .snd-game .snd-option.is-correct,.snd-app .snd-game .snd-flag-card.is-correct{border-color:var(--snd-correct)}
+.snd-app .snd-game .snd-flag-card .snd-flag-option{border:0}
+.snd-app .snd-game .snd-history .is-current{border-color:var(--snd-accent)}
+.snd-app .snd-game .snd-mode .is-active{box-shadow:inset 0 -2px var(--snd-direction)}
+.snd-app .snd-home-rules .snd-rule-number{border-color:var(--snd-control-border)}
+.snd-app .snd-card-action:focus-visible,.snd-app .snd-home-game:focus-visible{outline:3px solid var(--snd-direction);outline-offset:4px}

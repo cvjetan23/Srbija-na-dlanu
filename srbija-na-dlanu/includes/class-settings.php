@@ -6,8 +6,8 @@ final class SND_Settings {
     public static function defaults() {
         return array(
             'app_name'=>'Srbija na dlanu','default_language'=>'sr','languages'=>array('sr','en','de','ru'),
-            'default_theme'=>'auto','theme_switch'=>true,'primary_color'=>'#6f7c45','dark_accent'=>'#eef0e5','highlight_color'=>'#FFD447','dark_button_color'=>'#6f7c45',
-            'ink_color'=>'#171914','surface_color'=>'#ffffff','pale_color'=>'#eef0e5','border_color'=>'#d8dccb','dark_surface_color'=>'#292c25','river_background'=>true,'font_scale'=>100,
+            'default_theme'=>'auto','theme_switch'=>true,'primary_color'=>'#2d6a4f','dark_accent'=>'#95d5b2','highlight_color'=>'#FFD447','dark_button_color'=>'#2d6a4f',
+            'ink_color'=>'#102a26','surface_color'=>'#ffffff','pale_color'=>'#f4f7ed','border_color'=>'#95d5b2','dark_surface_color'=>'#1a3c34','palette_version'=>2,'river_background'=>true,'font_scale'=>100,
             'district_enabled'=>true,'municipality_enabled'=>true,'daily_enabled'=>true,'practice_enabled'=>true,
             'max_guesses'=>6,'hint_after'=>3,'hint_enabled'=>true,'source_help_enabled'=>true,'media_fallback'=>true,
             'rounds'=>array('population','administration','flag','landmark'),'show_sources'=>true,
@@ -18,11 +18,18 @@ final class SND_Settings {
     public static function all() {
         if(self::$cache===null){
             $stored=(array)get_option('snd_settings',array());
-            // Upgrade the old stock palette, while retaining deliberately customized colors.
-            if(empty($stored['palette_version'])){
-                foreach(array('primary_color'=>'#355d3d','dark_accent'=>'#a5c797','dark_button_color'=>'#35513d') as $key=>$old){
-                    if(isset($stored[$key]) && strtolower($stored[$key])===$old){unset($stored[$key]);}
+            // Replace a complete stock palette. A customized palette stays together.
+            if((int)($stored['palette_version']??0)<2){
+                $previous=array('primary_color'=>'#6f7c45','dark_accent'=>'#eef0e5','highlight_color'=>'#ffd447','dark_button_color'=>'#6f7c45','ink_color'=>'#171914','surface_color'=>'#ffffff','pale_color'=>'#eef0e5','border_color'=>'#d8dccb','dark_surface_color'=>'#292c25');
+                $candidate=array_intersect_key($stored,$previous);
+                if(empty($stored['palette_version'])){
+                    foreach(array('primary_color'=>'#355d3d','dark_accent'=>'#a5c797','dark_button_color'=>'#35513d') as $key=>$old){
+                        if(isset($candidate[$key]) && strtolower($candidate[$key])===$old){$candidate[$key]=$previous[$key];}
+                    }
                 }
+                $stock=true;foreach($candidate as $key=>$color){if(strtolower($color)!==$previous[$key]){$stock=false;break;}}
+                if($stock){foreach($previous as $key=>$color){unset($stored[$key]);}}
+                $stored['palette_version']=2;
             }
             self::$cache=array_merge(self::defaults(),$stored);
         }
@@ -34,13 +41,13 @@ final class SND_Settings {
     }
     public static function reset(){self::$cache=null;}
     public static function color_fields() {
-        return array('primary_color'=>'Maslinasta — glavna boja i oblici',
+        return array('primary_color'=>'Šumska zelena — glavna dugmad i oblici',
             'highlight_color'=>'Sunrise — akcenti, strelice i tačni odgovori',
-            'ink_color'=>'Tamna — pozadina tamne teme i tekst svetle',
-            'dark_surface_color'=>'Tamna površina — kartice i polja',
+            'ink_color'=>'Borova — tamna pozadina i tekst svetle teme',
+            'dark_surface_color'=>'Krošnja — tamne kartice i polja',
             'surface_color'=>'Bela — svetle kartice i tekst tamne teme',
-            'pale_color'=>'Svetla — pozadina i sporedni tekst',
-            'border_color'=>'Svetla ivica — razdelnici i mapa',
+            'pale_color'=>'Slonova kost — svetla pozadina',
+            'border_color'=>'Žad — oblici i osnova za ivice',
             'dark_accent'=>'Sporedni tekst (tamna tema)',
             'dark_button_color'=>'Pozadina glavnih dugmadi (tamna tema)');
     }
@@ -61,7 +68,7 @@ final class SND_Settings {
         $out['default_theme']=in_array($input['default_theme']??'',array('light','dark','auto'),true)?$input['default_theme']:'auto';
         foreach(array('theme_switch','district_enabled','municipality_enabled','daily_enabled','practice_enabled','hint_enabled','source_help_enabled','media_fallback','show_sources','analytics_enabled','guest_analytics','erase_deleted_users','ranking_enabled','river_background','flag_fallback') as $key){$out[$key]=!empty($input[$key]);}
         foreach(array_keys(self::color_fields()) as $key){$out[$key]=sanitize_hex_color($input[$key]??'')?:$out[$key];}
-        $out['palette_version']=1;
+        $out['palette_version']=2;
         $out['points_territory']=max(0,min(100,(int)($input['points_territory']??60)));
         $out['points_step']=max(0,min(100,(int)($input['points_step']??6)));
         $out['points_hint']=max(0,min(100,(int)($input['points_hint']??10)));

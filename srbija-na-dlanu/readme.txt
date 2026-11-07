@@ -4,7 +4,7 @@ Tags: geography, quiz, serbia, education
 Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 3.6.0
+Stable tag: 3.7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -52,6 +52,12 @@ Detaljna analitika se od 3.0.0 čuva u dve tabele iste WP baze: {prefix}snd_game
 Kod: GPL-2.0-or-later. Geografija/fotografije: SOURCES.md i DATA-LICENSE.md. Zastave: FLAGS.md. Za dopunske granice Kosova i Metohije javni geografski servis nije naveo posebnu licencu za redistribuciju. Karte služe igri. Deaktivacija ne briše sadržaj i rezultate.
 
 == Changelog ==
+
+= 3.7.0 =
+* Nova paleta Šuma i sunce: borova, šumska i žad zelena, topla svetla podloga i Sunrise akcent.
+* Jasnije površine i kontrole, beliji natpisi, mirnije ivice, diskretnije reke i uređena dugmad Igraj.
+* Vrati predložene boje u WP podešavanjima, bez promene pravila, registracije ili bodovanja.
+* Očuvanje prilagođene palete i osvežavanje ranijih podrazumevanih kombinacija.
 
 = 3.6.0 =
 * Sedam osnovnih boja glavnog sajta uz Sunrise #FFD447; ravna dugmad sa belim natpisima i čitljivim kontrastom.

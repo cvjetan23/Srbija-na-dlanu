@@ -31,7 +31,7 @@ final class SND_Control {
         echo '</select><p class="description">Jezik iz linka ili izbor posetioca ima prednost. Ako podrazumevani jezik isključiš, koristi se prvi dostupan.</p></td></tr><tr><th>Podrazumevana tema</th><td><select name="settings[default_theme]">';
         foreach(array('auto'=>'Prema uređaju','light'=>'Svetla','dark'=>'Tamna') as $key=>$name){echo '<option value="'.$key.'" '.selected($key,$s['default_theme'],false).'>'.esc_html($name).'</option>';}
         echo '</select>';self::checkbox('theme_switch','Dozvoli igraču da promeni temu',$s['theme_switch']);echo '</td></tr>';
-        echo '</table><h2>Paleta boja</h2><p>Osnova je paleta glavnog sajta uz Sunrise #FFD447. Iste boje koriste dugmad, tekst, polja pokušaja, mape i tačni odgovori, bez zasebnih nijansi za svaki element. Prvih sedam boja čini osnovnu paletu; poslednja dva polja omogućavaju dodatno prilagođavanje tamne teme.</p><table class="form-table">';
+        echo '</table><h2>Paleta boja — Šuma i sunce</h2><p>Borova i žad zelena, svetla podloga i Sunrise #FFD447. Sedam osnovnih boja raspoređeno je po ulogama: pozadina, površine, čitljiv tekst, glavne akcije i rezultat. Ivice su diskretne, a Sunrise naglašava važne detalje. Poslednja dva polja omogućavaju dodatno prilagođavanje tamne teme.</p><table class="form-table">';
         foreach(SND_Settings::color_fields() as $key=>$label){echo '<tr><th><label for="snd-color-'.esc_attr($key).'">'.esc_html($label).'</label></th><td><input id="snd-color-'.esc_attr($key).'" type="color" name="settings['.esc_attr($key).']" value="'.esc_attr($s[$key]).'"> <code>'.esc_html($s[$key]).'</code></td></tr>';}
         echo '<tr><th>Pozadina reka</th><td>';self::checkbox('river_background','Diskretna SVG pozadina sa rekama Srbije',$s['river_background']);echo '</td></tr>';
         echo '<tr><th>Veličina teksta</th><td><input type="number" name="settings[font_scale]" min="90" max="140" value="'.(int)$s['font_scale'].'"> % (90–140)</td></tr></table><h2>Pravila i sadržaj</h2><p>Promene pravila važe za nove partije vežbanja i buduće dnevne izazove. Već započete partije zadržavaju svoja pravila.</p><fieldset>';
@@ -45,7 +45,8 @@ final class SND_Control {
         echo '<p class="description">Novi igrači dobijaju WP ulogu Pretplatnik. Postojeći nalozi mogu da se prijave i kada je registracija isključena.</p></td></tr></table>';self::ranking_settings($s);echo '<h2>Analitika i čuvanje podataka</h2>';
         foreach(array('analytics_enabled'=>'Beleži analitiku i detaljnu istoriju partija','guest_analytics'=>'Beleži i anonimne goste','erase_deleted_users'=>'Obriši analitiku igrača prilikom brisanja njegovog WP naloga') as $key=>$label){self::checkbox($key,$label,$s[$key]);}
         echo '<p><label>Čuvaj detaljnu analitiku <input type="number" name="settings[retention_days]" min="0" max="3650" value="'.(int)$s['retention_days'].'"> dana (0 = bez automatskog brisanja, inače 7–3650).</label></p><p class="description">Čišćenje radi dnevno kroz WP-Cron. Progres na nalogu se čuva nezavisno od roka za analitiku. Kada brisanje pri uklanjanju naloga isključiš, istorija se anonimizuje. Ne čuvaju se sirove IP adrese, lozinke, kolačići ili sadržaj URL upita; za preporuke se čuva samo domen.</p>';
-        submit_button('Sačuvaj podešavanja');echo '</form><hr><h2>Izvoz i brisanje analitike</h2><p>Izvoz je dostupan i uz filtere na stranici Analitika. Brisanje ovde uklanja samo tabele analitike, a progres i WP nalozi ostaju sačuvani.</p>';self::form('snd_analytics_clear');
+        submit_button('Sačuvaj podešavanja');echo '</form><hr><h2>Predložena paleta</h2><p>Vrati boje „Šuma i sunce“. Menjaju se samo boje; pravila igre, jezici, registracija i bodovanje ostaju sačuvani.</p>';self::form('snd_control_save');
+        echo '<input type="hidden" name="snd_palette_reset" value="1">';submit_button('Vrati predložene boje','secondary');echo '</form><hr><h2>Izvoz i brisanje analitike</h2><p>Izvoz je dostupan i uz filtere na stranici Analitika. Brisanje ovde uklanja samo tabele analitike, a progres i WP nalozi ostaju sačuvani.</p>';self::form('snd_analytics_clear');
         echo '<label><input type="checkbox" name="confirm" value="1" required> Potvrđujem brisanje celokupne detaljne analitike.</label>';submit_button('Obriši analitiku','delete');echo '</form></div>';
     }
     private static function ranking_settings($s) {
@@ -64,8 +65,15 @@ final class SND_Control {
         $url=wp_nonce_url(add_query_arg(array_merge($f,array('action'=>'snd_ranking_export')),admin_url('admin-post.php')),'snd_ranking_export');echo '<p><a class="button" href="'.esc_url($url).'">Izvezi bodovane partije (CSV)</a></p></div>';
     }
     public static function save() {
-        self::guard('snd_control_save');$input=wp_unslash($_POST['settings']??array());$s=SND_Settings::validate($input);
-        update_option('snd_settings',$s,false);update_option('snd_registration_enabled',!empty($input['registration_enabled']),false);SND_Settings::reset();
+        self::guard('snd_control_save');
+        if(!empty($_POST['snd_palette_reset'])){
+            $s=SND_Settings::all();$defaults=SND_Settings::defaults();
+            foreach(SND_Settings::color_fields() as $key=>$label){$s[$key]=$defaults[$key];}$s['palette_version']=$defaults['palette_version'];
+        }else{
+            $input=wp_unslash($_POST['settings']??array());$s=SND_Settings::validate($input);
+            update_option('snd_registration_enabled',!empty($input['registration_enabled']),false);
+        }
+        update_option('snd_settings',$s,false);SND_Settings::reset();
         wp_safe_redirect(self::url('settings',array('saved'=>1)));exit;
     }
     private static function filter_form($page,$f) {
