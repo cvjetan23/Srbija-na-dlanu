@@ -1,4 +1,23 @@
-# Produkcija — verzija 3.2.0
+# Produkcija — verzija 3.3.0
+
+Verzija **3.3.0 je postavljena i aktivna** na https://cvjetan.dev/srbija-na-dlanu/ — 7. novembar 2026. WordPress je potvrdio uspešno ažuriranje kroz standardni obrazac za zamenu dodatka.
+
+- Proveren izvor: `809ebc5fb7e1c3b4e6b91c64c34164c089fcd2e3`. Proveren izvor i paket: `0b7b5e6a0c9a6a0993c2f1f791d80faec6c25fd2`. Svih 151 datoteka proverene grane poređeno je sa lokalnim izvorom po Git blob SHA i veličini.
+- ZIP SHA256: `51d2f3aeee5cb4796d1a2450fa7ceb91cd6245a50693ac00668bf0e2ab71f328`; 7.894.697 bajtova i 122 datoteke dodatka.
+- [GitHub Actions za izdanje](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/42360742134) prošao je sa MySQL 8, WordPress 7.1.4, PHP 8.3.6, Autoptimize i Slim SEO. Prošla je i [provera na main](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/42360995658).
+- Prošle su **1.023 javne HTTP tvrdnje**: svi pogledi u četiri jezika, odvojena ikonica naloga posle menija i izbora prikaza, tabele/stanovništvo/godine, 30 okružnih celina, 174 opštine/grada sa KiM, oblici i linkovi, metapodaci i privatni keš.
+- Produkcijski `app.css`, `game.css`, `game.js`, `ui.js`, `library.js`, `themes.css`, `atlas.css` i `motion.css` poklapaju se po bajtovima sa proverenim paketom. API vraća 3.3.0.
+- Još **51 HTTP tvrdnja** proverila je jednu novu gostujuću partiju: tri promašaja, tačan četvrti odgovor, geometriju svakog pokušaja na završnoj mapi, populaciju, sedište, zastavu i fotografiju znamenitosti. Ponuđeni nazivi znamenitosti jesu neutralni; podatak o tačnom odgovoru sa zvaničnim nazivom dostupan je posle odgovora. Završen kviz ima sva četiri pregleda odgovora.
+- Ista partija koristila je oba transporta. Ponovljeni start vratio je isti token, ponovljeni potez staru reviziju/409, a nastavak prihvaćeni rezultat bez ponavljanja. Napravljeno je jedno gostujuće vežbanje; produkcijski progres naloga i pravila igre nisu menjani testom.
+- Svih pet administratorskih prikaza dostupno je sa statusom 200, bez PHP grešaka. Administratorska sesija je odjavljena nakon provera.
+
+U lokalnom i MySQL CI Chromium-u prošlo je **169 tvrdnji**, uključujući novu seriju od 56 provera u svetloj/tamnoj temi i na mobilnoj širini 320 px. Proverene su boje pre/posle tri promašaja, oslobađanje busy stanja i nakon odbijenog poteza, jednake visine unosa i dugmeta, redovi 1–6, SVG strelice i ikonice, sloj padajuće liste, nalog na desnoj ivici, progres uz izvore i brojevi svih pokušaja na mapi i rezultatu. Sve četiri dodatne runde proverene su bez zaostalog posvetljivanja. Pregledani su stvarni snimci svetle/tamne teme i mobilnog ruskog prikaza.
+
+Backend je dodatno proverio neutralne nazive u sva četiri jezika, jedinstvene ponuđene odgovore, skrivanje rešenja pre odgovora, očuvane identifikatore starih pitanja, zvanične nazive u pregledu i sanitizaciju novih administratorskih polja: 2.530 tvrdnji. Lokalni HTTP tok prijave, izvoza, podešavanja i privatnosti prošao je sa 301 tvrdnjom.
+
+Fizički telefon i produkcijska isporuka e-pošte nisu proveravani. Produkcijski vizuelni pregled 3.3.0 nije izvršen u Chromium-u: ranija provera u istom Cloud okruženju pokazala je `ERR_CERT_AUTHORITY_INVALID` kroz proxy, a TLS provera nije isključivana. Produkcija je proverena HTTP klijentom sa uključenom TLS proverom, uz identične resurse potvrđene u lokalnom i CI Chromium-u. Broj tvrdnji nije broj nezavisnih scenarija ili uređaja.
+
+# Prethodna produkcijska provera — verzija 3.2.0
 
 Verzija **3.2.0 je postavljena i aktivna** na https://cvjetan.dev/srbija-na-dlanu/ — 7. novembar 2026. ZIP je zamenjen standardnim WP obrascem sa stvarnim nonce-om; WordPress je potvrdio uspešno ažuriranje.
 

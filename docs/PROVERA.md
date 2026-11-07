@@ -6,6 +6,8 @@ Novi `tests/presentation-browser.cjs` prošao je sa 56 tvrdnji u stvarnom Chromi
 
 Uzrok posvetljivanja bio je `aria-busy=true` koji je ostajao posle ponovnog renderovanja. Render sada uvek usklađuje taj atribut sa stvarnim stanjem, a busy stil više ne menja prozirnost cele table. Izvori i autori fotografija ostaju dostupni po ranijim pravilima. Neutralni nazivi primenjuju se pri prikazu, tako da se sadržaj i identifikatori započetih dnevnih partija ne resetuju.
 
+Lokalno i u MySQL GitHub Actions instalaciji prošle su sve backend i JavaScript provere, uključujući 2.530 novih tvrdnji. Ukupno je prošlo 169 Chromium tvrdnji (98 atlas, 15 učitavanje/oporavak, 56 prikaz pokušaja) i 301 lokalna HTTP tvrdnja za prijavu, podešavanja, izvoz i privatnost. [Produkcijska evidencija 3.3.0](LIVE-CHECK.md): 1.074 HTTP tvrdnje i pet administratorskih prikaza.
+
 # Provera verzije 3.2.0
 
 Proverene su tabele opština, kompaktni meni i animacije sa reduced-motion podrškom. Novi testovi `tests/transport.js`, `tests/transport.php` i `tests/polish-browser.cjs` proveravaju rezervni WP AJAX kanal, nonce/vlasništvo, idempotentan početak i odgovor izgubljen posle prihvaćenog poteza. Stvarni browser test se prijavljuje kao izolovani Pretplatnik i potvrđuje jedan upis rezultata. Ispravljeno je i same-origin pravilo prijave u Chrome-u.

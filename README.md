@@ -4,7 +4,7 @@ Zasebna geografska aplikacija unutar WordPress-a: početna, igre za okruge i op�
 
 **[Preuzmi instalacioni ZIP](https://github.com/cvjetan23/Srbija-na-dlanu/raw/refs/heads/main/dist/srbija-na-dlanu.zip)** · [Instalacija](srbija-na-dlanu/INSTALACIJA.md) · [Provere](docs/PROVERA.md) · [Zastave i licence](srbija-na-dlanu/FLAGS.md)
 
-**Verzija 3.2.0 postavljena je i aktivna na [cvjetan.dev/srbija-na-dlanu](https://cvjetan.dev/srbija-na-dlanu/).** Prošlo je 1.009 produkcijskih HTTP tvrdnji i pregled svih pet administratorskih stranica. Lokalno i u CI-ju prošlo je 113 Chromium provera mapa, tabele, jezika, teme, učitavanja i oporavka veze. [Evidencija i granice provere](docs/LIVE-CHECK.md).
+**Verzija 3.3.0 postavljena je i aktivna na [cvjetan.dev/srbija-na-dlanu](https://cvjetan.dev/srbija-na-dlanu/).** Prošle su 1.074 produkcijske HTTP tvrdnje i pregled svih pet administratorskih stranica. Lokalno i u MySQL CI-ju prošlo je 169 Chromium provera, uključujući pokušaje bez posvetljivanja, poravnanje, nalog desno, donji red i numerisanu mapu. [Evidencija i granice provere](docs/LIVE-CHECK.md).
 
 ## Instalacija i ažuriranje
 
@@ -69,7 +69,7 @@ Ispravke dva QA izveštaja obuhvataju deljene linkove sa režimom/datumom, tasta
 
 [Detaljno: nalaz → ispravka → provera](docs/QA-ISPRAVKE.md). Postojeći podaci, 30 okružnih celina, 174 opštine/grada i Kosovo i Metohija ostaju sačuvani. Banka od 30 fotografija i 52 zastave nije proširivana ovom ispravkom; uputstvo i oznake sada dosledno opisuju geografske zamene.
 
-**Ovaj repozitorijum sadrži paket 3.3.0.** Novi kod i paket proveravaju se u izdvojenoj GitHub Actions instalaciji sa Autoptimize i Slim SEO dodacima. Za 3.2.0 izvršen je pregled i funkcionalna provera u Chromium-u, sa prikazima širine 320, 390, 768 i 1440 piksela; fizički telefon nije korišćen.
+**Ovaj repozitorijum sadrži paket 3.3.0.** Novi kod i paket proveravaju se u izdvojenoj GitHub Actions instalaciji sa Autoptimize i Slim SEO dodacima. Za 3.3.0 izvršen je pregled i funkcionalna provera u Chromium-u, sa prikazima širine 320, 390, 768 i 1440 piksela; fizički telefon nije korišćen.
 
 ## Sadržaj i igra
 
