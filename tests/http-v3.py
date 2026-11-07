@@ -5,6 +5,7 @@ ROOT=pathlib.Path(__file__).resolve().parent
 BASE=os.environ.get('SND_TEST_URL','http://127.0.0.1:8899').rstrip('/')
 if urllib.parse.urlparse(BASE).hostname not in ('127.0.0.1','localhost'):raise SystemExit('Refusing non-loopback site.')
 ENV={**os.environ,'SND_TEST_URL':BASE};APP=BASE+'/srbija-na-dlanu/';count=0
+VERSION=re.search(r"define\('SND_VERSION',\s*'([^']+)'",(ROOT.parent/'srbija-na-dlanu/srbija-na-dlanu.php').read_text())[1]
 def check(value,label):
  global count
  count+=1
@@ -40,7 +41,7 @@ try:
    check(s.html['lang']==('sr-Latn' if lang=='sr' else lang),'HTML locale');check('no-store' in h.get('Cache-Control',''),'Locale page uncached')
    check(bool(s.select_one('.snd-app-header .snd-compass')) and len(s.select('.snd-app-nav a'))==5 and bool(s.select_one('.snd-app-header>a:last-child.snd-account-link svg')),'Standalone header, compass and separate account icon')
    check(len(s.select('a[data-language]'))==4 and len(s.select('button[data-snd-theme-choice]'))==3,'Four languages and three themes')
-   check('themes.css?ver=3.5.0' in html and 'ui.js?ver=3.5.0' in html,'Theme and preferences assets loaded')
+   check(('themes.css?ver='+VERSION) in html and ('ui.js?ver='+VERSION) in html,'Theme and preferences assets loaded')
    check(len(s.select('link[hreflang]'))==4 and len(s.head.select('title'))==1,'Localized metadata without duplicate title')
    check(all('lang='+lang in a.get('href','') for a in s.select('.snd-app-nav a')),'Menu preserves language')
    if path=='baza-znanja/':check(s.h1.get_text()==title and len(s.select('.snd-district-card'))==30,'Knowledge base translated with all districts')

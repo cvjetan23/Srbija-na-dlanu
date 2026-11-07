@@ -4,3 +4,6 @@ html[data-snd-theme=dark] .snd-ranking-emblem,html[data-snd-theme=dark] .snd-ran
 
 .snd-app .snd-rank-date{display:flex;flex-direction:row;align-items:center;justify-content:center}.snd-app .snd-rank-date input:not([type=hidden]){width:190px;flex:0 1 190px}.snd-app .snd-rank-date label{width:auto;margin:0}.snd-app .snd-rank-date button{width:auto;margin:0}.snd-rank-mobile-meta{display:none}
 @media(max-width:560px){.snd-ranking-table th:nth-child(4),.snd-ranking-table td:nth-child(4),.snd-ranking-table th:nth-child(5),.snd-ranking-table td:nth-child(5){display:none}.snd-ranking-table tbody th{min-width:0}.snd-ranking-table td:first-child,.snd-ranking-table th:first-child{width:42px;padding-left:8px;padding-right:4px}.snd-ranking-table th:nth-child(3){white-space:normal}.snd-ranking-table td:nth-child(3){white-space:nowrap}.snd-rank-mobile-meta{display:block!important;font-size:11px!important;line-height:1.5;margin-top:5px;color:var(--snd-secondary);font-weight:400}.snd-ranking-table .snd-rank-empty{white-space:normal;overflow-wrap:anywhere}.snd-app .snd-rank-date input:not([type=hidden]){flex:0 1 170px}.snd-rank-date .snd-app-button{font-size:15px;padding:10px 13px}}
+
+/* Native month controls need room for long month names plus the calendar icon. */
+.snd-app .snd-rank-date input[type=month]{width:220px;flex:0 1 220px;max-width:100%}
