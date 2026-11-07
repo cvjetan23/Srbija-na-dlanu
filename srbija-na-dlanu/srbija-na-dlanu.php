@@ -68,8 +68,8 @@ add_action('wp_ajax_snd_game',array('SND_API','ajax'));
 add_action('wp_ajax_nopriv_snd_game',array('SND_API','ajax'));
 function snd_enqueue_game_assets() {
     SND_I18n::enqueue();
-    wp_enqueue_style('snd-ranking',SND_URL.'assets/ranking.css',array('snd-game'),SND_VERSION);
-    wp_enqueue_style('snd-game', SND_URL . 'assets/game.css', array(), SND_VERSION);
+    wp_enqueue_style('snd-ranking',SND_URL.'assets/ranking.css',array(),SND_VERSION);
+    wp_enqueue_style('snd-game', SND_URL . 'assets/game.css', array('snd-ranking'), SND_VERSION);
     wp_enqueue_script('snd-game', SND_URL . 'assets/game.js', array('snd-i18n'), SND_VERSION, true);
 }
 

@@ -27,7 +27,8 @@ Odvojen prolaz posle implementacije, 7. novembra 2026. Predprodukcijska provera 
 | Nadimak i privatnost | Podrazumevani pseudonim ne otkriva ime za prijavu ili e-poštu. Sopstveni nadimak se sanitizuje. Stvarni obrazac može sakriti postojeće i buduće rezultate; tuđi nalog nije moguće menjati. |
 | Administracija | Pregled i CSV, zbir po igrama/režimima, podešavanje težina, boja, pozadine i zastava. Pretplatnik nema pristup pregledu/izvozu; pogrešan nonce vraća 403. |
 | Čuvanje i brisanje | Bodovi ne zavise od uključenosti/roka analitike. Čišćenje uklanja samo stare nezavršene rezervacije; završeni bodovi ostaju. WP privatni izvoz i brisanje uključuju tabelu i profil. |
-| Stara istorija | Nema naknadno izmišljenih bodova. Započeta partija i dnevna pravila ostaju zamrznuti; korisnik može dobrovoljno otvoriti novo vežbanje. |
+| Stara istorija | Nema naknadno izmišljenih bodova. Započeta partija i dnevna pravila ostaju zamrznuti; jasno obaveštenje nudi novo vežbanje sa bodovanjem i obnovljenim zastavama, bez prisilnog resetovanja. |
+| Resursi teme i buildera | Izdvojena MySQL provera otkrila je povratnu zavisnost novih stilova od igre u prethodno odbačenom renderovanju. Zavisnost je okrenuta: igra zavisi od stilova bodova. Regresija potvrđuje da druge stranice ne dobijaju stil igre. |
 | Jezici, izvori i SEO | Nova stranica i bodovanje su prevedeni na sva četiri jezika; izbori čuvaju jezik. Rang HTML nema privatne ID-eve ili adrese. Canonical ostaje osnovna rang stranica, a promenljivi prikaz se ne kešira. |
 | Ažuriranje | Paket proverava sadržaj svake datoteke, verziju i SHA256. Produkcija se postavlja tek nakon provera; onda slede novi pregled javnih stranica i administracije, stvarna gostujuća partija i odjava održavanja. |
 

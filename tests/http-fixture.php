@@ -13,7 +13,7 @@ if($op==='setup'){
 }elseif(in_array($op,array('scenario','rank_scenario'),true)){
     $fixture_user=0;if($op==='rank_scenario'){if(!in_array($a['user']??'',array('snd-http-a','snd-http-b'),true)){exit(1);}$u=get_user_by('login',$a['user']);if(!$u){exit(1);}$fixture_user=$u->ID;}wp_set_current_user($fixture_user);$s=SND_Game::load($a['token']);$t=SND_Data::get()['territories'][$a['target']]??null;
     if(is_wp_error($s) || !$t || (int)($s['owner']??0)!==(int)$fixture_user || $s['challenge']['mode']!=='practice' || $s['challenge']['kind']!==$t['kind']){exit(1);}
-    $pool=SND_Data::pool($t['kind']);if($t['id']==='m-beograd' && in_array('m-beograd',SND_Data::retired_ids(),true)){$seed=require SND_DIR.'data/territories.php';$pool=array();foreach($seed['territories'] as $row){if($row['kind']==='municipality'){$pool[$row['id']]=$row;}}$s['challenge']['catalog']=$pool;}
+    $pool=SND_Data::pool($t['kind']);if($t['id']==='m-beograd' && in_array('m-beograd',SND_Data::retired_ids(),true)){$seed=require SND_DIR.'data/territories.php';$pool=array();foreach($seed['territories'] as $row){if($row['kind']==='municipality'){$pool[$row['id']]=$row;}}$s['challenge']['catalog']=$pool;unset($s['scoring']);$s['rank_eligible']=false;}
     $s['challenge']['target']=$t;$s['challenge']['questions']=SND_Game::questions($t,$pool,SND_Data::pool('district'),'presentation:'.$t['id']);SND_Game::persist($a['token'],$s);echo wp_json_encode(array('target'=>$t['id']));
 }elseif($op==='mail'){echo wp_json_encode(get_option('snd_http_mail'));
 }elseif($op==='settings'){echo wp_json_encode(SND_Settings::all());

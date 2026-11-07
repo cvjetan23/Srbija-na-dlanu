@@ -2378,6 +2378,11 @@ return json_decode(<<<'SND_LANGUAGES'
     "en": "Games: {games} · Average: {average}",
     "de": "Partien: {games} · Schnitt: {average}",
     "ru": "Игры: {games} · Среднее: {average}"
+  },
+  "Nova verzija donosi bodovanje i obnovljenu rundu zastava. Nastavi ovu partiju ili započni novo vežbanje.": {
+    "en": "The update adds points and a restored flag round. Continue this game or start a new practice.",
+    "de": "Das Update bringt Punkte und eine erneuerte Flaggenrunde. Setze diese Partie fort oder starte eine neue Übung.",
+    "ru": "Обновление добавляет баллы и возвращает раунд с флагами. Продолжите эту игру или начните новую тренировку."
   }
 }
 SND_LANGUAGES
