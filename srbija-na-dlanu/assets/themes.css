@@ -79,3 +79,5 @@ html[data-snd-theme=dark] .snd-app .snd-rule-number{color:var(--snd-highlight,#F
 .snd-app .snd-game .snd-mode .is-active{box-shadow:inset 0 -2px var(--snd-direction)}
 .snd-app .snd-home-rules .snd-rule-number{border-color:var(--snd-control-border)}
 .snd-app .snd-card-action:focus-visible,.snd-app .snd-home-game:focus-visible{outline:3px solid var(--snd-direction);outline-offset:4px}
+
+@media(max-width:560px){.snd-app .snd-home-games{grid-template-columns:repeat(2,minmax(0,1fr))}.snd-app .snd-home-game{min-width:0}.snd-app .snd-home-game .snd-card-action{gap:8px;padding:10px 8px}.snd-app .snd-home-game .snd-card-action svg{width:24px;height:24px;flex-shrink:0}}

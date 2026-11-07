@@ -20,6 +20,7 @@ async function scenario(browser,kind,target){const context=await browser.newCont
    for(const y of [0,800]){await p.evaluate(y=>scrollTo(0,y),y);check(await p.locator('.snd-river-background').evaluate(n=>{const b=n.getBoundingClientRect(),s=getComputedStyle(n);return b.x===0&&b.y===0&&b.width===innerWidth&&b.height===innerHeight&&s.maskImage.includes('rivers.svg')&&s.maskSize==='cover';}),'River layer covers wide viewport while scrolling '+theme+' '+y);}
    await shot(p,'sunrise-home-'+theme);
   }
+  await p.setViewportSize({width:320,height:844});for(const lang of ['sr','en','de','ru']){await p.goto(app+'?lang='+lang+'&snd_theme=dark');check(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'Home play actions fit translated labels '+lang);}await p.setViewportSize({width:2560,height:1440});
   const borough=await scenario(browser,'municipality','m-bg-vracar');
   for(const name of ['Stari grad','Savski venac','Novi Beograd'])await guess(borough.p,name);
   check(await borough.p.locator('.snd-history .snd-direction').first().evaluate(n=>getComputedStyle(n).color==='rgb(255, 212, 71)'),'Sunrise direction arrows');
