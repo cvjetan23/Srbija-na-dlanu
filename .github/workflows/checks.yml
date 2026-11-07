@@ -1,7 +1,7 @@
 name: WordPress checks and package
 on:
   push:
-    branches: [main, feature/v3-7-forest]
+    branches: [main, feature/v3-8-buttons]
   workflow_dispatch:
 concurrency:
   group: wp-checks-${{ github.ref }}
@@ -99,7 +99,7 @@ jobs:
             dist/srbija-na-dlanu.zip
             dist/SHA256SUMS
   package:
-    if: github.ref == 'refs/heads/feature/v3-7-forest'
+    if: github.ref == 'refs/heads/feature/v3-8-buttons'
     needs: check
     runs-on: ubuntu-24.04
     permissions:
@@ -116,5 +116,5 @@ jobs:
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git commit -m "Build verified WordPress installation package"
-            git push origin HEAD:feature/v3-7-forest
+            git push origin HEAD:feature/v3-8-buttons
           fi

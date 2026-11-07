@@ -41,8 +41,8 @@ final class SND_Settings {
     }
     public static function reset(){self::$cache=null;}
     public static function color_fields() {
-        return array('primary_color'=>'Šumska zelena — glavna dugmad i oblici',
-            'highlight_color'=>'Sunrise — akcenti, strelice i tačni odgovori',
+        return array('primary_color'=>'Šumska zelena — dugmad, tačni odgovori i oblici',
+            'highlight_color'=>'Sunrise — akcenti, strelice i netačni odgovori',
             'ink_color'=>'Borova — tamna pozadina i tekst svetle teme',
             'dark_surface_color'=>'Krošnja — tamne kartice i polja',
             'surface_color'=>'Bela — svetle kartice i tekst tamne teme',

@@ -169,3 +169,11 @@ body:not(.snd-app-body) .snd-game{--snd-brand:#2d6a4f;--snd-accent:#2d6a4f;--snd
 .snd-game .snd-update-notice{margin:20px 0 0;padding:14px 16px;border:1px solid var(--snd-border);border-radius:7px;background:var(--snd-soft);color:var(--snd-text);font-size:14px}.snd-game .snd-update-notice .snd-text-button{font-size:14px;margin-top:7px}
 
 .snd-source .snd-action-icon{width:14px;height:14px;vertical-align:middle;margin-left:3px}.snd-direction>.snd-action-icon{width:22px;height:22px}
+
+.snd-game .snd-flag-card{position:relative}
+.snd-game .snd-flag-zoom{position:absolute;z-index:2;top:18px;right:18px;display:grid;place-items:center;width:40px;height:40px;min-width:40px;min-height:40px;margin:0;padding:9px;border:1px solid var(--snd-control-border,var(--snd-brand));border-radius:12px;background:var(--snd-brand,#2d6a4f);color:var(--snd-highlight,#FFD447);text-decoration:none;box-shadow:none;cursor:zoom-in}
+.snd-game .snd-flag-zoom .snd-action-icon{width:20px;height:20px}
+.snd-game .snd-flag-zoom:hover{outline:2px solid var(--snd-highlight,#FFD447);outline-offset:1px}
+.snd-app .snd-game .snd-flag-card .snd-flag-option{padding:12px 12px 8px;min-height:170px;line-height:24px}
+.snd-app .snd-game .snd-flag-option .snd-option-label{font-size:16px}
+@media(max-width:560px){.snd-game .snd-flag-zoom{top:14px;right:14px}.snd-app .snd-game .snd-flag-card .snd-flag-option{padding:9px 9px 8px;min-height:135px}}
