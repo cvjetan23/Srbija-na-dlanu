@@ -23,7 +23,9 @@ async function clickRegion(page,selector){
    points.sort((a,b)=>a.dist-b.dist);if(!points.length)return null;
    const p=points[0].p.matrixTransform(shape.getScreenCTM());return {x:p.x,y:p.y};
  });check(point,'SVG has clickable interior');
- const target=await region.getAttribute('href');await Promise.all([page.waitForURL(target),page.mouse.click(point.x,point.y)]);
+ const target=await region.getAttribute('href'),bounds=await region.boundingBox();assert.ok(bounds,'SVG link has a bounding box');
+ try{await Promise.all([page.waitForURL(target,{waitUntil:'domcontentloaded'}),region.click({position:{x:point.x-bounds.x,y:point.y-bounds.y}})]);}
+ catch(error){if(output){fs.mkdirSync(output,{recursive:true});await page.screenshot({path:path.join(output,'failed-map-navigation.png'),animations:'disabled'}).catch(()=>{});}console.error(JSON.stringify({target,actual:page.url(),point,hit:await page.evaluate(({x,y})=>{const n=document.elementFromPoint(x,y);return n?{tag:n.tagName,cls:n.getAttribute('class'),link:n.closest('a')?.getAttribute('href')}:null;},point).catch(()=>null)}));throw error;}
  await page.locator('.snd-preferences').waitFor();
 }
 (async()=>{
