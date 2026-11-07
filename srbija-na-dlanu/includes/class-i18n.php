@@ -88,6 +88,18 @@ final class SND_I18n {
         foreach(SND_Data::get()['territories'] as $t){if(($t['landmark']['name']??'')===$name && !empty($t['landmark']['translations'][self::lang()]['name'])){return $t['landmark']['translations'][self::lang()]['name'];}}
         return $facts[$name][self::lang()]['name']??$name;
     }
+    public static function landmark_quiz_name($name,$language=null) {
+        $language=$language?:self::lang();
+        foreach(SND_Data::get()['territories'] as $t){$l=$t['landmark']??array();if(($l['name']??'')===$name){
+            if(!empty($l['translations'][$language]['quiz_name'])){return $l['translations'][$language]['quiz_name'];}
+            if($language==='sr' && !empty($l['quiz_name'])){return $l['quiz_name'];}
+        }}
+        static $labels=null;if($labels===null){$labels=require SND_DIR.'data/landmark-labels.php';}
+        if(isset($labels[$name][$language])){return $labels[$name][$language];}
+        $facts=self::facts();
+        foreach(SND_Data::get()['territories'] as $t){if(($t['landmark']['name']??'')===$name && !empty($t['landmark']['translations'][$language]['name'])){return $t['landmark']['translations'][$language]['name'];}}
+        return $facts[$name][$language]['name']??$name;
+    }
     private static function facts(){if(self::$facts===null){self::$facts=require SND_DIR.'data/landmark-translations.php';}return self::$facts;}
     public static function fact($territory) {
         $landmark=$territory['landmark']??array();$facts=self::facts();$name=$landmark['name']??'';
@@ -123,7 +135,7 @@ final class SND_I18n {
             $vars['place']=self::place($meta['place']??($target['kind']==='district'?$target['seat']:$target['name']));
             $q['title']=self::t('Koja je zastava mesta „{place}“?',$vars);$q['correct_label']=self::t('Zastava mesta {place}',$vars);
             $q['explanation']=self::t('Prikazana je zastava mesta {place}.',$vars);
-        }elseif($type==='landmark'){$q['title']=self::t('Koja je znamenitost na fotografiji?');$q['explanation']=self::fact($target);
+        }elseif($type==='landmark'){$q['title']=self::t('Koja je znamenitost na fotografiji?');$q['explanation']=self::fact($target);$q['correct_label']=self::landmark_name($correct);
         }elseif($type==='distance'){
             preg_match_all('/„([^“]+)“/u',$original['title'],$m);$vars['anchor']=self::text($meta['anchor']??($m[1][1]??''));
             preg_match('/približno (\d+) km/u',$original['explanation'],$distance);$vars['km']=self::number($meta['km']??($distance[1]??0));
@@ -138,7 +150,7 @@ final class SND_I18n {
             if($type==='population' || $type==='distance'){
                 if(preg_match('/^Oko ([\d.]+)( km)?$/uD',$option['label'],$m)){$option['label']=self::t('Oko {value}',array('value'=>self::number((int)str_replace('.','',$m[1])))).(!empty($m[2])?' km':'');}
             }elseif($type==='orientation'){$option['label']=self::direction($option['label']);}
-            elseif($type==='landmark'){$option['label']=self::landmark_name($option['label']);}
+            elseif($type==='landmark'){$option['label']=self::landmark_quiz_name($option['label']);}
             elseif($type==='region'){$option['label']=self::region($option['label']);}
             else{$option['label']=self::text(self::place($option['label']));}
         }

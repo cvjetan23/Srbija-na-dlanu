@@ -10,6 +10,10 @@ if($op==='setup'){
     wp_mkdir_p(WPMU_PLUGIN_DIR);file_put_contents(WPMU_PLUGIN_DIR.'/snd-http-mail.php',"<?php if(in_array(wp_get_environment_type(),array('local','development'),true)){add_filter('pre_wp_mail',function(\$r,\$a){update_option('snd_http_mail',\$a,false);return true;},10,2);}");
     global $wpdb;foreach($wpdb->get_col("SELECT option_name FROM {$wpdb->options} WHERE option_name LIKE '_transient_snd_rate_%'") as $key){delete_option($key);}flush_rewrite_rules(false);echo wp_json_encode($pages);
 }elseif($op==='state'){$u=get_user_by('login',$a['user']??'');if($u){wp_set_current_user($u->ID);}$s=SND_Game::load($a['token']);echo wp_json_encode(is_wp_error($s)?array('error'=>$s->get_error_code()):$s);
+}elseif($op==='scenario'){
+    wp_set_current_user(0);$s=SND_Game::load($a['token']);$t=SND_Data::get()['territories'][$a['target']]??null;
+    if(is_wp_error($s) || !$t || !empty($s['owner']) || $s['challenge']['mode']!=='practice' || $s['challenge']['kind']!==$t['kind']){exit(1);}
+    $s['challenge']['target']=$t;$s['challenge']['questions']=SND_Game::questions($t,SND_Data::pool($t['kind']),SND_Data::pool('district'),'presentation:'.$t['id']);SND_Game::persist($a['token'],$s);echo wp_json_encode(array('target'=>$t['id']));
 }elseif($op==='mail'){echo wp_json_encode(get_option('snd_http_mail'));
 }elseif($op==='settings'){echo wp_json_encode(SND_Settings::all());
 }elseif($op==='cleanup'){

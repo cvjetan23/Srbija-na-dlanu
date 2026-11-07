@@ -1,3 +1,11 @@
+# Provera verzije 3.3.0
+
+Novi `tests/presentation.php` proverava sve ponuđene nazive fotografisanih znamenitosti na četiri jezika, jedinstvene opcije, nepromenjene identifikatore, skrivanje rešenja do odgovora, zvanično ime posle odgovora, sanitizaciju novih polja i ikonicu naloga. Lokalno je prošlo 2.530 tvrdnji.
+
+Novi `tests/presentation-browser.cjs` prošao je sa 56 tvrdnji u stvarnom Chromium-u: unapred popunjena numeracija šest redova, tri promašaja bez promene boje pozadine/oblika i bez ostavljenog busy stanja, odbijen potez bez promene broja pokušaja, poravnanje polja i dugmeta, SVG strelice/ikonice, padajuća lista iznad donjeg reda, račun desno, progres/izvori u istom redu i sva četiri pokušaja na završnoj mapi. Isto je ponovljeno u svetloj/tamnoj temi; odgovori u svim dodatnim rundama ne ostavljaju posvetljenu tablu. Ruski mobilni prikaz je proveren na širini 320 px. Snimci su vizuelno pregledani; fizički telefon nije korišćen.
+
+Uzrok posvetljivanja bio je `aria-busy=true` koji je ostajao posle ponovnog renderovanja. Render sada uvek usklađuje taj atribut sa stvarnim stanjem, a busy stil više ne menja prozirnost cele table. Izvori i autori fotografija ostaju dostupni po ranijim pravilima. Neutralni nazivi primenjuju se pri prikazu, tako da se sadržaj i identifikatori započetih dnevnih partija ne resetuju.
+
 # Provera verzije 3.2.0
 
 Proverene su tabele opština, kompaktni meni i animacije sa reduced-motion podrškom. Novi testovi `tests/transport.js`, `tests/transport.php` i `tests/polish-browser.cjs` proveravaju rezervni WP AJAX kanal, nonce/vlasništvo, idempotentan početak i odgovor izgubljen posle prihvaćenog poteza. Stvarni browser test se prijavljuje kao izolovani Pretplatnik i potvrđuje jedan upis rezultata. Ispravljeno je i same-origin pravilo prijave u Chrome-u.

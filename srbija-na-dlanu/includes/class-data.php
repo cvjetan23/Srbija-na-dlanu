@@ -85,9 +85,10 @@ final class SND_Data {
                 }
                 if (empty($l['credit']) || empty($l['license']) || empty($l['source_url'])) { return new WP_Error('snd_credit', 'Fotografija zahteva autora, licencu i izvor: ' . $id); }
                 foreach (array('name', 'credit', 'license', 'fact') as $key) { $row['landmark'][$key] = sanitize_text_field($l[$key] ?? ''); }
+                if(isset($l['quiz_name']) && is_string($l['quiz_name'])){$row['landmark']['quiz_name']=sanitize_text_field($l['quiz_name']);}
                 $row['landmark']['image'] = $image;
                 $row['landmark']['source_url'] = esc_url_raw($l['source_url'], array('https'));
-                foreach(array('sr','en','de','ru') as $lang){foreach(array('name','fact') as $field){
+                foreach(array('sr','en','de','ru') as $lang){foreach(array('name','fact','quiz_name') as $field){
                     if(!empty($l['translations'][$lang][$field]) && is_string($l['translations'][$lang][$field])){$row['landmark']['translations'][$lang][$field]=sanitize_text_field($l['translations'][$lang][$field]);}
                 }}
             }

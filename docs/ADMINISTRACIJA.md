@@ -1,4 +1,4 @@
-# Administracija 3.0.0
+# Administracija
 
 Sve funkcije koriste postojeću WordPress bazu i WP korisnike. Ne postoji spoljašnji servis za analitiku. Pristup administraciji i izvozu zahteva `manage_options`; igrači ne vide tuđu istoriju.
 
@@ -22,3 +22,6 @@ Stariji dnevni rezultati uvoze se u grupama do 25 naloga preko WP-Cron-a i imaju
 Podrazumevano se detaljna analitika čuva 365 dana; podesivo 7–3650 ili 0 za neograničeno. Dnevno čišćenje ne briše progres na nalogu. Brisanje WP naloga podrazumevano briše njegovu analitiku; ako se to isključi, zapisi se anonimizuju. WP izvoz/brisanje ličnih podataka obuhvata igru. Ručno brisanje celokupne analitike zahteva administratorski nonce i posebno označenu potvrdu; stariji zbirni rezultati se zatim ne uvoze ponovo automatski.
 
 Backup obuhvata WP `options`, `usermeta`, `{prefix}snd_games`, `{prefix}snd_events` i lokalne medije. JSON geografske baze obuhvata sadržaj i prevode znamenitosti, a ne korisničke naloge/analitiku. Deaktivacija čuva podatke.
+
+
+Od verzije 3.3.0, uređivanje teritorije uključuje poseban naziv znamenitosti u ponuđenim odgovorima, na srpskom, engleskom, nemačkom i ruskom. Upiši naziv bez grada koji bi otkrio rešenje; puni zvanični naziv i objašnjenje ostaju odvojeni. Prazno polje koristi ugrađeni neutralni naziv, a nova prilagođena znamenitost njen zvanični naziv dok ne uneseš neutralni. Podatak se prenosi JSON izvozom/uvozom baze.

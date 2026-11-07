@@ -43,7 +43,7 @@
 .snd-game .snd-question-heading h2{font-size:18px;margin:0}
 .snd-game .snd-turn{font-size:13px;color:var(--snd-muted);font-variant-numeric:tabular-nums;white-space:nowrap}
 .snd-game .snd-panel-copy{font-size:13px;color:var(--snd-muted);line-height:1.6;margin:0 0 16px}
-.snd-game .snd-guess-form{display:grid;grid-template-columns:minmax(0,1fr) 96px;gap:8px;margin:0;text-align:left}
+.snd-game .snd-guess-form{display:grid;align-items:start;grid-template-columns:minmax(0,1fr) 96px;gap:8px;margin:0;text-align:left}
 .snd-game .snd-search-wrap{position:relative;min-width:0}
 .snd-game .snd-search-wrap input{display:block;appearance:none;width:100%;height:46px;min-height:46px;margin:0;padding:10px 12px;border:1px solid #bcc9ba;border-radius:5px;background:#fff;color:var(--snd-ink);font-size:16px;line-height:24px;box-shadow:none}
 .snd-game .snd-search-wrap input::placeholder{color:#596755;font-size:14px;opacity:1}
@@ -141,3 +141,17 @@
 .snd-game .snd-media-error button{display:inline-block;width:auto;font-size:15px;text-decoration:underline;padding:8px;min-height:44px}
 .snd-game .snd-suggestions{touch-action:pan-y}
 .snd-game .snd-no-matches{color:#52644a}
+
+/* Stable attempt slots and controls. Busy feedback never changes board opacity. */
+.snd-game .snd-action-icon{display:inline-block;width:19px;height:19px;flex-shrink:0;vertical-align:middle}
+.snd-game .snd-text-button,.snd-game .snd-secondary,.snd-game .snd-footer button{display:flex;align-items:center;justify-content:center;gap:8px}
+.snd-game .snd-primary{gap:9px}.snd-game .snd-icon-button{display:grid;place-items:center}.snd-game .snd-icon-button .snd-action-icon{width:21px;height:21px}
+.snd-game .snd-guess-form .snd-primary,.snd-game .snd-guess-form .snd-search-wrap input{height:52px;min-height:52px;max-height:52px;box-sizing:border-box;line-height:1.4;padding-top:10px;padding-bottom:10px}
+.snd-game .snd-history li{min-height:47px}.snd-game .snd-history .is-empty{background:var(--snd-surface,#fff);border-style:dashed}.snd-game .snd-history .is-current{border-style:solid;border-color:var(--snd-accent,#355d3d);background:var(--snd-soft,#edf3e8)}.snd-game .snd-empty-line{grid-column:2/-1;display:block;max-width:105px;width:45%;height:1px;background:var(--snd-border,#e0e5e0)}
+.snd-game .snd-guess-number{font-size:13px;font-weight:600}.snd-game .snd-hint{display:flex;align-items:center;justify-content:center;gap:8px}
+.snd-game .snd-footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px 20px;margin-top:auto;padding-top:30px}.snd-game .snd-footer .snd-save-status{display:flex;align-items:baseline;justify-content:center;flex-wrap:wrap;gap:0 5px;font-size:13px!important;line-height:1.6;margin:0!important;text-align:left}.snd-game .snd-footer button{font-size:13px;line-height:1.6;white-space:nowrap}
+.snd-game .snd-context-map{width:310px;height:410px}.snd-game .snd-map-caption{list-style:none;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 16px;padding:0;margin:14px 0 0;font-size:13px}.snd-game .snd-map-caption li{display:flex;align-items:center;gap:6px}.snd-game .snd-map-caption .snd-map-number{display:inline-grid;place-items:center;width:23px;height:23px;border:1px solid #a78553;border-radius:50%;font-size:12px;font-weight:700;color:var(--snd-text,#26372a);background:var(--snd-surface,#fff)}.snd-game .snd-map-caption .snd-map-number::before{content:none}.snd-game .snd-map-caption .snd-legend-target .snd-map-number{border-color:var(--snd-accent,#355d3d)}
+.snd-map-markers{pointer-events:none}.snd-map-markers circle{fill:var(--snd-surface,#fff);stroke:#a78553;stroke-width:2;vector-effect:non-scaling-stroke}.snd-map-markers line{stroke:var(--snd-text,#26372a);stroke-width:1;vector-effect:non-scaling-stroke}.snd-map-markers text{font-size:29px;font-weight:750;fill:var(--snd-text,#26372a);stroke:none}.snd-map-markers .is-correct circle{fill:var(--snd-accent,#355d3d);stroke:var(--snd-accent,#355d3d)}.snd-map-markers .is-correct text{fill:var(--snd-on-accent,#fff)}.snd-game .snd-map-answer{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:9px;font-size:13px}.snd-map-answer>span{width:8px;height:8px;border-radius:50%;background:var(--snd-accent,#355d3d)}
+@media(max-width:600px){.snd-game .snd-footer{justify-content:center}.snd-game .snd-footer .snd-save-status{text-align:center}.snd-game .snd-history li{min-height:44px}.snd-game .snd-secondary-actions{gap:8px;flex-wrap:wrap}.snd-game .snd-context-map{width:270px;height:360px}}
+
+.snd-game .snd-direction{color:var(--snd-accent,#4a6b39)}.snd-direction-icon{display:block;width:24px;height:24px}.snd-game .snd-guess-number{color:var(--snd-secondary,#586750)}html[data-snd-theme=dark] .snd-map-markers .is-correct text{fill:var(--snd-on-dark-accent,#13210f)}

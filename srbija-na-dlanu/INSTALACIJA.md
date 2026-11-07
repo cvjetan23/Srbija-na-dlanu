@@ -1,4 +1,4 @@
-# Instalacija i ažuriranje na 3.2.0
+# Instalacija i ažuriranje na 3.3.0
 
 1. Preuzmi instalacioni `srbija-na-dlanu.zip` iz direktorijuma `dist` repozitorijuma.
 2. WordPress → **Dodaci → Dodaj novi → Otpremi dodatak**. Izaberi ZIP, instaliraj; pri ažuriranju potvrdi **Zameni postojeći dodatak**. Aktiviraj ako je potrebno.
@@ -18,6 +18,8 @@ Registracija pravi Pretplatnika i šalje WP poruku sa linkom za postavljanje loz
 Rezultati i aktivne partije prijavljenih korisnika čuvaju se na nalogu. Drugi uređaj nastavlja istu partiju; svaka igra ima svoj dnevni izazov i vežbanje. Gostujuća trenutna partija vezuje se za nalog samo kada nema ranije aktivne partije tog tipa. Lokalna istorija prethodnih gostujućih rezultata ne uvozi se kao serverski verifikovan rezultat.
 
 ## Uređivanje sadržaja
+
+Od 3.3.0 uz znamenitost postoje polja **Naziv u ponuđenim odgovorima — bez imena grada** i odgovarajuća polja za engleski, nemački i ruski. Ona menjaju tekst opcija u kvizu. Puni naziv znamenitosti i zanimljivost ostaju zasebni, za bazu i objašnjenje posle odgovora. Ugrađena baza koristi 30 neutralnih naziva u svakom jeziku; postojeći identifikatori odgovora se ne menjaju. Broj stalno prikazanih polja prati **Podešavanja → Broj pokušaja**.
 
 Meni **Srbija na dlanu** sadrži sve teritorije. Možeš menjati naziv, druge nazive, sedište, stanovništvo/godinu/izvor, fotografiju i zanimljivost. Za zastavu unesi HTTPS adresu slike iz WP biblioteke, autora, licencu i stranicu izvora. Zastava sedišta okruga i odgovarajućeg grada deli isti zapis. Moguće je vratiti ugrađenu zastavu.
 

@@ -18,7 +18,7 @@ for(const lang of Object.keys(labels)){
  check(!L.text('Pokušaj 2 od 6').includes('{'),'Dynamic placeholder filled '+lang);
  const g=Object.create(Game.prototype);g.state={kind:'district',mode:'practice',stage:'guess',question_count:0,max_guesses:3,hint_after:1,hint_enabled:false,guesses:[{id:'a',name:'A',km:3,direction:{arrow:'↑',name:'North'}}],hint:false};g.root={id:'v3'};
  check(!g.guessPanel().includes('data-cmd="hint"'),'Disabled help hidden '+lang);g.state.hint_enabled=true;check(g.guessPanel().includes('data-cmd="hint"'),'Custom hint threshold '+lang);
- g.state={...g.state,stage:'reveal',territory:{name:'A'},solved:false};check(g.panel().includes('data-cmd="next">Rezultat'),'Empty quiz leads to result '+lang);
+ g.state={...g.state,stage:'reveal',territory:{name:'A'},solved:false};check(g.panel().includes('<span>Rezultat</span>'),'Empty quiz leads to result '+lang);
 }
 L.configure({language:'en',dictionary:{'Prijava':'<img src=x onerror=alert(1)>','Pogođeno iz {count}. pokušaja.':'Attempt {count}.'}});
 check(L.html('<p>Prijava</p>').includes('&lt;img'),'Translation rendered as escaped text');check(L.text('Pogođeno iz 3. pokušaja.')==='Attempt 3.','Dynamic result text');

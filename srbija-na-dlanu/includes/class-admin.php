@@ -42,6 +42,7 @@ final class SND_Admin {
             self::field('population_source', 'Izvor stanovništva (HTTPS)', $target['population_source'] ?? '', 'url');
             $l = $target['landmark'] ?? array();
             self::field('landmark_name', 'Naziv znamenitosti', $l['name'] ?? '');
+            self::field('landmark_quiz_name','Naziv u ponuđenim odgovorima — bez imena grada',SND_I18n::landmark_quiz_name($l['name']??'','sr'));
             self::field('landmark_image', 'URL fotografije (HTTPS) ili photos/ime.jpg', $l['image'] ?? '');
             echo '<tr><th>Fotografija iz biblioteke</th><td><button type="button" class="button" id="snd-select-image">Izaberi fotografiju</button><p class="description">Dodaj samo fotografiju za koju imaš pravo korišćenja. Upiši autora, licencu i stranicu izvora.</p></td></tr>';
             self::field('landmark_credit', 'Autor fotografije', $l['credit'] ?? '');
@@ -50,6 +51,7 @@ final class SND_Admin {
             self::field('landmark_fact', 'Kratka zanimljivost / objašnjenje', $l['fact'] ?? '');
             foreach(array('en'=>'English','de'=>'Deutsch','ru'=>'Русский') as $lang=>$label){
                 self::field('landmark_'.$lang.'_name','Naziv znamenitosti — '.$label,$l['translations'][$lang]['name']??'');
+                self::field('landmark_'.$lang.'_quiz_name','Naziv u odgovorima, bez imena grada — '.$label,SND_I18n::landmark_quiz_name($l['name']??'',$lang));
                 self::field('landmark_'.$lang.'_fact','Zanimljivost — '.$label,$l['translations'][$lang]['fact']??'');
             }
             echo '<tr><th>Prevodi sadržaja</th><td>Prazno polje koristi ugrađeni prevod. Kada promeniš izvornu zanimljivost, dodaj i njene prevode; bez njih se prikazuje izvorni tekst.</td></tr>';
@@ -100,8 +102,8 @@ final class SND_Admin {
             $t['population'] = (int) ($_POST['population'] ?? 0); $t['year'] = (int) ($_POST['year'] ?? 0);
             $t['aliases'] = array_filter(array_map('trim', explode(',', wp_unslash($_POST['aliases'] ?? ''))));
             $t['disabled'] = !empty($_POST['disabled']); $t['landmark'] = array();
-            foreach (array('name', 'image', 'credit', 'license', 'source_url', 'fact') as $key) { $t['landmark'][$key] = wp_unslash($_POST['landmark_' . $key] ?? ''); }
-            foreach(array('en','de','ru') as $lang){foreach(array('name','fact') as $field){$value=$_POST['landmark_'.$lang.'_'.$field]??'';if(is_string($value) && $value!==''){$t['landmark']['translations'][$lang][$field]=wp_unslash($value);}}}
+            foreach (array('name', 'quiz_name', 'image', 'credit', 'license', 'source_url', 'fact') as $key) { $t['landmark'][$key] = wp_unslash($_POST['landmark_' . $key] ?? ''); }
+            foreach(array('en','de','ru') as $lang){foreach(array('name','fact','quiz_name') as $field){$value=$_POST['landmark_'.$lang.'_'.$field]??'';if(is_string($value) && $value!==''){$t['landmark']['translations'][$lang][$field]=wp_unslash($value);}}}
         }
         unset($t);
         if (!$found) { self::redirect('Teritorija nije pronađena.', true); }

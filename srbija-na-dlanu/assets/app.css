@@ -136,3 +136,9 @@ html:has(body.snd-app-body){margin-top:0!important}
 .snd-region-table{width:100%;border-collapse:collapse;margin:24px 0;font-size:16px}
 .snd-region-table th,.snd-region-table td{padding:12px;border-bottom:1px solid #dbe5d4;text-align:left}
 .snd-region-note{font-size:16px!important;color:#52664a}
+
+.snd-app .snd-app-header .snd-account-link{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;order:2;width:44px;height:44px;border-radius:50%;color:var(--snd-text,#26372a)}.snd-account-link svg{width:24px;height:24px}.snd-account-link:hover,.snd-account-link[aria-current=page]{background:var(--snd-soft,#edf3e8)}
+.snd-view-district,.snd-view-municipality{display:flex;flex-direction:column}.snd-app .snd-game{display:flex;flex-direction:column;flex:1;width:100%}
+@media(min-width:561px) and (max-width:1080px){.snd-app .snd-app-header{display:grid;grid-template-columns:minmax(0,1fr) auto 44px;align-items:center;gap:14px 18px;flex-direction:row}.snd-app .snd-app-header .snd-app-nav{grid-column:1/-1;grid-row:2}.snd-app .snd-app-header .snd-preferences{grid-column:2;grid-row:1;margin:0}.snd-app .snd-app-header .snd-account-link{grid-column:3;grid-row:1}.snd-app .snd-app-header .snd-app-brand{grid-column:1;grid-row:1;margin:0}}
+@media(max-width:800px){.snd-app .snd-app-header{display:grid;grid-template-columns:minmax(0,1fr) 44px;align-items:center;justify-items:stretch;gap:14px 12px}.snd-app .snd-app-header .snd-app-brand{grid-column:1;grid-row:1;margin:0;justify-self:start}.snd-app .snd-app-header .snd-account-link{grid-column:2;grid-row:1;justify-self:end}.snd-app .snd-app-header .snd-preferences{grid-column:1/-1;grid-row:2;justify-self:center;margin:0;padding-left:0;border-left:0}.snd-app .snd-app-header .snd-app-nav{grid-column:1/-1;grid-row:3;justify-content:center}}
+@media(max-width:360px){.snd-app .snd-app-header .snd-app-brand{font-size:17px;gap:8px}.snd-app .snd-app-header .snd-compass{width:30px;height:30px}}

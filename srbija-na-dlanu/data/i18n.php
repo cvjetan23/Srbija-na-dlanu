@@ -1807,6 +1807,16 @@ return json_decode(<<<'SND_LANGUAGES'
     "de": "Ungültige Anfrage.",
     "ru": "Некорректный запрос."
   },
+  "Pokušaji": {
+    "en": "Attempts",
+    "de": "Versuche",
+    "ru": "Попытки"
+  },
+  "Pokušaj {count}: još nije odigran.": {
+    "en": "Attempt {count}: not played yet.",
+    "de": "Versuch {count}: noch nicht gespielt.",
+    "ru": "Попытка {count}: ещё не сделана."
+  },
   "@days_one": {
     "sr": "{count} dan",
     "en": "{count} day",

@@ -1,4 +1,4 @@
-# Srbija na dlanu 3.2
+# Srbija na dlanu 3.3
 
 Zasebna geografska aplikacija unutar WordPress-a: početna, igre za okruge i opštine, baza znanja i nalozi igrača. Sveden prikaz: slika gore, pitanje i odgovori ispod, sa većim slovima.
 
@@ -25,6 +25,14 @@ Zasebna geografska aplikacija unutar WordPress-a: početna, igre za okruge i op�
 Ove stranice imaju svoj kompas, meni, zaglavlje i podnožje, bez zaglavlja i podnožja aktivne teme. Ostali deo sajta zadržava postojeći izgled. Postojeći Elementor podaci početne stranice se ne brišu. Dodatak ne menja globalnu početnu stranicu WordPress-a.
 
 Shortcode `[srbija_na_dlanu]` i dalje radi na drugim WP stranicama; tu se zadržava njihova tema. Za određenu igru koristi `[srbija_na_dlanu kind="district"]` ili `kind="municipality"`.
+
+## Novo u 3.3.0
+
+- Svih šest polja za pokušaje vidi se pre prvog odgovora, sa brojevima i istaknutim sledećim poljem; broj prati podešavanje administratora.
+- Završna mapa prikazuje sve pokušaje, njihove brojeve i odgovarajuću legendu. Strelice su SVG ikonice.
+- Ispravljen je zaostali `aria-busy` posle poteza i uklonjeno posvetljivanje cele table. Unos i dugme imaju jednaku visinu.
+- Nalog/prijava je zasebna ikonica sasvim desno; progres i izvori dele donji red. Dodate su ikonice pomoći i drugih akcija.
+- Ponuđeni nazivi znamenitosti ne sadrže nazive gradova koji otkrivaju odgovor. Puni nazivi ostaju u bazi i objašnjenjima. Neutralni nazivi za sva četiri jezika mogu se menjati uz teritoriju u administraciji.
 
 ## Novo u 3.2.0
 
@@ -61,7 +69,7 @@ Ispravke dva QA izveštaja obuhvataju deljene linkove sa režimom/datumom, tasta
 
 [Detaljno: nalaz → ispravka → provera](docs/QA-ISPRAVKE.md). Postojeći podaci, 30 okružnih celina, 174 opštine/grada i Kosovo i Metohija ostaju sačuvani. Banka od 30 fotografija i 52 zastave nije proširivana ovom ispravkom; uputstvo i oznake sada dosledno opisuju geografske zamene.
 
-**Ovaj repozitorijum sadrži paket 3.2.0.** Novi kod i paket proveravaju se u izdvojenoj GitHub Actions instalaciji sa Autoptimize i Slim SEO dodacima. Za 3.2.0 izvršen je pregled i funkcionalna provera u Chromium-u, sa prikazima širine 320, 390, 768 i 1440 piksela; fizički telefon nije korišćen.
+**Ovaj repozitorijum sadrži paket 3.3.0.** Novi kod i paket proveravaju se u izdvojenoj GitHub Actions instalaciji sa Autoptimize i Slim SEO dodacima. Za 3.2.0 izvršen je pregled i funkcionalna provera u Chromium-u, sa prikazima širine 320, 390, 768 i 1440 piksela; fizički telefon nije korišćen.
 
 ## Sadržaj i igra
 
