@@ -1,4 +1,25 @@
-# Produkcija — verzija 3.4.0
+# Produkcija — verzija 3.5.1
+
+Verzija **3.5.1 je postavljena i aktivna** na https://cvjetan.dev/srbija-na-dlanu/ — 7. novembar 2026. Nativni WordPress obrazac potvrdio je uspešno ažuriranje dodatka; nova stranica je https://cvjetan.dev/srbija-na-dlanu/rang-lista/.
+
+- Proveren izvor: `bc8772a3a307729c368e7fcf9b2654d216424d8f`. Proveren izvor i instalacioni paket: `363e0218030a2cfb766e226d70aea2b113c0f1f3`. Svih **163 datoteke** proverene grane, uključujući ZIP, poređene su sa lokalnim izvorom po Git blob SHA i veličini.
+- ZIP SHA256: `a86eb5e01a977188b0dbb9371ead976f23972ae5b8bca019b7d8a2f396e9bb65`; **7.951.759 bajtova i 127 datoteka dodatka**.
+- Prošle su [provere izdvojene grane](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/42379900773) i [main](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/42380534293), sa WordPress 7.1.4, PHP 8.3.6, MySQL 8.0.46, Autoptimize i Slim SEO. Kompletne PHP/JS provere, novih 1.278 tvrdnji bodovanja/rangiranja i svih **276 Chromium tvrdnji** su prošli.
+- Nakon konačne zamene prošle su **1.824 javne HTTP tvrdnje**. Obuhvaćeni su šest javnih pogleda na četiri jezika, samostalno zaglavlje/podnožje, meni sa rang listom i ikonicom naloga desno, pravila i njihovi SVG prikazi, tačne mape/tabele i svih 17 beogradskih opština. Ostaje 30 okružnih celina, 190 aktivnih opština/gradova, pet okruga i 29 opština KiM, bez izmišljenog popisa.
+- Oba tipa rang liste proverena su za sva tri perioda i sve tri igre/obuhvata, na sva četiri jezika: **72 kombinacije**. Provereni su aktivni izbor, tabela, ispravan prikaz i no-store. Aktuelni CSS/JS, `ranking.css` i `rivers.svg` poklapaju se po bajtovima sa proverenim paketom.
+- Još **21 tvrdnja u stvarnom produkcijskom Chromium-u** proverila je konačni cache-busting 3.5.1, beli tekst dugmadi, pravila i reke, pet stavki menija, sva četiri jezika i mesečnu listu na 320 px. Septembar i godina staju uz ikonicu kalendara. Tehnički rezultat ostaje skriven sa javne liste; nema JavaScript grešaka. TLS provera je bila uključena.
+- U punoj funkcionalnoj proveri neposredno pre sitne ispravke polja meseca prošlo je **67 HTTP tvrdnji**, sa dve gostujuće partije. Provereni su tri promašaja i tačan četvrti pokušaj, geometrija svih pokušaja, četiri dodatne runde uključujući stvarnu zastavu, neutralni nazivi znamenitosti, tačno serversko bodovanje, 190 opština i prihvatanje Vračara, završetak/nastavak i oba transporta bez dupliranja.
+- Prošlo je i **46 produkcijskih Chromium tvrdnji**, sa jednom gostujućom partijom, na širinama 1440 i 320 px: početna, pravila, mapa/tabela Beograda i Vračar, pravilni krug i overlay, pokušaj bez posvetljivanja table, sve četiri dodatne runde, uvećanje zastave pre/posle odgovora, fokus/Escape, SVG kvačica, bodovi i čitljivi brojevi stare kartice rezultata, oba tipa liste/sva tri perioda i četiri jezika. Ispravka 3.5.1 nije menjala ovaj backend ili tok igre.
+- Zasebno je izvršena **jedna bodovana partija tehničkog naloga za održavanje** kroz standardnu WP prijavu i native obrazac nadimka/privatnosti. Nalogu je sakriven javni plasman pre početka. Prvi pogodak i jedan tačan dodatni odgovor dali su **70/100**; server je ignorisao klijentski poslate poene. Progres se uvećao jednom, dva nastavka nisu duplirala upis, rezultat postoji u administratorskoj listi i nije vidljiv na javnoj. Progres drugih naloga nije menjan.
+- Svih **šest administratorskih prikaza** (Analitika, Igrači, Partije, Podešavanja, Prevodi, Rang lista) vraća 200 bez PHP grešaka. Potvrđene su četiri uključene runde, šest pokušaja i podešavanja 60/6/10, #FFD447 i tamna pozadina dugmadi.
+
+Produkcijska provera ukupno je napravila **tri gostujuća vežbanja i jedno privatno vežbanje tehničkog naloga**. Konačna provera 3.5.1 nije dodavala nove partije. Obe sesije održavanja odjavljene su i zatvorene. Započete partije, ranija istorija i dnevna pravila ostaju sačuvani; obaveštenje nudi novo vežbanje sa bodovanjem i obnovljenom rundom zastava.
+
+U odvojenom pregledu ispravljeni su dodatno kontrast starih brojčanih rezultata, odsečene kolone na telefonu, početni loader bez JavaScript-a i zavisnost stilova igre u odbačenom builder renderu. Automatizovano kliktanje SVG mape sada čeka da link prima klik i da je DOM odredišta spreman. [Pregled svakog elementa](PREGLED-3.5.md).
+
+Fizički telefon i produkcijska isporuka e-pošte nisu proveravani. Broj tvrdnji nije broj nezavisnih uređaja ili scenarija. Produkcijski pregledi koriste normalnu proxy konfiguraciju i uključenu TLS proveru.
+
+# Prethodna produkcijska provera — verzija 3.4.0
 
 Verzija **3.4.0 je postavljena i aktivna** na https://cvjetan.dev/srbija-na-dlanu/ — 7. novembar 2026. WordPress je potvrdio uspešno ažuriranje kroz standardni obrazac za zamenu dodatka.
 

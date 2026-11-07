@@ -1,10 +1,10 @@
-# Srbija na dlanu 3.5
+# Srbija na dlanu 3.5.1
 
 Zasebna geografska aplikacija unutar WordPress-a: početna, igre za okruge i opštine, baza znanja i nalozi igrača. Sveden prikaz: slika gore, pitanje i odgovori ispod, sa većim slovima.
 
 **[Preuzmi instalacioni ZIP](https://github.com/cvjetan23/Srbija-na-dlanu/raw/refs/heads/main/dist/srbija-na-dlanu.zip)** · [Instalacija](srbija-na-dlanu/INSTALACIJA.md) · [Provere](docs/PROVERA.md) · [Zastave i licence](srbija-na-dlanu/FLAGS.md)
 
-**Verzija 3.4.0 postavljena je i aktivna na [cvjetan.dev/srbija-na-dlanu](https://cvjetan.dev/srbija-na-dlanu/).** Prošle su 1.334 produkcijske HTTP tvrdnje, pregled svih pet administratorskih stranica i 25 provera u stvarnom produkcijskom Chromium-u na desktopu i mobilnoj širini. Lokalno i u MySQL CI-ju prošlo je 226 Chromium provera. [Evidencija i granice provere](docs/LIVE-CHECK.md).
+**Verzija 3.5.1 postavljena je i aktivna na [cvjetan.dev/srbija-na-dlanu](https://cvjetan.dev/srbija-na-dlanu/).** Proverene su obe igre, zastave, bodovi, oba tipa rang liste, privatnost, šest administratorskih prikaza i mobilni/desktop prikaz na četiri jezika. Prošla je i stvarna bodovana partija tehničkog naloga, skrivena sa javne liste. [Evidencija i granice provere](docs/LIVE-CHECK.md) · [Pregled svakog elementa i ispravke](docs/PREGLED-3.5.md).
 
 ## Instalacija i ažuriranje
 
@@ -88,7 +88,7 @@ Ispravke dva QA izveštaja obuhvataju deljene linkove sa režimom/datumom, tasta
 
 [Detaljno: nalaz → ispravka → provera](docs/QA-ISPRAVKE.md). Postojeći podaci, 30 okružnih celina, 174 opštine/grada i Kosovo i Metohija ostaju sačuvani. Banka od 30 fotografija i 52 zastave nije proširivana ovom ispravkom; uputstvo i oznake sada dosledno opisuju geografske zamene.
 
-**Ovaj repozitorijum sadrži paket 3.5.0.** Novi kod i paket proveravaju se u izdvojenoj GitHub Actions instalaciji sa Autoptimize i Slim SEO dodacima. Za 3.4.0 izvršen je pregled i funkcionalna provera u Chromium-u, sa prikazima širine 320, 390, 768 i 1440 piksela; fizički telefon nije korišćen.
+**Ovaj repozitorijum sadrži paket 3.5.1.** Novi kod i paket proveravaju se u izdvojenoj GitHub Actions instalaciji sa Autoptimize i Slim SEO dodacima. Izvršen je pregled i funkcionalna provera u Chromium-u, sa prikazima širine 320, 390, 768 i 1440 piksela; fizički telefon nije korišćen. Ispravka 3.5.1 sprečava odsecanje dugog naziva meseca uz kalendar na uskom ekranu.
 
 ## Sadržaj i igra
 
