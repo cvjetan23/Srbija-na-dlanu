@@ -45,7 +45,7 @@ final class SND_Explore {
             $q[]=self::choice('basin','Kojem morskom slivu pripada ova reka?',$t['sea'],array('Crno more','Jadransko more','Egejsko more','Baltičko more'),$seed.':sea','Sliv reke {name} završava u moru: {answer}.',array('name'=>$t['name']),$t['basin_source']??$source);
             $q[]=self::numeric('length','Kolika je približna ukupna dužina reke?',$t['length_km'],'km',$seed.':length',$source,'Cela reka, uključujući deo van Srbije.');
         }else{
-            $q[]=self::choice('peak','Koji je najviši vrh prema navedenom obuhvatu planine?',$t['peak'],array_column(self::pool('mountain'),'peak'),$seed.':peak','Planina {name}: vrh {answer}. {scope}',array('name'=>$t['name'],'scope'=>$t['peak_scope']??''),$source);
+            $q[]=self::choice('peak','Koji je referentni vrh planine u pregledu PSS za Srbiju?',$t['peak'],array_column(self::pool('mountain'),'peak'),$seed.':peak','Planina {name}: vrh {answer}. {scope}',array('name'=>$t['name'],'scope'=>$t['peak_scope']??''),$source);
             $q[]=self::numeric('height','Kolika je približna visina tog vrha?',$t['height'],'m',$seed.':height',$source,$t['peak_scope']??'');
             if(!empty($t['area_km2']) && !empty($t['area_scope']) && !empty($t['area_source'])){$q[]=self::numeric('area','Kolika je približna površina navedenog planinskog obuhvata?',$t['area_km2'],'km²',$seed.':area',$t['area_source'],$t['area_scope']);}
             else{$q[]=self::choice('region','U kom širem delu Srbije je označena planina?',$t['region'],array('Vojvodina','Zapadna Srbija','Centralna Srbija','Istočna Srbija','Južna Srbija','Kosovo i Metohija'),$seed.':region','Označeni položaj planine {name}: {answer}.',array('name'=>$t['name']),$t['source']);}
@@ -63,6 +63,7 @@ final class SND_Explore {
         return array('type'=>'explore_photo','title'=>$title,'title_key'=>$title,'correct'=>$correct,'correct_label'=>$t['name'],'options'=>$options,'explanation'=>'Fotografija prikazuje: {name}.','explanation_key'=>'Fotografija prikazuje: {name}.','vars'=>array('name'=>$t['name']),'source'=>$t['photo']['source_url'],'image_source'=>$t['photo']['source_url'],'attribution'=>$attribution);
     }
     public static function translate($q,$t){
+        if($q['type']==='explore_peak'){$q['title_key']='Koji je referentni vrh planine u pregledu PSS za Srbiju?';}
         $vars=$q['vars']??array();if(isset($vars['name'])){$vars['name']=self::name($t);}foreach($vars as $key=>$value){$vars[$key]=is_numeric($value)?SND_I18n::number($value):SND_I18n::text($value);}
         $answer='';foreach($q['options'] as &$o){
             if(!empty($o['image']) && strpos($o['image'],'photos/')===0){$o['image']=SND_Data::image_url($o['image']);}

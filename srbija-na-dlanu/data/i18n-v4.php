@@ -342,10 +342,10 @@ return json_decode(<<<'SND_V4_LANGUAGES'
     "de": "Ostsee",
     "ru": "Балтийское море"
   },
-  "Koji je najviši vrh prema navedenom obuhvatu planine?": {
-    "en": "What is the highest peak within the stated mountain extent?",
-    "de": "Welcher Gipfel ist im angegebenen Gebirgsumfang der höchste?",
-    "ru": "Какая вершина самая высокая в указанном горном районе?"
+  "Koji je referentni vrh planine u pregledu PSS za Srbiju?": {
+    "en": "Which reference peak is listed for this mountain in the PSS guide for Serbia?",
+    "de": "Welcher Referenzgipfel ist im PSS-Verzeichnis für Serbien für dieses Gebirge aufgeführt?",
+    "ru": "Какая опорная вершина этой горы указана в справочнике PSS по Сербии?"
   },
   "Planina {name}: vrh {answer}. {scope}": {
     "en": "Mountain {name}: peak {answer}. {scope}",
