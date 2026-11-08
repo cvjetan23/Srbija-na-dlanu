@@ -1,0 +1,50 @@
+[
+  {
+    "path": "tools/explore-photo-bundles/01.zip",
+    "sha256": "83d8e3cd764585a53096701c9bf8c6fcc335e42e2770f1ef0ac7a4547ead0885",
+    "bytes": 2977357,
+    "files": 44
+  },
+  {
+    "path": "tools/explore-photo-bundles/02.zip",
+    "sha256": "8909ace449f7fef1efea17d3b3ca8bd500170294c1d01aca96cf9a26a3567b24",
+    "bytes": 2977484,
+    "files": 43
+  },
+  {
+    "path": "tools/explore-photo-bundles/03.zip",
+    "sha256": "dede9dc9588fe6203b3bb19ca56b65ec008f0e581efce786de0139f57e8143dc",
+    "bytes": 2949459,
+    "files": 46
+  },
+  {
+    "path": "tools/explore-photo-bundles/04.zip",
+    "sha256": "fecafaf26bc46b01d6eff0d86300c61ff3db3a2ecf4279b41afeef3821e1e81d",
+    "bytes": 2990079,
+    "files": 44
+  },
+  {
+    "path": "tools/explore-photo-bundles/05.zip",
+    "sha256": "76981d890158dd4ec251a203821f1a500e219f7ebed85d7d58a53419f8a4e7cf",
+    "bytes": 2912136,
+    "files": 47
+  },
+  {
+    "path": "tools/explore-photo-bundles/06.zip",
+    "sha256": "fa641b8027f22bf8517b8c207e7c01b7bd689df14d39ce86099ffdc9abf6a923",
+    "bytes": 2994280,
+    "files": 46
+  },
+  {
+    "path": "tools/explore-photo-bundles/07.zip",
+    "sha256": "1a9028c43cd6be3cb0195dcef04706b2ee4649a31991ae33ec5858a58bbf1d89",
+    "bytes": 2996025,
+    "files": 44
+  },
+  {
+    "path": "tools/explore-photo-bundles/08.zip",
+    "sha256": "b8e5302e8e61d7efe64f14ed2072f51000bb47d7da1e2e0f4ad152890db860fb",
+    "bytes": 1576577,
+    "files": 23
+  }
+]

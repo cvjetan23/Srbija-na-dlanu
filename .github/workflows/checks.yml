@@ -27,11 +27,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - uses: actions/cache@v4
-        with:
-          path: srbija-na-dlanu/assets/photos/v4
-          key: explore-photos-${{ hashFiles('tools/explore-assets.json') }}
-      - name: Pinned geography photographs
+      - name: Verify offline geography photographs
         run: python3 tools/build-explore-assets.py
       - name: Syntax and frontend regressions
         run: |
@@ -117,10 +113,6 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.sha }}
-      - uses: actions/cache@v4
-        with:
-          path: srbija-na-dlanu/assets/photos/v4
-          key: explore-photos-${{ hashFiles('tools/explore-assets.json') }}
       - name: Commit reproducible package to the tested branch
         run: |
           python3 tools/build-package.py
