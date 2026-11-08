@@ -1,4 +1,17 @@
-# Produkcija — verzija 3.8.1
+# Produkcija — verzija 4.0.0
+
+Verzija **4.0.0 je postavljena i aktivna** na https://cvjetan.dev/srbija-na-dlanu/ — 8. novembar 2026. Nativni WordPress installer je vratio 200, očekivani SHA256 i „Plugin updated successfully“. WP API potvrđuje aktivan dodatak 4.0.0.
+
+- Konačni izvor `f89faea6b8ef7d20d8e339350cc7d3faafaa3b51`, stablo `cd9039de68f5380f456332ad562942e71252c3e7`. Paket `48fc7e74ee5012213a7386cc6a7c044937e2e14d`, stablo `ff631b6526edba6823988cdae5d97f89fb30a742`. Svih **190 datoteka** poređeno je sa lokalnim manifestom po Git blob SHA i veličini. Naknadni izveštaj menja samo dokumentaciju.
+- ZIP: **30.678.303 bajta, 471 datoteka**, SHA256 `e9cdfd33b500b51e976b4b1aa5dde7ee8d70fe9301256b5a8e6fa6777838641e`. Isti hash potvrđuju lokalna izgradnja, GitHub CI, repozitorijum i nativna WP zamena. Fotografije su lokalne: 337 proverenih kopija, sa autorima, licencama i izvorima. Izvorni ZIP paketi sprečavaju razlike pri kasnijem generisanju Wikimedia sličica.
+- [Izvorni CI i izgradnja](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/42525092843) su prošli: **56.094 WordPress, 141 JavaScript, 620 Chromium tvrdnji**. [Main CI](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/42525706631) radi nad istim izvorom i paketom.
+- **341 javna HTTP tvrdnja**: 40 pogleda u četiri jezika, četiri glavna linka menija, kompaktne jezičke/tematske kontrole, no-store, devet identičnih CSS/JS resursa i svih pet aktivnih kataloga. API: 30 okružnih celina, 190 opština, 255 naselja, 475 reka, 188 planina; spreman dnevni fond 226/61/52 za nove igre. KiM ostaje uključen.
+- **171 produkcijska Chromium tvrdnja**: svih pet dnevnih igara od početka do rezultata kao gost; šest numerisanih pokušaja, boje i smer, stvarni pinovi/tokovi promašaja, map-zum, fotografije i zastave sa lupicom bez slanja odgovora, povratak fokusa, bodovi i četiri pregledana odgovora, nastavak po osvežavanju i odsustvo ponovnog igranja. Potvrđen je vidljiv PSS obuhvat pitanja o planini. Baza znanja otvara katalog i detalj svakog novog tipa; mobilni meni i rang lista su provereni u četiri jezika i obe teme. Snimci grada/reke/mobilnog prikaza su pregledani. Nema JS izuzetaka; TLS provera je uključena.
+- Svih **sedam administrativnih prikaza** je zdravo: analitika, igrači, partije, podešavanja, prevodi, rang lista i geografski katalozi. Paleta, runde sa zastavama, šest pokušaja i težine 60/6/10 su očuvani. Tokom produkcijske provere završeno je pet gostujućih partija, uz nekoliko parcijalnih proba proverača. Progres i javni poeni naloga nisu menjani. Sesija za održavanje je odjavljena i zatvorena.
+
+[Raspored igara i rangiranja](NOVE-IGRE.md) · [Izvori i granice kataloga](../srbija-na-dlanu/EXPLORE-SOURCES.md). Mobilni prikaz je emuliran; fizički telefon i isporuka e-pošte nisu deo provere.
+
+# Prethodna produkcija — verzija 3.8.1
 
 Verzija **3.8.1 je postavljena i aktivna** na https://cvjetan.dev/srbija-na-dlanu/ — 8. novembar 2026. Nativni WordPress obrazac vratio je 200, očekivani hash i „Plugin updated successfully“.
 

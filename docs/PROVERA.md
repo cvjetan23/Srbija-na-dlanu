@@ -1,4 +1,19 @@
-# Provera verzije 3.8.1
+# Provera verzije 4.0.0
+
+**Pet dnevnih igara je aktivno na produkciji.** [Provere konačnog izvora i paketa](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/42525092843) su prošle. [Main CI](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/42525706631) proverava iste datoteke. Završni izveštaj menja samo dokumentaciju.
+
+- **56.094 WordPress, 141 JavaScript i 620 Chromium tvrdnji** u CI-ju, uz MySQL 8.0.46, WordPress 7.1.4 i PHP 8.3.6. Lokalno su provereni i SQLite/PHP 8.4.
+- Novih **22.099 serverskih tvrdnji** proverava sve spremne zadatke u četiri jezika, izvore, licence i fotografije, pitanja bez otkrivenog rešenja, šest pokušaja i geometriju promašenih reka, vlasništvo, ponovljene zahteve, 100 po igri/500 ukupno i pet pojedinačnih rang lista. Arhivirano vežbanje ne ulazi u novu sezonu.
+- Novih **137 Chromium tvrdnji** prolazi svih pet dnevnih igara kroz pravi WP nalog, nastavak i završetak, zbir 500, mapu/zum/fotografije, mobilni nemački prikaz, četiri jezika i obe teme, bazu znanja, nativnu izmenu/izvoz kataloga i zabranu administracije pretplatniku. Stari token u pregledaču i izbor vežbanja ne blokiraju novu sezonu. Proverena je i obrada prekinutih animacija pri promeni širine ekrana.
+- Svih **190 datoteka repozitorijuma** u pakovanom commitu poređeno je sa lokalnim izvorom po Git blob SHA i veličini. ZIP ima **471 datoteku dodatka**, uključujući 337 lokalnih fotografija. Izgradnja fotografija koristi verzionisane pakete i dvostruku SHA256 proveru, bez mrežnih zavisnosti.
+- Produkcija: **341 javna HTTP tvrdnja** pokriva 40 pogleda u četiri jezika, svih pet kataloga/uključene igre, dnevni režim i identične CSS/JS resurse. **171 Chromium tvrdnja** obuhvata pet završenih gostujućih dnevnih partija, mapu i promašaje, zastave, fotografije i uvećanje, bodove/pregled, nastavak, kataloge i mobilni meni/rang listu u obe teme i četiri jezika. Snimci stvarnog sajta su vizuelno pregledani.
+- Svih **sedam WP administratorskih prikaza** vraća 200 bez PHP grešaka. Sačuvani su paleta, šest pokušaja, četiri stare dodatne runde uključujući zastave i težine 60/6/10. Nije pisan progres ili plasman stvarnih naloga; produkcijske partije su gostujuće. Administratorska sesija je odjavljena nakon provere.
+
+Katalog je širi od dnevnog fonda: 255 naselja/226 spremnih, 475 reka/61 spremna, 188 planina/52 spremne. Ovo nije tvrdnja da je popisana svaka reka. Površina planine koristi se samo uz potvrđen obuhvat; inače je pitanje o regionu. [Pravila i uređivanje](NOVE-IGRE.md) · [Izvori](../srbija-na-dlanu/EXPLORE-SOURCES.md) · [Evidencija postavljanja](LIVE-CHECK.md).
+
+Mobilni prikaz je proveren emulacijom širine ekrana, bez fizičkog uređaja. Produkcijska dostava e-pošte nije deo ove provere. Broj tvrdnji nije broj nezavisnih scenarija.
+
+# Prethodna provera — 3.8.1
 
 **Kompaktniji meni je postavljen na produkciju.** Prošle su [provere izdvojene grane](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/42512723173) i [main](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/42513104102). Provereno je svih **169 datoteka** paketa po Git blob SHA i veličini. Završni commit menja samo dokumentaciju.
 

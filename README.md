@@ -4,7 +4,7 @@ Zasebna geografska aplikacija unutar WordPress-a: pet dnevnih igara, baza znanja
 
 **[Preuzmi instalacioni ZIP](https://github.com/cvjetan23/Srbija-na-dlanu/raw/refs/heads/main/dist/srbija-na-dlanu.zip)** · [Instalacija](srbija-na-dlanu/INSTALACIJA.md) · [Provere](docs/PROVERA.md) · [Zastave i licence](srbija-na-dlanu/FLAGS.md)
 
-**Izdanje 4.0.0:** pet igara sa jednim zadatkom po danu i zajedničkom rang listom. [Igre i pravila](docs/NOVE-IGRE.md) · [Podaci i fotografije](srbija-na-dlanu/EXPLORE-SOURCES.md) · [Produkcijska provera](docs/LIVE-CHECK.md).
+**Verzija 4.0.0 je postavljena i aktivna na [cvjetan.dev/srbija-na-dlanu](https://cvjetan.dev/srbija-na-dlanu/).** Pet igara sa jednim zadatkom po danu i zajedničkom rang listom. [Igre i pravila](docs/NOVE-IGRE.md) · [Podaci i fotografije](srbija-na-dlanu/EXPLORE-SOURCES.md) · [Produkcijska provera](docs/LIVE-CHECK.md).
 
 ## Instalacija i ažuriranje
 
