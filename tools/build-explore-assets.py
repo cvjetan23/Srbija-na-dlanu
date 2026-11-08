@@ -21,7 +21,7 @@ def hydrate(entry):
         try:
             req=urllib.request.Request(entry['url'],headers={'User-Agent':'SrbijaNaDlanu/4.0 (https://cvjetan.dev; reproducible offline educational assets)'})
             with urllib.request.urlopen(req,timeout=90) as response:content=response.read(500001)
-            if len(content)!=entry['bytes'] or hashlib.sha256(content).hexdigest()!=entry['sha256']:raise ValueError('Image checksum mismatch: '+relative)
+            if len(content)!=entry['bytes'] or hashlib.sha256(content).hexdigest()!=entry['sha256']:raise ValueError('Image checksum mismatch: '+relative+'; received '+str(len(content))+' bytes / '+hashlib.sha256(content).hexdigest()+'; type '+str(response.headers.get('Content-Type')))
             target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(content);return
         except urllib.error.HTTPError as error:
             if error.code==429 and attempt<2:time.sleep(min(30,int(error.headers.get('Retry-After','5'))));continue
