@@ -83,7 +83,7 @@
         throw e;
       }
     }
-    key(guest = false,date = this.info.date) { return `session:v2:${!guest && this.account.authenticated ? 'user-' + this.account.user.id : 'guest'}:${this.mode}:${this.kind}:${this.mode === 'daily' ? date : 'practice'}`; }
+    key(guest = false,date = this.info.date) { return `session:${this.info.config && this.info.config.daily_only?'v4':'v2'}:${!guest && this.account.authenticated ? 'user-' + this.account.user.id : 'guest'}:${this.mode}:${this.kind}:${this.mode === 'daily' ? date : 'practice'}`; }
     async refreshDay() {
       if (!this.info || (this.info.next_change && Date.now() + (this.clockOffset || 0) >= this.info.next_change * 1000)) {
         this.info = await this.request('bootstrap');
