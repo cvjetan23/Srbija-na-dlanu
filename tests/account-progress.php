@@ -5,6 +5,7 @@ $_SERVER['HTTP_HOST']=parse_url(getenv('WP_TEST_URL')?:'http://snd.test',PHP_URL
 $_SERVER['REQUEST_METHOD']='GET';$_SERVER['REQUEST_URI']='/';$_SERVER['SERVER_PROTOCOL']='HTTP/1.1';
 require rtrim($root,'/').'/wp-load.php';
 if(!in_array(wp_get_environment_type(),array('local','development'),true)){exit("Refusing production/staging.\n");}
+require __DIR__.'/legacy-mode.php';
 if(!class_exists('SND_Progress')){exit("Activate Srbija na dlanu first.\n");}
 $count=0;$users=array();$tokens=array();$old_user=get_current_user_id();$old_flag=get_option('snd_flag_overrides',array());
 function expect_progress($condition,$message){global $count;$count++;if(!$condition){throw new RuntimeException($message);}}

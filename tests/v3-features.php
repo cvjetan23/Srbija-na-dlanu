@@ -3,6 +3,7 @@
 $root=getenv('WP_ROOT');if(!$root || !is_file($root.'/wp-load.php')){exit("Set WP_ROOT.\n");}
 $_SERVER['HTTP_HOST']='snd.test';$_SERVER['REQUEST_METHOD']='GET';$_SERVER['REQUEST_URI']='/';$_SERVER['SERVER_PROTOCOL']='HTTP/1.1';
 require $root.'/wp-load.php';if(!in_array(wp_get_environment_type(),array('local','development'),true)){exit("Refusing production/staging.\n");}
+require __DIR__.'/legacy-mode.php';
 $checks=0;$users=array();$tokens=array();$ids=array();$saved=array();$current=get_current_user_id();$cookie=$_COOKIE['snd_client']??null;
 foreach(array('snd_settings','snd_registration_enabled','snd_translations','snd_backfill_cursor','snd_backfill_complete') as $key){$saved[$key]=get_option($key,null);}
 function v3_ok($v,$label){global $checks;$checks++;if(!$v){throw new RuntimeException($label);}}
@@ -10,7 +11,7 @@ function v3_api($route,$body=null){$r=new WP_REST_Request($body===null?'GET':'PO
 function v3_start($kind='district'){global $tokens,$ids;$r=v3_api('start',array('kind'=>$kind,'mode'=>'practice','fresh'=>true));v3_ok($r->get_status()===200,'Start game');$g=$r->get_data();$tokens[]=$g['token'];$s=SND_Game::load($g['token']);$ids[]=$s['game_id'];return $g;}
 function v3_move($g,$action,$value=null){$r=v3_api('action',array('token'=>$g['token'],'revision'=>$g['state']['revision'],'action'=>$action,'value'=>$value));v3_ok($r->get_status()===200,'Action '.$action);return $r->get_data();}
 function v3_user($role='subscriber'){global $users;$id=wp_insert_user(array('user_login'=>'snd-v3-'.bin2hex(random_bytes(6)),'user_email'=>'v3-'.bin2hex(random_bytes(6)).'@example.invalid','user_pass'=>bin2hex(random_bytes(20)),'role'=>$role));v3_ok(!is_wp_error($id),'Create isolated user');$users[]=$id;return $id;}
-function v3_settings($changes=array()){$s=array_merge(SND_Settings::defaults(),$changes);update_option('snd_settings',$s,false);SND_Settings::reset();return $s;}
+function v3_settings($changes=array()){$s=array_merge(array_merge(SND_Settings::defaults(),array('daily_only'=>false,'practice_enabled'=>true)),$changes);update_option('snd_settings',$s,false);SND_Settings::reset();return $s;}
 try{
     wp_set_current_user(0);$_COOKIE['snd_client']=bin2hex(random_bytes(24));v3_settings();SND_I18n::force('sr');SND_Site::install();
     global $wpdb;$games=SND_Analytics::games_table();$events=SND_Analytics::events_table();v3_ok(SND_Analytics::ready(),'Analytics schema installed');

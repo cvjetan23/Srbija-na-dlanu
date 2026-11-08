@@ -1,6 +1,7 @@
 <?php
 $root=getenv('WP_ROOT');if(!$root || !is_file($root.'/wp-load.php')){exit("Set WP_ROOT.\n");}$_SERVER['HTTP_HOST']='snd.test';$_SERVER['REQUEST_METHOD']='GET';$_SERVER['REQUEST_URI']='/';require $root.'/wp-load.php';
 if(!in_array(wp_get_environment_type(),array('local','development'),true)){exit("Refusing production.\n");}
+require __DIR__.'/legacy-mode.php';
 $count=0;$users=array();$tokens=array();$id=get_current_user_id();
 function tx_ok($v,$label){global $count;$count++;if(!$v){throw new RuntimeException($label);}}
 function tx_call($route,$data,$nonce=''){return SND_API::ajax_request($route,wp_json_encode($data),$nonce);}

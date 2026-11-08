@@ -1,10 +1,10 @@
-# Srbija na dlanu 3.8.1
+# Srbija na dlanu 4.0.0
 
-Zasebna geografska aplikacija unutar WordPress-a: početna, igre za okruge i opštine, baza znanja i nalozi igrača. Sveden prikaz: slika gore, pitanje i odgovori ispod, sa većim slovima.
+Zasebna geografska aplikacija unutar WordPress-a: pet dnevnih igara, baza znanja i nalozi igrača. Sveden prikaz: slika gore, pitanje i odgovori ispod, sa većim slovima.
 
 **[Preuzmi instalacioni ZIP](https://github.com/cvjetan23/Srbija-na-dlanu/raw/refs/heads/main/dist/srbija-na-dlanu.zip)** · [Instalacija](srbija-na-dlanu/INSTALACIJA.md) · [Provere](docs/PROVERA.md) · [Zastave i licence](srbija-na-dlanu/FLAGS.md)
 
-**Verzija 3.8.1 postavljena je i aktivna na [cvjetan.dev/srbija-na-dlanu](https://cvjetan.dev/srbija-na-dlanu/).** Jezik i tema su kompaktniji; na manjim ekranima jezik stoji levo, ikonice teme desno, a navigacija počinje od leve ivice. Zadržani su zajednički izgled dugmadi, Sunrise netačan/zelen tačan odgovor i lupica preko slike zastave. [Produkcijska provera](docs/LIVE-CHECK.md) · [Predlog novih igara](docs/NOVE-IGRE.md).
+**Izdanje 4.0.0:** pet igara sa jednim zadatkom po danu i zajedničkom rang listom. [Igre i pravila](docs/NOVE-IGRE.md) · [Podaci i fotografije](srbija-na-dlanu/EXPLORE-SOURCES.md) · [Produkcijska provera](docs/LIVE-CHECK.md).
 
 ## Instalacija i ažuriranje
 
@@ -16,6 +16,10 @@ Zasebna geografska aplikacija unutar WordPress-a: početna, igre za okruge i op�
 | Stranica | Putanja |
 |---|---|
 | Početna | `/srbija-na-dlanu/` |
+| Izbor svih pet igara | `/srbija-na-dlanu/igre/` |
+| Gradovi i naselja | `/srbija-na-dlanu/gradovi/` |
+| Reke | `/srbija-na-dlanu/reke/` |
+| Planine | `/srbija-na-dlanu/planine/` |
 | Okruzi | `/srbija-na-dlanu/okruzi/` |
 | Opštine i gradovi | `/srbija-na-dlanu/opstine/` |
 | Baza znanja | `/srbija-na-dlanu/baza-znanja/` |
@@ -25,7 +29,14 @@ Zasebna geografska aplikacija unutar WordPress-a: početna, igre za okruge i op�
 
 Ove stranice imaju svoj kompas, meni, zaglavlje i podnožje, bez zaglavlja i podnožja aktivne teme. Ostali deo sajta zadržava postojeći izgled. Postojeći Elementor podaci početne stranice se ne brišu. Dodatak ne menja globalnu početnu stranicu WordPress-a.
 
-Shortcode `[srbija_na_dlanu]` i dalje radi na drugim WP stranicama; tu se zadržava njihova tema. Za određenu igru koristi `[srbija_na_dlanu kind="district"]` ili `kind="municipality"`.
+Shortcode `[srbija_na_dlanu]` i dalje radi na drugim WP stranicama; tu se zadržava njihova tema. Za određenu igru koristi `[srbija_na_dlanu kind="district"]` ili `kind="municipality"`, `kind="city"`, `kind="river"`, `kind="mountain"`.
+
+## Novo u 4.0.0
+
+- Aktivne dnevne igre za naselja, reke i planine sa stvarnim mapama, šest pokušaja i foto-pitanjem. Okruzi i opštine zadržavaju zastave.
+- Jedan rezultat po nalogu, igri i danu. Do 100 poena po igri i 500 ukupno. Dnevni, mesečni i ukupni plasman sabiraju samo dnevne zadatke nove sezone.
+- Baza znanja i WP → Srbija na dlanu → Geografski katalozi imaju naselja, reke i planine; svaki podatak ima izvor.
+- Nova sezona čuva stare partije i istoriju. Vežbanje je isključeno u javnom dnevnom režimu; urednik može posebno uključiti prethodni režim u podešavanjima.
 
 ## Novo u 3.8.1
 

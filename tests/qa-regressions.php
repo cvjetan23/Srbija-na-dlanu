@@ -4,6 +4,7 @@ $root=getenv('WP_ROOT');if(!$root || !is_file(rtrim($root,'/').'/wp-load.php')){
 $_SERVER['HTTP_HOST']='snd.test';$_SERVER['REQUEST_METHOD']='GET';$_SERVER['REQUEST_URI']='/';$_SERVER['SERVER_PROTOCOL']='HTTP/1.1';
 require rtrim($root,'/').'/wp-load.php';
 if(!in_array(wp_get_environment_type(),array('local','development'),true)){exit("Refusing production/staging.\n");}
+require __DIR__.'/legacy-mode.php';
 $count=0;$tokens=array();$saved_user=get_current_user_id();$saved_cookie=$_COOKIE['snd_client']??null;$saved_ip=$_SERVER['REMOTE_ADDR']??null;
 function qa_check($value,$label){global $count;$count++;if(!$value){throw new RuntimeException($label);}}
 function qa_request($path,$body){$request=new WP_REST_Request('POST','/srbija-na-dlanu/v1/'.$path);$request->set_header('Content-Type','application/json');$request->set_body(wp_json_encode($body));return rest_do_request($request);}

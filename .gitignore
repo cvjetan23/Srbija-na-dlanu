@@ -11,3 +11,6 @@ work/
 wp-config.php
 *.sqlite
 *.sqlite3
+
+# Downloaded from pinned Wikimedia manifests for tests and the installable ZIP.
+srbija-na-dlanu/assets/photos/v4/

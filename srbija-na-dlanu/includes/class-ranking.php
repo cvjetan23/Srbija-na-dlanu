@@ -2,7 +2,7 @@
 defined('ABSPATH') || exit;
 
 final class SND_Ranking {
-    const DB_VERSION=1;
+    const DB_VERSION=2;
     public static function table(){global $wpdb;return $wpdb->prefix.'snd_ranking';}
     public static function ready(){return (int)get_option('snd_ranking_db')===self::DB_VERSION;}
     public static function install() {
@@ -14,6 +14,7 @@ final class SND_Ranking {
             user_id bigint(20) unsigned NOT NULL,
             kind varchar(20) NOT NULL,
             mode varchar(20) NOT NULL,
+            season smallint(5) unsigned NOT NULL DEFAULT 0,
             played_on date NOT NULL,
             points smallint(5) unsigned NULL,
             territory_points smallint(5) unsigned NOT NULL DEFAULT 0,
@@ -26,10 +27,11 @@ final class SND_Ranking {
             UNIQUE KEY slot_key (slot_key),
             UNIQUE KEY game_id (game_id),
             KEY board_date (played_on,mode,kind),
+            KEY season_date (season,played_on,kind),
             KEY user_date (user_id,played_on)
         ) $collate;");
         if($wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s',$wpdb->esc_like($t)))!==$t){return;}
-        update_option('snd_ranking_db',self::DB_VERSION,false);add_option('snd_ranking_started',gmdate('Y-m-d H:i:s'),'',false);
+        update_option('snd_ranking_db',self::DB_VERSION,false);add_option('snd_ranking_season_4',SND_Game::date(),'',false);add_option('snd_ranking_started',gmdate('Y-m-d H:i:s'),'',false);
     }
     public static function alias($id) {
         $p=get_user_meta($id,'snd_rank_profile',true);$alias=is_array($p)?self::clean_alias($p['alias']??''):'';
@@ -41,9 +43,10 @@ final class SND_Ranking {
     }
     public static function reserve($s) {
         if(!self::ready() || !SND_Settings::get('ranking_enabled') || empty($s['owner']) || empty($s['scoring']['rank_enabled'])){return false;}
+        if(SND_Settings::get('daily_only') && $s['challenge']['mode']!=='daily'){return false;}
         global $wpdb;$c=$s['challenge'];$user=(int)$s['owner'];$p=(array)get_user_meta($user,'snd_rank_profile',true);
-        $slot=$c['mode']==='daily'?'daily:'.$user.':'.$c['kind'].':'.$c['date']:'game:'.$s['game_id'];
-        $row=array('slot_key'=>hash('sha256',$slot),'game_id'=>$s['game_id'],'user_id'=>$user,'kind'=>$c['kind'],'mode'=>$c['mode'],'played_on'=>$c['date'],'hidden'=>!empty($p['hidden'])?1:0,'policy'=>wp_json_encode($s['scoring']));
+        $slot=$c['mode']==='daily'?'daily:'.($s['scoring']['season']??0).':'.$user.':'.$c['kind'].':'.$c['date']:'game:'.$s['game_id'];
+        $row=array('slot_key'=>hash('sha256',$slot),'game_id'=>$s['game_id'],'user_id'=>$user,'kind'=>$c['kind'],'mode'=>$c['mode'],'season'=>(int)($s['scoring']['season']??0),'played_on'=>$c['date'],'hidden'=>!empty($p['hidden'])?1:0,'policy'=>wp_json_encode($s['scoring']));
         $old=$wpdb->get_row($wpdb->prepare('SELECT game_id FROM '.self::table().' WHERE slot_key=%s',$row['slot_key']),ARRAY_A);
         if($old){return $old['game_id']===$s['game_id'];}
         return $wpdb->insert(self::table(),$row)!==false;
@@ -60,7 +63,7 @@ final class SND_Ranking {
         $input=$input===null?wp_unslash($_GET):$input;$today=SND_Game::date();$out=array();
         $out['board']=($input['board']??'')==='general'?'general':'daily';
         $out['period']=in_array($input['period']??'',array('day','month','all'),true)?$input['period']:'day';
-        $out['game']=in_array($input['game']??'',array('district','municipality'),true)?$input['game']:'';
+        $out['game']=in_array($input['game']??'',SND_Kinds::ALL,true)?$input['game']:'';
         $date=$input['rank_date']??$today;$valid=is_string($date)&&preg_match('/^(\d{4})-(\d{2})-(\d{2})$/D',$date,$m)&&checkdate((int)$m[2],(int)$m[3],(int)$m[1]);
         $out['rank_date']=$valid && $date<=$today?$date:$today;
         $month=$input['rank_month']??substr($today,0,7);$valid=is_string($month)&&preg_match('/^(\d{4})-(\d{2})$/D',$month,$m)&&checkdate((int)$m[2],1,(int)$m[1]);
@@ -71,7 +74,7 @@ final class SND_Ranking {
         $empty=array('rows'=>array(),'players'=>0,'page'=>1,'pages'=>1);if(!self::ready()){return $empty;}
         global $wpdb;$f=self::filters($filters);$t=self::table();$where='r.points IS NOT NULL';$args=array();
         if(!$private){$where.=' AND r.hidden=0';}
-        if($f['board']==='daily'){$where.=" AND r.mode='daily'";}
+        if(SND_Settings::get('daily_only') && !$private){$where.=" AND r.mode='daily' AND r.season=4";}elseif($f['board']==='daily'){$where.=" AND r.mode='daily'";}
         if($f['game']){$where.=' AND r.kind=%s';$args[]=$f['game'];}
         if($f['period']==='day'){$where.=' AND r.played_on=%s';$args[]=$f['rank_date'];}
         elseif($f['period']==='month'){$where.=' AND r.played_on>=%s AND r.played_on<=%s';$args[]=$f['rank_month'].'-01';$args[]=(new DateTimeImmutable($f['rank_month'].'-01'))->format('Y-m-t');}
@@ -91,10 +94,12 @@ final class SND_Ranking {
     public static function page() {
         echo '<section class="snd-ranking"><header class="snd-ranking-head"><span class="snd-ranking-emblem" aria-hidden="true">'.self::trophy().'</span><h1>Rang lista</h1><p>Svaka partija donosi od 0 do 100 poena.</p></header>';
         if(!SND_Settings::get('ranking_enabled')){echo '<p class="snd-rank-empty">Rang lista trenutno nije dostupna.</p></section>';return;}
-        $f=self::filters();$result=self::results($f);
+        $f=self::filters();if(SND_Settings::get('daily_only')){$f['board']='daily';}$result=self::results($f);
+        if(!SND_Settings::get('daily_only')){
         echo '<nav class="snd-ranking-boards" aria-label="Vrsta rang liste">';foreach(array('daily'=>'Dnevni izazovi','general'=>'Opšta rang lista') as $key=>$name){echo '<a href="'.esc_url(self::link($f,array('board'=>$key))).'"'.($f['board']===$key?' aria-current="true"':'').'>'.esc_html($name).'</a>';}echo '</nav><p class="snd-rank-description">'.($f['board']==='daily'?'Samo dnevni izazovi: najviše jedan rezultat po igri i danu.':'Dnevni izazovi i sva vežbanja. Više završenih partija donosi veći zbir.').'</p>';
+        }else{echo '<p class="snd-rank-description">Jedan rezultat po igri i danu. Ukupno do 500 poena dnevno za pet igara. Vežbanje ne ulazi u plasman.</p><p class="snd-rank-note">Nova sezona dnevnih igara. Raniji rezultati ostaju u istoriji naloga.</p>';}
         echo '<nav class="snd-ranking-periods" aria-label="Period rang liste">';foreach(array('day'=>'Dnevna','month'=>'Mesečna','all'=>'Večna') as $key=>$name){echo '<a href="'.esc_url(self::link($f,array('period'=>$key))).'"'.($f['period']===$key?' aria-current="true"':'').'>'.esc_html($name).'</a>';}echo '</nav>';
-        echo '<nav class="snd-ranking-games" aria-label="Igra na rang listi">';foreach(array(''=>'Sve igre','district'=>'Okruzi','municipality'=>'Opštine i gradovi') as $key=>$name){echo '<a href="'.esc_url(self::link($f,array('game'=>$key))).'"'.($f['game']===$key?' aria-current="true"':'').'>'.esc_html($name).'</a>';}echo '</nav>';
+        echo '<nav class="snd-ranking-games" aria-label="Igra na rang listi">';foreach(array(''=>'Sve igre')+SND_Kinds::labels() as $key=>$name){echo '<a href="'.esc_url(self::link($f,array('game'=>$key))).'"'.($f['game']===$key?' aria-current="true"':'').'>'.esc_html($name).'</a>';}echo '</nav>';
         if($f['period']!=='all'){echo '<form class="snd-rank-date" method="get" action="'.esc_url(SND_Site::url('ranking')).'">';$route=array();parse_str(wp_parse_url(SND_Site::url('ranking'),PHP_URL_QUERY)?:'',$route);foreach(array('page_id','pagename') as $key){if(isset($route[$key]) && is_scalar($route[$key])){echo '<input type="hidden" name="'.$key.'" value="'.esc_attr($route[$key]).'">';}}foreach(array('lang'=>SND_I18n::lang(),'board'=>$f['board'],'period'=>$f['period'],'game'=>$f['game']) as $key=>$value){echo '<input type="hidden" name="'.$key.'" value="'.esc_attr($value).'">';}$month=$f['period']==='month';echo '<label for="snd-rank-date">'.($month?'Mesec':'Datum').'</label><input id="snd-rank-date" type="'.($month?'month':'date').'" name="'.($month?'rank_month':'rank_date').'" value="'.esc_attr($month?$f['rank_month']:$f['rank_date']).'" max="'.esc_attr($month?substr(SND_Game::date(),0,7):SND_Game::date()).'"><button class="snd-app-button snd-button-outline" type="submit">Prikaži</button></form>';}
         echo '<p class="snd-rank-summary">'.esc_html(SND_I18n::t('Igrača na listi: {count}',array('count'=>$result['players']))).'</p><div class="snd-ranking-scroll"><table class="snd-ranking-table"><caption class="snd-app-sr-only">Rang lista igrača</caption><thead><tr><th scope="col">Mesto</th><th scope="col">Igrač</th><th scope="col">Poeni ukupno</th><th scope="col">Partije</th><th scope="col">Prosek / 100</th></tr></thead><tbody>';
         foreach($result['rows'] as $row){echo '<tr'.((int)$row['user_id']===get_current_user_id()?' class="is-me"':'').'><td><span class="snd-rank-position'.($row['rank']<=3?' is-podium':'').'">'.(int)$row['rank'].'</span></td><th scope="row"><span data-snd-original>'.esc_html($row['alias']).'</span><span class="snd-rank-mobile-meta">'.esc_html(SND_I18n::t('Partije: {games} · Prosek: {average}',array('games'=>(int)$row['games'],'average'=>number_format((float)$row['average'],1,SND_I18n::lang()==='en'?'.':',','')))).'</span>'.((int)$row['user_id']===get_current_user_id()?'<small>Ti</small>':'').'</th><td class="snd-rank-points">'.esc_html(SND_I18n::number($row['total'])).'</td><td>'.(int)$row['games'].'</td><td>'.esc_html(number_format_i18n((float)$row['average'],1)).'</td></tr>';}

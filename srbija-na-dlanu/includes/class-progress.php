@@ -5,12 +5,12 @@ final class SND_Progress {
     public static function get($user_id) {
         $p = get_user_meta($user_id, 'snd_progress_v2', true);
         if (!is_array($p)) { $p = array(); }
-        foreach (array('district', 'municipality') as $kind) {
+        foreach (SND_Kinds::ALL as $kind) {
             $p[$kind] = array_merge(array('days' => array(), 'discovered' => array(), 'practice_count' => 0, 'completed_games' => array(), 'quiz_correct' => 0, 'quiz_total' => 0), isset($p[$kind]) && is_array($p[$kind]) ? $p[$kind] : array());
         }
         return $p;
     }
-    public static function slot($kind, $mode) { return 'snd_active_v2_' . $kind . '_' . $mode; }
+    public static function slot($kind, $mode) { return 'snd_active_v4_' . $kind . '_' . $mode; }
     public static function active($user_id, $kind, $mode) {
         $token = get_user_meta($user_id, self::slot($kind, $mode), true);
         if (!$token) { return null; }
@@ -72,7 +72,7 @@ final class SND_Progress {
         if ($id) {
             $u = wp_get_current_user(); $out['user'] = array('id' => $id, 'name' => $u->display_name);
             $out['nonce'] = wp_create_nonce('wp_rest'); $out['progress'] = self::summary($id);
-            foreach (array('district', 'municipality') as $kind) { foreach (array('daily', 'practice') as $mode) {
+            foreach (SND_Kinds::ALL as $kind) { foreach (array('daily', 'practice') as $mode) {
                 $active = self::active($id, $kind, $mode);
                 if ($active) { $out['active'][$kind . ':' . $mode] = $active['token']; }
             } }

@@ -154,7 +154,7 @@ final class SND_Analytics {
         $rows=$wpdb->get_results($wpdb->prepare("SELECT user_id,meta_value FROM {$wpdb->usermeta} WHERE meta_key='snd_progress_v2' AND user_id>%d ORDER BY user_id ASC LIMIT 25",$cursor),ARRAY_A);
         foreach($rows as $row){
             $user_id=(int)$row['user_id'];$progress=maybe_unserialize($row['meta_value']);
-            if(is_array($progress)){foreach(array('district','municipality') as $kind){foreach((array)($progress[$kind]['days']??array()) as $date=>$day){
+            if(is_array($progress)){foreach(SND_Kinds::ALL as $kind){foreach((array)($progress[$kind]['days']??array()) as $date=>$day){
                 if(!preg_match('/^(\d{4})-(\d{2})-(\d{2})$/D',(string)$date,$parts) || !checkdate((int)$parts[2],(int)$parts[3],(int)$parts[1]) || !is_array($day)){continue;}
                 $retention=(int)SND_Settings::get('retention_days');if($retention && $date<(new DateTimeImmutable(SND_Game::date()))->modify('-'.$retention.' days')->format('Y-m-d')){continue;}
                 if($wpdb->get_var($wpdb->prepare("SELECT id FROM $table WHERE user_id=%d AND kind=%s AND mode='daily' AND played_on=%s AND stage='complete' LIMIT 1",$user_id,$kind,$date))){continue;}
@@ -204,14 +204,14 @@ final class SND_Analytics {
         $u=get_user_by('email',$email);if(!$u){return array('items_removed'=>false,'items_retained'=>false,'messages'=>array(),'done'=>true);}global $wpdb;
         if(self::ready()){foreach(array(self::games_table(),self::events_table()) as $table){$wpdb->delete($table,array('user_id'=>$u->ID));}}
         SND_Ranking::delete_user($u->ID);
-        foreach(array('district','municipality') as $kind){foreach(array('daily','practice') as $mode){$slot=SND_Progress::slot($kind,$mode);$token=get_user_meta($u->ID,$slot,true);if(is_string($token) && preg_match('/^[a-f0-9]{48}$/D',$token)){delete_transient('snd_session_'.$token);}delete_user_meta($u->ID,$slot);}}
+        foreach(SND_Kinds::ALL as $kind){foreach(array('daily','practice') as $mode){foreach(array(SND_Progress::slot($kind,$mode),'snd_active_v2_'.$kind.'_'.$mode) as $slot){$token=get_user_meta($u->ID,$slot,true);if(is_string($token) && preg_match('/^[a-f0-9]{48}$/D',$token)){delete_transient('snd_session_'.$token);}delete_user_meta($u->ID,$slot);}}}
         update_user_meta($u->ID,'snd_privacy_epoch',bin2hex(random_bytes(16)));delete_user_meta($u->ID,'snd_progress_v2');return array('items_removed'=>true,'items_retained'=>false,'messages'=>array(),'done'=>true);
     }
     public static function filters($input=null) {
         $input=$input===null?wp_unslash($_GET):$input;$out=array();
         foreach(array('from','to') as $key){$value=$input[$key]??'';$valid=is_string($value) && preg_match('/^(\d{4})-(\d{2})-(\d{2})$/D',$value,$m) && checkdate((int)$m[2],(int)$m[3],(int)$m[1]);$out[$key]=$valid?$value:($key==='from'?(new DateTimeImmutable(SND_Game::date()))->modify('-29 days')->format('Y-m-d'):SND_Game::date());}
         if($out['from']>$out['to']){list($out['from'],$out['to'])=array($out['to'],$out['from']);}
-        $out['kind']=in_array($input['kind']??'',array('district','municipality'),true)?$input['kind']:'';
+        $out['kind']=in_array($input['kind']??'',SND_Kinds::ALL,true)?$input['kind']:'';
         $out['mode']=in_array($input['mode']??'',array('daily','practice'),true)?$input['mode']:'';
         $out['user_id']=max(0,(int)($input['user_id']??0));$out['stage']=in_array($input['stage']??'',array('guess','reveal','quiz','complete'),true)?$input['stage']:'';
         $out['language']=in_array($input['language']??'',array('sr','en','de','ru'),true)?$input['language']:'';

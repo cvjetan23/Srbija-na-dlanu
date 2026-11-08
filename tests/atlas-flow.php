@@ -3,13 +3,14 @@
 $root=getenv('WP_ROOT');if(!$root || !is_file($root.'/wp-load.php')){exit("Set WP_ROOT.\n");}
 $_SERVER['HTTP_HOST']='snd.test';$_SERVER['REQUEST_METHOD']='GET';$_SERVER['REQUEST_URI']='/';$_SERVER['SERVER_PROTOCOL']='HTTP/1.1';require $root.'/wp-load.php';
 if(!in_array(wp_get_environment_type(),array('local','development'),true)){exit("Refusing production/staging.\n");}
+require __DIR__.'/legacy-mode.php';
 $count=0;$get=$_GET;$cookies=$_COOKIE;$saved=get_option('snd_settings',null);$permalinks=get_option('permalink_structure');
 function atlas_ok($v,$label){global $count;$count++;if(!$v){throw new RuntimeException($label);}}
 function atlas_html(){ob_start();SND_Site::content();return SND_I18n::html(ob_get_clean());}
 function atlas_dom($html){$dom=new DOMDocument();@$dom->loadHTML('<?xml encoding="UTF-8"><div>'.$html.'</div>');return new DOMXPath($dom);}
 try{
     $pages=SND_Site::install();$GLOBALS['wp_query']=new WP_Query(array('page_id'=>$pages['library']));$GLOBALS['wp_the_query']=$GLOBALS['wp_query'];
-    update_option('snd_settings',SND_Settings::defaults(),false);SND_Settings::reset();$districts=SND_Data::pool('district');$municipalities=SND_Data::pool('municipality');
+    update_option('snd_settings',array_merge(SND_Settings::defaults(),array('daily_only'=>false,'practice_enabled'=>true)),false);SND_Settings::reset();$districts=SND_Data::pool('district');$municipalities=SND_Data::pool('municipality');
     foreach(array('sr','en','de','ru') as $lang){SND_I18n::force($lang);$_GET=array();$html=atlas_html();$x=atlas_dom($html);
         atlas_ok($x->query('//a[@data-territory]')->length===30,'Country has 30 interactive districts '.$lang);
         atlas_ok($x->query('//a[contains(@class,"snd-district-card")]')->length===30,'District list retained '.$lang);
@@ -42,7 +43,7 @@ try{
         atlas_ok($x->query('//details[contains(@class,"snd-language-picker")]/summary')->length===1,'Native accessible language disclosure');
     }
     SND_I18n::force('sr');$_GET=array('opstina'=>'<script>bad</script>');atlas_ok(SND_Atlas::municipality()===null,'Invalid municipality rejected');$_GET=array('opstina'=>array('m-cacak'));atlas_ok(SND_Atlas::municipality()===null,'Array selector rejected');
-    $_GET=array('snd_theme'=>'dark');atlas_ok(SND_I18n::theme()==='dark','Explicit theme resolves before paint');$_GET=array();$_COOKIE['snd_theme']='light';atlas_ok(SND_I18n::theme()==='light','Cookie preference');$s=SND_Settings::defaults();$s['theme_switch']=false;$s['default_theme']='dark';update_option('snd_settings',$s,false);SND_Settings::reset();atlas_ok(SND_I18n::theme()==='dark','Admin forced theme respected');
+    $_GET=array('snd_theme'=>'dark');atlas_ok(SND_I18n::theme()==='dark','Explicit theme resolves before paint');$_GET=array();$_COOKIE['snd_theme']='light';atlas_ok(SND_I18n::theme()==='light','Cookie preference');$s=array_merge(SND_Settings::defaults(),array('daily_only'=>false,'practice_enabled'=>true));$s['theme_switch']=false;$s['default_theme']='dark';update_option('snd_settings',$s,false);SND_Settings::reset();atlas_ok(SND_I18n::theme()==='dark','Admin forced theme respected');
     $s['theme_switch']=true;$s['languages']=array('sr','de');update_option('snd_settings',$s,false);SND_Settings::reset();ob_start();SND_Site::header();$x=atlas_dom(ob_get_clean());atlas_ok($x->query('//a[@data-language]')->length===2,'Enabled languages respected');
     $GLOBALS['wp_rewrite']->set_permalink_structure('');$_GET=array('opstina'=>'m-cacak');parse_str(parse_url(SND_Site::preference_url(),PHP_URL_QUERY),$args);atlas_ok(isset($args['page_id'],$args['okrug'],$args['opstina'],$args['lang']),'Default permalinks retained');
     atlas_ok(SND_Atlas::viewbox(array(array('map_path'=>'m0 0 c10 10 20 20 30 30z')))==='0 0 600 800','Imported curved/relative path uses client fit fallback');

@@ -22,7 +22,7 @@ final class SND_I18n {
     }
     public static function wp_locale(){return array('sr'=>'sr_RS','en'=>'en_US','de'=>'de_DE','ru'=>'ru_RU')[self::lang()];}
     public static function data() {
-        if(self::$data===null){self::$data=is_file(SND_DIR.'data/i18n.php')?require SND_DIR.'data/i18n.php':array();}
+        if(self::$data===null){self::$data=is_file(SND_DIR.'data/i18n.php')?require SND_DIR.'data/i18n.php':array();if(is_file(SND_DIR.'data/i18n-v4.php')){self::$data=array_merge(self::$data,require SND_DIR.'data/i18n-v4.php');}}
         return self::$data;
     }
     public static function catalog($lang=null) {
@@ -80,6 +80,7 @@ final class SND_I18n {
     public static function region($name){$key='@region_'.SND_Text::key($name);$value=self::t($key);return $value===$key?$name:$value;}
     public static function place($name) {return $name==='Beograd'?self::t('@belgrade'):$name;}
     public static function territory_name($territory) {
+        if(SND_Kinds::is_explore($territory['kind']??'')){return SND_Explore::display_name($territory);}
         if(($territory['kind']??'')==='district'){return self::t($territory['name']);}
         return self::place($territory['name']);
     }
@@ -114,6 +115,7 @@ final class SND_I18n {
         $key=SND_Text::key($name);return self::t('@direction_'.$key);
     }
     public static function question($q,$target) {
+        if(strpos($q['type'],'explore_')===0){return SND_Explore::translate($q,$target);}
         $original=$q;$correct='';foreach($original['options'] as $option){if($option['id']===$original['correct']){$correct=$option['label'];}}
         $name=self::territory_name($target);$vars=array('name'=>$name,'seat'=>self::place($target['seat']??$target['name']),'year'=>$target['year']??2022,
             'population'=>self::number($target['population']??0),'answer'=>$correct);

@@ -4,6 +4,7 @@ $wp_root=getenv('WP_ROOT');
 if(!$wp_root || !is_file(rtrim($wp_root,'/').'/wp-load.php')){fwrite(STDERR,"Set WP_ROOT to an isolated test WordPress.\n");exit(1);}
 require rtrim($wp_root,'/').'/wp-load.php';
 if(!in_array(wp_get_environment_type(),array('local','development'),true)){fwrite(STDERR,"Refusing to run on production/staging.\n");exit(1);} 
+require __DIR__.'/legacy-mode.php';
 require_once ABSPATH . 'wp-admin/includes/plugin.php';
 activate_plugin('srbija-na-dlanu/srbija-na-dlanu.php');
 if (!class_exists('SND_Game')) { require WP_PLUGIN_DIR . '/srbija-na-dlanu/srbija-na-dlanu.php'; }

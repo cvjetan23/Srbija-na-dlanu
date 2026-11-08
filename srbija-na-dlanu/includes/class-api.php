@@ -49,7 +49,7 @@ final class SND_API {
         $data = SND_Data::get(); $date = SND_Game::date();
         $tomorrow = new DateTimeImmutable('tomorrow', new DateTimeZone('Europe/Belgrade'));
         $outline = array(); foreach (SND_Data::pool('district') as $t) { $outline[] = $t['map_path']; }
-        return self::response(array('date' => $date, 'next_change' => $tomorrow->getTimestamp(), 'server_time' => time(), 'counts' => array('district' => count(SND_Data::pool('district')), 'municipality' => count(SND_Data::pool('municipality'))), 'retired_ids'=>SND_Data::retired_ids(),'coverage' => $data['coverage'], 'sources' => $data['sources'], 'outline' => $outline, 'version' => SND_VERSION,'config'=>SND_Settings::public_config()));
+        return self::response(array('date' => $date, 'next_change' => $tomorrow->getTimestamp(), 'server_time' => time(), 'counts' => SND_Kinds::counts(),'target_counts'=>SND_Explore::target_counts(),'games'=>SND_Kinds::labels(), 'retired_ids'=>SND_Data::retired_ids(),'coverage' => $data['coverage'], 'sources' => array_merge($data['sources'],SND_Explore::data()['sources']??array()), 'outline' => $outline, 'version' => SND_VERSION,'config'=>SND_Settings::public_config()));
     }
 
     public static function start($request) {
@@ -65,8 +65,9 @@ final class SND_API {
     }
     private static function start_game($request) {
         $kind = $request->get_param('kind'); $mode = $request->get_param('mode');
-        if (!in_array($kind, array('district', 'municipality'), true) || !in_array($mode, array('daily', 'practice'), true)) { return new WP_Error('snd_mode', 'Nepoznata igra ili režim.', array('status' => 400)); }
+        if (!in_array($kind, SND_Kinds::ALL, true) || !in_array($mode, array('daily', 'practice'), true)) { return new WP_Error('snd_mode', 'Nepoznata igra ili režim.', array('status' => 400)); }
         if(!SND_Settings::get($kind.'_enabled') || !SND_Settings::get($mode.'_enabled')){return new WP_Error('snd_disabled','Nove partije ovog tipa trenutno nisu dostupne.',array('status'=>503));}
+        if($mode==='practice' && SND_Settings::get('daily_only')){return new WP_Error('snd_daily_only','Igra se jednom dnevno. Otvori današnji izazov.',array('status'=>403));}
         $lock = is_user_logged_in() ? 'snd_start_lock_'.get_current_user_id().'_'.$kind.'_'.$mode : '';
         $lease=$lock?SND_Lock::acquire($lock):true;
         if (!$lease) { return new WP_Error('snd_busy','Partija se još priprema. Pokušaj ponovo.',array('status'=>409)); }

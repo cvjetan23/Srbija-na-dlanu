@@ -4,6 +4,8 @@ from pathlib import Path
 import hashlib
 import re
 import zipfile
+import subprocess
+import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 PLUGIN = ROOT / "srbija-na-dlanu"
@@ -11,6 +13,8 @@ OUTPUT = ROOT / "dist"
 
 
 def main():
+    if (ROOT / "tools/explore-assets.json").exists():
+        subprocess.run([sys.executable, str(ROOT / "tools/build-explore-assets.py")], check=True)
     if not (PLUGIN / "srbija-na-dlanu.php").is_file():
         raise SystemExit("Missing plugin entry point.")
     entry = (PLUGIN / "srbija-na-dlanu.php").read_text(encoding="utf-8")

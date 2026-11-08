@@ -3,7 +3,7 @@ defined('ABSPATH') || exit;
 
 final class SND_Game {
     const MAX_GUESSES = 6;
-    const RULESET = 3;
+    const RULESET = 4;
 
     public static function date() { return (new DateTimeImmutable('now', new DateTimeZone('Europe/Belgrade')))->format('Y-m-d'); }
 
@@ -41,6 +41,7 @@ final class SND_Game {
     }
 
     public static function geometry_sources($territories) {
+        if($territories && SND_Kinds::is_explore(reset($territories)['kind']??'')){return SND_Explore::geometry_sources($territories);}
         $kim=false;$other=false;$extra=array();
         foreach($territories as $t){if(!empty($t['boundary_source'])){$extra[$t['boundary_source']]=($t['parent_id']??'')==='m-beograd'?'MRE — granice beogradskih gradskih opština':'Granice teritorije';}elseif(($t['region']??'')==='Kosovo i Metohija'){$kim=true;}else{$other=true;}}
         $out=array();
@@ -154,8 +155,8 @@ final class SND_Game {
     }
 
     public static function challenge($kind, $mode) {
-        $data = SND_Data::get(); $pool = SND_Data::pool($kind); $districts = SND_Data::pool('district');
-        if (count($pool) < 4 || count($districts) < 4) { return new WP_Error('snd_empty', 'Nema dovoljno aktivnih teritorija. Obratite se administratoru.', array('status' => 503)); }
+        $data = SND_Data::get(); $pool = SND_Data::pool($kind); $districts = SND_Data::pool('district');$targets=SND_Kinds::is_explore($kind)?SND_Explore::targets($kind):$pool;
+        if (count($targets) < 4 || count($districts) < 4) { return new WP_Error('snd_empty', 'Nema dovoljno aktivnih teritorija. Obratite se administratoru.', array('status' => 503)); }
         $date = self::date(); $key = 'snd_day_v'.self::RULESET.'_' . str_replace('-', '', $date) . '_' . $kind;
         if ($mode === 'daily') { $saved = get_option($key); if ($saved) { return $saved; } }
         $lock=$mode==='daily'?'snd_challenge_lock_'.$key:'';$lease=$lock?SND_Lock::acquire($lock):true;
@@ -163,16 +164,16 @@ final class SND_Game {
         try {
         if($mode==='daily'){$saved=get_option($key);if($saved){return $saved;}}
         $days = (int) (new DateTimeImmutable('2026-01-01'))->diff(new DateTimeImmutable($date))->format('%r%a');
-        $cycle = (int) floor($days / count($pool));
-        $order = self::ordered($pool, $kind . ':' . $cycle);
-        $target = $mode === 'daily' ? $order[(($days % count($pool)) + count($pool)) % count($pool)] : $order[random_int(0, count($pool) - 1)];
+        $cycle = (int) floor($days / count($targets));
+        $order = self::ordered($targets, $kind . ':' . $cycle);
+        $target = $mode === 'daily' ? $order[(($days % count($targets)) + count($targets)) % count($targets)] : $order[random_int(0, count($targets) - 1)];
         $seed = $mode === 'daily' ? $date . ':' . $kind : bin2hex(random_bytes(16));
         $catalog = array();
-        foreach ($pool as $t) { $catalog[$t['id']] = array_intersect_key($t, array_flip(array('id', 'kind', 'name', 'center', 'aliases', 'map_path'))); }
-        $challenge = array('date' => $date, 'kind' => $kind, 'mode' => $mode, 'ruleset' => self::RULESET, 'storage_key' => $key, 'number' => max(1, $days + 1), 'target' => $target, 'catalog' => $catalog, 'revision' => $data['revision'], 'questions' => self::questions($target, $pool, $districts, $seed));
+        foreach ($pool as $t) { $catalog[$t['id']] = array_intersect_key($t, array_flip(array('id', 'kind', 'name', 'center', 'aliases', 'map_path','point','labels','display_name','district_name'))); }
+        $challenge = array('date' => $date, 'kind' => $kind, 'mode' => $mode, 'ruleset' => self::RULESET, 'storage_key' => $key, 'number' => max(1, $days + 1), 'target' => $target, 'catalog' => $catalog, 'revision' => SND_Kinds::is_explore($kind)?SND_Explore::revision():$data['revision'], 'questions' => SND_Kinds::is_explore($kind)?SND_Explore::questions($target,$pool,$seed):self::questions($target, $pool, $districts, $seed));
         $challenge['scoring']=SND_Scoring::rules();
         $challenge['options']=SND_Settings::game_options();$slots=array('population','administration','flag','landmark');$selected=array();
-        foreach($challenge['questions'] as $i=>$question){if(in_array($slots[$i],$challenge['options']['rounds'],true)){$selected[]=$question;}}$challenge['questions']=$selected;
+        foreach($challenge['questions'] as $i=>$question){if(SND_Kinds::is_explore($kind)?in_array($i,SND_Settings::get('explore_rounds',array(0,1,2,3)),true):in_array($slots[$i],$challenge['options']['rounds'],true)){$selected[]=$question;}}$challenge['questions']=$selected;
         if ($mode === 'daily') { add_option($key, $challenge, '', false); return get_option($key); }
         return $challenge;
         } finally {if($lock){SND_Lock::release($lock,$lease);}}
@@ -187,7 +188,7 @@ final class SND_Game {
         // Fresh sessions can restore a real flag round from an older cached day.
         // Already started sessions keep their questions and answer identifiers.
         $slots=$c['options']['rounds']??array('population','administration','flag','landmark');$flag_index=array_search('flag',$slots,true);
-        if($flag_index!==false && SND_Settings::get('flag_fallback') && isset($c['questions'][$flag_index]) && $c['questions'][$flag_index]['type']!=='flag'){
+        if(!SND_Kinds::is_explore($kind) && $flag_index!==false && SND_Settings::get('flag_fallback') && isset($c['questions'][$flag_index]) && $c['questions'][$flag_index]['type']!=='flag'){
             $flag=SND_Flags::question($c['target'],$c['date'].':'.$c['kind'].':restored-flag',true);if($flag){$state['question_overrides'][$flag_index]=$flag;}
         }
         $state['rank_eligible']=SND_Ranking::reserve($state);
@@ -234,14 +235,14 @@ final class SND_Game {
         } elseif ($action==='source' && $s['stage']==='quiz' && !isset($s['answers'][$s['question_index']])) {
             if(!$options['source_help_enabled']){return new WP_Error('snd_help_disabled','Ova pomoć je isključena u podešavanjima igre.',array('status'=>403));}
             $q=self::question_for($s,$s['question_index']);
-            if(empty($q['image']) || empty($q['image_source'])){return new WP_Error('snd_source','Izvor slike sada nije dostupan.',array('status'=>409));}
+            if(($q['type']!=='explore_photo' && empty($q['image'])) || empty($q['image_source'])){return new WP_Error('snd_source','Izvor slike sada nije dostupan.',array('status'=>409));}
             $s['source_help']=true;$s['source_help_questions'][$s['question_index']]=true;
         } elseif ($action==='media_unavailable' && $s['stage']==='quiz' && !isset($s['answers'][$s['question_index']])) {
             if(!$options['media_fallback']){return new WP_Error('snd_fallback_disabled','Zamensko pitanje je isključeno u podešavanjima igre.',array('status'=>403));}
             $q=self::question_for($s,$s['question_index']);
-            if(empty($q['image']) && $q['type']!=='flag'){return new WP_Error('snd_media','Ovo pitanje ne koristi slike.',array('status'=>409));}
+            if(empty($q['image']) && !in_array($q['type'],array('flag','explore_photo'),true)){return new WP_Error('snd_media','Ovo pitanje ne koristi slike.',array('status'=>409));}
             $target=$c['target'];$pool=SND_Data::pool($c['kind']);
-            $s['question_overrides'][$s['question_index']]=self::distance_question($target,$pool,$c['date'].':'.$target['id'].':media:'.$s['question_index'],'Zamensko geografsko pitanje: slika nije mogla da se učita. Prethodni pokušaji nisu potrošeni.');
+            $s['question_overrides'][$s['question_index']]=SND_Kinds::is_explore($c['kind'])?SND_Explore::questions($target,$pool,$c['date'].':media:'.$s['question_index'])[0]:self::distance_question($target,$pool,$c['date'].':'.$target['id'].':media:'.$s['question_index'],'Zamensko geografsko pitanje: slika nije mogla da se učita. Prethodni pokušaji nisu potrošeni.');
             $s['technical_replacements'][$s['question_index']]=true;
         } elseif (($action === 'answer' || $action === 'skip') && $s['stage'] === 'quiz' && !isset($s['answers'][$s['question_index']])) {
             $q = self::question_for($s,$s['question_index']);
@@ -266,11 +267,12 @@ final class SND_Game {
         $c = $s['challenge'];$options=SND_Settings::options_for($c);
         $out = array_intersect_key($s, array_flip(array('stage', 'guesses', 'hint', 'solved', 'question_index', 'revision', 'source_help')));
         $out += array('date' => $c['date'], 'number' => $c['number'], 'kind' => $c['kind'], 'mode' => $c['mode'], 'shape' => $c['target']['path'], 'max_guesses' => $options['max_guesses'],'hint_after'=>$options['hint_after'],'hint_enabled'=>$options['hint_enabled'],'source_help_enabled'=>$options['source_help_enabled'],'media_fallback'=>$options['media_fallback'], 'question_count' => count($c['questions']));
+        if(SND_Kinds::is_explore($c['kind'])){$out['explore_map']=SND_Explore::map_state($s);}
         if($s['stage']==='guess'){$out['catalog'] = array_map(function ($t) { return array_intersect_key($t, array_flip(array('id', 'name', 'aliases'))); }, array_values($c['catalog']));}
         if ($s['hint']) { $out['hint_text'] = 'Širi položaj: ' . $c['target']['region'] . '.'; }
         if ($s['stage'] !== 'guess') {
             $out['territory'] = array_intersect_key($c['target'], array_flip(array('id', 'name', 'region', 'map_path')));
-            if(in_array($s['stage'],array('reveal','complete'),true)){$out['map'] = array_map(function ($t) { return array_intersect_key($t, array_flip(array('id', 'name', 'map_path'))); }, array_values($c['catalog']));}
+            if(in_array($s['stage'],array('reveal','complete'),true)){$out['map'] = array_map(function ($t) { return array_intersect_key($t, array_flip(array('id', 'name', 'map_path','point'))); }, array_values($c['catalog']));}
         }
         if ($s['stage'] === 'quiz') {
             $i = $s['question_index']; $q = SND_I18n::question(self::question_for($s,$i),$c['target']);
@@ -280,6 +282,7 @@ final class SND_Game {
             }
             $q['source_help_used']=!empty($s['source_help_questions'][$i]);
             if(isset($s['answers'][$i])){$q['answer']=$s['answers'][$i];}
+            if($q['type']==='explore_photo' && !isset($s['answers'][$i]) && empty($s['source_help_questions'][$i])){foreach($q['attribution'] as &$credit){unset($credit['source']);}unset($credit);}
             $out['question'] = $q;
         }
         $out['score'] = count(array_filter($s['answers'], function ($a) { return $a['correct']; }));
@@ -292,7 +295,7 @@ final class SND_Game {
                 $q=SND_I18n::question(self::question_for($s,$i),$c['target']);$answer=$s['answers'][$i]??array('correct'=>false,'skipped'=>true,'choice'=>null);
                 $correct=array();$chosen=array();
                 foreach($q['options'] as $o){if($o['id']===$q['correct']){$correct=$o;}if($o['id']===($answer['choice']??null)){$chosen=$o;}}
-                $out['review'][]=array('title'=>$q['title'],'type'=>$q['type'],'correct_label'=>$q['correct_label']??($correct['label']??''),'correct_image'=>$correct['image']??($q['image']??''),'choice_label'=>$chosen['label']??'','choice_image'=>$chosen['image']??'','explanation'=>$q['explanation'],'source'=>$q['source'],'sources'=>$q['sources']??array(),'credits'=>$q['credits']??array(),'credit'=>$q['credit']??'','license'=>$q['license']??'','image_source'=>$q['image_source']??'','answer'=>$answer,'source_help_used'=>!empty($s['source_help_questions'][$i]),'technical_replacement'=>!empty($s['technical_replacements'][$i]));
+                $out['review'][]=array('title'=>$q['title'],'type'=>$q['type'],'correct_label'=>$q['correct_label']??($correct['label']??''),'correct_image'=>$correct['image']??($q['image']??''),'choice_label'=>$chosen['label']??'','choice_image'=>$chosen['image']??'','explanation'=>$q['explanation'],'source'=>$q['source'],'sources'=>$q['sources']??array(),'credits'=>$q['credits']??($q['attribution']??array()),'credit'=>$q['credit']??'','license'=>$q['license']??'','image_source'=>$q['image_source']??'','answer'=>$answer,'source_help_used'=>!empty($s['source_help_questions'][$i]),'technical_replacement'=>!empty($s['technical_replacements'][$i]));
             }
         }
         foreach($out['guesses'] as &$guess){$t=$c['catalog'][$guess['id']]??null;if($t){$guess['name']=SND_I18n::territory_name($t);}$guess['direction']['name']=SND_I18n::direction($guess['direction']['name']);}unset($guess);

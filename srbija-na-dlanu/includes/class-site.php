@@ -2,7 +2,7 @@
 defined('ABSPATH') || exit;
 
 final class SND_Site {
-    const VIEWS = array('home','district','municipality','library','ranking','login','account');
+    const VIEWS = array('home','games','district','municipality','city','river','mountain','library','ranking','login','account');
     public static function view() {
         if (!is_page()) { return ''; }
         $view = get_post_meta(get_queried_object_id(), '_snd_app_view', true);
@@ -11,7 +11,7 @@ final class SND_Site {
     public static function url($view='home') {
         $pages=get_option('snd_pages',array());
         if(!empty($pages[$view]) && get_post_status($pages[$view])==='publish'){return SND_I18n::url(get_permalink($pages[$view]));}
-        $slugs=array('home'=>'','district'=>'okruzi/','municipality'=>'opstine/','library'=>'baza-znanja/','ranking'=>'rang-lista/','login'=>'prijava/','account'=>'nalog/');
+        $slugs=array('home'=>'','games'=>'igre/','city'=>'gradovi/','river'=>'reke/','mountain'=>'planine/','district'=>'okruzi/','municipality'=>'opstine/','library'=>'baza-znanja/','ranking'=>'rang-lista/','login'=>'prijava/','account'=>'nalog/');
         return SND_I18n::url(home_url('/srbija-na-dlanu/'.($slugs[$view]??'')));
     }
     public static function install() {
@@ -19,7 +19,7 @@ final class SND_Site {
         $root=get_page_by_path('srbija-na-dlanu',OBJECT,'page');
         if(!$root){$id=wp_insert_post(array('post_type'=>'page','post_status'=>'publish','post_title'=>'Srbija na dlanu','post_name'=>'srbija-na-dlanu','post_content'=>'[srbija_na_dlanu]'),true);if(is_wp_error($id)){return $id;}$root=get_post($id);}
         $pages=array('home'=>$root->ID);
-        $definitions=array('district'=>array('okruzi','Okruzi'),'municipality'=>array('opstine','Opštine i gradovi'),'library'=>array('baza-znanja','Baza znanja'),'ranking'=>array('rang-lista','Rang lista'),'login'=>array('prijava','Prijava'),'account'=>array('nalog','Moj nalog'));
+        $definitions=array('games'=>array('igre','Igre'),'city'=>array('gradovi','Gradovi i naselja'),'river'=>array('reke','Reke'),'mountain'=>array('planine','Planine'),'district'=>array('okruzi','Okruzi'),'municipality'=>array('opstine','Opštine i gradovi'),'library'=>array('baza-znanja','Baza znanja'),'ranking'=>array('rang-lista','Rang lista'),'login'=>array('prijava','Prijava'),'account'=>array('nalog','Moj nalog'));
         foreach($definitions as $view=>$details){
             $page=get_page_by_path('srbija-na-dlanu/'.$details[0],OBJECT,'page');
             if(!$page){$id=wp_insert_post(array('post_type'=>'page','post_status'=>'publish','post_parent'=>$root->ID,'post_title'=>$details[1],'post_name'=>$details[0],'post_content'=>''),true);if(is_wp_error($id)){return $id;}$page=get_post($id);}
@@ -53,8 +53,8 @@ final class SND_Site {
     public static function assets() {
         $view=self::view();if(!$view){return;}SND_I18n::enqueue();wp_enqueue_style('snd-ranking',SND_URL.'assets/ranking.css',array('snd-themes'),SND_VERSION);
         wp_enqueue_script('snd-ui',SND_URL.'assets/ui.js',array('snd-i18n'),SND_VERSION,true);
-        wp_enqueue_style('snd-app',SND_URL.'assets/app.css',array(),SND_VERSION);wp_enqueue_style('snd-themes',SND_URL.'assets/themes.css',array('snd-app'),SND_VERSION);
-        if(in_array($view,array('district','municipality'),true)){snd_enqueue_game_assets();}
+        wp_enqueue_style('snd-app',SND_URL.'assets/app.css',array(),SND_VERSION);wp_enqueue_style('snd-themes',SND_URL.'assets/themes.css',array('snd-app'),SND_VERSION);wp_enqueue_style('snd-explore',SND_URL.'assets/explore.css',array('snd-themes'),SND_VERSION);
+        if(in_array($view,SND_Kinds::ALL,true)){snd_enqueue_game_assets();}
         if($view==='library'){wp_enqueue_script('snd-library',SND_URL.'assets/library.js',array(),SND_VERSION,true);wp_enqueue_style('snd-atlas',SND_URL.'assets/atlas.css',array('snd-themes'),SND_VERSION);}
     }
     public static function trim_theme_assets() {
@@ -76,8 +76,8 @@ final class SND_Site {
     public static function header() {
         $view=self::view();
         echo '<header class="snd-app-header"><a class="snd-app-brand" href="'.esc_url(self::url()).'">'.self::compass().'<span data-snd-original>'.esc_html(SND_Settings::get('app_name')).'</span></a><nav class="snd-app-nav" aria-label="Glavni meni">';
-        $items=array('home'=>'Početna','district'=>'Okruzi','municipality'=>'Opštine','library'=>'Baza znanja','ranking'=>'Rang lista');
-        foreach($items as $key=>$name){echo '<a href="'.esc_url(self::url($key)).'" '.($key===$view?'aria-current="page"':'').'>'.esc_html($name).'</a>';}
+        $items=array('home'=>'Početna','games'=>'Igre','library'=>'Baza znanja','ranking'=>'Rang lista');
+        foreach($items as $key=>$name){echo '<a href="'.esc_url(self::url($key)).'" '.($key===$view || ($key==='games' && in_array($view,SND_Kinds::ALL,true))?'aria-current="page"':'').'>'.esc_html($name).'</a>';}
         echo '</nav>';self::preferences();$account=is_user_logged_in()?'account':'login';$label=SND_I18n::t(is_user_logged_in()?'Moj nalog':'Prijava');
         echo '<a class="snd-account-link" href="'.esc_url(self::url($account)).'" aria-label="'.esc_attr($label).'" title="'.esc_attr($label).'"'.($account===$view?' aria-current="page"':'').'><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M4.5 21v-2a7.5 7.5 0 0 1 15 0v2"/></svg></a></header>';
     }
@@ -104,8 +104,8 @@ final class SND_Site {
         $url=self::canonical();foreach(array('mode','date','pretraga','board','period','game','rank_date','rank_month','rank_page') as $key){if(isset($_GET[$key]) && is_string($_GET[$key])){$url=add_query_arg($key,sanitize_text_field(wp_unslash($_GET[$key])),$url);}}return $url;
     }
     public static function game_root($atts=array()) {
-        snd_enqueue_game_assets();$id=wp_unique_id('snd-');$kind=in_array($atts['kind']??'',array('district','municipality'),true)?$atts['kind']:'';
-        return '<div id="'.esc_attr($id).'" class="snd-game" lang="'.esc_attr(SND_I18n::html_lang()).'" data-api="'.esc_url(rest_url('srbija-na-dlanu/v1/')).'" data-assets="'.esc_url(SND_URL.'assets/').'" data-ajax="'.esc_url(admin_url('admin-ajax.php')).'" data-login="'.esc_url(self::url('login')).'" data-account="'.esc_url(self::url('account')).'" data-kind="'.esc_attr($kind).'" data-district-url="'.esc_url(self::url('district')).'" data-municipality-url="'.esc_url(self::url('municipality')).'" data-regions-url="'.esc_url(add_query_arg('podela','regioni',self::url('library'))).'" data-lang="'.esc_attr(SND_I18n::lang()).'" data-shell="'.(self::view()?'1':'0').'"><div class="snd-loading" role="status">'.self::loader().'Učitavanje igre…</div><noscript><style>.snd-loading{display:none!important}</style>Za igranje uključi JavaScript.</noscript></div>';
+        snd_enqueue_game_assets();$id=wp_unique_id('snd-');$kind=in_array($atts['kind']??'',SND_Kinds::ALL,true)?$atts['kind']:'';
+        return '<div id="'.esc_attr($id).'" class="snd-game" lang="'.esc_attr(SND_I18n::html_lang()).'" data-api="'.esc_url(rest_url('srbija-na-dlanu/v1/')).'" data-assets="'.esc_url(SND_URL.'assets/').'" data-ajax="'.esc_url(admin_url('admin-ajax.php')).'" data-login="'.esc_url(self::url('login')).'" data-account="'.esc_url(self::url('account')).'" data-kind="'.esc_attr($kind).'" data-games-url="'.esc_url(self::url('games')).'" data-city-url="'.esc_url(self::url('city')).'" data-river-url="'.esc_url(self::url('river')).'" data-mountain-url="'.esc_url(self::url('mountain')).'" data-district-url="'.esc_url(self::url('district')).'" data-municipality-url="'.esc_url(self::url('municipality')).'" data-regions-url="'.esc_url(add_query_arg('podela','regioni',self::url('library'))).'" data-lang="'.esc_attr(SND_I18n::lang()).'" data-shell="'.(self::view()?'1':'0').'"><div class="snd-loading" role="status">'.self::loader().'Učitavanje igre…</div><noscript><style>.snd-loading{display:none!important}</style>Za igranje uključi JavaScript.</noscript></div>';
     }
     public static function loader() {
         return '<span class="snd-compass-loader" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="19" stroke="currentColor" stroke-width="1.5"/><path d="M24 1v8m0 30v8M1 24h8m30 0h8" stroke="currentColor" stroke-width="1.5"/><g class="snd-loader-needle"><path d="m32 16-5.5 10.5L16 32l5.5-10.5L32 16Z" fill="currentColor"/></g></svg></span>';
@@ -113,33 +113,42 @@ final class SND_Site {
     public static function silhouette($territory,$class='') {return '<svg class="snd-atlas-shape '.esc_attr($class).'" viewBox="0 0 360 360" role="img" aria-label="Obris: '.esc_attr($territory['name']).'"><path d="'.esc_attr($territory['path']).'"/></svg>';}
     public static function content() {
         $view=self::view();
-        if(in_array($view,array('district','municipality'),true) && !SND_Settings::get($view.'_enabled')){echo '<section class="snd-auth-card"><h1>'.esc_html($view==='district'?'Okruzi':'Opštine i gradovi').'</h1><p>Nove partije ovog tipa trenutno nisu dostupne.</p></section>';return;}
-        if($view==='home'){self::home();}
-        elseif(in_array($view,array('district','municipality'),true)){echo self::game_root(array('kind'=>$view));}
+        if(in_array($view,SND_Kinds::ALL,true) && !SND_Settings::get($view.'_enabled')){echo '<section class="snd-auth-card"><h1>'.esc_html(SND_Kinds::labels()[$view]).'</h1><p>Nove partije ovog tipa trenutno nisu dostupne.</p></section>';return;}
+        if(in_array($view,array('home','games'),true)){self::home();}
+        elseif(in_array($view,SND_Kinds::ALL,true)){echo self::game_root(array('kind'=>$view));}
         elseif($view==='library'){self::library();}
         elseif($view==='ranking'){SND_Ranking::page();}
         elseif($view==='login'){SND_Accounts::form();}
         elseif($view==='account'){self::account();}
     }
     private static function home() {
-        $data=SND_Data::get();$districts=SND_Data::pool('district');$municipalities=SND_Data::pool('municipality');
-        echo '<section class="snd-home-intro"><h1 data-snd-original>'.esc_html(SND_Settings::get('app_name')).'</h1><p>Prepoznaj teritoriju sa slike i proveri svoje znanje.</p></section><div class="snd-home-games">';
-        foreach(array('district'=>array('Okruzi',$districts,'rs-12'),'municipality'=>array('Opštine i gradovi',$municipalities,'m-cacak')) as $kind=>$entry){
-            if(!SND_Settings::get($kind.'_enabled')){continue;}$example=$entry[1][$entry[2]]??reset($entry[1]);
-            echo '<a class="snd-home-game" href="'.esc_url(self::url($kind)).'">'.self::silhouette($example).'<h2>'.esc_html($entry[0]).'</h2><p>'.count($entry[1]).' teritorija</p><span class="snd-card-action"><span>Igraj</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></span></a>';
+        $progress=is_user_logged_in()?SND_Progress::get(get_current_user_id()):array();$today=SND_Game::date();
+        echo '<section class="snd-home-intro"><h1 data-snd-original>'.esc_html(self::view()==='games'?SND_I18n::t('Igre'):SND_Settings::get('app_name')).'</h1><p>Pet geografskih izazova. Svaki dan novo otkriće.</p></section><div id="snd-games" class="snd-home-games snd-five-games">';
+        foreach(SND_Kinds::available() as $kind=>$label){
+            $pool=SND_Data::pool($kind);$example=$pool[$kind==='district'?'rs-12':'m-cacak']??reset($pool);if(!$example){continue;}
+            $picture=SND_Kinds::is_explore($kind)?self::game_icon($kind):self::silhouette($example);
+            $day=$progress[$kind]['days'][$today]??null;$active=is_user_logged_in()?SND_Progress::active(get_current_user_id(),$kind,'daily'):null;
+            $status=$day?SND_I18n::t('Završeno').' · '.(int)($day['points']??0).'/100':($active?SND_I18n::t('Nastavi današnji izazov'):SND_I18n::t('Današnji izazov'));
+            echo '<a class="snd-home-game" data-game-kind="'.esc_attr($kind).'" href="'.esc_url(self::url($kind)).'">'.$picture.'<h2>'.esc_html($label).'</h2><p>'.esc_html(SND_I18n::t('{count} unosa u bazi',array('count'=>count($pool)))).'</p><span class="snd-daily-status" data-daily-kind="'.esc_attr($kind).'" data-daily-date="'.esc_attr($today).'">'.esc_html($status).'</span><span class="snd-card-action"><span>'.($day?'Pogledaj rezultat':($active?'Nastavi':'Igraj')).'</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></span></a>';
         }
-        echo '</div>';self::home_rules();echo '<section class="snd-home-library"><div><h2>Upoznaj okruge</h2><p>Pronađi obris, sedište, stanovništvo i opštine jednog okruga.</p></div><a class="snd-app-button snd-button-outline" href="'.esc_url(self::url('library')).'">Baza znanja</a></section>';
+        echo '</div>';self::home_rules();echo '<section class="snd-home-library"><div><h2>Upoznaj Srbiju</h2><p>Istraži okruge, opštine, naselja, reke i planine.</p></div><a class="snd-app-button snd-button-outline" href="'.esc_url(self::url('library')).'">Baza znanja</a></section>';
         if(!is_user_logged_in()){echo '<p class="snd-home-account"><a href="'.esc_url(self::url('login')).'">Prijavi se</a> za čuvanje progresa na nalogu.</p>';}
+    }
+    public static function game_icon($kind){
+        $paths=array('city'=>'<path d="M70 160h180M85 160V95h42v65m20 0V65h70v95m-87-30h10m-10 15h10m27-65h12m-12 22h12m-12 22h12"/><path d="M160 28a17 17 0 1 0-34 0c0 15 17 31 17 31s17-16 17-31Z"/><circle cx="143" cy="28" r="5"/>','river'=>'<path d="M95 35c130 32-80 52 38 82s92 41-12 70M78 44c130 32-80 52 38 82s92 41-12 70M168 37l16 10-14 8m-43 88 16 10-14 8"/>','mountain'=>'<path d="m40 172 92-129 57 79 25-33 66 83H40Z"/><path d="m105 81 27 23 22-30m-54 53 20-6 13 15 17-11 22 19m28-37 14 16 13-13"/>');
+        return '<svg class="snd-game-card-icon" viewBox="0 0 320 220" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'.($paths[$kind]??'').'</svg>';
     }
     private static function home_rules() {
         $pool=SND_Data::pool('district');$example=$pool['rs-12']??reset($pool);if(!$example){return;}
         $pictures=array('<path class="snd-rule-fill" d="'.esc_attr($example['path']).'" transform="translate(36 2) scale(.28)"/>','<rect x="14" y="35" width="112" height="40" rx="8"/><path d="M26 55h54m-52-10v20m68-10h19m-7-7 7 7-7 7"/>','<circle cx="46" cy="54" r="25"/><path d="M46 37v34m-10-22 10-12 10 12M85 43h35m-35 18h25"/>','<rect x="18" y="18" width="45" height="35" rx="5"/><rect x="76" y="18" width="45" height="35" rx="5"/><rect x="18" y="65" width="45" height="35" rx="5"/><rect x="76" y="65" width="45" height="35" rx="5"/><path d="m29 36 9 8 16-17"/>');
-        $steps=array(array('Prepoznaj obris','Pogledaj oblik okruga ili opštine. Sever je uvek gore.'),array('Unesi odgovor',SND_I18n::t('Imaš {count} pokušaja da pronađeš traženu teritoriju.',array('count'=>SND_Settings::get('max_guesses')))),array('Prati tragove','Kilometri i strelica vode od tvog odgovora ka traženoj teritoriji.'),array('Proveri znanje','Nastavi kroz pitanja o stanovništvu, pripadnosti, zastavi i znamenitostima.'));
+        $steps=array(array('Pogledaj mapu','Prepoznaj obris, pin naselja ili planine, ili označeni tok reke. Sever je gore.'),array('Unesi odgovor',SND_I18n::t('Imaš {count} pokušaja da pronađeš traženu teritoriju.',array('count'=>SND_Settings::get('max_guesses')))),array('Prati tragove','Pinovi, kilometri i strelice vode ka odgovoru. Kod reka uporedi označene tokove.'),array('Proveri znanje','Odgovori na četiri pitanja, prepoznaj fotografiju ili zastavu i osvoji do 100 poena.'));
         echo '<section class="snd-home-rules" aria-labelledby="snd-rules-title"><h2 id="snd-rules-title">Kako se igra?</h2><ol role="list">';
         foreach($steps as $i=>$step){echo '<li><div class="snd-rule-picture"><svg viewBox="0 0 140 115" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'.$pictures[$i].'</svg></div><span class="snd-rule-number" aria-hidden="true">'.($i+1).'</span><h3>'.esc_html($step[0]).'</h3><p>'.esc_html($step[1]).'</p></li>';}
         echo '</ol></section>';
     }
     private static function library() {
+        if(SND_Explore_Admin::library()){return;}
+        SND_Explore_Admin::library_tabs();
         $districts=SND_Data::pool('district');if(isset($_GET['podela']) && $_GET['podela']==='regioni'){self::regions();return;}$key=isset($_GET['okrug'])&&is_string($_GET['okrug'])?sanitize_key(wp_unslash($_GET['okrug'])):'';
         $municipality=SND_Atlas::municipality();if($municipality && isset($districts[$municipality['district_id']])){SND_Atlas::municipality_detail($municipality,$districts[$municipality['district_id']]);return;}
         if($key && isset($districts[$key])){self::district_detail($districts[$key]);return;}
@@ -179,10 +188,11 @@ final class SND_Site {
     }
     public static function document_title($original='') {
         $view=self::view();if(!$view){return $original;}
+        $object=SND_Explore_Admin::current();if($object){return SND_I18n::t('{name} — Baza znanja — Srbija na dlanu',array('name'=>SND_Explore::name($object)));}
         $m=SND_Atlas::municipality();if($m){return SND_I18n::t('{name} — Baza znanja — Srbija na dlanu',array('name'=>SND_I18n::territory_name($m)));}
         $t=self::current_district();if($t){return SND_I18n::t('{name} — Baza znanja — Srbija na dlanu',array('name'=>SND_I18n::territory_name($t)));}
         if($view==='library' && ($_GET['podela']??'')==='regioni'){return SND_I18n::text('Šire celine u igri — Srbija na dlanu');}
-        $labels=array('home'=>'Geografska igra','district'=>'Okruzi','municipality'=>'Opštine i gradovi','library'=>'Baza znanja','ranking'=>'Rang lista','login'=>'Prijava','account'=>'Moj nalog');
+        $labels=array('games'=>'Igre','city'=>'Gradovi i naselja','river'=>'Reke','mountain'=>'Planine','home'=>'Geografska igra','district'=>'Okruzi','municipality'=>'Opštine i gradovi','library'=>'Baza znanja','ranking'=>'Rang lista','login'=>'Prijava','account'=>'Moj nalog');
         return str_replace('Srbija na dlanu',SND_Settings::get('app_name'),SND_I18n::text($view==='home'?'Srbija na dlanu — Geografska igra':$labels[$view].' — Srbija na dlanu'));
     }
     public static function description($original='') {
@@ -190,14 +200,17 @@ final class SND_Site {
         $m=SND_Atlas::municipality();if($m){$district=self::current_district();return SND_I18n::t('{name}: obris, položaj u okrugu {district}, stanovništvo i izvori.',array('name'=>SND_I18n::territory_name($m),'district'=>SND_I18n::territory_name($district)));}
         $t=self::current_district();
         if($t){return SND_I18n::t('{name}: obris teritorije, sedište {seat}, pripadajuće opštine, stanovništvo i izvori. Baza znanja igre Srbija na dlanu.',array('name'=>SND_I18n::territory_name($t),'seat'=>SND_I18n::place($t['seat'])));}
+        if(SND_Settings::get('daily_only') && in_array($view,array('home','district','municipality','library'),true)){return SND_I18n::t('Pet geografskih izazova. Svaki dan novo otkriće.');}
         $values=array('home'=>'Prepoznaj okruge, opštine i gradove Srbije po obrisu. Dnevni izazov, vežbanje i dodatna pitanja, uključujući Kosovo i Metohiju.','district'=>'Pogodi okrug Srbije po obrisu, prati udaljenost i smer, pa proveri znanje kroz dodatna pitanja. Dnevni izazov i vežbanje.','municipality'=>SND_I18n::t('Prepoznaj {count} opština i gradova Srbije, sa Kosovom i Metohijom. Igraj dnevni izazov ili vežbaj.',array('count'=>count(SND_Data::pool('municipality')))),'library'=>'Pronađi svih 30 okružnih celina Srbije: obris, sedište, stanovništvo, pripadajuće opštine i izvori.','login'=>'Prijavi se da sačuvaš rezultate i nastaviš igru Srbija na dlanu na drugom uređaju.','account'=>'Tvoji rezultati, upoznate teritorije i niz igranja u igri Srbija na dlanu.');
-        return $view==='ranking'?SND_I18n::t('Dnevni izazovi i opšta rang lista: dnevni, mesečni i ukupni rezultati igrača.'):SND_I18n::t($values[$view]);
+        if(in_array($view,array('games','city','river','mountain'),true)){return SND_I18n::t('Dnevne geografske igre: gradovi i naselja, reke i planine. Mapa, šest pokušaja, fotografije i rang lista.');}
+        return $view==='ranking'?SND_I18n::t('Rang lista dnevnih izazova za svih pet igara.'):SND_I18n::t($values[$view]);
     }
     public static function canonical() {
         $url=self::url(self::view()?:'home');$t=self::current_district();
         $m=SND_Atlas::municipality();if($m){return SND_Atlas::url($m);}
         if($t){return add_query_arg('okrug',$t['id'],self::url('library'));}
         if(self::view()==='library' && ($_GET['podela']??'')==='regioni'){return add_query_arg('podela','regioni',self::url('library'));}
+        if(self::view()==='library' && in_array($_GET['tip']??'',SND_Kinds::EXPLORE,true)){$url=add_query_arg('tip',sanitize_key($_GET['tip']),$url);$object=SND_Explore_Admin::current();if($object){$url=add_query_arg('objekat',$object['id'],$url);}}
         return $url;
     }
     public static function canonical_filter($original) {return self::view()?self::canonical():$original;}
@@ -238,8 +251,8 @@ final class SND_Site {
     private static function account() {
         $u=wp_get_current_user();$progress=SND_Progress::summary($u->ID);
         echo '<section class="snd-account"><h1>Moj nalog</h1><p class="snd-account-name" data-snd-original>'.esc_html($u->display_name).'</p><p>Progres se čuva na tvom nalogu i dostupan je na drugim uređajima.</p><div class="snd-account-grid">';
-        foreach(array('district'=>'Okruzi','municipality'=>'Opštine i gradovi') as $kind=>$label){$p=$progress[$kind];
-            echo '<section class="snd-progress-card"><h2>'.esc_html($label).'</h2><dl><div><dt>Upoznate teritorije</dt><dd>'.count($p['discovered']).' / '.count(SND_Data::pool($kind)).'</dd></div><div><dt>Dnevne partije</dt><dd>'.$p['daily_count'].'</dd></div><div><dt>Vežbanje</dt><dd>'.$p['practice_count'].'</dd></div><div><dt>Niz igranja</dt><dd>'.esc_html(SND_Text::days($p['streak'])).'</dd></div><div><dt>Tačni odgovori u kvizu</dt><dd>'.$p['quiz_correct'].' / '.$p['quiz_total'].'</dd></div></dl><a class="snd-app-button" href="'.esc_url(self::url($kind)).'">Nastavi igru</a></section>';
+        foreach(SND_Kinds::labels() as $kind=>$label){$p=$progress[$kind];
+            echo '<section class="snd-progress-card"><h2>'.esc_html($label).'</h2><dl><div><dt>Upoznate teritorije</dt><dd>'.count($p['discovered']).' / '.count(SND_Data::pool($kind)).'</dd></div><div><dt>Dnevne partije</dt><dd>'.$p['daily_count'].'</dd></div>'.(!SND_Settings::get('daily_only')?'<div><dt>Vežbanje</dt><dd>'.$p['practice_count'].'</dd></div>':'').'<div><dt>Niz igranja</dt><dd>'.esc_html(SND_Text::days($p['streak'])).'</dd></div><div><dt>Tačni odgovori u kvizu</dt><dd>'.$p['quiz_correct'].' / '.$p['quiz_total'].'</dd></div></dl><a class="snd-app-button" href="'.esc_url(self::url($kind)).'">Nastavi igru</a></section>';
         }
         echo '</div>';SND_Ranking::profile_form();echo '<form method="post" class="snd-logout" action="'.esc_url(self::url('login')).'">';wp_nonce_field('snd_auth_logout');echo '<input type="hidden" name="snd_action" value="logout"><button type="submit">Odjavi se</button></form></section>';
     }

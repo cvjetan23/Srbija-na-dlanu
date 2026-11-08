@@ -8,9 +8,9 @@ final class SND_Settings {
             'app_name'=>'Srbija na dlanu','default_language'=>'sr','languages'=>array('sr','en','de','ru'),
             'default_theme'=>'auto','theme_switch'=>true,'primary_color'=>'#2d6a4f','dark_accent'=>'#95d5b2','highlight_color'=>'#FFD447','dark_button_color'=>'#2d6a4f',
             'ink_color'=>'#102a26','surface_color'=>'#ffffff','pale_color'=>'#f4f7ed','border_color'=>'#95d5b2','dark_surface_color'=>'#1a3c34','palette_version'=>2,'river_background'=>true,'font_scale'=>100,
-            'district_enabled'=>true,'municipality_enabled'=>true,'daily_enabled'=>true,'practice_enabled'=>true,
+            'district_enabled'=>true,'municipality_enabled'=>true,'city_enabled'=>true,'river_enabled'=>true,'mountain_enabled'=>true,'daily_only'=>true,'daily_enabled'=>true,'practice_enabled'=>false,
             'max_guesses'=>6,'hint_after'=>3,'hint_enabled'=>true,'source_help_enabled'=>true,'media_fallback'=>true,
-            'rounds'=>array('population','administration','flag','landmark'),'show_sources'=>true,
+            'explore_rounds'=>array(0,1,2,3),'rounds'=>array('population','administration','flag','landmark'),'show_sources'=>true,
             'analytics_enabled'=>true,'guest_analytics'=>true,'retention_days'=>365,'erase_deleted_users'=>true,
             'ranking_enabled'=>true,'points_territory'=>60,'points_step'=>6,'points_hint'=>10,'flag_fallback'=>true,
         );
@@ -66,7 +66,7 @@ final class SND_Settings {
         if(!$out['languages']){$out['languages']=array('sr');}
         $out['default_language']=in_array($input['default_language']??'',$out['languages'],true)?$input['default_language']:$out['languages'][0];
         $out['default_theme']=in_array($input['default_theme']??'',array('light','dark','auto'),true)?$input['default_theme']:'auto';
-        foreach(array('theme_switch','district_enabled','municipality_enabled','daily_enabled','practice_enabled','hint_enabled','source_help_enabled','media_fallback','show_sources','analytics_enabled','guest_analytics','erase_deleted_users','ranking_enabled','river_background','flag_fallback') as $key){$out[$key]=!empty($input[$key]);}
+        foreach(array('theme_switch','district_enabled','municipality_enabled','city_enabled','river_enabled','mountain_enabled','daily_only','daily_enabled','practice_enabled','hint_enabled','source_help_enabled','media_fallback','show_sources','analytics_enabled','guest_analytics','erase_deleted_users','ranking_enabled','river_background','flag_fallback') as $key){$out[$key]=!empty($input[$key]);}
         foreach(array_keys(self::color_fields()) as $key){$out[$key]=sanitize_hex_color($input[$key]??'')?:$out[$key];}
         $out['palette_version']=2;
         $out['points_territory']=max(0,min(100,(int)($input['points_territory']??60)));
@@ -76,6 +76,7 @@ final class SND_Settings {
         $out['max_guesses']=max(2,min(12,(int)($input['max_guesses']??6)));
         $out['hint_after']=max(1,min($out['max_guesses']-1,(int)($input['hint_after']??3)));
         $out['retention_days']=(int)($input['retention_days']??365);if($out['retention_days']!==0){$out['retention_days']=max(7,min(3650,$out['retention_days']));}
+        $out['explore_rounds']=array_values(array_intersect(array(0,1,2,3),array_map('intval',(array)($input['explore_rounds']??array()))));
         $out['rounds']=array_values(array_intersect(array('population','administration','flag','landmark'),(array)($input['rounds']??array())));
         return $out;
     }
@@ -88,7 +89,7 @@ final class SND_Settings {
     }
     public static function public_config() {
         return array('app_name'=>self::get('app_name'),'languages'=>self::get('languages'),'language'=>SND_I18n::lang(),
-            'district_enabled'=>self::get('district_enabled'),'municipality_enabled'=>self::get('municipality_enabled'),'daily_enabled'=>self::get('daily_enabled'),'practice_enabled'=>self::get('practice_enabled'),
+            'district_enabled'=>self::get('district_enabled'),'municipality_enabled'=>self::get('municipality_enabled'),'city_enabled'=>self::get('city_enabled'),'river_enabled'=>self::get('river_enabled'),'mountain_enabled'=>self::get('mountain_enabled'),'daily_only'=>self::get('daily_only'),'daily_enabled'=>self::get('daily_enabled'),'practice_enabled'=>!self::get('daily_only') && self::get('practice_enabled'),
             'theme'=>self::get('default_theme'),'theme_switch'=>self::get('theme_switch'),'font_scale'=>self::get('font_scale'),
             'analytics'=>self::get('analytics_enabled'),'guest_analytics'=>self::get('guest_analytics'),'show_sources'=>self::get('show_sources'),'ranking_enabled'=>self::get('ranking_enabled'),'ranking_url'=>SND_Site::url('ranking'));
     }

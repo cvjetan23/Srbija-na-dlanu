@@ -37,6 +37,7 @@ final class SND_Data {
     public static function reset_cache() { self::$cache = null; }
 
     public static function pool($kind) {
+        if(SND_Kinds::is_explore($kind)){return SND_Explore::pool($kind);}
         $data = self::get();
         $retired=self::retired_ids();return array_filter($data['territories'], function ($t) use ($kind,$retired) { return $t['kind'] === $kind && !in_array($t['id'],$retired,true); });
     }

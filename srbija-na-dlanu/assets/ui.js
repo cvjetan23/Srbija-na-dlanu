@@ -1,6 +1,7 @@
 (function(){
   'use strict';
   const L=window.SND_L10N,cfg=L.config(),html=document.documentElement;
+  try{const results=JSON.parse(localStorage.getItem('snd:v1:daily-results')||'{}');document.querySelectorAll('[data-daily-kind]').forEach(n=>{const v=results[n.dataset.dailyKind];if(v && v.date===n.dataset.dailyDate){n.textContent=L.text('Završeno')+(v.points===null?'':' · '+v.points+'/100');}});}catch(_){}
   const media=window.matchMedia?window.matchMedia('(prefers-color-scheme: dark)'):{matches:false};
   function apply(choice,remember){
     if(!['light','dark','auto'].includes(choice))choice=cfg.theme||'auto';
