@@ -183,7 +183,7 @@ final class SND_I18n {
     public static function head() {
         if(!SND_Site::view()){return;}
         $theme=self::theme();$switch=SND_Settings::get('theme_switch');
-        $script='(function(){var p='.wp_json_encode($theme).';';
+        $script='(function(){function settle(e){var v=e.viewTransition;if(v){v.ready.catch(function(){});v.finished.catch(function(){});}}window.addEventListener("pageswap",settle);window.addEventListener("pagereveal",settle);var p='.wp_json_encode($theme).';';
         if($switch && !isset($_GET['snd_theme'])){$script.='var saved;try{saved=localStorage.getItem("snd:theme");}catch(e){}p=saved||((document.cookie.match(/(?:^|; )snd_theme=(light|dark|auto)(?:;|$)/)||[])[1])||p;';}
         $script.='if(["light","dark","auto"].indexOf(p)<0)p="auto";document.documentElement.dataset.sndTheme=p==="auto"?(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"):p;document.documentElement.dataset.sndPreference=p;})();';
         echo '<script data-noptimize="1">'.$script.'</script>';
