@@ -1,4 +1,17 @@
-# Produkcija — verzija 3.8.0
+# Produkcija — verzija 3.8.1
+
+Verzija **3.8.1 je postavljena i aktivna** na https://cvjetan.dev/srbija-na-dlanu/ — 8. novembar 2026. Nativni WordPress obrazac vratio je 200, očekivani hash i „Plugin updated successfully“.
+
+- Izvor `ae89514897be1c90fd4f7457aeecd7344d781563`, stablo `3ed3a9189742860ed2ea5f2579b86c7d806984c0`. Paket `3fcf69bd82b877459b181b45c4b711986468739d`, stablo `1706e58b3d94dba61beb01bf288d406b4aa9502d`. Svih **169 datoteka** paketa odgovara lokalnom manifestu po Git blob SHA i veličini.
+- ZIP SHA256: `b3baf7fdc6331bf748e22485bfdd809f48c0ac6ba2095e729d7e719c5426ffad`; **7.953.565 bajtova, 127 datoteka dodatka**. Završni dokumentacioni commit ne menja dodatak ni ZIP.
+- Prošle su [provere izvora](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/42512723173) i [main](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/42513104102): **33.197 WordPress, 141 JavaScript i 483 Chromium tvrdnje**. Nova serija ima 151 tvrdnju za kompaktno zaglavlje u četiri jezika i obe teme, na 320/640/1024/1440 px.
+- **202 javne produkcijske HTTP tvrdnje** proveravaju šest pogleda na četiri jezika, jezičke i tematske kontrole, pet stavki menija i nalog, no-store i osam identičnih CSS/JS resursa. API vraća 3.8.1, 30 okružnih celina i 190 opština/gradova/gradskih opština, uz očuvan KiM.
+- **152 produkcijske Chromium tvrdnje**: jezik prati levu ivicu, tema desnu, navigacija počinje levo, nalog ostaje desno u prvom redu; kontrole su kompaktnije i ne preklapaju se. Proverena je širina 640 px sa korisnikove slike i 320 px, oba desktop rasporeda, četiri jezika i obe teme, tastatura, otvaranje jezičkog menija i njegova širina, očuvanje okruga pri promeni jezika i native promena jezika/teme bez JS. Pregledan je produkcijski snimak zaglavlja. Nema JS izuzetaka; TLS provera je uključena.
+- Svih **šest administratorskih prikaza** vraća 200 bez PHP grešaka. Potvrđene su iste boje, runde, pokušaji i težine bodovanja kao pre ažuriranja. **Nijedna partija nije kreirana**, progres i poeni naloga nisu menjani. Administratorska sesija je odjavljena i zatvorena.
+
+[Gradovi/naselja, reke, planine i zajednička dnevna rang lista](NOVE-IGRE.md) ostaju razrađen koncept za pregled; nisu predstavljeni kao dostupne funkcije ovog izdanja. Fizički telefon i produkcijska isporuka e-pošte nisu deo provere. Broj tvrdnji nije broj nezavisnih scenarija.
+
+# Prethodna produkcija — verzija 3.8.0
 
 Verzija **3.8.0 je postavljena i aktivna** na https://cvjetan.dev/srbija-na-dlanu/ — 7. novembar 2026. Nativni WordPress obrazac potvrdio je uspešno ažuriranje i očekivani hash ZIP-a.
 

@@ -54,7 +54,7 @@ Za igru reka isključiti nazive reka iz dekorativne pozadine sajta da ne daju ne
 
 **Početak:** pin na reprezentativnoj, dokumentovanoj tački planine, uz diskretan reljef. Kada postoji pouzdan geografski obuhvat, prikazati i obris masiva. Planine nemaju uvek jednu opšteprihvaćenu granicu: ne crtati izmišljen precizan poligon samo da bi ličio na opštinu. Silueta horizonta može biti dodatni vizuelni detalj, označena kao pogled, a ne kao geografska granica.
 
-**Promašaj:** dodaje se manji numerisan pin i, ako postoji, obris izabrane planine. Razmak i smer mere se između istovrsnih referentnih tačaka, jasno opisanih u pravilima. Ako se koriste najviši vrhovi, to pravilo važi za sve planine u fond-u. Granice prekograničnih masiva ne seku se proizvoljno bez objašnjenja.
+**Promašaj:** dodaje se manji numerisan pin i, ako postoji, obris izabrane planine. Razmak i smer mere se između istovrsnih referentnih tačaka, jasno opisanih u pravilima. Ako se koriste najviši vrhovi, to pravilo važi za sve planine u fondu. Granice prekograničnih masiva ne seku se proizvoljno bez objašnjenja.
 
 Četiri dodatna pitanja:
 

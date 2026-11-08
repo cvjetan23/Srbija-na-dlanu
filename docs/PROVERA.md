@@ -1,4 +1,15 @@
-# Provera verzije 3.8.0
+# Provera verzije 3.8.1
+
+**Kompaktniji meni je postavljen na produkciju.** Prošle su [provere izdvojene grane](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/42512723173) i [main](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/42513104102). Provereno je svih **169 datoteka** paketa po Git blob SHA i veličini. Završni commit menja samo dokumentaciju.
+
+- **33.197 WordPress**, **141 JavaScript** i **483 Chromium tvrdnje** u CI-ju. Prethodne provere toka igre, obe teme, odgovora i zastava ostaju uključene.
+- Novih **151 Chromium tvrdnji** proverava stvarno poravnanje jezika levo i teme desno na 320/640 px, kompaktne kontrole i odsustvo preklapanja na 320/640/1024/1440 px, četiri jezika i obe teme. Provereni su padajući izbor, tastatura, očuvanje otvorenog okruga i nativna promena jezika/teme bez JavaScript-a.
+- Produkcija: **202 javne HTTP i 152 Chromium tvrdnje**, bez kreiranja partija ili promene progresa. Potvrđeni su novi resursi 3.8.1 i identične CSS/JS datoteke, šest javnih pogleda u četiri jezika, jezički izbor i raspored na istoj širini kao korisnikova slika. Snimak zaglavlja je vizuelno pregledan.
+- Svih šest administratorskih prikaza je zdravo. Postojeća paleta, četiri dodatne runde, šest pokušaja i težine 60/6/10 su očuvani. Sesija za održavanje je odjavljena i zatvorena.
+
+[Nove igre i promena rangiranja](NOVE-IGRE.md) su razrađen predlog za pregled; ovo izdanje ih ne aktivira. Fizički telefon i dostava e-pošte nisu deo ove provere. Broj tvrdnji nije broj nezavisnih scenarija.
+
+# Prethodna provera verzije 3.8.0
 
 **Verzija 3.8.0 je postavljena i proverena na produkciji.** Prošle su [provere konačne grane](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/42400382241) i [main](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/42400877778). Svih **167 datoteka** proverenog paketa upoređeno je sa lokalnim izvorom po Git blob SHA i veličini. Završni commit menja samo dokumentaciju.
 
