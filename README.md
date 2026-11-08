@@ -1,4 +1,4 @@
-# Srbija na dlanu 3.8.0
+# Srbija na dlanu 3.8.1
 
 Zasebna geografska aplikacija unutar WordPress-a: početna, igre za okruge i opštine, baza znanja i nalozi igrača. Sveden prikaz: slika gore, pitanje i odgovori ispod, sa većim slovima.
 
@@ -26,6 +26,11 @@ Zasebna geografska aplikacija unutar WordPress-a: početna, igre za okruge i op�
 Ove stranice imaju svoj kompas, meni, zaglavlje i podnožje, bez zaglavlja i podnožja aktivne teme. Ostali deo sajta zadržava postojeći izgled. Postojeći Elementor podaci početne stranice se ne brišu. Dodatak ne menja globalnu početnu stranicu WordPress-a.
 
 Shortcode `[srbija_na_dlanu]` i dalje radi na drugim WP stranicama; tu se zadržava njihova tema. Za određenu igru koristi `[srbija_na_dlanu kind="district"]` ili `kind="municipality"`.
+
+## Novo u 3.8.1
+
+- Kompaktnije ikonice teme i izbor jezika. Na mobilnom/tabletu jezik je levo, tema desno, a navigacija počinje od leve ivice.
+- [Razrađen predlog tri nove dnevne igre i zajedničkog rangiranja](docs/NOVE-IGRE.md). Ovo je koncept za pregled, a ne objava novih igara.
 
 ## Novo u 3.8.0
 
