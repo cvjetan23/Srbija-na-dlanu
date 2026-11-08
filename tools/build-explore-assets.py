@@ -10,17 +10,38 @@ import concurrent.futures,hashlib,json,re,time,urllib.request,urllib.parse,urlli
 ROOT=Path(__file__).resolve().parents[1]
 MANIFEST=ROOT/'tools/explore-assets.json'
 
+def normalize_image(content):
+    # Thumbnail servers attach variable EXIF/JFIF comments. Keep compressed
+    # image data unchanged; signatures pin every encoded pixel, not metadata.
+    if content[:2] != b"\xff\xd8":return content
+    result=bytearray(content[:2]);offset=2
+    while offset<len(content):
+        if content[offset]!=255:raise ValueError("Invalid JPEG marker")
+        start=offset
+        while offset<len(content) and content[offset]==255:offset+=1
+        marker=content[offset];offset+=1
+        if marker in (0xda,0xd9):result.extend(content[start:]);return bytes(result)
+        size=int.from_bytes(content[offset:offset+2],"big")
+        if size<2 or offset+size>len(content):raise ValueError("Invalid JPEG segment")
+        if not (0xe0<=marker<=0xed or marker in (0xef,0xfe)):result.extend(content[start:offset+size])
+        offset+=size
+    raise ValueError("Incomplete JPEG")
+
 def hydrate(entry):
     relative=entry['path']
     if not re.fullmatch(r'srbija-na-dlanu/assets/photos/v4/[a-f0-9]{24}\.(jpg|png|webp)',relative):raise ValueError('Invalid asset path')
     url=urllib.parse.urlparse(entry['url'])
     if url.scheme!='https' or url.hostname not in ('upload.wikimedia.org','thumb.wikimedia.org'):raise ValueError('Invalid image origin')
     target=ROOT/relative
-    if target.exists() and hashlib.sha256(target.read_bytes()).hexdigest()==entry['sha256']:return
+    if target.exists():
+        content=normalize_image(target.read_bytes())
+        if hashlib.sha256(content).hexdigest()==entry['sha256']:
+            if content!=target.read_bytes():target.write_bytes(content)
+            return
     for attempt in range(3):
         try:
             req=urllib.request.Request(entry['url'],headers={'User-Agent':'SrbijaNaDlanu/4.0 (https://cvjetan.dev; reproducible offline educational assets)'})
-            with urllib.request.urlopen(req,timeout=90) as response:content=response.read(500001)
+            with urllib.request.urlopen(req,timeout=90) as response:content=normalize_image(response.read(500001))
             if len(content)!=entry['bytes'] or hashlib.sha256(content).hexdigest()!=entry['sha256']:raise ValueError('Image checksum mismatch: '+relative+'; received '+str(len(content))+' bytes / '+hashlib.sha256(content).hexdigest()+'; type '+str(response.headers.get('Content-Type')))
             target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(content);return
         except urllib.error.HTTPError as error:
