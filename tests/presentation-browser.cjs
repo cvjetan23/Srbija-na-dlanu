@@ -6,7 +6,7 @@ let count=0;const check=(v,label)=>{assert.ok(v,label);count++;};
 const fixture=(op,data={})=>{const r=spawnSync(process.env.PHP_BIN || 'php',[path.join(__dirname,'http-fixture.php')],{input:JSON.stringify({op,...data}),encoding:'utf8',env:process.env});if(r.status)throw new Error(r.stderr || r.stdout);return r.stdout.trim()?JSON.parse(r.stdout):null;};
 async function shot(p,name){if(process.env.SND_SCREENSHOTS){fs.mkdirSync(process.env.SND_SCREENSHOTS,{recursive:true});await p.screenshot({path:path.join(process.env.SND_SCREENSHOTS,name+'.png'),fullPage:true,animations:'disabled'});}}
 async function stable(p){await p.waitForFunction(()=>{const game=document.querySelector('.snd-game'),panel=document.querySelector('.snd-panel');return game && game.getAttribute('aria-busy')==='false' && panel && getComputedStyle(panel).opacity==='1';});}
-async function choose(p,name){const input=p.locator('.snd-guess-form input');await input.fill(name);await p.locator('[role=option]').filter({hasText:name}).first().click();await p.locator('[data-cmd=guess]').click();await stable(p);}
+async function choose(p,name){const input=p.locator('.snd-guess-form input');await input.fill(name);await p.getByRole('option',{name:name,exact:true}).click();await p.locator('[data-cmd=guess]').click();await stable(p);}
 (async()=>{
  fixture('setup',{password:require('node:crypto').randomBytes(20).toString('hex')});const browser=await chromium.launch({executablePath:process.env.CHROMIUM_BIN || '/usr/bin/chromium',headless:true,args:['--no-sandbox','--disable-dev-shm-usage']});const errors=[];
  try{

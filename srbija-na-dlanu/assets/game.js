@@ -389,7 +389,8 @@
         const display = () => {
           const query = normalize(input.value); const guessed = new Set(this.state.guesses.map(g => g.id));
           const found=this.state.catalog.filter(t=>(!query || [t.name,...(t.aliases || [])].some(n=>normalize(n).includes(query))));
-          matches=found.filter(t=>!guessed.has(t.id)).sort((a,b)=>a.name.localeCompare(b.name,L.config().language==='sr'?'sr-Latn':L.config().language || 'sr-Latn'));
+          const rank=t=>normalize(t.name)===query?0:(t.aliases || []).some(n=>normalize(n)===query)?1:normalize(t.name).startsWith(query)?2:3;
+          matches=found.filter(t=>!guessed.has(t.id)).sort((a,b)=>rank(a)-rank(b)||a.name.localeCompare(b.name,L.config().language==='sr'?'sr-Latn':L.config().language || 'sr-Latn'));
           const alreadyTried=found.length>0 && matches.length===0;
           active = -1; input.removeAttribute('aria-activedescendant');
           list.innerHTML = L.html(matches.length ? matches.map((t,i) => `<div role="option" id="${this.root.id}-option-${i}" aria-selected="false" data-index="${i}">${esc(t.name)}<span aria-hidden="true">${icon('enter')}</span></div>`).join('') : `<div class="snd-no-matches">${alreadyTried?'Ovu teritoriju si već pokušao/la.':'Nema rezultata. Probaj drugi naziv.'}</div>`);
