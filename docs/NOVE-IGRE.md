@@ -1,4 +1,4 @@
-# Pet dnevnih igara — 4.0.0
+# Pet dnevnih igara — 4.1.0
 
 Implementacija dnevnih igara za okruge, opštine, gradove i naselja, reke i planine. Isti zadatak za sve igrače i jezike, promena dana u zoni Europe/Belgrade. Svaka igra ima šest pokušaja, zatim četiri dodatna pitanja. Neuspešno pogađanje ne sprečava nastavak obrazovnih pitanja.
 
@@ -24,7 +24,7 @@ Rang lista podrazumevano prikazuje samo dnevne zadatke nove sezone 4. Filteri: s
 
 ## Katalog i uređivanje
 
-Početni katalog: **255 naselja, 475 reka, 188 planina**. Dnevni fond trenutno koristi **226 naselja, 61 reku i 52 planine** sa kompletnim pitanjima i fotografijama. Širi katalog služi za odgovore i bazu znanja. Ovo nije tvrdnja da je obrađena svaka reka u Srbiji.
+Javni katalog: **255 naselja, 63 potvrđene reke, 188 planina**. Dodatnih 412 OSM naziva reka ostaje privatni nacrt do nezavisne provere. Dnevni fond trenutno koristi **226 naselja, 61 reku i 52 planine** sa kompletnim pitanjima i fotografijama. Širi, potvrđeni katalog služi za odgovore i bazu znanja. Ovo nije tvrdnja da je obrađena svaka reka u Srbiji.
 
 Obuhvaćeni su Kosovo i Metohija. Popis RZS 2022. tamo nije sproveden: nepoznati broj stanovnika nije zamenjen izmišljenom vrednošću, već geografskim pitanjem. Kod drugih naselja koristi se stanovništvo samog naselja, ne cele opštine. Istoimena mesta imaju dodatnu administrativnu odrednicu.
 
@@ -33,3 +33,5 @@ WP → **Srbija na dlanu → Geografski katalozi**: pregled spremnosti, pretraga
 Fotografije su lokalno u instalacionom ZIP-u. Manifest čuva HTTPS adresu, veličinu i SHA256; autor, licenca i izvor nalaze se uz zapis. Autori/licence dostupni su i pre odgovora, dok se izvor koji otkriva rešenje otvara kao pomoć. U toku igre nema zavisnosti od spoljnog servisa za mape ili slike.
 
 [Izvori i ograničenja](../srbija-na-dlanu/EXPLORE-SOURCES.md) · [Provere](PROVERA.md)
+
+[Provera naziva i svih 197 opštinskih teritorija](KATALOG-4.1.md). Kategorije baze znanja su centrirane, sa tanjim ivicama; filteri rang liste su u levoj koloni, rezultati desno.

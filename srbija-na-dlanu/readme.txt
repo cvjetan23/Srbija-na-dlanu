@@ -4,7 +4,7 @@ Tags: geography, quiz, serbia, education
 Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 4.0.0
+Stable tag: 4.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,7 +15,7 @@ Zasebna geografska aplikacija u WordPress-u: igre, baza znanja i nalozi.
 * Sopstveni kompas i meni, početna, Okruzi, Opštine, Baza znanja, Rang lista, Prijava i Moj nalog.
 * Bez zaglavlja/podnožja teme na stranicama aplikacije; ostale stranice sajta zadržavaju temu.
 * Sveden prikaz sa većim slovima: slika gore, pitanje/odgovori ispod.
-* 29 upravnih okruga i Grad Beograd, 190 opština/gradova i gradskih opština (17 u Beogradu), uključujući pet okruga i 29 opština Kosova i Metohije.
+* 29 upravnih okruga i Grad Beograd, 197 opština, gradskih opština i gradova prema RZS (svih 28 gradskih opština u pet gradova), uključujući pet okruga i 29 opština Kosova i Metohije.
 * Podesiv broj pokušaja i pomoć; podrazumevano šest pokušaja i pomoć posle trećeg promašaja.
 * Četiri dodatna pitanja: stanovništvo/položaj, geografija, zastava i znamenitost/prostorni izazov.
 * 52 lokalne zastave pokrivaju 17 sedišta okruga i 51 opštinu/grad (68 aktivnih teritorija). Za mesta bez lokalne zastave podrazumevano se pita potvrđena zastava sedišta ili drugog jasno imenovanog mesta.
@@ -52,6 +52,14 @@ Detaljna analitika se od 3.0.0 čuva u dve tabele iste WP baze: {prefix}snd_game
 Kod: GPL-2.0-or-later. Geografija/fotografije: SOURCES.md i DATA-LICENSE.md. Zastave: FLAGS.md. Za dopunske granice Kosova i Metohije javni geografski servis nije naveo posebnu licencu za redistribuciju. Karte služe igri. Deaktivacija ne briše sadržaj i rezultate.
 
 == Changelog ==
+
+= 4.1.0 =
+* Preglednija početna bez brojača unosa, opis i padajući izbor svih pet igara.
+* Rang lista sa filterima levo i rezultatima desno; centrirane kategorije baze znanja sa tanjim ivicama.
+* 197 teritorija usklađenih sa RZS, uključujući Niš, Požarevac, Vranje i Užice.
+* Potvrđeni javni nazivi reka/planina, privatni nacrti i urednički izvori provere.
+* Pretraga, sortiranje i filteri mapa/tabela za opštine, naselja, reke i planine.
+* Očuvane započete partije, istorija i bodovanje.
 
 = 4.0.0 =
 * Pet dnevnih igara: okruzi, opštine, gradovi i naselja, reke i planine.

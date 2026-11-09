@@ -1,4 +1,4 @@
-# Izvori novih geografskih igara — 4.0.0
+# Izvori novih geografskih igara — 4.1.0
 
 Podaci pripremljeni i pregledani 8. novembra 2026. U `data/explore.json` svaki zapis ima izvor geometrije, izvore činjenica i metapodatke fotografije. `tools/explore-assets.json` u repozitorijumu sadrži reproduktivni manifest 337 fotografija; skripta `tools/build-explore-assets.py` obnavlja pregledane slike iz verzionisanih ZIP paketa i proverava veličinu i SHA256 pre pakovanja. Izgradnja je bez mrežnih zavisnosti za fotografije. Fotografije nisu obuhvaćene GPL licencom koda: važe licence navedene uz svaku fotografiju.
 
@@ -8,4 +8,6 @@ Podaci pripremljeni i pregledani 8. novembra 2026. U `data/explore.json` svaki z
 - **Fotografije:** [Wikimedia Commons](https://commons.wikimedia.org/), povezane kroz Wikidata. Potpis, konkretna licenca, stranica licence i originalna stranica fotografije sačuvani su po zapisu. PNG/JPEG/WebP umanjene kopije imaju neutralna imena; pravo uvećanja ne šalje odgovor. Pregledom su odbačene pogrešne slike istoimenih naselja/planina i nereprezentativne fotografije reka.
 - **Mape:** OpenStreetMap, © OpenStreetMap contributors, [ODbL](https://www.openstreetmap.org/copyright). Osnova okruga/opština koristi ranije navedene izvore iz dodatka. Nema plaćenih pločica niti spoljnog map servisa u toku igre.
 
-Katalog je širi od dnevnog fonda: 255 naselja (226 spremnih), 475 reka (61 spremna) i 188 planina (52 spremne). Nedostajuća činjenica prikazuje se crticom u bazi znanja. Brojevi nisu popis svih geografskih objekata Srbije. Urednik može izmeniti i proširiti katalog u WordPress-u; dnevni zadaci se biraju samo iz spremnih, uključenih zapisa.
+Javni katalog je širi od dnevnog fonda: 255 naselja (226 spremnih), 63 potvrđene reke (61 spremna) i 188 planina potvrđenih prema PSS (52 spremne). Još 412 nepotvrđenih OSM naziva reka ostaje u privatnom uredničkom nacrtu. Nedostajuća činjenica prikazuje se crticom u bazi znanja. Brojevi nisu popis svih geografskih objekata Srbije. Urednik može izmeniti i proširiti katalog u WordPress-u; dnevni zadaci se biraju samo iz spremnih, uključenih zapisa.
+
+Detalji provere svih naziva, nezavisni izvori i ograničenja: [Katalog 4.1](../docs/KATALOG-4.1.md). Politika potvrde važi i za javni spisak odgovora ranije zamrznutih igara.

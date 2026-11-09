@@ -22,7 +22,7 @@ final class SND_I18n {
     }
     public static function wp_locale(){return array('sr'=>'sr_RS','en'=>'en_US','de'=>'de_DE','ru'=>'ru_RU')[self::lang()];}
     public static function data() {
-        if(self::$data===null){self::$data=is_file(SND_DIR.'data/i18n.php')?require SND_DIR.'data/i18n.php':array();if(is_file(SND_DIR.'data/i18n-v4.php')){self::$data=array_merge(self::$data,require SND_DIR.'data/i18n-v4.php');}}
+        if(self::$data===null){self::$data=is_file(SND_DIR.'data/i18n.php')?require SND_DIR.'data/i18n.php':array();if(is_file(SND_DIR.'data/i18n-v4.php')){self::$data=array_merge(self::$data,require SND_DIR.'data/i18n-v4.php');}if(is_file(SND_DIR.'data/i18n-v41.php')){self::$data=array_merge(self::$data,require SND_DIR.'data/i18n-v41.php');}}
         return self::$data;
     }
     public static function catalog($lang=null) {
@@ -132,7 +132,7 @@ final class SND_I18n {
         }elseif($type==='seat'){$q['title']=self::t('Koje je sedište ovog okruga?');$q['explanation']=self::t('Sedište okruga je {seat}.',$vars);
         }elseif($type==='district'){$vars['district']=self::text($correct);$q['title']=self::t('Kojem okrugu pripada ova teritorija?');$q['explanation']=self::t('{name} pripada administrativnoj celini: {district}.',$vars);
         }elseif($type==='membership'){$vars['member']=self::place($correct);$q['title']=self::t('Koja od ovih opština pripada ovom okrugu?');$q['explanation']=self::t('Opština {member} pripada celini: {name}, prema podeli na pet upravnih okruga na Kosovu i Metohiji.',$vars);
-        }elseif($type==='city_membership'){$q['title']=self::t('Kom gradu pripada ova gradska opština?');$q['explanation']=self::t('Gradska opština {name} pripada Gradu Beogradu.',$vars);
+        }elseif($type==='city_membership'){$q['title']=self::t('Kom gradu pripada ova gradska opština?');$vars['city']=self::place($target['parent_name']??'Beograd');$q['explanation']=($target['parent_id']??'')==='m-beograd'?self::t('Gradska opština {name} pripada Gradu Beogradu.',$vars):self::t('Gradska opština {name} pripada gradu {city}.',$vars);
         }elseif($type==='river'){$q['title']=self::t('Na ušću kojih reka se nalazi Beograd?');$q['explanation']=self::t('Beograd se nalazi na ušću Save u Dunav.');
         }elseif($type==='flag'){
             $vars['place']=self::place($meta['place']??($target['kind']==='district'?$target['seat']:$target['name']));

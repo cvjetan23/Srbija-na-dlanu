@@ -1,0 +1,1218 @@
+{
+  "source": "https://stat.gov.rs/media/412350/sifarnikgradovi-opstine-tekucestanje.xlsx",
+  "checked_on": "2026-11-09",
+  "units": [
+    {
+      "id": "m-bg-barajevo",
+      "sors_code": "70092",
+      "name": "Barajevo",
+      "district_id": "rs-00"
+    },
+    {
+      "id": "m-bg-vozdovac",
+      "sors_code": "70106",
+      "name": "Voždovac",
+      "district_id": "rs-00"
+    },
+    {
+      "id": "m-bg-vracar",
+      "sors_code": "70114",
+      "name": "Vračar",
+      "district_id": "rs-00"
+    },
+    {
+      "id": "m-bg-grocka",
+      "sors_code": "70122",
+      "name": "Grocka",
+      "district_id": "rs-00"
+    },
+    {
+      "id": "m-bg-zvezdara",
+      "sors_code": "70149",
+      "name": "Zvezdara",
+      "district_id": "rs-00"
+    },
+    {
+      "id": "m-bg-zemun",
+      "sors_code": "70157",
+      "name": "Zemun",
+      "district_id": "rs-00"
+    },
+    {
+      "id": "m-bg-lazarevac",
+      "sors_code": "70165",
+      "name": "Lazarevac",
+      "district_id": "rs-00"
+    },
+    {
+      "id": "m-bg-mladenovac",
+      "sors_code": "70173",
+      "name": "Mladenovac",
+      "district_id": "rs-00"
+    },
+    {
+      "id": "m-bg-novi-beograd",
+      "sors_code": "70181",
+      "name": "Novi Beograd",
+      "district_id": "rs-00"
+    },
+    {
+      "id": "m-bg-obrenovac",
+      "sors_code": "70190",
+      "name": "Obrenovac",
+      "district_id": "rs-00"
+    },
+    {
+      "id": "m-bg-palilula",
+      "sors_code": "70203",
+      "name": "Palilula (Beograd)",
+      "district_id": "rs-00"
+    },
+    {
+      "id": "m-bg-rakovica",
+      "sors_code": "70211",
+      "name": "Rakovica",
+      "district_id": "rs-00"
+    },
+    {
+      "id": "m-bg-savski-venac",
+      "sors_code": "70220",
+      "name": "Savski venac",
+      "district_id": "rs-00"
+    },
+    {
+      "id": "m-bg-sopot",
+      "sors_code": "70238",
+      "name": "Sopot",
+      "district_id": "rs-00"
+    },
+    {
+      "id": "m-bg-stari-grad",
+      "sors_code": "70246",
+      "name": "Stari  grad",
+      "district_id": "rs-00"
+    },
+    {
+      "id": "m-bg-cukarica",
+      "sors_code": "70254",
+      "name": "Čukarica",
+      "district_id": "rs-00"
+    },
+    {
+      "id": "m-bg-surcin",
+      "sors_code": "71293",
+      "name": "Surčin",
+      "district_id": "rs-00"
+    },
+    {
+      "id": "m-backa-topola",
+      "sors_code": "80071",
+      "name": "Bačka Topola",
+      "district_id": "rs-01"
+    },
+    {
+      "id": "m-mali-idjos",
+      "sors_code": "80241",
+      "name": "Mali Iđoš",
+      "district_id": "rs-01"
+    },
+    {
+      "id": "m-subotica",
+      "sors_code": "80438",
+      "name": "Subotica",
+      "district_id": "rs-01"
+    },
+    {
+      "id": "m-zitiste",
+      "sors_code": "80144",
+      "name": "Žitište",
+      "district_id": "rs-02"
+    },
+    {
+      "id": "m-zrenjanin",
+      "sors_code": "80152",
+      "name": "Zrenjanin",
+      "district_id": "rs-02"
+    },
+    {
+      "id": "m-nova-crnja",
+      "sors_code": "80250",
+      "name": "Nova Crnja",
+      "district_id": "rs-02"
+    },
+    {
+      "id": "m-novi-becej",
+      "sors_code": "80268",
+      "name": "Novi Bečej",
+      "district_id": "rs-02"
+    },
+    {
+      "id": "m-secanj",
+      "sors_code": "80373",
+      "name": "Sečanj",
+      "district_id": "rs-02"
+    },
+    {
+      "id": "m-ada",
+      "sors_code": "80012",
+      "name": "Ada",
+      "district_id": "rs-03"
+    },
+    {
+      "id": "m-kanjiza",
+      "sors_code": "80195",
+      "name": "Kanjiža",
+      "district_id": "rs-03"
+    },
+    {
+      "id": "m-kikinda",
+      "sors_code": "80209",
+      "name": "Kikinda",
+      "district_id": "rs-03"
+    },
+    {
+      "id": "m-novi-knezevac",
+      "sors_code": "80276",
+      "name": "Novi Kneževac",
+      "district_id": "rs-03"
+    },
+    {
+      "id": "m-senta",
+      "sors_code": "80365",
+      "name": "Senta",
+      "district_id": "rs-03"
+    },
+    {
+      "id": "m-coka",
+      "sors_code": "80489",
+      "name": "Čoka",
+      "district_id": "rs-03"
+    },
+    {
+      "id": "m-alibunar",
+      "sors_code": "80039",
+      "name": "Alibunar",
+      "district_id": "rs-04"
+    },
+    {
+      "id": "m-bela-crkva",
+      "sors_code": "80098",
+      "name": "Bela Crkva",
+      "district_id": "rs-04"
+    },
+    {
+      "id": "m-vrsac",
+      "sors_code": "80128",
+      "name": "Vršac",
+      "district_id": "rs-04"
+    },
+    {
+      "id": "m-kovacica",
+      "sors_code": "80217",
+      "name": "Kovačica",
+      "district_id": "rs-04"
+    },
+    {
+      "id": "m-kovin",
+      "sors_code": "80225",
+      "name": "Kovin",
+      "district_id": "rs-04"
+    },
+    {
+      "id": "m-opovo",
+      "sors_code": "80292",
+      "name": "Opovo",
+      "district_id": "rs-04"
+    },
+    {
+      "id": "m-pancevo",
+      "sors_code": "80314",
+      "name": "Pančevo",
+      "district_id": "rs-04"
+    },
+    {
+      "id": "m-plandiste",
+      "sors_code": "80349",
+      "name": "Plandište",
+      "district_id": "rs-04"
+    },
+    {
+      "id": "m-apatin",
+      "sors_code": "80047",
+      "name": "Apatin",
+      "district_id": "rs-05"
+    },
+    {
+      "id": "m-kula",
+      "sors_code": "80233",
+      "name": "Kula",
+      "district_id": "rs-05"
+    },
+    {
+      "id": "m-odzaci",
+      "sors_code": "80306",
+      "name": "Odžaci",
+      "district_id": "rs-05"
+    },
+    {
+      "id": "m-sombor",
+      "sors_code": "80381",
+      "name": "Sombor",
+      "district_id": "rs-05"
+    },
+    {
+      "id": "m-bac",
+      "sors_code": "80055",
+      "name": "Bač",
+      "district_id": "rs-06"
+    },
+    {
+      "id": "m-backa-palanka",
+      "sors_code": "80063",
+      "name": "Bačka Palanka",
+      "district_id": "rs-06"
+    },
+    {
+      "id": "m-backi-petrovac",
+      "sors_code": "80080",
+      "name": "Bački Petrovac",
+      "district_id": "rs-06"
+    },
+    {
+      "id": "m-beocin",
+      "sors_code": "80101",
+      "name": "Beočin",
+      "district_id": "rs-06"
+    },
+    {
+      "id": "m-becej",
+      "sors_code": "80110",
+      "name": "Bečej",
+      "district_id": "rs-06"
+    },
+    {
+      "id": "m-zabalj",
+      "sors_code": "80136",
+      "name": "Žabalj",
+      "district_id": "rs-06"
+    },
+    {
+      "id": "m-srbobran",
+      "sors_code": "80390",
+      "name": "Srbobran",
+      "district_id": "rs-06"
+    },
+    {
+      "id": "m-sremski-karlovci",
+      "sors_code": "80411",
+      "name": "Sremski Karlovci",
+      "district_id": "rs-06"
+    },
+    {
+      "id": "m-temerin",
+      "sors_code": "80446",
+      "name": "Temerin",
+      "district_id": "rs-06"
+    },
+    {
+      "id": "m-titel",
+      "sors_code": "80454",
+      "name": "Titel",
+      "district_id": "rs-06"
+    },
+    {
+      "id": "m-vrbas",
+      "sors_code": "80462",
+      "name": "Vrbas",
+      "district_id": "rs-06"
+    },
+    {
+      "id": "m-novi-sad",
+      "sors_code": "89010",
+      "name": "Novi Sad",
+      "district_id": "rs-06"
+    },
+    {
+      "id": "m-indjija",
+      "sors_code": "80179",
+      "name": "Inđija",
+      "district_id": "rs-07"
+    },
+    {
+      "id": "m-irig",
+      "sors_code": "80187",
+      "name": "Irig",
+      "district_id": "rs-07"
+    },
+    {
+      "id": "m-pecinci",
+      "sors_code": "80322",
+      "name": "Pećinci",
+      "district_id": "rs-07"
+    },
+    {
+      "id": "m-ruma",
+      "sors_code": "80357",
+      "name": "Ruma",
+      "district_id": "rs-07"
+    },
+    {
+      "id": "m-sremska-mitrovica",
+      "sors_code": "80403",
+      "name": "Sremska Mitrovica",
+      "district_id": "rs-07"
+    },
+    {
+      "id": "m-stara-pazova",
+      "sors_code": "80420",
+      "name": "Stara Pazova",
+      "district_id": "rs-07"
+    },
+    {
+      "id": "m-sid",
+      "sors_code": "80497",
+      "name": "Šid",
+      "district_id": "rs-07"
+    },
+    {
+      "id": "m-bogatic",
+      "sors_code": "70289",
+      "name": "Bogatić",
+      "district_id": "rs-08"
+    },
+    {
+      "id": "m-vladimirci",
+      "sors_code": "70408",
+      "name": "Vladimirci",
+      "district_id": "rs-08"
+    },
+    {
+      "id": "m-koceljeva",
+      "sors_code": "70637",
+      "name": "Koceljeva",
+      "district_id": "rs-08"
+    },
+    {
+      "id": "m-krupanj",
+      "sors_code": "70661",
+      "name": "Krupanj",
+      "district_id": "rs-08"
+    },
+    {
+      "id": "m-loznica",
+      "sors_code": "70734",
+      "name": "Loznica",
+      "district_id": "rs-08"
+    },
+    {
+      "id": "m-ljubovija",
+      "sors_code": "70777",
+      "name": "Ljubovija",
+      "district_id": "rs-08"
+    },
+    {
+      "id": "m-mali-zvornik",
+      "sors_code": "70793",
+      "name": "Mali Zvornik",
+      "district_id": "rs-08"
+    },
+    {
+      "id": "m-sabac",
+      "sors_code": "71269",
+      "name": "Šabac",
+      "district_id": "rs-08"
+    },
+    {
+      "id": "m-valjevo",
+      "sors_code": "70360",
+      "name": "Valjevo",
+      "district_id": "rs-09"
+    },
+    {
+      "id": "m-lajkovac",
+      "sors_code": "70700",
+      "name": "Lajkovac",
+      "district_id": "rs-09"
+    },
+    {
+      "id": "m-ljig",
+      "sors_code": "70769",
+      "name": "Ljig",
+      "district_id": "rs-09"
+    },
+    {
+      "id": "m-mionica",
+      "sors_code": "70831",
+      "name": "Mionica",
+      "district_id": "rs-09"
+    },
+    {
+      "id": "m-osecina",
+      "sors_code": "70882",
+      "name": "Osečina",
+      "district_id": "rs-09"
+    },
+    {
+      "id": "m-ub",
+      "sors_code": "71218",
+      "name": "Ub",
+      "district_id": "rs-09"
+    },
+    {
+      "id": "m-velika-plana",
+      "sors_code": "70386",
+      "name": "Velika Plana",
+      "district_id": "rs-10"
+    },
+    {
+      "id": "m-smederevo",
+      "sors_code": "71099",
+      "name": "Smederevo",
+      "district_id": "rs-10"
+    },
+    {
+      "id": "m-smederevska-palanka",
+      "sors_code": "71102",
+      "name": "Smederevska Palanka",
+      "district_id": "rs-10"
+    },
+    {
+      "id": "m-veliko-gradiste",
+      "sors_code": "70394",
+      "name": "Veliko Gradište",
+      "district_id": "rs-11"
+    },
+    {
+      "id": "m-golubac",
+      "sors_code": "70475",
+      "name": "Golubac",
+      "district_id": "rs-11"
+    },
+    {
+      "id": "m-zabari",
+      "sors_code": "70521",
+      "name": "Žabari",
+      "district_id": "rs-11"
+    },
+    {
+      "id": "m-zagubica",
+      "sors_code": "70530",
+      "name": "Žagubica",
+      "district_id": "rs-11"
+    },
+    {
+      "id": "m-kucevo",
+      "sors_code": "70696",
+      "name": "Kučevo",
+      "district_id": "rs-11"
+    },
+    {
+      "id": "m-malo-crnice",
+      "sors_code": "70807",
+      "name": "Malo Crniće",
+      "district_id": "rs-11"
+    },
+    {
+      "id": "m-petrovac-na-mlavi",
+      "sors_code": "70912",
+      "name": "Petrovac na Mlavi",
+      "district_id": "rs-11"
+    },
+    {
+      "id": "m-pozarevac-grad",
+      "sors_code": "70947",
+      "name": "Požarevac",
+      "district_id": "rs-11"
+    },
+    {
+      "id": "m-pozarevac-kostolac",
+      "sors_code": "71340",
+      "name": "Kostolac",
+      "district_id": "rs-11"
+    },
+    {
+      "id": "m-arandjelovac",
+      "sors_code": "70033",
+      "name": "Aranđelovac",
+      "district_id": "rs-12"
+    },
+    {
+      "id": "m-batocina",
+      "sors_code": "70076",
+      "name": "Batočina",
+      "district_id": "rs-12"
+    },
+    {
+      "id": "m-knic",
+      "sors_code": "70599",
+      "name": "Knić",
+      "district_id": "rs-12"
+    },
+    {
+      "id": "m-kragujevac",
+      "sors_code": "70645",
+      "name": "Kragujevac",
+      "district_id": "rs-12"
+    },
+    {
+      "id": "m-raca",
+      "sors_code": "71013",
+      "name": "Rača",
+      "district_id": "rs-12"
+    },
+    {
+      "id": "m-topola",
+      "sors_code": "71153",
+      "name": "Topola",
+      "district_id": "rs-12"
+    },
+    {
+      "id": "m-lapovo",
+      "sors_code": "71277",
+      "name": "Lapovo",
+      "district_id": "rs-12"
+    },
+    {
+      "id": "m-despotovac",
+      "sors_code": "70491",
+      "name": "Despotovac",
+      "district_id": "rs-13"
+    },
+    {
+      "id": "m-paracin",
+      "sors_code": "70904",
+      "name": "Paraćin",
+      "district_id": "rs-13"
+    },
+    {
+      "id": "m-rekovac",
+      "sors_code": "71030",
+      "name": "Rekovac",
+      "district_id": "rs-13"
+    },
+    {
+      "id": "m-jagodina",
+      "sors_code": "71048",
+      "name": "Jagodina",
+      "district_id": "rs-13"
+    },
+    {
+      "id": "m-svilajnac",
+      "sors_code": "71056",
+      "name": "Svilajnac",
+      "district_id": "rs-13"
+    },
+    {
+      "id": "m-cuprija",
+      "sors_code": "71200",
+      "name": "Ćuprija",
+      "district_id": "rs-13"
+    },
+    {
+      "id": "m-bor",
+      "sors_code": "70327",
+      "name": "Bor",
+      "district_id": "rs-14"
+    },
+    {
+      "id": "m-kladovo",
+      "sors_code": "70572",
+      "name": "Kladovo",
+      "district_id": "rs-14"
+    },
+    {
+      "id": "m-majdanpek",
+      "sors_code": "70785",
+      "name": "Majdanpek",
+      "district_id": "rs-14"
+    },
+    {
+      "id": "m-negotin",
+      "sors_code": "70840",
+      "name": "Negotin",
+      "district_id": "rs-14"
+    },
+    {
+      "id": "m-boljevac",
+      "sors_code": "70319",
+      "name": "Boljevac",
+      "district_id": "rs-15"
+    },
+    {
+      "id": "m-zajecar",
+      "sors_code": "70556",
+      "name": "Zaječar",
+      "district_id": "rs-15"
+    },
+    {
+      "id": "m-knjazevac",
+      "sors_code": "70602",
+      "name": "Knjaževac",
+      "district_id": "rs-15"
+    },
+    {
+      "id": "m-sokobanja",
+      "sors_code": "71129",
+      "name": "Sokobanja",
+      "district_id": "rs-15"
+    },
+    {
+      "id": "m-arilje",
+      "sors_code": "70041",
+      "name": "Arilje",
+      "district_id": "rs-16"
+    },
+    {
+      "id": "m-bajina-basta",
+      "sors_code": "70068",
+      "name": "Bajina Bašta",
+      "district_id": "rs-16"
+    },
+    {
+      "id": "m-kosjeric",
+      "sors_code": "70629",
+      "name": "Kosjerić",
+      "district_id": "rs-16"
+    },
+    {
+      "id": "m-nova-varos",
+      "sors_code": "70866",
+      "name": "Nova Varoš",
+      "district_id": "rs-16"
+    },
+    {
+      "id": "m-pozega",
+      "sors_code": "70955",
+      "name": "Požega",
+      "district_id": "rs-16"
+    },
+    {
+      "id": "m-priboj",
+      "sors_code": "70971",
+      "name": "Priboj",
+      "district_id": "rs-16"
+    },
+    {
+      "id": "m-prijepolje",
+      "sors_code": "70980",
+      "name": "Prijepolje",
+      "district_id": "rs-16"
+    },
+    {
+      "id": "m-sjenica",
+      "sors_code": "71072",
+      "name": "Sjenica",
+      "district_id": "rs-16"
+    },
+    {
+      "id": "m-cajetina",
+      "sors_code": "71234",
+      "name": "Čajetina",
+      "district_id": "rs-16"
+    },
+    {
+      "id": "m-uzice-grad",
+      "sors_code": "71145",
+      "name": "Užice",
+      "district_id": "rs-16"
+    },
+    {
+      "id": "m-uzice-sevojno",
+      "sors_code": "71366",
+      "name": "Sevojno",
+      "district_id": "rs-16"
+    },
+    {
+      "id": "m-gornji-milanovac",
+      "sors_code": "70483",
+      "name": "Gornji Milanovac",
+      "district_id": "rs-17"
+    },
+    {
+      "id": "m-ivanjica",
+      "sors_code": "70564",
+      "name": "Ivanjica",
+      "district_id": "rs-17"
+    },
+    {
+      "id": "m-lucani",
+      "sors_code": "70742",
+      "name": "Lučani",
+      "district_id": "rs-17"
+    },
+    {
+      "id": "m-cacak",
+      "sors_code": "71242",
+      "name": "Čačak",
+      "district_id": "rs-17"
+    },
+    {
+      "id": "m-vrnjacka-banja",
+      "sors_code": "70459",
+      "name": "Vrnjačka Banja",
+      "district_id": "rs-18"
+    },
+    {
+      "id": "m-kraljevo",
+      "sors_code": "70653",
+      "name": "Kraljevo",
+      "district_id": "rs-18"
+    },
+    {
+      "id": "m-novi-pazar",
+      "sors_code": "70874",
+      "name": "Novi Pazar",
+      "district_id": "rs-18"
+    },
+    {
+      "id": "m-raska",
+      "sors_code": "71021",
+      "name": "Raška",
+      "district_id": "rs-18"
+    },
+    {
+      "id": "m-tutin",
+      "sors_code": "71188",
+      "name": "Tutin",
+      "district_id": "rs-18"
+    },
+    {
+      "id": "m-aleksandrovac",
+      "sors_code": "70017",
+      "name": "Aleksandrovac",
+      "district_id": "rs-19"
+    },
+    {
+      "id": "m-brus",
+      "sors_code": "70343",
+      "name": "Brus",
+      "district_id": "rs-19"
+    },
+    {
+      "id": "m-varvarin",
+      "sors_code": "70378",
+      "name": "Varvarin",
+      "district_id": "rs-19"
+    },
+    {
+      "id": "m-krusevac",
+      "sors_code": "70670",
+      "name": "Kruševac",
+      "district_id": "rs-19"
+    },
+    {
+      "id": "m-trstenik",
+      "sors_code": "71170",
+      "name": "Trstenik",
+      "district_id": "rs-19"
+    },
+    {
+      "id": "m-cicevac",
+      "sors_code": "71196",
+      "name": "Ćićevac",
+      "district_id": "rs-19"
+    },
+    {
+      "id": "m-aleksinac",
+      "sors_code": "70025",
+      "name": "Aleksinac",
+      "district_id": "rs-20"
+    },
+    {
+      "id": "m-gadzin-han",
+      "sors_code": "70467",
+      "name": "Gadžin Han",
+      "district_id": "rs-20"
+    },
+    {
+      "id": "m-doljevac",
+      "sors_code": "70513",
+      "name": "Doljevac",
+      "district_id": "rs-20"
+    },
+    {
+      "id": "m-merosina",
+      "sors_code": "70823",
+      "name": "Merošina",
+      "district_id": "rs-20"
+    },
+    {
+      "id": "m-razanj",
+      "sors_code": "71005",
+      "name": "Ražanj",
+      "district_id": "rs-20"
+    },
+    {
+      "id": "m-svrljig",
+      "sors_code": "71064",
+      "name": "Svrljig",
+      "district_id": "rs-20"
+    },
+    {
+      "id": "m-nis-niska-banja",
+      "sors_code": "71285",
+      "name": "Niška Banja",
+      "district_id": "rs-20"
+    },
+    {
+      "id": "m-nis-pantelej",
+      "sors_code": "71307",
+      "name": "Pantelej",
+      "district_id": "rs-20"
+    },
+    {
+      "id": "m-nis-crveni-krst",
+      "sors_code": "71315",
+      "name": "Crveni krst",
+      "district_id": "rs-20"
+    },
+    {
+      "id": "m-nis-palilula",
+      "sors_code": "71323",
+      "name": "Palilula (Niš)",
+      "district_id": "rs-20"
+    },
+    {
+      "id": "m-nis-medijana",
+      "sors_code": "71331",
+      "name": "Medijana",
+      "district_id": "rs-20"
+    },
+    {
+      "id": "m-blace",
+      "sors_code": "70262",
+      "name": "Blace",
+      "district_id": "rs-21"
+    },
+    {
+      "id": "m-zitoradja",
+      "sors_code": "70548",
+      "name": "Žitorađa",
+      "district_id": "rs-21"
+    },
+    {
+      "id": "m-kursumlija",
+      "sors_code": "70688",
+      "name": "Kuršumlija",
+      "district_id": "rs-21"
+    },
+    {
+      "id": "m-prokuplje",
+      "sors_code": "70998",
+      "name": "Prokuplje",
+      "district_id": "rs-21"
+    },
+    {
+      "id": "m-babusnica",
+      "sors_code": "70050",
+      "name": "Babušnica",
+      "district_id": "rs-22"
+    },
+    {
+      "id": "m-bela-palanka",
+      "sors_code": "70084",
+      "name": "Bela Palanka",
+      "district_id": "rs-22"
+    },
+    {
+      "id": "m-dimitrovgrad",
+      "sors_code": "70505",
+      "name": "Dimitrovgrad",
+      "district_id": "rs-22"
+    },
+    {
+      "id": "m-pirot",
+      "sors_code": "70939",
+      "name": "Pirot",
+      "district_id": "rs-22"
+    },
+    {
+      "id": "m-bojnik",
+      "sors_code": "70297",
+      "name": "Bojnik",
+      "district_id": "rs-23"
+    },
+    {
+      "id": "m-vlasotince",
+      "sors_code": "70424",
+      "name": "Vlasotince",
+      "district_id": "rs-23"
+    },
+    {
+      "id": "m-lebane",
+      "sors_code": "70718",
+      "name": "Lebane",
+      "district_id": "rs-23"
+    },
+    {
+      "id": "m-leskovac",
+      "sors_code": "70726",
+      "name": "Leskovac ",
+      "district_id": "rs-23"
+    },
+    {
+      "id": "m-medvedja",
+      "sors_code": "70815",
+      "name": "Medveđa",
+      "district_id": "rs-23"
+    },
+    {
+      "id": "m-crna-trava",
+      "sors_code": "71226",
+      "name": "Crna Trava",
+      "district_id": "rs-23"
+    },
+    {
+      "id": "m-bosilegrad",
+      "sors_code": "70335",
+      "name": "Bosilegrad",
+      "district_id": "rs-24"
+    },
+    {
+      "id": "m-bujanovac",
+      "sors_code": "70351",
+      "name": "Bujanovac",
+      "district_id": "rs-24"
+    },
+    {
+      "id": "m-vladicin-han",
+      "sors_code": "70416",
+      "name": "Vladičin Han",
+      "district_id": "rs-24"
+    },
+    {
+      "id": "m-presevo",
+      "sors_code": "70963",
+      "name": "Preševo",
+      "district_id": "rs-24"
+    },
+    {
+      "id": "m-surdulica",
+      "sors_code": "71137",
+      "name": "Surdulica",
+      "district_id": "rs-24"
+    },
+    {
+      "id": "m-trgoviste",
+      "sors_code": "71161",
+      "name": "Trgovište",
+      "district_id": "rs-24"
+    },
+    {
+      "id": "m-vranje-grad",
+      "sors_code": "70432",
+      "name": "Vranje",
+      "district_id": "rs-24"
+    },
+    {
+      "id": "m-vranje-vranjska-banja",
+      "sors_code": "71358",
+      "name": "Vranjska Banja",
+      "district_id": "rs-24"
+    },
+    {
+      "id": "m-glogovac",
+      "sors_code": "90034",
+      "name": "Glogovac",
+      "district_id": "rs-25"
+    },
+    {
+      "id": "m-kacanik",
+      "sors_code": "90115",
+      "name": "Kačanik",
+      "district_id": "rs-25"
+    },
+    {
+      "id": "m-kosovo-polje",
+      "sors_code": "90131",
+      "name": "Kosovo Polje",
+      "district_id": "rs-25"
+    },
+    {
+      "id": "m-lipljan",
+      "sors_code": "90166",
+      "name": "Lipljan",
+      "district_id": "rs-25"
+    },
+    {
+      "id": "m-obilic",
+      "sors_code": "90204",
+      "name": "Obilić",
+      "district_id": "rs-25"
+    },
+    {
+      "id": "m-podujevo",
+      "sors_code": "90247",
+      "name": "Podujevo",
+      "district_id": "rs-25"
+    },
+    {
+      "id": "m-pristina",
+      "sors_code": "90263",
+      "name": "Priština",
+      "district_id": "rs-25"
+    },
+    {
+      "id": "m-urosevac",
+      "sors_code": "90301",
+      "name": "Uroševac",
+      "district_id": "rs-25"
+    },
+    {
+      "id": "m-stimlje",
+      "sors_code": "90310",
+      "name": "Štimlje",
+      "district_id": "rs-25"
+    },
+    {
+      "id": "m-strpce",
+      "sors_code": "90328",
+      "name": "Štrpce",
+      "district_id": "rs-25"
+    },
+    {
+      "id": "m-decani",
+      "sors_code": "90069",
+      "name": "Dečani",
+      "district_id": "rs-26"
+    },
+    {
+      "id": "m-djakovica",
+      "sors_code": "90085",
+      "name": "Đakovica",
+      "district_id": "rs-26"
+    },
+    {
+      "id": "m-istok",
+      "sors_code": "90107",
+      "name": "Istok",
+      "district_id": "rs-26"
+    },
+    {
+      "id": "m-klina",
+      "sors_code": "90123",
+      "name": "Klina",
+      "district_id": "rs-26"
+    },
+    {
+      "id": "m-pec",
+      "sors_code": "90239",
+      "name": "Peć",
+      "district_id": "rs-26"
+    },
+    {
+      "id": "m-orahovac",
+      "sors_code": "90212",
+      "name": "Orahovac",
+      "district_id": "rs-27"
+    },
+    {
+      "id": "m-prizren",
+      "sors_code": "90255",
+      "name": "Prizren",
+      "district_id": "rs-27"
+    },
+    {
+      "id": "m-suva-reka",
+      "sors_code": "90280",
+      "name": "Suva Reka",
+      "district_id": "rs-27"
+    },
+    {
+      "id": "m-gora",
+      "sors_code": "90336",
+      "name": "Gora",
+      "district_id": "rs-27"
+    },
+    {
+      "id": "m-vucitrn",
+      "sors_code": "90026",
+      "name": "Vučitrn",
+      "district_id": "rs-28"
+    },
+    {
+      "id": "m-zubin-potok",
+      "sors_code": "90093",
+      "name": "Zubin Potok",
+      "district_id": "rs-28"
+    },
+    {
+      "id": "m-leposavic",
+      "sors_code": "90158",
+      "name": "Leposavić",
+      "district_id": "rs-28"
+    },
+    {
+      "id": "m-srbica",
+      "sors_code": "90271",
+      "name": "Srbica",
+      "district_id": "rs-28"
+    },
+    {
+      "id": "m-kosovska-mitrovica",
+      "sors_code": "90298",
+      "name": "Kosovska Mitrovica",
+      "district_id": "rs-28"
+    },
+    {
+      "id": "m-zvecan",
+      "sors_code": "90352",
+      "name": "Zvečan",
+      "district_id": "rs-28"
+    },
+    {
+      "id": "m-vitina",
+      "sors_code": "90018",
+      "name": "Vitina",
+      "district_id": "rs-29"
+    },
+    {
+      "id": "m-gnjilane",
+      "sors_code": "90042",
+      "name": "Gnjilane",
+      "district_id": "rs-29"
+    },
+    {
+      "id": "m-kosovska-kamenica",
+      "sors_code": "90140",
+      "name": "Kosovska Kamenica",
+      "district_id": "rs-29"
+    },
+    {
+      "id": "m-novo-brdo",
+      "sors_code": "90182",
+      "name": "Novo Brdo",
+      "district_id": "rs-29"
+    }
+  ],
+  "groups": [
+    {
+      "parent": "m-nis",
+      "children": 5,
+      "population": 249501,
+      "overlap_degrees2": -1.6653345369377348e-16,
+      "geometry_source": "https://kro.mre.gov.rs/arcgis/rest/services/IMIS/MINING_PUBLIC/MapServer/4"
+    },
+    {
+      "parent": "m-pozarevac",
+      "children": 2,
+      "population": 68648,
+      "overlap_degrees2": 2.0816681711721685e-17,
+      "geometry_source": "https://www.openstreetmap.org/relation/6665948"
+    },
+    {
+      "parent": "m-vranje",
+      "children": 2,
+      "population": 74381,
+      "overlap_degrees2": -9.992007221626409e-16,
+      "geometry_source": "https://www.openstreetmap.org/relation/10275950"
+    },
+    {
+      "parent": "m-uzice",
+      "children": 2,
+      "population": 69997,
+      "overlap_degrees2": 3.0531133177191805e-16,
+      "geometry_source": "https://www.openstreetmap.org/relation/8031757"
+    }
+  ]
+}

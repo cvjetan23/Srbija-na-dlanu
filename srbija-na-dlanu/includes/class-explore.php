@@ -4,10 +4,13 @@ defined('ABSPATH') || exit;
 /** Offline, sourced catalogues for the three map games. No third-party API in play. */
 final class SND_Explore {
     private static $cache;
+    private static $approval;
     public static function data(){
         if(self::$cache===null){
             $file=SND_DIR.'data/explore.json';$base=is_file($file)?json_decode(file_get_contents($file),true):array('items'=>array(),'sources'=>array());
-            $custom=get_option('snd_explore_catalogue',null);if(is_array($custom) && !empty($custom['items'])){$base=$custom;}
+            $custom=get_option('snd_explore_catalogue',null);if(is_array($custom) && !empty($custom['items'])){
+                $review=array_column($base['items'],null,'id');foreach($custom['items'] as &$t){if(!isset($t['review_status'])){$seed=$review[$t['id']]??null;$same=$seed && $seed['kind']===$t['kind'] && SND_Text::key($seed['name'])===SND_Text::key($t['name']);foreach(array('review_status','verification_source','reviewed_on','review_note') as $key){$t[$key]=$same?($seed[$key]??''):'';}$t['review_status']=$t['review_status']?:'pending';}}unset($t);$base=$custom;
+            }
             self::$cache=$base;
         }return self::$cache;
     }
@@ -15,8 +18,15 @@ final class SND_Explore {
         static $p=null;if($p===null){$seed=json_decode(file_get_contents(SND_DIR.'data/explore.json'),true);$p=$seed['projection'];}
         return array(round(((float)$center[1]*$p['coslat']-$p['xmin'])*$p['scale']+$p['ox'],2),round(($p['ymax']-(float)$center[0])*$p['scale']+$p['oy'],2));
     }
-    public static function reset(){self::$cache=null;SND_Data::reset_cache();}
-    public static function pool($kind){$out=array();foreach(self::data()['items']??array() as $t){if(($t['kind']??'')===$kind && empty($t['disabled'])){$out[$t['id']]=$t;}}return $out;}
+    public static function reset(){self::$cache=null;self::$approval=null;SND_Data::reset_cache();}
+    public static function pool($kind){$out=array();foreach(self::data()['items']??array() as $t){if(($t['kind']??'')===$kind && self::reviewed($t) && empty($t['disabled'])){$out[$t['id']]=$t;}}return $out;}
+    public static function reviewed($t){return ($t['review_status']??'')==='verified' && !empty($t['verification_source']);}
+    public static function approved_id($id){if(self::$approval===null){self::$approval=array();foreach(self::data()['items']??array() as $t){if(self::reviewed($t)){self::$approval[$t['id']]=true;}}}return isset(self::$approval[$id]);}
+    public static function safe_decoys($q,$seed){
+        if(($q['type']??'')!=='explore_city_river'){return $q;}$pool=self::pool('river');$known=array();foreach($pool as $t){foreach(array_merge(array($t['name']),$t['aliases']??array()) as $name){$known[SND_Text::key($name)]=true;}}
+        $used=array_map(function($o){return SND_Text::key($o['label']);},$q['options']);$choices=SND_Game::ordered($pool,$seed);
+        foreach($q['options'] as &$o){if($o['id']===$q['correct'] || isset($known[SND_Text::key($o['label'])])){continue;}foreach($choices as $candidate){$key=SND_Text::key($candidate['name']);if(!in_array($key,$used,true)){$o['label']=$candidate['name'];$o['value']=$candidate['name'];$used[]=$key;break;}}}unset($o);return $q;
+    }
     public static function targets($kind){return array_filter(self::pool($kind),function($t){return !empty($t['playable']) && !empty($t['photo']['image']);});}
     public static function target_counts(){$out=array();foreach(SND_Kinds::EXPLORE as $kind){$out[$kind]=count(self::targets($kind));}return $out;}
     public static function revision(){return substr(hash('sha256',wp_json_encode(self::data())),0,16);}
@@ -83,6 +93,7 @@ final class SND_Explore {
     }
     public static function validate($data){
         if(!is_array($data) || (int)($data['schema']??0)!==1 || !is_array($data['items']??null) || count($data['items'])>5000){return new WP_Error('snd_explore_schema','Očekivan je katalog sa schema: 1 i najviše 5000 stavki.');}
+        $shipped=json_decode(file_get_contents(SND_DIR.'data/explore.json'),true);$known=array_column($shipped['items'],null,'id');
         $out=array('schema'=>1,'items'=>array(),'sources'=>array(),'river_context'=>array(),'projection'=>self::data()['projection']??array());$ids=array();$ready=array_fill_keys(SND_Kinds::EXPLORE,0);
         foreach($data['items'] as $t){
             if(!is_array($t) || !is_string($t['id']??null) || !preg_match('/^(city|river|mountain)-[a-z0-9-]{1,60}$/D',$t['id']) || isset($ids[$t['id']]) || !in_array($t['kind']??'',SND_Kinds::EXPLORE,true)){return new WP_Error('snd_explore_id','Neispravan ili ponovljen identifikator.');}
@@ -96,7 +107,10 @@ final class SND_Explore {
             $r['labels']=array();foreach(array('sr','en','de','ru') as $lang){$r['labels'][$lang]=sanitize_text_field($t['labels'][$lang]??$r['name']);}
             $r['aliases']=array_map('sanitize_text_field',array_slice((array)($t['aliases']??array()),0,20));$r['photo']=array();
             if(!empty($t['photo'])){$p=$t['photo'];if((!preg_match('~^photos/v4/[a-f0-9]{16,64}\.(jpg|png|webp)$~D',$p['image']??'') && !(is_string($p['image']??null) && strpos($p['image'],'https://')===0 && esc_url_raw($p['image'],array('https')))) || empty($p['credit'])||empty($p['license'])||empty($p['source_url'])){return new WP_Error('snd_explore_photo','Fotografija zahteva lokalnu putanju, autora, licencu i izvor.');}foreach(array('image','credit','license') as $k){$r['photo'][$k]=sanitize_text_field($p[$k]);}$r['photo']['source_url']=esc_url_raw($p['source_url'],array('https'));$r['photo']['license_url']=esc_url_raw($p['license_url']??'',array('https'));}
-            $r['disabled']=!empty($t['disabled']);$r['playable']=!empty($t['playable'])&&!$r['disabled'];
+            if(!isset($t['review_status']) && isset($known[$r['id']]) && $known[$r['id']]['kind']===$r['kind'] && SND_Text::key($known[$r['id']]['name'])===SND_Text::key($r['name'])){foreach(array('review_status','verification_source','reviewed_on','review_note') as $key){$t[$key]=$known[$r['id']][$key]??'';}}
+            $r['review_status']=($t['review_status']??'pending')==='verified'?'verified':'pending';$r['verification_source']=esc_url_raw($t['verification_source']??'',array('https'));$r['reviewed_on']=sanitize_text_field($t['reviewed_on']??'');$r['review_note']=sanitize_text_field($t['review_note']??'');
+            if($r['review_status']==='verified' && !$r['verification_source']){return new WP_Error('snd_explore_review','Potvrđen naziv zahteva nezavisan HTTPS izvor.');}
+            $r['disabled']=!empty($t['disabled']);$r['playable']=!empty($t['playable'])&&!$r['disabled'] && self::reviewed($r);
             if($r['playable']){if(empty($r['photo'])||($r['kind']==='river'&&(!$r['mouth']||!$r['sea']||!$r['length_km']))||($r['kind']==='mountain'&&(!$r['peak']||!$r['height']))){return new WP_Error('snd_explore_ready','Dnevni zadatak nema sve podatke: '.$r['id']);}$ready[$r['kind']]++;}
             $out['items'][]=$r;
         }

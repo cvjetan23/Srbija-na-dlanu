@@ -22,6 +22,16 @@
     picker.addEventListener('keydown',event=>{if(event.key==='Escape'){picker.open=false;picker.querySelector('summary').focus();}});
     document.addEventListener('click',event=>{if(!picker.contains(event.target))picker.open=false;});
   });
+  document.querySelectorAll('.snd-games-menu').forEach(menu=>{
+    const summary=menu.querySelector('summary');
+    menu.addEventListener('keydown',event=>{
+      if(event.key==='Escape'){menu.open=false;summary.focus();event.stopPropagation();}
+      if(event.key==='ArrowDown'&&event.target===summary){event.preventDefault();menu.open=true;menu.querySelector('a').focus();}
+    });
+    menu.addEventListener('toggle',()=>{if(menu.open)document.querySelectorAll('.snd-language-picker[open]').forEach(n=>n.open=false);});
+    document.addEventListener('click',event=>{if(!menu.contains(event.target))menu.open=false;});
+    menu.addEventListener('focusout',()=>setTimeout(()=>{if(!menu.contains(document.activeElement))menu.open=false;},0));
+  });
   const pageLoader=document.getElementById('snd-page-loader');let loadTimer,clearTimer;
   function loading(on){if(!pageLoader)return;clearTimeout(loadTimer);clearTimeout(clearTimer);if(!on){pageLoader.hidden=true;return;}pageLoader.hidden=false;clearTimer=setTimeout(()=>{pageLoader.hidden=true;},12000);}
   document.addEventListener('click',event=>{

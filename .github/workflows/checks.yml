@@ -1,7 +1,7 @@
 name: WordPress checks and package
 on:
   push:
-    branches: [main, feature/v4-daily-geography]
+    branches: [main, feature/v4.1-catalogues]
   workflow_dispatch:
 concurrency:
   group: wp-checks-${{ github.ref }}
@@ -66,6 +66,7 @@ jobs:
           php tests/ranking.php
           php tests/palette.php
           php tests/explore.php
+          php tests/catalogue.php
       - name: Real Chromium map and preference flows
         env:
           WP_ROOT: /tmp/snd-wp
@@ -89,6 +90,7 @@ jobs:
           node tests/sunrise-browser.cjs
           node tests/header-browser.cjs
           node tests/explore-browser.cjs
+          node tests/catalogue-browser.cjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -104,7 +106,7 @@ jobs:
             dist/srbija-na-dlanu.zip
             dist/SHA256SUMS
   package:
-    if: github.ref == 'refs/heads/feature/v4-daily-geography'
+    if: github.ref == 'refs/heads/feature/v4.1-catalogues'
     needs: check
     runs-on: ubuntu-24.04
     permissions:
@@ -121,5 +123,5 @@ jobs:
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git commit -m "Build verified WordPress installation package"
-            git push origin HEAD:feature/v4-daily-geography
+            git push origin HEAD:feature/v4.1-catalogues
           fi

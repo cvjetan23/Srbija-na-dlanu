@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Srbija na dlanu
  * Description: Dnevna geografska igra i vežbanje za okruge, opštine i gradove. Shortcode: [srbija_na_dlanu]
- * Version: 4.0.0
+ * Version: 4.1.0
  * Requires at least: 6.2
  * Requires PHP: 7.4
  * Author: Srbija na dlanu
@@ -11,7 +11,7 @@
  */
 
 defined('ABSPATH') || exit;
-define('SND_VERSION', '4.0.0');
+define('SND_VERSION', '4.1.0');
 define('SND_DIR', plugin_dir_path(__FILE__));
 define('SND_URL', plugin_dir_url(__FILE__));
 
@@ -21,6 +21,7 @@ require_once SND_DIR . 'includes/class-rate.php';
 require_once SND_DIR . 'includes/class-kinds.php';
 require_once SND_DIR . 'includes/class-explore.php';
 require_once SND_DIR . 'includes/class-explore-admin.php';
+require_once SND_DIR . 'includes/class-catalogue.php';
 require_once SND_DIR . 'includes/class-data.php';
 require_once SND_DIR . 'includes/class-settings.php';
 require_once SND_DIR . 'includes/class-scoring.php';

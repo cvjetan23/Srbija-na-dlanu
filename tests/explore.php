@@ -11,7 +11,7 @@ try{
  $boot=ex_api('bootstrap')->get_data();ex_ok(count($boot['counts'])===5 && count($boot['games'])===5,'All five game types published');
  $valid=SND_Explore::validate(SND_Explore::data());ex_ok(!is_wp_error($valid),'Imported catalogues validate');
  foreach(SND_Kinds::EXPLORE as $kind){
-  ex_ok(count(SND_Explore::pool($kind))>=100,'Substantial sourced catalogue '.$kind);ex_ok(count(SND_Explore::targets($kind))>=20,'Complete daily tasks with photos '.$kind);
+  ex_ok(count(SND_Explore::pool($kind))>=($kind==='river'?60:100),'Substantial sourced catalogue '.$kind);ex_ok(count(SND_Explore::targets($kind))>=20,'Complete daily tasks with photos '.$kind);
   $kim=array_filter(SND_Explore::pool($kind),function($t){return $t['region']==='Kosovo i Metohija';});ex_ok(count($kim)>0,'KiM geography in '.$kind);
   foreach($kim as $t){if($kind==='city'){ex_ok(empty($t['population']) && empty($t['year']),'No invented KiM 2022 census');}}
   foreach(SND_Explore::targets($kind) as $t){

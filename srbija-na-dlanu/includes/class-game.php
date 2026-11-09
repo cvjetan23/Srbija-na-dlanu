@@ -128,8 +128,8 @@ final class SND_Game {
             $q[] = self::choice_question('membership', 'Koja od ovih opština pripada ovom okrugu?', $inside[0], $outside, $seed . ':membership', 'Opština ' . $inside[0] . ' pripada celini: ' . $target['name'] . ', prema podeli na pet upravnih okruga na Kosovu i Metohiji.', 'https://kro.mre.gov.rs/arcgis/rest/services/IMIS/MINING_PUBLIC/MapServer');
         } elseif ($target['kind'] === 'district' && $target['id'] !== 'rs-00') {
             $q[] = self::choice_question('seat', 'Koje je sedište ovog okruga?', $target['seat'], array_column($districts, 'seat'), $seed . ':seat', 'Sedište okruga je ' . $target['seat'] . '.', $target['region']==='Kosovo i Metohija'?'https://kro.mre.gov.rs/arcgis/rest/services/IMIS/MINING_PUBLIC/MapServer':'https://www.srbija.gov.rs/sekcija/329/okruzi.php');
-        } elseif (($target['parent_id']??'')==='m-beograd') {
-            $q[]=self::choice_question('city_membership','Kom gradu pripada ova gradska opština?','Beograd',array('Novi Sad','Niš','Kragujevac'),$seed.':city','Gradska opština '.$target['name'].' pripada Gradu Beogradu.','https://www.stat.gov.rs/sr-latn/oblasti/registar-prostornih-jedinica-i-gis/administrativno-teritorijalna-podela-i-nstj-nivoi-1-2-3/');
+        } elseif (!empty($target['parent_id'])) {
+            $city=$target['parent_name']??'Beograd';$alternatives=array_values(array_diff(array('Beograd','Niš','Požarevac','Vranje','Užice','Novi Sad','Kragujevac'),array($city)));$q[]=self::choice_question('city_membership','Kom gradu pripada ova gradska opština?',$city,$alternatives,$seed.':city','Gradska opština '.$target['name'].' pripada gradu '.$city.'.','https://www.stat.gov.rs/sr-latn/oblasti/registar-prostornih-jedinica-i-gis/administrativno-teritorijalna-podela-i-nstj-nivoi-1-2-3/');
         } elseif ($target['kind'] === 'municipality' && $target['district_id'] !== 'rs-00') {
             $parent = $districts[$target['district_id']];
             $q[] = self::choice_question('district', 'Kojem okrugu pripada ova teritorija?', $parent['name'], array_column($districts, 'name'), $seed . ':district', $target['name'] . ' pripada administrativnoj celini: ' . $parent['name'] . '.', $target['region']==='Kosovo i Metohija'?'https://kro.mre.gov.rs/arcgis/rest/services/IMIS/MINING_PUBLIC/MapServer':'https://www.srbija.gov.rs/sekcija/329/okruzi.php');
@@ -215,12 +215,14 @@ final class SND_Game {
         if (!isset($s['challenge']) && isset($s['challenge_key'])) { $s['challenge'] = get_option($s['challenge_key']); }
         if (empty($s['challenge'])) { return new WP_Error('snd_expired', 'Podaci ove partije više nisu dostupni. Pokreni novu.', array('status' => 410)); }
         if ($s['challenge']['mode'] === 'daily' && $s['challenge']['date'] !== self::date()) { return new WP_Error('snd_new_day', 'Stigao je novi dnevni izazov. Pokreni današnju partiju.', array('status' => 410)); }
+        foreach($s['challenge']['questions'] as $i=>$q){if(!isset($s['answers'][$i]) && ($q['type']??'')==='explore_city_river' && !isset($s['question_overrides'][$i])){$s['question_overrides'][$i]=SND_Explore::safe_decoys($q,$s['challenge']['date'].':'.$i);}}
         return $s;
     }
 
     public static function act(&$s, $action, $value) {
         $c = $s['challenge'];$options=SND_Settings::options_for($c);$before_index=$s['question_index'];
         if ($action === 'guess' && $s['stage'] === 'guess') {
+            if(SND_Kinds::is_explore($c['kind']) && is_string($value) && !SND_Explore::approved_id($value)){return new WP_Error('snd_guess','Izaberi naziv iz proverenog spiska.',array('status'=>400));}
             if (!is_string($value) || !isset($c['catalog'][$value])) { return new WP_Error('snd_guess', 'Izaberi teritoriju iz ponuđene liste.', array('status' => 400)); }
             foreach ($s['guesses'] as $guess) { if ($guess['id'] === $value) { return new WP_Error('snd_duplicate', 'Ovu teritoriju si već pokušao/la.', array('status' => 400)); } }
             $from = $c['catalog'][$value]; $correct = $value === $c['target']['id'];
@@ -268,11 +270,12 @@ final class SND_Game {
         $out = array_intersect_key($s, array_flip(array('stage', 'guesses', 'hint', 'solved', 'question_index', 'revision', 'source_help')));
         $out += array('date' => $c['date'], 'number' => $c['number'], 'kind' => $c['kind'], 'mode' => $c['mode'], 'shape' => $c['target']['path'], 'max_guesses' => $options['max_guesses'],'hint_after'=>$options['hint_after'],'hint_enabled'=>$options['hint_enabled'],'source_help_enabled'=>$options['source_help_enabled'],'media_fallback'=>$options['media_fallback'], 'question_count' => count($c['questions']));
         if(SND_Kinds::is_explore($c['kind'])){$out['explore_map']=SND_Explore::map_state($s);}
-        if($s['stage']==='guess'){$out['catalog'] = array_map(function ($t) { return array_intersect_key($t, array_flip(array('id', 'name', 'aliases'))); }, array_values($c['catalog']));}
+        $public_catalog=$c['catalog'];if(SND_Kinds::is_explore($c['kind'])){$public_catalog=array_filter($public_catalog,function($t){return SND_Explore::approved_id($t['id']);});}
+        if($s['stage']==='guess'){$out['catalog'] = array_map(function ($t) { return array_intersect_key($t, array_flip(array('id', 'name', 'aliases'))); }, array_values($public_catalog));}
         if ($s['hint']) { $out['hint_text'] = 'Širi položaj: ' . $c['target']['region'] . '.'; }
         if ($s['stage'] !== 'guess') {
             $out['territory'] = array_intersect_key($c['target'], array_flip(array('id', 'name', 'region', 'map_path')));
-            if(in_array($s['stage'],array('reveal','complete'),true)){$out['map'] = array_map(function ($t) { return array_intersect_key($t, array_flip(array('id', 'name', 'map_path','point'))); }, array_values($c['catalog']));}
+            if(in_array($s['stage'],array('reveal','complete'),true)){$out['map'] = array_map(function ($t) { return array_intersect_key($t, array_flip(array('id', 'name', 'map_path','point'))); }, array_values($public_catalog));}
         }
         if ($s['stage'] === 'quiz') {
             $i = $s['question_index']; $q = SND_I18n::question(self::question_for($s,$i),$c['target']);

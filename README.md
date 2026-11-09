@@ -1,4 +1,4 @@
-# Srbija na dlanu 4.0.0
+# Srbija na dlanu 4.1.0
 
 Zasebna geografska aplikacija unutar WordPress-a: pet dnevnih igara, baza znanja i nalozi igrača. Sveden prikaz: slika gore, pitanje i odgovori ispod, sa većim slovima.
 
@@ -30,6 +30,14 @@ Zasebna geografska aplikacija unutar WordPress-a: pet dnevnih igara, baza znanja
 Ove stranice imaju svoj kompas, meni, zaglavlje i podnožje, bez zaglavlja i podnožja aktivne teme. Ostali deo sajta zadržava postojeći izgled. Postojeći Elementor podaci početne stranice se ne brišu. Dodatak ne menja globalnu početnu stranicu WordPress-a.
 
 Shortcode `[srbija_na_dlanu]` i dalje radi na drugim WP stranicama; tu se zadržava njihova tema. Za određenu igru koristi `[srbija_na_dlanu kind="district"]` ili `kind="municipality"`, `kind="city"`, `kind="river"`, `kind="mountain"`.
+
+## Novo u 4.1.0
+
+- Pet preglednih kartica u više redova, bez brojača unosa, sa opisom aplikacije i menijem „Igre“.
+- Rang lista kao dashboard: filteri levo, rezultati desno, prilagođeno telefonu.
+- Baza znanja: centrirane kategorije, pretraga, sortiranje, filteri i pojedinačni izvori za reke i planine.
+- Svih **197 opština, gradskih opština i gradova** usklađeno sa RZS; 174 jedinice lokalne samouprave ostaju objašnjene kao drugi nivo podele.
+- Nepotvrđene reke ostaju privatni nacrti; **63 javne reke i 188 planina** imaju proveru identiteta. [Izvori i promene](docs/KATALOG-4.1.md).
 
 ## Novo u 4.0.0
 
