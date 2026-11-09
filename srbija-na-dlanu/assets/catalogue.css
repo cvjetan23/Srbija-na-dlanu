@@ -70,3 +70,8 @@
 .snd-ranking-results .snd-ranking-table tbody th{min-width:0;overflow-wrap:anywhere}
 @media(max-width:800px){.snd-ranking-dashboard{grid-template-columns:minmax(0,1fr);gap:24px}.snd-app .snd-ranking-filters nav{flex-direction:row;flex-wrap:wrap;gap:8px}.snd-app .snd-ranking-filters nav>a{justify-content:center}.snd-app .snd-ranking-filters .snd-rank-description{font-size:13px}.snd-app .snd-ranking-filters .snd-rank-date{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end}.snd-app .snd-ranking-filters .snd-rank-date label{grid-column:1/-1}.snd-app .snd-ranking-filters .snd-rank-date input:not([type=hidden]){margin:0}.snd-app .snd-ranking-filters .snd-rank-date button{margin:0}.snd-catalogue-controls{grid-template-columns:repeat(2,minmax(0,1fr))}.snd-catalogue-controls .snd-catalogue-search{grid-column:1/-1}.snd-catalogue-controls button{grid-column:1/-1}}
 @media(max-width:500px){.snd-library-featured{grid-template-columns:1fr}.snd-library-featured article{padding:20px}.snd-app .snd-home-description{padding:20px}.snd-catalogue-controls{padding:16px;gap:10px}.snd-app .snd-catalogue-controls select{font-size:13px;padding:9px 7px}.snd-ranking-filters{padding:16px}.snd-ranking-results .snd-ranking-table{font-size:13px}.snd-ranking-results .snd-ranking-table th,.snd-ranking-results .snd-ranking-table td{padding:12px 8px}}
+
+/* Completed-game labels must fit as well as the shorter play action. */
+.snd-app .snd-directory-bottom{flex-wrap:wrap}
+.snd-app .snd-directory-bottom .snd-card-action{max-width:100%;box-sizing:border-box;white-space:normal;text-align:center}
+@media(max-width:600px){.snd-app .snd-directory-bottom .snd-daily-status{flex:1 1 100%}.snd-app .snd-directory-bottom .snd-card-action{width:100%;justify-content:center}}
