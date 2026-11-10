@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Srbija na dlanu
  * Description: Dnevna geografska igra i vežbanje za okruge, opštine i gradove. Shortcode: [srbija_na_dlanu]
- * Version: 4.1.1
+ * Version: 4.1.2
  * Requires at least: 6.2
  * Requires PHP: 7.4
  * Author: Srbija na dlanu
@@ -11,7 +11,7 @@
  */
 
 defined('ABSPATH') || exit;
-define('SND_VERSION', '4.1.1');
+define('SND_VERSION', '4.1.2');
 define('SND_DIR', plugin_dir_path(__FILE__));
 define('SND_URL', plugin_dir_url(__FILE__));
 
@@ -115,7 +115,7 @@ add_action('snd_cleanup', array('SND_Game', 'cleanup'));
 // Autoptimize recognizes data-noptimize before rewriting template literals.
 // Keep our tested JavaScript and small styles intact without changing the site.
 function snd_preserve_asset_tag($tag,$handle) {
-    if(!in_array($handle,array('snd-game','snd-app','snd-library','snd-i18n','snd-ui','snd-themes','snd-atlas','snd-motion','snd-ranking'),true)){return $tag;}
+    if(strpos((string)$handle,'snd-')!==0){return $tag;}
     return '<!--noptimize-->'.preg_replace('/<(script|link)\b/','<$1 data-noptimize="1"',$tag,1).'<!--/noptimize-->';
 }
 add_filter('script_loader_tag','snd_preserve_asset_tag',10,2);

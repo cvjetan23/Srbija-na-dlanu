@@ -12,6 +12,7 @@ async function stable(p){await p.waitForFunction(()=>document.querySelector('.sn
  try{
   const p=await browser.newPage({viewport:{width:1440,height:1000}});p.on('pageerror',e=>errors.push(e.message));
   await p.goto(app+'?lang=sr&snd_theme=dark');
+  for(const handle of ['themes','explore','catalogue']){check(await p.locator('#snd-'+handle+'-css[data-noptimize]').count()===1,'Production optimizer preserves '+handle+' CSS');}
   const cards=await p.locator('.snd-home-game').evaluateAll(ns=>ns.map(n=>{const b=n.getBoundingClientRect();return {x:b.x,y:b.y,w:b.width,h:b.height};}));
   check(cards.length===5&&cards[0].y===cards[1].y&&cards[2].y===cards[3].y&&cards[4].y>cards[2].y,'Five games in three clear rows');check(cards.every(b=>Math.abs(b.w-cards[0].w)<1&&Math.abs(b.h-cards[0].h)<1),'Equal readable game cards');check(await p.locator('.snd-game-count').count()===0&&!/\d+ unosa/.test(await p.locator('.snd-app-content').innerText()),'Catalogue entry counts removed');
   check(await p.evaluate(()=>document.querySelector('.snd-home-description').getBoundingClientRect().top>document.querySelector('.snd-game-directory').getBoundingClientRect().bottom),'Home explanation follows all game cards');await shot(p,'v41-home-desktop');
