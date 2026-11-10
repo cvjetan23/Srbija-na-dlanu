@@ -1,3 +1,17 @@
+# Provera verzije 4.1.2
+
+**Verzija je postavljena i aktivna na produkciji.** [Konačni CI izvora i paketa](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/42819371420) je prošao. Promene posle pakovanja obuhvataju samo dokumentaciju.
+
+- **58.192 WordPress, 141 JavaScript i 754 Chromium tvrdnji.** Provereni su svih pet dnevnih tokova, zastave/fotografije, upis i nastavak rezultata, ukupno 500 poena, vlasništvo, optimizatori i privatnost. Nove provere posebno pokrivaju 197 zvaničnih jedinica i njihove RZS šifre, svih 28 gradskih opština, zbir stanovništva i očuvanje ranije zamrznutih igara.
+- **630 novih serverskih tvrdnji** za nezavisne potvrde reka/planina, privatne nacrte, kompatibilan uvoz i prethodno započete partije. **118 novih Chromium tvrdnji** i 16 dodatnih provera dugih natpisa završenih igara za raspored kartica, meni tastaturom i bez JavaScript-a, tačan „Ub” pre „Golubac”, filtere i dokaze u bazi, uređivanje nacrta i dashboard u četiri jezika na 320/640/1440 px.
+- Izvor `860360490069139b008640aaa31184c896fb96f7`, paket `d39ed1019d0ae2ede7c283c80c87715e7b102f15`. Svih **199 datoteka repozitorijuma** provereno je po Git blob SHA i veličini. ZIP: **30.749.111 bajtova, 475 datoteka dodatka**, uključujući 337 nepromenjenih lokalnih fotografija. SHA256 `3dbb0caaa144c416b55045ee1d504465534aac61d194f639505cf818f9fc960f`.
+- Produkcija: **374 javnih HTTP** i **203 Chromium** tvrdnji; pet gostujućih partija bez upisa na naloge ili rang listu. Provereni su 4.1.2 i tačni bajtovi deset CSS/JS resursa, nova početna, meni, 197/255/63/188 javni katalozi, izvori, zastave, foto-zum, rang dashboard, četiri jezika i obe teme na telefonu.
+- Autoptimize čuva nove stilove u njihovom redosledu; mobilne kartice su u jednoj koloni, a brojevi pravila na ilustracijama. Svih sedam WP administratorskih pogleda radi; postojeća paleta, Sunrise, 6 pokušaja, težine 60/6/10 i četiri dodatne runde uključujući zastavu ostali su isti. Administratorska sesija je odjavljena nakon provere.
+
+[Izvori i ograničenja kataloga](KATALOG-4.1.md) · [Produkcijska provera](LIVE-CHECK.md)
+
+---
+
 # Provera verzije 4.0.0
 
 **Pet dnevnih igara je aktivno na produkciji.** [Provere konačnog izvora i paketa](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/42525092843) su prošle. [Main CI](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/42525706631) proverava iste datoteke. Završni izveštaj menja samo dokumentaciju.

@@ -1,3 +1,17 @@
+# Produkcija — verzija 4.1.2
+
+Verzija **4.1.2 je postavljena i aktivna** na https://cvjetan.dev/srbija-na-dlanu/ — 10. novembar 2026. Nativni WP installer je potvrdio uspešnu zamenu; WP API potvrđuje aktivan dodatak 4.1.2.
+
+- Konačni izvor `860360490069139b008640aaa31184c896fb96f7`, paket `d39ed1019d0ae2ede7c283c80c87715e7b102f15`; svih **199 datoteka** odgovara lokalnom manifestu. [CI izvora i paketa](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/42819371420) prolazi 58.192 WP, 141 JS i 754 Chromium tvrdnji. Dokumentacioni završetak ne menja dodatak ili ZIP.
+- ZIP SHA256 `3dbb0caaa144c416b55045ee1d504465534aac61d194f639505cf818f9fc960f`; **30.749.111 bajtova, 475 datoteka dodatka**. Instaliran je isti provereni ZIP sa grane main.
+- **374 javnih HTTP tvrdnji**: svi glavni pogledi na četiri jezika, padajući meni sa pet igara, brojači uklonjeni, opis ispod igara, dashboard, no-store, deset tačnih CSS/JS resursa i odgovarajući javni katalozi. API: 30 okružnih celina, **197 opštinskih jedinica**, 255 naselja, **63 potvrđene reke**, 188 planina. Potpun dnevni fond novih igara ostaje 226/61/52. Svih 28 gradskih opština i KiM su uključeni.
+- **203 produkcijskih Chromium tvrdnji**: pet kompletnih gostujućih dnevnih partija, km/smer, prikaz promašenog toka/pina, četiri dodatna pitanja, zastave, fotografije, uvećanje, boje odgovora, rezultat/nastavak, baze sa nezavisnim izvorima, nova Medijana, filteri levo/rezultati desno i mobilni prikazi 320 px u četiri jezika i obe teme. Nema JS izuzetaka. Posebno je potvrđeno da Autoptimize čuva redosled novih stilova, da su mobilne igre u jednoj koloni i da su brojevi pravila na ilustracijama. Nema upisa rezultata na naloge/rang listu; provera koristi goste. Fizički telefon nije korišćen.
+- Svi WP pogledi analytics/players/games/settings/translations/ranking/explore vraćaju 200 bez PHP grešaka. Paleta, Sunrise, 6 pokušaja, težine 60/6/10 i runde population/administration/flag/landmark su očuvani.
+- Privatni nacrt „Agla” dostupan je uredniku, a odsutan iz javne baze i ponuđenih odgovora, uključujući zamrznuti dnevni katalog. Današnji zadatak/progres nisu resetovani; dopunjeni fond učestvuje u narednim dnevnim izborima. [Provera izvora](KATALOG-4.1.md).
+- Administratorska sesija je nativno odjavljena i memorijski proces zatvoren nakon provere.
+
+---
+
 # Produkcija — verzija 4.0.0
 
 Verzija **4.0.0 je postavljena i aktivna** na https://cvjetan.dev/srbija-na-dlanu/ — 8. novembar 2026. Nativni WordPress installer je vratio 200, očekivani SHA256 i „Plugin updated successfully“. WP API potvrđuje aktivan dodatak 4.0.0.
