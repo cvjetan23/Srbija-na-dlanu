@@ -8,7 +8,7 @@ final class SND_Settings {
             'app_name'=>'Srbija na dlanu','default_language'=>'sr','languages'=>array('sr','en','de','ru'),
             'default_theme'=>'auto','theme_switch'=>true,'primary_color'=>'#2d6a4f','dark_accent'=>'#95d5b2','highlight_color'=>'#FFD447','dark_button_color'=>'#2d6a4f',
             'ink_color'=>'#102a26','surface_color'=>'#ffffff','pale_color'=>'#f4f7ed','border_color'=>'#95d5b2','dark_surface_color'=>'#1a3c34','palette_version'=>2,'river_background'=>true,'font_scale'=>100,
-            'district_enabled'=>true,'municipality_enabled'=>true,'city_enabled'=>true,'river_enabled'=>true,'mountain_enabled'=>true,'daily_only'=>true,'daily_enabled'=>true,'practice_enabled'=>false,
+            'district_enabled'=>true,'municipality_enabled'=>true,'city_enabled'=>true,'river_enabled'=>true,'mountain_enabled'=>true,'daily_only'=>true,'daily_enabled'=>true,'practice_enabled'=>true,'play_modes_version'=>2,
             'max_guesses'=>6,'hint_after'=>3,'hint_enabled'=>true,'source_help_enabled'=>true,'media_fallback'=>true,
             'explore_rounds'=>array(0,1,2,3),'rounds'=>array('population','administration','flag','landmark'),'show_sources'=>true,
             'analytics_enabled'=>true,'guest_analytics'=>true,'retention_days'=>365,'erase_deleted_users'=>true,
@@ -31,6 +31,7 @@ final class SND_Settings {
                 if($stock){foreach($previous as $key=>$color){unset($stored[$key]);}}
                 $stored['palette_version']=2;
             }
+            if((int)($stored['play_modes_version']??0)<2){$stored['practice_enabled']=true;$stored['play_modes_version']=2;}
             self::$cache=array_merge(self::defaults(),$stored);
         }
         return self::$cache;
@@ -89,7 +90,7 @@ final class SND_Settings {
     }
     public static function public_config() {
         return array('app_name'=>self::get('app_name'),'languages'=>self::get('languages'),'language'=>SND_I18n::lang(),
-            'district_enabled'=>self::get('district_enabled'),'municipality_enabled'=>self::get('municipality_enabled'),'city_enabled'=>self::get('city_enabled'),'river_enabled'=>self::get('river_enabled'),'mountain_enabled'=>self::get('mountain_enabled'),'daily_only'=>self::get('daily_only'),'daily_enabled'=>self::get('daily_enabled'),'practice_enabled'=>!self::get('daily_only') && self::get('practice_enabled'),
+            'district_enabled'=>self::get('district_enabled'),'municipality_enabled'=>self::get('municipality_enabled'),'city_enabled'=>self::get('city_enabled'),'river_enabled'=>self::get('river_enabled'),'mountain_enabled'=>self::get('mountain_enabled'),'daily_only'=>self::get('daily_only'),'daily_enabled'=>self::get('daily_enabled'),'practice_enabled'=>self::get('practice_enabled'),
             'theme'=>self::get('default_theme'),'theme_switch'=>self::get('theme_switch'),'font_scale'=>self::get('font_scale'),
             'analytics'=>self::get('analytics_enabled'),'guest_analytics'=>self::get('guest_analytics'),'show_sources'=>self::get('show_sources'),'ranking_enabled'=>self::get('ranking_enabled'),'ranking_url'=>SND_Site::url('ranking'));
     }

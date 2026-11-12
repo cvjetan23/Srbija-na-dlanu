@@ -1,0 +1,54 @@
+/* Shared action roles and a borderless interface. Geometry strokes stay intact. */
+html:not([data-snd-theme=dark]),html:not([data-snd-theme=dark]) .snd-app{--snd-highlight:var(--snd-brand,#2d6a4f);--snd-direction:var(--snd-brand,#2d6a4f);--snd-correct:var(--snd-brand,#2d6a4f)}
+.snd-app{--snd-button-font:16px;--snd-button-height:44px;--snd-button-radius:12px;--snd-primary-bg:color-mix(in srgb,var(--snd-edge,#95d5b2) 50%,var(--snd-white,#fff));--snd-primary-ink:var(--snd-deep,#102a26);--snd-secondary-bg:var(--snd-brand,#2d6a4f);--snd-secondary-ink:var(--snd-white,#fff);--snd-button-bg:var(--snd-primary-bg);--snd-button-ink:var(--snd-primary-ink)}
+html[data-snd-theme=dark] .snd-app{--snd-primary-bg:var(--snd-highlight,#FFD447);--snd-secondary-bg:var(--snd-dark-button,#2d6a4f);--snd-primary-ink:var(--snd-deep,#102a26);--snd-button-bg:var(--snd-primary-bg);--snd-button-ink:var(--snd-primary-ink)}
+.snd-app *,.snd-app *::before,.snd-app *::after{border:0!important}
+.snd-app a,.snd-app button,.snd-app input,.snd-app select,.snd-app textarea,.snd-app [aria-current],.snd-app .is-active,.snd-app .is-correct,.snd-app .is-wrong{box-shadow:none!important;outline:none!important}
+.snd-app :focus-visible{outline:2px solid var(--snd-highlight)!important;outline-offset:4px}
+.snd-app :is(.snd-app-button,.snd-card-action,.snd-primary,.snd-secondary,.snd-text-button,.snd-ranking nav a,.snd-mode button,.snd-tabs button,.snd-media-error button,.snd-error button,.snd-footer button,.snd-logout button){display:inline-flex;align-items:center;justify-content:center;gap:8px;min-width:0;min-height:44px;font-family:inherit;font-weight:650;letter-spacing:normal;text-align:center;text-decoration:none!important;vertical-align:middle;white-space:normal;cursor:pointer;padding:10px 16px;font-size:16px;line-height:24px;border-radius:12px;background:var(--snd-primary-bg);color:var(--snd-primary-ink)!important}
+.snd-app :is(.snd-app-button.snd-button-outline,.snd-game .snd-secondary,.snd-game .snd-text-button,.snd-game .snd-footer button,.snd-logout button){background:var(--snd-secondary-bg);color:var(--snd-secondary-ink)!important}
+.snd-app :is(.snd-card-action,.snd-primary,.snd-app-button,.snd-secondary,.snd-text-button) :is(svg,.snd-action-icon){width:18px;height:18px;flex:0 0 18px;color:inherit}
+.snd-app :is(.snd-button-outline,.snd-game .snd-secondary,.snd-game .snd-text-button) :is(svg,.snd-action-icon){color:var(--snd-secondary-ink)}
+.snd-app :is(.snd-app-button,.snd-card-action,.snd-primary,.snd-secondary,.snd-text-button):hover:not(:disabled){background:var(--snd-button-bg);color:var(--snd-button-ink)!important;filter:brightness(.96)}
+.snd-app :is(.snd-button-outline,.snd-game .snd-secondary,.snd-game .snd-text-button):hover:not(:disabled){background:var(--snd-secondary-bg);color:var(--snd-secondary-ink)!important}
+.snd-app .snd-theme-options{padding:4px;background:var(--snd-soft);gap:3px;border-radius:12px}
+.snd-app .snd-theme-options button{width:34px;height:34px;min-height:34px;padding:7px;background:transparent;color:var(--snd-secondary);border-radius:9px}
+.snd-app .snd-theme-options button[aria-pressed=true]{background:var(--snd-brand,#2d6a4f);color:var(--snd-white,#fff)}
+html[data-snd-theme=dark] .snd-app .snd-theme-options button[aria-pressed=true]{background:var(--snd-highlight,#FFD447);color:var(--snd-brand,#2d6a4f)}
+.snd-app .snd-theme-options button svg{color:inherit}
+.snd-app .snd-app-nav :is(a,summary)[aria-current=page]{font-weight:750}
+.snd-app .snd-games-menu>summary{padding:8px 0}.snd-app .snd-games-dropdown{padding:8px}
+.snd-app .snd-game-directory{max-width:980px}.snd-app .snd-game-directory .snd-home-game{min-height:190px;padding:24px}
+.snd-app .snd-directory-bottom{padding-top:16px}
+.snd-app .snd-home-description{max-width:980px;width:100%;box-sizing:border-box;margin:42px auto;padding:42px 36px;border-radius:14px;background:color-mix(in srgb,var(--snd-edge,#95d5b2) 48%,var(--snd-white,#fff));color:var(--snd-deep,#102a26)}
+.snd-app .snd-home-description h2{color:var(--snd-deep,#102a26)}.snd-app .snd-home-description p{color:var(--snd-deep,#102a26);line-height:1.8}
+.snd-app .snd-home-rules{max-width:980px;width:100%;margin:42px auto}.snd-app .snd-home-rules li{padding-bottom:22px}
+.snd-app .snd-home-links{max-width:980px;margin:45px auto 20px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:40px}
+.snd-app .snd-home-links article{display:flex;flex-direction:column;align-items:flex-start;gap:14px;max-width:none;margin:0;padding:20px 0;background:transparent;border-radius:0;color:var(--snd-text)}
+.snd-app .snd-home-links h2{font-size:24px;color:var(--snd-text)}.snd-app .snd-home-links p{font-size:16px;color:var(--snd-text);line-height:1.7;margin:0;flex:1}
+.snd-app .snd-home-links .snd-app-button{margin-top:5px}
+.snd-app .snd-game input:not([type=checkbox]),.snd-app .snd-game .snd-guess-form .snd-primary,.snd-app .snd-catalogue-controls input,.snd-app .snd-catalogue-controls select,.snd-app .snd-catalogue-controls button{min-height:44px;height:44px}
+.snd-app .snd-game .snd-guess-form input{font-size:17px}.snd-app .snd-game .snd-secondary-actions{gap:10px}
+.snd-app .snd-game .snd-header .snd-icon-button{width:38px;height:38px;padding:8px;background:var(--snd-soft)}
+.snd-app .snd-game .snd-mode-label{display:inline-flex;gap:8px;align-items:center;font-size:15px;font-weight:650;color:var(--snd-secondary)}
+.snd-mode-label svg{width:18px;height:18px}.snd-app .snd-game .snd-daily-note{margin:8px 0 18px}
+.snd-app .snd-game .snd-practice-entry{max-width:650px;margin:35px auto 8px;text-align:center;padding:20px 0}
+.snd-app .snd-game .snd-practice-entry p{color:var(--snd-secondary);font-size:14px;margin:0 0 12px}.snd-app .snd-game .snd-practice-entry button{font-size:15px}
+.snd-app .snd-game .snd-hints{margin:18px 0;padding:16px;background:var(--snd-surface);border-radius:12px;text-align:center}
+.snd-app .snd-game .snd-hints p{font-size:16px;margin:0}.snd-app .snd-game .snd-name-pattern{display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-end;gap:5px;margin-top:12px}
+.snd-name-letter{display:inline-grid;place-items:center;position:relative;width:24px;height:34px;font-size:20px;font-weight:650}
+.snd-name-letter::after{content:"";position:absolute;bottom:0;left:2px;right:2px;height:2px;background:var(--snd-secondary)}
+.snd-name-separator{display:inline-block;width:12px;font-size:18px}.snd-app .snd-game .snd-hint-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+.snd-app .snd-game .snd-hint-actions button{font-size:14px;min-height:40px;padding:8px 13px}.snd-hint-actions .snd-action-icon{width:18px;height:18px}
+.snd-app .snd-ranking nav a,.snd-app .snd-explore-library-tabs>a{background:var(--snd-soft);color:var(--snd-text)!important}
+.snd-app .snd-ranking nav a[aria-current=true],.snd-app .snd-explore-library-tabs>a[aria-current=page]{background:var(--snd-secondary-bg);color:var(--snd-secondary-ink)!important}
+.snd-app .snd-ranking-table tr:nth-child(even){background:var(--snd-soft)}.snd-app .snd-game .snd-points-result{background:var(--snd-surface)}
+html:not([data-snd-theme=dark]) .snd-app .snd-game :is(.snd-option.is-wrong,.snd-flag-card.is-wrong){background:var(--snd-soft);color:var(--snd-deep,#102a26)!important}
+html:not([data-snd-theme=dark]) .snd-app .snd-game .snd-flag-card.is-wrong .snd-flag-option{color:var(--snd-deep,#102a26)!important}
+@media(min-width:601px){.snd-app .snd-game-directory .snd-home-game:last-child:nth-child(odd){grid-column:1/-1;justify-self:center;width:calc((100% - 18px)/2)}}
+@media(max-width:600px){.snd-app .snd-game-directory .snd-home-game{padding:20px;min-height:180px}.snd-app .snd-home-description{padding:30px 24px;margin:32px auto}.snd-app .snd-home-rules{margin:32px auto}.snd-app .snd-home-links{grid-template-columns:1fr;gap:15px;margin:32px auto 10px}.snd-app .snd-home-links article{padding:16px 0}.snd-app .snd-game .snd-hints{padding:14px 10px}.snd-name-letter{width:21px;height:30px;font-size:18px}}
+
+.snd-app .snd-game .snd-option{min-height:44px;padding:10px 16px;font-size:16px}
+.snd-app .snd-game button:disabled{opacity:.55;cursor:default}
+.snd-app .snd-theme-options{min-height:40px;padding:3px}.snd-app .snd-theme-options button{flex-basis:32px;width:32px;height:32px;min-width:32px;min-height:32px;padding:7px}
+@media(max-width:560px){.snd-app .snd-home-game .snd-card-action{width:100%;max-width:100%}.snd-app .snd-ranking nav a{font-size:16px!important;padding:10px 12px!important}}

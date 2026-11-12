@@ -9,6 +9,7 @@ final class SND_API {
             register_rest_route('srbija-na-dlanu/v1', '/' . $route, array('methods' => 'POST', 'callback' => array(__CLASS__, $route), 'permission_callback' => '__return_true'));
         }
         register_rest_route('srbija-na-dlanu/v1', '/claim', array('methods'=>'POST','callback'=>array(__CLASS__,'claim'),'permission_callback'=>function(){ return is_user_logged_in(); }));
+        register_rest_route('srbija-na-dlanu/v1','/admin/ranking-repair',array('methods'=>'POST','callback'=>function($request){$r=SND_Ranking_Repair::restore((array)$request->get_json_params());return is_wp_error($r)?$r:SND_API::response($r);},'permission_callback'=>function(){return current_user_can('manage_options');}));
         register_rest_route('srbija-na-dlanu/v1', '/admin/setup', array('methods'=>'POST','callback'=>function(){ $r=SND_Site::install(); return is_wp_error($r)?$r:SND_API::response(array('pages'=>$r)); },'permission_callback'=>function(){ return current_user_can('manage_options'); }));
     }
 
@@ -67,7 +68,6 @@ final class SND_API {
         $kind = $request->get_param('kind'); $mode = $request->get_param('mode');
         if (!in_array($kind, SND_Kinds::ALL, true) || !in_array($mode, array('daily', 'practice'), true)) { return new WP_Error('snd_mode', 'Nepoznata igra ili režim.', array('status' => 400)); }
         if(!SND_Settings::get($kind.'_enabled') || !SND_Settings::get($mode.'_enabled')){return new WP_Error('snd_disabled','Nove partije ovog tipa trenutno nisu dostupne.',array('status'=>503));}
-        if($mode==='practice' && SND_Settings::get('daily_only')){return new WP_Error('snd_daily_only','Igra se jednom dnevno. Otvori današnji izazov.',array('status'=>403));}
         $lock = is_user_logged_in() ? 'snd_start_lock_'.get_current_user_id().'_'.$kind.'_'.$mode : '';
         $lease=$lock?SND_Lock::acquire($lock):true;
         if (!$lease) { return new WP_Error('snd_busy','Partija se još priprema. Pokušaj ponovo.',array('status'=>409)); }
@@ -86,7 +86,7 @@ final class SND_API {
         $limit = self::limit('resume', 240); if (is_wp_error($limit)) { return $limit; }
         $s = SND_Game::load($request->get_param('token')); if (is_wp_error($s)) { return $s; }
         // A read must not overwrite a simultaneous action with an older revision.
-        if ($s['stage']==='complete' && !empty($s['owner']) && empty($s['recorded'])) {
+        if ($s['stage']==='complete' && !empty($s['owner']) && (empty($s['recorded']) || (empty($s['rank_eligible']) && !empty($s['scoring'])))) {
             $key='snd_lock_'.$request->get_param('token');
             $lease=SND_Lock::acquire($key);
             if (!$lease) { return new WP_Error('snd_busy','Rezultat se još čuva. Pokušaj ponovo.',array('status'=>409)); }
@@ -137,6 +137,7 @@ final class SND_API {
             $s=SND_Game::load($token);if(is_wp_error($s)){return $s;}
             $s['owner']=get_current_user_id();
             $s['privacy_epoch']=get_user_meta(get_current_user_id(),'snd_privacy_epoch',true);
+            if($c['mode']==='daily' && !empty($s['scoring'])){$s['rank_eligible']=SND_Ranking::reserve($s);}
             $record=SND_Progress::record($s);if(is_wp_error($record)){return $record;}
             SND_Game::persist($token,$s);SND_Progress::remember(get_current_user_id(),$c['kind'],$c['mode'],$token);
             return self::game_response($token,$s);

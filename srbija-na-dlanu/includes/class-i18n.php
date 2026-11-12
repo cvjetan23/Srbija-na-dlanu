@@ -22,7 +22,7 @@ final class SND_I18n {
     }
     public static function wp_locale(){return array('sr'=>'sr_RS','en'=>'en_US','de'=>'de_DE','ru'=>'ru_RU')[self::lang()];}
     public static function data() {
-        if(self::$data===null){self::$data=is_file(SND_DIR.'data/i18n.php')?require SND_DIR.'data/i18n.php':array();if(is_file(SND_DIR.'data/i18n-v4.php')){self::$data=array_merge(self::$data,require SND_DIR.'data/i18n-v4.php');}if(is_file(SND_DIR.'data/i18n-v41.php')){self::$data=array_merge(self::$data,require SND_DIR.'data/i18n-v41.php');}}
+        if(self::$data===null){self::$data=is_file(SND_DIR.'data/i18n.php')?require SND_DIR.'data/i18n.php':array();if(is_file(SND_DIR.'data/i18n-v4.php')){self::$data=array_merge(self::$data,require SND_DIR.'data/i18n-v4.php');}if(is_file(SND_DIR.'data/i18n-v41.php')){self::$data=array_merge(self::$data,require SND_DIR.'data/i18n-v41.php');}if(is_file(SND_DIR.'data/i18n-v42.php')){self::$data=array_merge(self::$data,require SND_DIR.'data/i18n-v42.php');}}
         return self::$data;
     }
     public static function catalog($lang=null) {

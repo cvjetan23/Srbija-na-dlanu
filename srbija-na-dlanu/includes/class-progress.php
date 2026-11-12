@@ -24,6 +24,7 @@ final class SND_Progress {
     public static function record(&$state) {
         $user_id = (int) ($state['owner'] ?? 0);
         if (!$user_id || $state['stage'] !== 'complete') { return true; }
+        if($state['challenge']['mode']==='daily' && !empty($state['scoring']) && empty($state['rank_eligible'])){$state['rank_eligible']=SND_Ranking::reserve($state);global $wpdb;if(!$state['rank_eligible']&&$wpdb->last_error){return new WP_Error('snd_rank_save','Bodovi još nisu sačuvani. Pokušaj ponovo.',array('status'=>503));}}
         $ranking=SND_Ranking::complete($state);if(is_wp_error($ranking)){return $ranking;}
         if(!empty($state['recorded'])){return true;}
         $lock = 'snd_progress_lock_' . $user_id;

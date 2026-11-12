@@ -228,8 +228,8 @@ final class SND_Game {
             $from = $c['catalog'][$value]; $correct = $value === $c['target']['id'];
             $s['guesses'][] = array('id' => $value, 'name' => $from['name'], 'km' => (int) round(self::distance($from['center'], $c['target']['center'])), 'direction' => self::direction($from['center'], $c['target']['center']), 'correct' => $correct);
             if ($correct || count($s['guesses']) >= $options['max_guesses']) { $s['stage'] = 'reveal'; $s['solved'] = $correct; }
-        } elseif ($action === 'hint' && $s['stage'] === 'guess' && $options['hint_enabled'] && count($s['guesses']) >= $options['hint_after'] && !$s['hint']) {
-            $s['hint'] = true;
+        } elseif ($action === 'hint' && $s['stage'] === 'guess' && $options['hint_enabled'] && count($s['guesses']) >= $options['hint_after'] && SND_Hints::level($s)<2) {
+            $s['hint_level']=SND_Hints::level($s)+1;$s['hint'] = true;
         } elseif ($action === 'giveup' && $s['stage'] === 'guess') {
             $s['stage'] = 'reveal';
         } elseif ($action === 'next' && $s['stage'] === 'reveal') {
@@ -272,7 +272,7 @@ final class SND_Game {
         if(SND_Kinds::is_explore($c['kind'])){$out['explore_map']=SND_Explore::map_state($s);}
         $public_catalog=$c['catalog'];if(SND_Kinds::is_explore($c['kind'])){$public_catalog=array_filter($public_catalog,function($t){return SND_Explore::approved_id($t['id']);});}
         if($s['stage']==='guess'){$out['catalog'] = array_map(function ($t) { return array_intersect_key($t, array_flip(array('id', 'name', 'aliases'))); }, array_values($public_catalog));}
-        if ($s['hint']) { $out['hint_text'] = 'Širi položaj: ' . $c['target']['region'] . '.'; }
+        $out['hint_level']=SND_Hints::level($s);
         if ($s['stage'] !== 'guess') {
             $out['territory'] = array_intersect_key($c['target'], array_flip(array('id', 'name', 'region', 'map_path')));
             if(in_array($s['stage'],array('reveal','complete'),true)){$out['map'] = array_map(function ($t) { return array_intersect_key($t, array_flip(array('id', 'name', 'map_path','point'))); }, array_values($public_catalog));}
@@ -305,7 +305,7 @@ final class SND_Game {
         if(isset($out['catalog'])){foreach($out['catalog'] as &$entry){$original=$entry['name'];$t=$c['catalog'][$entry['id']];$entry['name']=SND_I18n::territory_name($t);$aliases=$entry['aliases']??array();$aliases[]=$original;foreach(array('sr','en','de','ru') as $language){$aliases[]=SND_I18n::t($original,array(),$language);}if($original==='Beograd'){$aliases=array_merge($aliases,array('Belgrade','Belgrad','Белград'));}$entry['aliases']=array_values(array_unique($aliases));}unset($entry);}
         if(isset($out['territory'])){$out['territory']['name']=SND_I18n::territory_name($c['target']);}
         if(isset($out['map'])){foreach($out['map'] as &$entry){$entry['name']=SND_I18n::territory_name($c['catalog'][$entry['id']]);}unset($entry);}
-        if($s['hint']){$out['hint_text']=SND_I18n::t('Širi položaj: {region}.',array('region'=>SND_I18n::region($c['target']['region'])));}
+        if($s['hint']){$out['name_hint']=SND_Hints::describe($s);$out['hint_text']=SND_I18n::t('Počinje slovom {letter}.',array('letter'=>$out['name_hint']['first']));}
         return $out;
     }
 

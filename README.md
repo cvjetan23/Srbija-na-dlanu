@@ -1,10 +1,10 @@
-# Srbija na dlanu 4.1.2
+# Srbija na dlanu 4.2.0
 
 Zasebna geografska aplikacija unutar WordPress-a: pet dnevnih igara, baza znanja i nalozi igrača. Sveden prikaz: slika gore, pitanje i odgovori ispod, sa većim slovima.
 
 **[Preuzmi instalacioni ZIP](https://github.com/cvjetan23/Srbija-na-dlanu/raw/refs/heads/main/dist/srbija-na-dlanu.zip)** · [Instalacija](srbija-na-dlanu/INSTALACIJA.md) · [Provere](docs/PROVERA.md) · [Zastave i licence](srbija-na-dlanu/FLAGS.md)
 
-**Verzija 4.1.2 je postavljena i aktivna na [cvjetan.dev/srbija-na-dlanu](https://cvjetan.dev/srbija-na-dlanu/).** Pet igara sa jednim zadatkom po danu i zajedničkom rang listom. [Igre i pravila](docs/NOVE-IGRE.md) · [Podaci i fotografije](srbija-na-dlanu/EXPLORE-SOURCES.md) · [Produkcijska provera](docs/LIVE-CHECK.md).
+**Paket 4.2.0 je u proveri; poslednja potvrđena produkcijska verzija je 4.1.2.** Pet igara sa jednim zadatkom po danu i zajedničkom rang listom. [Igre i pravila](docs/NOVE-IGRE.md) · [Podaci i fotografije](srbija-na-dlanu/EXPLORE-SOURCES.md) · [Produkcijska provera](docs/LIVE-CHECK.md).
 
 ## Instalacija i ažuriranje
 
@@ -16,7 +16,7 @@ Zasebna geografska aplikacija unutar WordPress-a: pet dnevnih igara, baza znanja
 | Stranica | Putanja |
 |---|---|
 | Početna | `/srbija-na-dlanu/` |
-| Izbor svih pet igara | `/srbija-na-dlanu/igre/` |
+| Izbor svih pet igara | Početna i padajući meni „Igre”; stari `/igre/` preusmerava na početnu |
 | Gradovi i naselja | `/srbija-na-dlanu/gradovi/` |
 | Reke | `/srbija-na-dlanu/reke/` |
 | Planine | `/srbija-na-dlanu/planine/` |
@@ -30,6 +30,14 @@ Zasebna geografska aplikacija unutar WordPress-a: pet dnevnih igara, baza znanja
 Ove stranice imaju svoj kompas, meni, zaglavlje i podnožje, bez zaglavlja i podnožja aktivne teme. Ostali deo sajta zadržava postojeći izgled. Postojeći Elementor podaci početne stranice se ne brišu. Dodatak ne menja globalnu početnu stranicu WordPress-a.
 
 Shortcode `[srbija_na_dlanu]` i dalje radi na drugim WP stranicama; tu se zadržava njihova tema. Za određenu igru koristi `[srbija_na_dlanu kind="district"]` ili `kind="municipality"`, `kind="city"`, `kind="river"`, `kind="mountain"`.
+
+## Novo u 4.2.0
+
+- Manje akcije bez ivica, sa dva jasna nivoa: Sunrise i tamnozeleni tekst u tamnoj temi, svetlozelena i tamnozelena u svetloj; sekundarna dugmad zelena sa belim tekstom. Svetla tema nema žute akcente.
+- Centrirana poslednja kartica, iste širine za igre, opis i pravila, te dve odvojene završne sekcije za bazu znanja i nalog.
+- „Igra dana” je glavni dnevni zadatak. Vežbanje je vraćeno kao zaseban izbor ispod igre i ne utiče na plasman; povratak čuva dnevni napredak.
+- Dve pomoći za naziv: prvo slovo, pa broj slova i prazna polja. Srpska slova Lj/Nj/Dž računaju se kao jedno; druga pomoć ne otkriva preostala slova. Ukupan raniji penal ostaje isti.
+- Dnevna partija preuzeta posle prijave dobija stvaran upis bodova. Rezultat vodi na rang listu svog datuma. Administracija može bez dupliranja obnoviti propušten upis iz završene serverske istorije, uz ponovan obračun i proveru vlasništva.
 
 ## Novo u 4.1.0
 

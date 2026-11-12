@@ -121,7 +121,7 @@ async function run(){
  values.set('snd:v1:stats',JSON.stringify({district:{days:null,discovered:5}}));daily.state={...complete,territory:{id:'rs-test',name:'Test'}};daily.kind='district';daily.mode='daily';daily.record();check(Array.isArray(kindStats(JSON.parse(values.get('snd:v1:stats')),'district').days),'Malformed nested statistics recover safely');
  daily.state={...complete,solved:true,guesses:[{correct:true}],territory:{name:'SECRET-TARGET'},review:[{answer:{correct:true}}]};daily.root=host();daily.fixedKind='district';daily.modal=()=>{};
  let copied='';Object.defineProperty(global,'navigator',{value:{clipboard:{async writeText(s){copied=s;}}},configurable:true});
- await daily.share();check(copied.includes('Dnevni izazov #310 · '+serverDate),'Shared text preserves spaces around dynamic values');check(copied.includes('\nKviz 🟩 0/4\n'),'Shared result preserves line breaks and word spaces');check(!copied.includes('SECRET-TARGET'),'Shared result never reveals target');check(copied.includes('?mode=daily&date='),'Shared result has deterministic daily link');
+ await daily.share();check(copied.includes('Igra dana #310 · '+serverDate),'Shared text preserves spaces around dynamic values');check(copied.includes('\nKviz 🟩 0/4\n'),'Shared result preserves line breaks and word spaces');check(!copied.includes('SECRET-TARGET'),'Shared result never reveals target');check(copied.includes('?mode=daily&date='),'Shared result has deterministic daily link');
 
  const fs=require('node:fs'),path=require('node:path');
  const styles=['game.css','app.css'].map(file=>fs.readFileSync(path.join(__dirname,'../srbija-na-dlanu/assets',file),'utf8')).join('\n');

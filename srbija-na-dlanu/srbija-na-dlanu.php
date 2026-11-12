@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Srbija na dlanu
  * Description: Dnevna geografska igra i vežbanje za okruge, opštine i gradove. Shortcode: [srbija_na_dlanu]
- * Version: 4.1.2
+ * Version: 4.2.0
  * Requires at least: 6.2
  * Requires PHP: 7.4
  * Author: Srbija na dlanu
@@ -11,7 +11,7 @@
  */
 
 defined('ABSPATH') || exit;
-define('SND_VERSION', '4.1.2');
+define('SND_VERSION', '4.2.0');
 define('SND_DIR', plugin_dir_path(__FILE__));
 define('SND_URL', plugin_dir_url(__FILE__));
 
@@ -26,8 +26,10 @@ require_once SND_DIR . 'includes/class-data.php';
 require_once SND_DIR . 'includes/class-settings.php';
 require_once SND_DIR . 'includes/class-scoring.php';
 require_once SND_DIR . 'includes/class-ranking.php';
+require_once SND_DIR . 'includes/class-ranking-repair.php';
 require_once SND_DIR . 'includes/class-i18n.php';
 require_once SND_DIR . 'includes/class-flags.php';
+require_once SND_DIR . 'includes/class-hints.php';
 require_once SND_DIR . 'includes/class-game.php';
 require_once SND_DIR . 'includes/class-progress.php';
 require_once SND_DIR . 'includes/class-accounts.php';
@@ -127,6 +129,7 @@ add_action('admin_post_snd_control_save',array('SND_Control','save'));
 add_action('admin_post_snd_translation_save',array('SND_Control','save_translations'));
 add_action('admin_post_snd_analytics_export',array('SND_Control','export'));
 add_action('admin_post_snd_analytics_clear',array('SND_Control','clear'));
+add_action('admin_post_snd_ranking_repair',array('SND_Ranking_Repair','handle'));
 add_action('admin_post_snd_ranking_export',array('SND_Ranking','export'));
 add_action('template_redirect',array('SND_I18n','prepare'),-1);
 add_action('wp_head',array('SND_I18n','head'),0);

@@ -9,6 +9,7 @@ final class SND_Site {
         return in_array($view,self::VIEWS,true) ? $view : '';
     }
     public static function url($view='home') {
+        if($view==='games'){$view='home';}
         $pages=get_option('snd_pages',array());
         if(!empty($pages[$view]) && get_post_status($pages[$view])==='publish'){return SND_I18n::url(get_permalink($pages[$view]));}
         $slugs=array('home'=>'','games'=>'igre/','city'=>'gradovi/','river'=>'reke/','mountain'=>'planine/','district'=>'okruzi/','municipality'=>'opstine/','library'=>'baza-znanja/','ranking'=>'rang-lista/','login'=>'prijava/','account'=>'nalog/');
@@ -41,6 +42,7 @@ final class SND_Site {
     public static function template($template) {return self::view()?SND_DIR.'templates/app.php':$template;}
     public static function prepare() {
         if(!self::view()){return;}
+        if(self::view()==='games'){wp_safe_redirect(self::url('home'),301);exit;}
         if(self::view()==='library' && ($_GET['opstina']??'')==='m-beograd' && in_array('m-beograd',SND_Data::retired_ids(),true)){wp_safe_redirect(add_query_arg('okrug','rs-00',self::url('library')),301);exit;}
         if(self::view()==='library' && is_string($_GET['opstina']??null) && $_GET['opstina']!=='m-beograd' && in_array($_GET['opstina'],SND_Data::retired_ids(),true)){wp_safe_redirect(SND_Catalogue::url('municipality',array('grad'=>sanitize_key($_GET['opstina']))),301);exit;}
         // Account HTML contains private data or short-lived nonces; never cache it.
@@ -54,7 +56,7 @@ final class SND_Site {
     public static function assets() {
         $view=self::view();if(!$view){return;}SND_I18n::enqueue();wp_enqueue_style('snd-ranking',SND_URL.'assets/ranking.css',array('snd-themes'),SND_VERSION);
         wp_enqueue_script('snd-ui',SND_URL.'assets/ui.js',array('snd-i18n'),SND_VERSION,true);
-        wp_enqueue_style('snd-app',SND_URL.'assets/app.css',array(),SND_VERSION);wp_enqueue_style('snd-themes',SND_URL.'assets/themes.css',array('snd-app'),SND_VERSION);wp_enqueue_style('snd-explore',SND_URL.'assets/explore.css',array('snd-themes'),SND_VERSION);wp_enqueue_style('snd-catalogue',SND_URL.'assets/catalogue.css',array('snd-explore'),SND_VERSION);
+        wp_enqueue_style('snd-app',SND_URL.'assets/app.css',array(),SND_VERSION);wp_enqueue_style('snd-themes',SND_URL.'assets/themes.css',array('snd-app'),SND_VERSION);wp_enqueue_style('snd-explore',SND_URL.'assets/explore.css',array('snd-themes'),SND_VERSION);wp_enqueue_style('snd-catalogue',SND_URL.'assets/catalogue.css',array('snd-explore'),SND_VERSION);wp_enqueue_style('snd-interface',SND_URL.'assets/interface.css',array('snd-app','snd-themes','snd-explore','snd-catalogue','snd-ranking'),SND_VERSION);
         if(in_array($view,SND_Kinds::ALL,true)){snd_enqueue_game_assets();}
         if($view==='library'){wp_enqueue_script('snd-library',SND_URL.'assets/library.js',array(),SND_VERSION,true);wp_enqueue_style('snd-atlas',SND_URL.'assets/atlas.css',array('snd-themes'),SND_VERSION);}
     }
@@ -81,7 +83,7 @@ final class SND_Site {
         foreach($items as $key=>$name){
             if($key==='games'){
                 $active=$view==='games' || in_array($view,SND_Kinds::ALL,true);
-                echo '<details class="snd-games-menu"><summary'.($active?' aria-current="page"':'').' aria-label="Izaberi igru">Igre<svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></summary><div class="snd-games-dropdown"><a class="snd-all-games" href="'.esc_url(self::url('games')).'">Sve igre<span aria-hidden="true">↗</span></a>';
+                echo '<details class="snd-games-menu"><summary'.($active?' aria-current="page"':'').' aria-label="Izaberi igru">Igre<svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></summary><div class="snd-games-dropdown">';
                 foreach(SND_Kinds::available() as $kind=>$label){echo '<a data-menu-game="'.esc_attr($kind).'" href="'.esc_url(self::url($kind)).'"'.($view===$kind?' aria-current="page"':'').'><span>'.esc_html($label).'</span><small>'.esc_html(self::game_description($kind)).'</small></a>';}
                 echo '</div></details>';continue;
             }
@@ -140,11 +142,12 @@ final class SND_Site {
             $pool=SND_Data::pool($kind);$example=$pool[$kind==='district'?'rs-12':'m-cacak']??reset($pool);if(!$example){continue;}
             $picture=SND_Kinds::is_explore($kind)?self::game_icon($kind):self::silhouette($example);
             $day=$progress[$kind]['days'][$today]??null;$active=is_user_logged_in()?SND_Progress::active(get_current_user_id(),$kind,'daily'):null;
-            $status=$day?SND_I18n::t('Završeno').' · '.(int)($day['points']??0).'/100':($active?SND_I18n::t('Nastavi današnji izazov'):SND_I18n::t('Današnji izazov'));
+            $status=$day?SND_I18n::t('Završeno').' · '.(int)($day['points']??0).'/100':($active?SND_I18n::t('Nastavi današnji izazov'):SND_I18n::t('Igra dana'));
             echo '<a class="snd-home-game" data-game-kind="'.esc_attr($kind).'" href="'.esc_url(self::url($kind)).'"><div class="snd-directory-icon">'.$picture.'</div><div class="snd-directory-copy"><h2>'.esc_html($label).'</h2><p class="snd-game-description">'.esc_html(self::game_description($kind)).'</p></div><div class="snd-directory-bottom"><span class="snd-daily-status" data-daily-kind="'.esc_attr($kind).'" data-daily-date="'.esc_attr($today).'">'.esc_html($status).'</span><span class="snd-card-action"><span>'.($day?'Pogledaj rezultat':($active?'Nastavi':'Igraj')).'</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></span></div></a>';
         }
-        echo '</div><section class="snd-home-description"><h2>Upoznaj Srbiju kroz igru</h2><p>Od obrisa okruga i opština do gradova, reka i planina — svakog dana pronađi nešto novo na mapi. Pokušaji daju tragove, a dodatna pitanja i fotografije pomažu da zapamtiš ono što si otkrio.</p><p>Igraj po jedan izazov iz svake igre dnevno, sačuvaj progres na nalogu i uporedi rezultat na rang listi. Kada poželiš da istražiš više, otvori bazu znanja.</p></section>';self::home_rules();echo '<section class="snd-home-library"><div><h2>Upoznaj Srbiju</h2><p>Istraži okruge, opštine, naselja, reke i planine.</p></div><a class="snd-app-button snd-button-outline" href="'.esc_url(self::url('library')).'">Baza znanja</a></section>';
-        if(!is_user_logged_in()){echo '<p class="snd-home-account"><a href="'.esc_url(self::url('login')).'">Prijavi se</a> za čuvanje progresa na nalogu.</p>';}
+        echo '</div><section class="snd-home-description"><h2>Upoznaj Srbiju kroz igru</h2><p>Od obrisa okruga i opština do gradova, reka i planina — svakog dana pronađi nešto novo na mapi. Pokušaji daju tragove, a dodatna pitanja i fotografije pomažu da zapamtiš ono što si otkrio.</p><p>Igraj po jedan izazov iz svake igre dnevno, sačuvaj progres na nalogu i uporedi rezultat na rang listi. Kada poželiš da istražiš više, otvori bazu znanja.</p></section>';self::home_rules();
+        echo '<section class="snd-home-links"><article class="snd-home-library"><h2>Upoznaj Srbiju</h2><p>Istraži okruge, opštine, naselja, reke i planine.</p><a class="snd-app-button snd-button-outline" href="'.esc_url(self::url('library')).'">Baza znanja</a></article><article class="snd-home-signin"><h2>'.(is_user_logged_in()?'Tvoje geografsko putovanje':'Sačuvaj svoje rezultate').'</h2><p>'.(is_user_logged_in()?'Nastavi započete igre i prati svoj napredak.':'Prijavi se, nastavi igru na drugom uređaju i pronađi se na rang listi.').'</p><a class="snd-app-button snd-button-outline" href="'.esc_url(self::url(is_user_logged_in()?'account':'login')).'">'.(is_user_logged_in()?'Moj nalog':'Prijava').'</a></article></section>';
+
     }
     public static function game_icon($kind){
         $paths=array('city'=>'<path d="M70 160h180M85 160V95h42v65m20 0V65h70v95m-87-30h10m-10 15h10m27-65h12m-12 22h12m-12 22h12"/><path d="M160 28a17 17 0 1 0-34 0c0 15 17 31 17 31s17-16 17-31Z"/><circle cx="143" cy="28" r="5"/>','river'=>'<path d="M95 35c130 32-80 52 38 82s92 41-12 70M78 44c130 32-80 52 38 82s92 41-12 70M168 37l16 10-14 8m-43 88 16 10-14 8"/>','mountain'=>'<path d="m40 172 92-129 57 79 25-33 66 83H40Z"/><path d="m105 81 27 23 22-30m-54 53 20-6 13 15 17-11 22 19m28-37 14 16 13-13"/>');

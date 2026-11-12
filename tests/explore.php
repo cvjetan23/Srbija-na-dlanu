@@ -7,7 +7,7 @@ function ex_api($route,$data=array()){$r=new WP_REST_Request($route==='bootstrap
 function ex_move($g,$action,$value=null){$r=ex_api('action',array('token'=>$g['token'],'revision'=>$g['state']['revision'],'action'=>$action,'value'=>$value,'points'=>999));ex_ok($r->get_status()===200,'Move '.$action);return $r->get_data();}
 try{
  delete_option('snd_explore_catalogue');SND_Explore::reset();update_option('snd_settings',SND_Settings::defaults(),false);SND_Settings::reset();SND_Site::install();
- ex_ok(SND_Settings::get('daily_only') && !SND_Settings::public_config()['practice_enabled'],'Production defaults only daily games');
+ ex_ok(SND_Settings::get('daily_only') && SND_Settings::public_config()['practice_enabled'],'Daily-only competition with practice enabled');
  $boot=ex_api('bootstrap')->get_data();ex_ok(count($boot['counts'])===5 && count($boot['games'])===5,'All five game types published');
  $valid=SND_Explore::validate(SND_Explore::data());ex_ok(!is_wp_error($valid),'Imported catalogues validate');
  foreach(SND_Kinds::EXPLORE as $kind){
@@ -36,7 +36,7 @@ try{
  }
  ex_ok($sum===500,'Five games maximum500');$ranking=SND_Ranking::results(array('board'=>'general','period'=>'day'));$own=array_values(array_filter($ranking['rows'],function($r)use($users){return (int)$r['user_id']===$users[0];}));ex_ok(count($own)===1 && (int)$own[0]['total']===500 && (int)$own[0]['games']===5,'Combined daily ranking 500 across five games');
  foreach(SND_Kinds::ALL as $kind){$rows=SND_Ranking::results(array('game'=>$kind,'period'=>'day'));$own=array_values(array_filter($rows['rows'],function($r)use($users){return (int)$r['user_id']===$users[0];}));ex_ok(count($own)===1 && (int)$own[0]['total']===100,'Per-game board '.$kind);}
- ex_ok(ex_api('start',array('kind'=>'city','mode'=>'practice'))->get_status()===503 || ex_api('start',array('kind'=>'city','mode'=>'practice'))->get_status()===403,'Practice rejected by production policy');
+ $practice=ex_api('start',array('kind'=>'city','mode'=>'practice'));ex_ok($practice->get_status()===200 && !$practice->get_data()['state']['rank_eligible'],'Practice available without public ranking');$tokens[]=$practice->get_data()['token'];
  wp_set_current_user($users[1]);ex_ok(ex_api('resume',array('token'=>$tokens[0]))->get_status()===403,'Ownership enforced');
  $positions=array();foreach(SND_Explore::targets('city') as $photo_target){$photo=SND_Explore::photo_question($photo_target,SND_Explore::pool('city'),'labels:'.$photo_target['id']);foreach($photo['options'] as $pos=>$option){if($option['id']===$photo['correct']){$positions[$pos]=true;}ex_ok($option['label']==='Fotografija '.chr(65+$pos),'Photo letters follow displayed positions');}}ex_ok(count($positions)===4,'Correct photo appears in all four positions across the daily fund');
  $r=ex_api('start',array('kind'=>'river','mode'=>'daily'));$g=$r->get_data();$tokens[]=$g['token'];$internal=SND_Game::load($g['token']);$wrong=array_values(array_filter($g['state']['catalog'],function($x)use($internal){return $x['id']!==$internal['challenge']['target']['id'];}));
