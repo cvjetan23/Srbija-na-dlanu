@@ -63,3 +63,10 @@ html:not([data-snd-theme=dark]) .snd-app .snd-game .snd-flag-card.is-wrong .snd-
 
 .snd-app .snd-landmark-attribution{max-width:650px;margin:16px auto 0;text-align:center;font-size:14px}.snd-app .snd-landmark-attribution summary{cursor:pointer;color:var(--snd-secondary);padding:9px 0}.snd-app .snd-landmark-attribution p{font-size:14px;line-height:1.7;margin-top:10px}
 .snd-app .snd-game .snd-suggestions>[aria-selected=true]{background:var(--snd-secondary-bg);color:var(--snd-secondary-ink)}.snd-app .snd-game .snd-suggestions>[aria-selected=true] span{color:inherit}
+
+.snd-app .snd-catalogue-controls{grid-template-columns:minmax(0,1.5fr) minmax(0,1fr) minmax(0,1fr) auto;gap:14px;padding:20px;align-items:end}
+.snd-app .snd-catalogue-controls label{display:grid;gap:8px;line-height:20px;margin:0;font-size:13px;min-width:0}
+.snd-app .snd-catalogue-controls :is(input:not([type=hidden]),select){height:44px;min-height:44px;max-width:100%;margin:0;padding:10px 13px;border-radius:10px;background:var(--snd-bg);font-size:16px;color:var(--snd-text)}
+.snd-app .snd-catalogue-controls button{height:44px;min-height:44px;margin:0;align-self:end}.snd-app .snd-landmark-attribution p{font-size:14px!important}
+@media(max-width:800px){.snd-app .snd-catalogue-controls{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){.snd-app .snd-catalogue-controls{grid-template-columns:minmax(0,1fr);padding:16px}.snd-app .snd-catalogue-controls button{width:100%}}

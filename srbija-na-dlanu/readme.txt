@@ -4,7 +4,7 @@ Tags: geography, quiz, serbia, education
 Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 4.2.3
+Stable tag: 4.2.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -53,7 +53,9 @@ Kod: GPL-2.0-or-later. Geografija/fotografije: SOURCES.md i DATA-LICENSE.md. Zas
 
 == Changelog ==
 
-= 4.2.3 =
+= 4.2.4 =
+* Javna baza reka prikazuje 61 potvrđen unos sa osnovnim činjenicama; prazni zapisi ostaju urednicima.
+* Filteri su poravnati i imaju jasnu podlogu u boji stranice.
 * Odgovori ostaju jasni pri čuvanju, bez prekrivača i bledenja.
 * Hover zadržava istu boju; nema outline okvira.
 * Foto-attribucija je sklopiva, bez pomoći preko izvora.

@@ -45,6 +45,7 @@ final class SND_Site {
         if(self::view()==='games'){wp_safe_redirect(self::url('home'),301);exit;}
         if(self::view()==='library' && ($_GET['opstina']??'')==='m-beograd' && in_array('m-beograd',SND_Data::retired_ids(),true)){wp_safe_redirect(add_query_arg('okrug','rs-00',self::url('library')),301);exit;}
         if(self::view()==='library' && is_string($_GET['opstina']??null) && $_GET['opstina']!=='m-beograd' && in_array($_GET['opstina'],SND_Data::retired_ids(),true)){wp_safe_redirect(SND_Catalogue::url('municipality',array('grad'=>sanitize_key($_GET['opstina']))),301);exit;}
+        if(self::view()==='library'&&in_array($_GET['tip']??'',array('river','mountain'),true)&&is_string($_GET['objekat']??null)){$kind=$_GET['tip'];$id=sanitize_key($_GET['objekat']);if(isset(SND_Data::pool($kind)[$id])&&!isset(SND_Catalogue::pool($kind)[$id])){wp_safe_redirect(SND_Catalogue::url($kind),302);exit;}}
         // Account HTML contains private data or short-lived nonces; never cache it.
         if(is_user_logged_in() || in_array(self::view(),array('login','account','ranking'),true)){
             if(!defined('DONOTCACHEPAGE')){define('DONOTCACHEPAGE',true);}nocache_headers();

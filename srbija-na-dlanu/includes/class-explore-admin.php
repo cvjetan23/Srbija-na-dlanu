@@ -36,7 +36,7 @@ final class SND_Explore_Admin {
         $valid=SND_Explore::validate($data);if(is_wp_error($valid)){wp_die(esc_html($valid->get_error_message()),'',array('response'=>400));}update_option('snd_explore_catalogue',$valid,false);SND_Explore::reset();wp_safe_redirect(self::url(array('saved'=>1,'kind'=>$kind,'item'=>$key)));exit;
     }
     public static function export(){self::guard();check_admin_referer('snd_explore_export');nocache_headers();header('Content-Type: application/json; charset=utf-8');header('Content-Disposition: attachment; filename="snd-geografski-katalozi.json"');echo wp_json_encode(SND_Explore::data(),JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE);exit;}
-    public static function current(){if(SND_Site::view()!=='library' || !in_array($_GET['tip']??'',SND_Kinds::EXPLORE,true) || !is_string($_GET['objekat']??null)){return null;}$pool=SND_Explore::pool($_GET['tip']);return $pool[sanitize_key($_GET['objekat'])]??null;}
+    public static function current(){if(SND_Site::view()!=='library' || !in_array($_GET['tip']??'',SND_Kinds::EXPLORE,true) || !is_string($_GET['objekat']??null)){return null;}$pool=SND_Catalogue::pool($_GET['tip']);return $pool[sanitize_key($_GET['objekat'])]??null;}
     public static function library_tabs(){SND_Catalogue::tabs();}
     public static function library(){return SND_Catalogue::library();}
     public static function detail($t){

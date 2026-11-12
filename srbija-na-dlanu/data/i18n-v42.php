@@ -183,6 +183,11 @@ return json_decode(<<<'SND_V42_LANGUAGES'
     "en": "Name hints cost {hint} points in total.",
     "de": "Die Namenshinweise kosten insgesamt {hint} Punkte.",
     "ru": "Подсказки к названию отнимают всего {hint} очков."
+  },
+  "Spisak sadrži potvrđene nazive sa osnovnim podacima.": {
+    "en": "This list contains verified entries with essential facts.",
+    "de": "Die Liste enthält bestätigte Einträge mit grundlegenden Angaben.",
+    "ru": "В списке — подтверждённые объекты с основными сведениями."
   }
 }
 SND_V42_LANGUAGES

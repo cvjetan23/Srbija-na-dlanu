@@ -1,8 +1,15 @@
 <?php
 defined('ABSPATH') || exit;
 
-/** Public knowledge directory; game answers and the directory share reviewed pools. */
+/** Knowledge directory: reviewed identities with usable facts for nature entries. */
 final class SND_Catalogue {
+    public static function pool($kind){
+        return array_filter(SND_Data::pool($kind),function($t)use($kind){
+            if($kind==='river'){return !empty($t['mouth'])&&!empty($t['sea'])&&(float)($t['length_km']??0)>0;}
+            if($kind==='mountain'){return !empty($t['peak'])&&(float)($t['height']??0)>0;}
+            return true;
+        });
+    }
     public static function url($kind,$args=array()){
         if($kind!=='district'){$args=array_merge(array('tip'=>$kind),$args);}return add_query_arg($args,SND_Site::url('library'));
     }
@@ -23,7 +30,7 @@ final class SND_Catalogue {
     }
     public static function library(){
         $kind=$_GET['tip']??'';if(!in_array($kind,array('municipality','city','river','mountain'),true)){return false;}
-        $all=SND_Data::pool($kind);$query=self::query('pretraga');$region=self::query('oblast');$sea=$kind==='river'?self::query('sliv'):'';$parent=$kind==='municipality'?self::query('grad'):'';
+        $all=self::pool($kind);$query=self::query('pretraga');$region=self::query('oblast');$sea=$kind==='river'?self::query('sliv'):'';$parent=$kind==='municipality'?self::query('grad'):'';
         $sort=self::query('sort');$numeric=$kind==='river'?'length_km':($kind==='mountain'?'height':'population');if(!in_array($sort,array('name',$numeric),true)){$sort='name';}
         $pool=self::sorted(self::filter($all,$query,$region,$sea,$parent),$sort);$current=SND_Explore_Admin::current();self::tabs();
         echo '<section class="snd-library-head"><h1>'.esc_html($current?SND_Explore::display_name($current):SND_I18n::t(SND_Kinds::labels()[$kind])).'</h1><p>Izaberi na mapi ili pronađi naziv u tabeli.</p></section>';
@@ -37,7 +44,7 @@ final class SND_Catalogue {
         if($current){echo '<p class="snd-catalogue-back"><a href="'.esc_url(self::url($kind)).'">← Nazad na spisak</a></p>';SND_Explore_Admin::detail($current);self::controls($kind,$all,$query,$region,$sea,$parent,$sort,$numeric);}
         self::table($kind,$pool);
         if($kind==='municipality'){echo '<aside class="snd-catalogue-source-note"><h2>Kako se računa broj opština?</h2><p>Spisak prati 197 opština, gradskih opština i gradova iz registra RZS. To nisu 197 samostalnih opština: Srbija ima 174 jedinice lokalne samouprave. Beograd, Niš, Požarevac, Vranje i Užice ovde su prikazani kroz 28 gradskih opština, bez ponovnog dodavanja celih gradova.</p><p>Uključeni su Kosovo i Metohija. Crtica znači da uporediv podatak iz Popisa 2022. nije dostupan.</p><a href="https://stat.gov.rs/sr-latn/oblasti/registar-prostornih-jedinica-i-gis/administrativno-teritorijalna-podela-i-nstj-nivoi-1-2-3/" target="_blank" rel="noopener noreferrer">Zvanična podela RZS ↗</a></aside>';}
-        else{echo '<p class="snd-explore-table-note">U javnom katalogu su potvrđeni nazivi. Nedostajući podaci označeni su crticom; dnevni zadaci imaju kompletna pitanja i fotografije.</p>';}
+        else{echo '<p class="snd-explore-table-note">'.esc_html(in_array($kind,array('river','mountain'),true)?SND_I18n::t('Spisak sadrži potvrđene nazive sa osnovnim podacima.'):SND_I18n::t('U javnom katalogu su potvrđeni nazivi. Nedostajući podaci označeni su crticom; dnevni zadaci imaju kompletna pitanja i fotografije.')).'</p>';}
         return true;
     }
     private static function controls($kind,$all,$query,$region,$sea,$parent,$sort,$numeric){
@@ -63,7 +70,7 @@ final class SND_Catalogue {
     public static function featured(){
         echo '<section class="snd-library-featured" aria-label="Istraži prirodu Srbije">';
         $groups=array('river'=>array('Reke Srbije','Istraži tok, ušće i sliv reke.',array('Dunav','Sava','Drina','Velika Morava','Tisa','Ibar')),'mountain'=>array('Planine Srbije','Pronađi planinu, njen vrh i visinu.',array('Kopaonik','Zlatibor','Tara i Zvijezda','Stara planina','Fruška gora','Šar planina')));
-        foreach($groups as $kind=>$group){echo '<article><h2>'.esc_html($group[0]).'</h2><p>'.esc_html($group[1]).'</p><ul>';$pool=SND_Explore::pool($kind);foreach($group[2] as $name){foreach($pool as $t){if($t['name']===$name){echo '<li><a href="'.esc_url(self::url($kind,array('objekat'=>$t['id']))).'">'.esc_html(SND_Explore::name($t)).'</a></li>';break;}}}echo '</ul><a class="snd-app-button" href="'.esc_url(self::url($kind)).'">'.($kind==='river'?'Sve reke':'Sve planine').'<span aria-hidden="true">→</span></a></article>';}
+        foreach($groups as $kind=>$group){echo '<article><h2>'.esc_html($group[0]).'</h2><p>'.esc_html($group[1]).'</p><ul>';$pool=self::pool($kind);foreach($group[2] as $name){foreach($pool as $t){if($t['name']===$name){echo '<li><a href="'.esc_url(self::url($kind,array('objekat'=>$t['id']))).'">'.esc_html(SND_Explore::name($t)).'</a></li>';break;}}}echo '</ul><a class="snd-app-button" href="'.esc_url(self::url($kind)).'">'.($kind==='river'?'Sve reke':'Sve planine').'<span aria-hidden="true">→</span></a></article>';}
         echo '</section>';
     }
 }
