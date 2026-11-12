@@ -4,7 +4,7 @@ Tags: geography, quiz, serbia, education
 Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 4.2.0
+Stable tag: 4.2.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -53,7 +53,7 @@ Kod: GPL-2.0-or-later. Geografija/fotografije: SOURCES.md i DATA-LICENSE.md. Zas
 
 == Changelog ==
 
-= 4.2.0 =
+= 4.2.1 =
 * Kompaktna dugmad bez ivica; primarne i sekundarne akcije, Sunrise samo u tamnoj temi.
 * Poravnate sekcije početne, centrirana poslednja igra i odvojene sekcije za bazu i nalog.
 * Dve pomoći za naziv: početno slovo, pa broj slova i prazna polja.

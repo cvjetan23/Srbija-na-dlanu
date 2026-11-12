@@ -118,6 +118,61 @@ return json_decode(<<<'SND_V42_LANGUAGES'
     "en": "The first hint reveals the first letter. The second shows the letter count and empty slots.",
     "de": "Der erste Hinweis zeigt den Anfangsbuchstaben. Der zweite zeigt die Anzahl und leere Buchstabenfelder.",
     "ru": "Первая подсказка открывает начальную букву. Вторая показывает число букв и пустые поля."
+  },
+  "Ilustracija Srbije sa okruzima, rekama i planinama": {
+    "en": "Illustration of Serbia with districts, rivers and mountains",
+    "de": "Illustration Serbiens mit Bezirken, Flüssen und Bergen",
+    "ru": "Иллюстрация Сербии с округами, реками и горами"
+  },
+  "Istraži i nauči": {
+    "en": "Explore and learn",
+    "de": "Entdecken und lernen",
+    "ru": "Исследуй и узнавай"
+  },
+  "Istraži okruge, gradove, reke i planine. Pronađi zanimljivosti, upoznaj mesta i spremi se za sledeću igru.": {
+    "en": "Explore districts, towns, rivers and mountains. Discover interesting facts and get ready for your next game.",
+    "de": "Erkunde Bezirke, Städte, Flüsse und Berge. Entdecke Wissenswertes und bereite dich auf das nächste Spiel vor.",
+    "ru": "Исследуй округа, города, реки и горы. Узнавай интересные факты и готовься к следующей игре."
+  },
+  "Tvoje mesto na mapi": {
+    "en": "Your place on the map",
+    "de": "Dein Platz auf der Karte",
+    "ru": "Твоё место на карте"
+  },
+  "Nastavi svoje putovanje": {
+    "en": "Continue your journey",
+    "de": "Setze deine Reise fort",
+    "ru": "Продолжи своё путешествие"
+  },
+  "Sačuvaj svoj napredak": {
+    "en": "Keep your progress",
+    "de": "Speichere deinen Fortschritt",
+    "ru": "Сохрани свой прогресс"
+  },
+  "Sve tvoje partije i rezultati na jednom mestu.": {
+    "en": "All your games and results in one place.",
+    "de": "Alle deine Spiele und Ergebnisse an einem Ort.",
+    "ru": "Все твои игры и результаты в одном месте."
+  },
+  "Jedan nalog za sve tvoje geografske izazove.": {
+    "en": "One account for all your geography games.",
+    "de": "Ein Konto für alle deine Geografiespiele.",
+    "ru": "Один аккаунт для всех географических игр."
+  },
+  "Nastavi na drugom uređaju": {
+    "en": "Continue on another device",
+    "de": "Auf einem anderen Gerät weiterspielen",
+    "ru": "Продолжай на другом устройстве"
+  },
+  "Sačuvaj rezultate": {
+    "en": "Save your results",
+    "de": "Ergebnisse speichern",
+    "ru": "Сохраняй результаты"
+  },
+  "Prati plasman": {
+    "en": "Follow your ranking",
+    "de": "Platzierung verfolgen",
+    "ru": "Следи за рейтингом"
   }
 }
 SND_V42_LANGUAGES
