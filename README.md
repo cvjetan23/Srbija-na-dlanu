@@ -1,10 +1,10 @@
-# Srbija na dlanu 4.2.2
+# Srbija na dlanu 4.2.3
 
 Zasebna geografska aplikacija unutar WordPress-a: pet dnevnih igara, baza znanja i nalozi igrača. Sveden prikaz: slika gore, pitanje i odgovori ispod, sa većim slovima.
 
 **[Preuzmi instalacioni ZIP](https://github.com/cvjetan23/Srbija-na-dlanu/raw/refs/heads/main/dist/srbija-na-dlanu.zip)** · [Instalacija](srbija-na-dlanu/INSTALACIJA.md) · [Provere](docs/PROVERA.md) · [Zastave i licence](srbija-na-dlanu/FLAGS.md)
 
-**Doradi 4.2.2 traju završne provere; prethodno ažuriranje je već aktivno na sajtu.** Pet igara sa jednim zadatkom po danu i zajedničkom rang listom. [Igre i pravila](docs/NOVE-IGRE.md) · [Podaci i fotografije](srbija-na-dlanu/EXPLORE-SOURCES.md) · [Produkcijska provera](docs/LIVE-CHECK.md).
+**Doradi 4.2.3 traju završne provere; prethodno ažuriranje je već aktivno na sajtu.** Pet igara sa jednim zadatkom po danu i zajedničkom rang listom. [Igre i pravila](docs/NOVE-IGRE.md) · [Podaci i fotografije](srbija-na-dlanu/EXPLORE-SOURCES.md) · [Produkcijska provera](docs/LIVE-CHECK.md).
 
 ## Instalacija i ažuriranje
 
@@ -30,6 +30,13 @@ Zasebna geografska aplikacija unutar WordPress-a: pet dnevnih igara, baza znanja
 Ove stranice imaju svoj kompas, meni, zaglavlje i podnožje, bez zaglavlja i podnožja aktivne teme. Ostali deo sajta zadržava postojeći izgled. Postojeći Elementor podaci početne stranice se ne brišu. Dodatak ne menja globalnu početnu stranicu WordPress-a.
 
 Shortcode `[srbija_na_dlanu]` i dalje radi na drugim WP stranicama; tu se zadržava njihova tema. Za određenu igru koristi `[srbija_na_dlanu kind="district"]` ili `kind="municipality"`, `kind="city"`, `kind="river"`, `kind="mountain"`.
+
+## Novo u 4.2.3
+
+- Potezi i odgovorene opcije ostaju bez zatamnjivanja ili zamućenja; učitavanje cele stranice zadržava zaseban prekrivač.
+- Hover samo blago potamni istu boju, a fokus koristi pozadinu/podvlačenje bez outline okvira.
+- Autor i licenca su u sklopivim detaljima ispod slike. Izvor kao pomoć uklonjen je iz interfejsa.
+- Ilustracija Srbije je svedena na okruge, reke i planinske simbole, bez pozadine i krugova.
 
 ## Novo u 4.2.1
 

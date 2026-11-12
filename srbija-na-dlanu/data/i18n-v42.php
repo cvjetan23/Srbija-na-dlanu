@@ -173,6 +173,16 @@ return json_decode(<<<'SND_V42_LANGUAGES'
     "en": "Follow your ranking",
     "de": "Platzierung verfolgen",
     "ru": "Следи за рейтингом"
+  },
+  "Fotografija: autor i licenca": {
+    "en": "Photo: author and licence",
+    "de": "Foto: Urheber und Lizenz",
+    "ru": "Фото: автор и лицензия"
+  },
+  "Pomoći za naziv ukupno oduzimaju {hint} poena.": {
+    "en": "Name hints cost {hint} points in total.",
+    "de": "Die Namenshinweise kosten insgesamt {hint} Punkte.",
+    "ru": "Подсказки к названию отнимают всего {hint} очков."
   }
 }
 SND_V42_LANGUAGES

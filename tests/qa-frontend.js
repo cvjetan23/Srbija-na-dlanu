@@ -110,7 +110,7 @@ async function run(){
  markup=reviewer.reviewItem({...wrong,answer:{correct:false,skipped:true}});check(markup.includes('Preskočeno')&&!markup.includes('>Netačno<'),'Skipped question is distinct from a wrong answer');
  markup=reviewer.reviewItem({...wrong,type:'flag',correct_image:'https://example.test/flag.png'});check(markup.includes('src="https://example.test/flag.png"'),'Correct flag survives final review rendering');
  reviewer.state.question={type:'landmark',title:'Znamenitost?',image:'https://example.test/photo.jpg',credit:'Fotograf',license:'CC BY-SA 4.0',options:[]};
- markup=reviewer.visual();check(markup.includes('Fotograf')&&markup.includes('creativecommons.org'),'Attribution stays visible before answer');check(markup.includes('Prikaži izvor fotografije (pomoć)'),'Photo source is explicitly an assisted action before answer');
+ markup=reviewer.visual();check(markup.includes('Fotograf')&&markup.includes('creativecommons.org'),'Attribution stays visible before answer');check(markup.includes('snd-landmark-attribution')&&!markup.includes('data-cmd="source"'),'Attribution is expandable and has no source-help action');
  const images=[{hidden:false}],buttons=[{disabled:false}],note={hidden:true};
  reviewer.root={querySelectorAll:s=>s==='.snd-media-img'?images:buttons,querySelector:()=>note};reviewer.mediaProblem();
  check(images[0].hidden && buttons[0].disabled && !note.hidden,'Failed image blocks unfair guessing and shows recovery');

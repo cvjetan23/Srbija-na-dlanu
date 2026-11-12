@@ -115,7 +115,7 @@
     async start(fresh) {
       if (this.busy) return;
       this.busy = true; this.error = ''; const requestNumber = ++this.requestNumber;
-      this.root.setAttribute('aria-busy', 'true');this.setBusy(true);
+      this.root.setAttribute('aria-busy', 'true');this.setBusy(true,true);
       try {
         await this.refreshDay();
         let result;
@@ -161,8 +161,8 @@
       }
       finally { this.busy = false; this.render(); this.focusPanel(); }
     }
-    setBusy(on) {
-      this.root.setAttribute('aria-busy', on ? 'true' : 'false');const loader=this.root.querySelector('.snd-game-loading'),shared=this.root.dataset.shell==='1' && typeof document.getElementById==='function'?document.getElementById('snd-page-loader'):null;if(shared)shared.hidden=!on;if(loader)loader.hidden=shared?true:!on;
+    setBusy(on, overlay=false) {
+      this.root.setAttribute('aria-busy', on ? 'true' : 'false');const loader=this.root.querySelector('.snd-game-loading'),shared=this.root.dataset.shell==='1' && typeof document.getElementById==='function'?document.getElementById('snd-page-loader'):null;if(shared)shared.hidden=!(on&&overlay);if(loader)loader.hidden=shared?true:!(on&&overlay);
       this.root.querySelectorAll('button[data-cmd], .snd-option, button[data-zoom]').forEach(b => { if (on) { b.dataset.wasDisabled = b.disabled ? '1' : '0'; b.disabled = true; } else if (b.dataset.wasDisabled !== undefined) { b.disabled = b.dataset.wasDisabled === '1'; delete b.dataset.wasDisabled; } });
     }
     async switchGame(kind, mode) {
@@ -217,7 +217,6 @@
         ${this.practiceEntry()}<footer class="snd-footer"><p class="snd-save-status">${this.account.authenticated ? `<span>Progres se čuva na nalogu.</span><a href="${safeUrl(this.root.dataset.account)}">Moj nalog</a>` : `<span>Igraš kao gost.</span><a href="${safeUrl(this.root.dataset.login)}">Prijavi se</a><span>za čuvanje na nalogu.</span>`}</p>${L.config().show_sources===false?'':`<button data-cmd="sources">${icon('sources')}<span>Obuhvat i izvori</span></button>`}</footer>
         <div class="snd-modal-host"></div><div class="snd-announcer" aria-live="polite" aria-atomic="true"></div>`);
       this.bind();
-      const panel=this.root.querySelector('.snd-panel');if(panel && panel.animate && !(typeof matchMedia==='function' && matchMedia('(prefers-reduced-motion: reduce)').matches))panel.animate([{opacity:.25,transform:'translateY(5px)'},{opacity:1,transform:'translateY(0)'}],{duration:200,easing:'ease-out'});
       const live=this.root.querySelector('.snd-announcer');
       if(live){const message=s.stage==='quiz'?L.t('Runda {round} od {total}: {title}',{round:s.question_index+2,total:s.question_count+1,title:s.question.title}):L.text(s.stage==='complete'?'Partija je završena.':s.stage==='reveal'?'Teritorija je otkrivena.':'Prepoznaj teritoriju.');setTimeout(()=>{if(this.root.querySelector('.snd-announcer')===live)live.textContent=message;},50);}
       this.setBusy(this.busy);
@@ -226,7 +225,7 @@
       const s = this.state, q = s.question;
       if(s.explore_map && !(s.stage==='quiz' && q.image)){return this.exploreVisual();}
       if (s.stage === 'quiz' && q.image) {
-        return `<div class="snd-visual snd-visual-photo"><div class="snd-photo-wrap"><img class="snd-landmark-photo snd-media-img" src="${this.mediaUrl(q.image)}" alt="Znamenitost koju treba prepoznati" loading="eager"></div><p class="snd-photo-credit">Foto: ${esc(q.credit)} · ${licenseUrl(q.license) ? `<a href="${safeUrl(licenseUrl(q.license))}" target="_blank" rel="noopener noreferrer">${esc(q.license)}</a>` : esc(q.license)}${q.image_source ? ` · ${sourceLink(q.image_source,'Izvor fotografije ↗')}` : ''}</p>${!q.answer && !q.image_source && s.source_help_enabled!==false ? '<button class="snd-text-button" data-cmd="source">Prikaži izvor fotografije (pomoć)</button>' : ''}${q.source_help_used ? '<p class="snd-round">Izvor fotografije je korišćen kao pomoć.</p>' : ''}</div>`;
+        return `<div class="snd-visual snd-visual-photo"><div class="snd-photo-wrap"><img class="snd-landmark-photo snd-media-img" src="${this.mediaUrl(q.image)}" alt="Znamenitost koju treba prepoznati" loading="eager"></div><details class="snd-photo-attribution snd-landmark-attribution"><summary>${esc(L.text('Fotografija: autor i licenca'))}</summary><p class="snd-photo-credit">${esc(q.credit)} · ${licenseUrl(q.license) ? `<a href="${safeUrl(licenseUrl(q.license))}" target="_blank" rel="noopener noreferrer">${esc(q.license)}</a>` : esc(q.license)}${q.image_source && q.answer ? ` · ${sourceLink(q.image_source,'Izvor fotografije ↗')}` : ''}</p></details></div>`;
       }
       if (s.stage === 'guess' || s.stage === 'quiz') {
         return `<div class="snd-visual ${s.stage === 'quiz' ? 'snd-visual-small' : ''}"><svg class="snd-shape" viewBox="0 0 360 360" role="img" aria-label="${s.stage === 'guess' ? 'Obris nepoznate teritorije; sever je gore' : 'Obris teritorije ' + esc(s.territory.name)}"><path d="${esc(s.shape)}"/></svg></div>`;
@@ -245,7 +244,7 @@
     }
     photoCredits(q) {
       const unlocked=q.answer || q.source_help_used;
-      return `<details class="snd-photo-attribution"><summary>${esc(L.text('Fotografije: autori i licence'))}</summary>${(q.attribution || []).map(c=>`<p>${esc(c.label)} · ${esc(c.credit)} · ${(c.license_url || licenseUrl(c.license))?'<a target="_blank" rel="noopener noreferrer" href="'+safeUrl(c.license_url || licenseUrl(c.license))+'">'+esc(c.license)+'</a>':esc(c.license)} ${unlocked?sourceLink(c.source):''}</p>`).join('')}${!unlocked?'<p>'+esc(L.text('Otvaranje izvora može otkriti odgovor i donosi 0 poena za ovo pitanje.'))+'</p><button class="snd-text-button" data-cmd="source">'+esc(L.text('Prikaži izvore fotografija (pomoć)'))+'</button>':''}</details>`;
+      return `<details class="snd-photo-attribution"><summary>${esc(L.text('Fotografije: autori i licence'))}</summary>${(q.attribution || []).map(c=>`<p>${esc(c.label)} · ${esc(c.credit)} · ${(c.license_url || licenseUrl(c.license))?'<a target="_blank" rel="noopener noreferrer" href="'+safeUrl(c.license_url || licenseUrl(c.license))+'">'+esc(c.license)+'</a>':esc(c.license)} ${unlocked?sourceLink(c.source):''}</p>`).join('')}</details>`;
     }
     panel() {
       const s = this.state;
@@ -319,7 +318,7 @@
     pointsIntro() {
       const s=this.state,r=s.scoring_rules;if(!r)return '';
       const base=s.question_count?r.territory:100;
-      return `<div class="snd-rank-intro"><details><summary>Bodovanje: 0–100</summary><p>${esc(L.t('Teritorija: do {base} poena. Svaki naredni pokušaj umanjuje taj deo za {step}.',{base,step:r.step}))} ${esc(L.t('Dodatna pitanja: do {quiz} poena, ravnomerno po tačnom odgovoru.',{quiz:100-base}))} ${esc(L.t('Pomoći za naziv ukupno oduzimaju {hint} poena. Pitanje uz pomoć izvora ne donosi poene.',{hint:r.hint}))}</p><a href="${safeUrl(L.config().ranking_url)}">Rang lista</a></details></div>`;
+      return `<div class="snd-rank-intro"><details><summary>Bodovanje: 0–100</summary><p>${esc(L.t('Teritorija: do {base} poena. Svaki naredni pokušaj umanjuje taj deo za {step}.',{base,step:r.step}))} ${esc(L.t('Dodatna pitanja: do {quiz} poena, ravnomerno po tačnom odgovoru.',{quiz:100-base}))} ${esc(L.t('Pomoći za naziv ukupno oduzimaju {hint} poena.',{hint:r.hint}))}</p><a href="${safeUrl(L.config().ranking_url)}">Rang lista</a></details></div>`;
     }
     rankLink() { const u=new URL(L.config().ranking_url || this.root.dataset.gamesUrl,location.href);u.searchParams.set('period','day');u.searchParams.set('rank_date',this.state.date);return u.href; }
     pointsResult() {
