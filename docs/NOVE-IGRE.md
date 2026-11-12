@@ -1,4 +1,4 @@
-# Pet dnevnih igara i vežbanje — 4.2.0
+# Pet dnevnih igara i vežbanje — 4.2.5
 
 Implementacija dnevnih igara za okruge, opštine, gradove i naselja, reke i planine. Isti zadatak za sve igrače i jezike, promena dana u zoni Europe/Belgrade. Svaka igra ima šest pokušaja, zatim četiri dodatna pitanja. Neuspešno pogađanje ne sprečava nastavak obrazovnih pitanja.
 
@@ -16,7 +16,7 @@ Planine se prikazuju dokumentovanim referentnim vrhom. Ne postoji izmišljena pr
 
 ## Bodovanje i rang lista
 
-Glavno pogađanje: 60, 54, 48, 42, 36 ili 30 poena za prvi do šestog pokušaja. Otkriven ili nepogođen odgovor daje 0. Pomoć oduzima 10 iz ove komponente, najmanje do 0. Svako tačno dodatno pitanje donosi 10, netačno/preskočeno 0. Izvor koji otkriva fotografiju može se otvoriti kroz označenu pomoć; tada aktivno pitanje daje 0.
+Glavno pogađanje: 60, 54, 48, 42, 36 ili 30 poena za prvi do šestog pokušaja. Otkriven ili nepogođen odgovor daje 0. Pomoć oduzima 10 iz ove komponente, najmanje do 0. Svako tačno dodatno pitanje donosi 10, netačno/preskočeno 0. Otvaranje podataka o autoru i licenci fotografije ne menja poene. Ranije korišćena pomoć preko izvora ostaje sačuvana samo u postojećoj istoriji.
 
 Maksimum je **100 po igri, 500 dnevno ukupno**. Brzina nije kriterijum. Jedan upis po nalogu, datumu, sezoni i igri, uz serversku proveru vlasništva i verzije poteza. Nastavak na nalogu čuva i već odigrani deo. Gost ima nastavak u istom pregledaču; za javni plasman prijavom se povezuje započeta ili završena današnja partija sa nalogom, ako taj dnevni slot već nije popunjen.
 
@@ -32,13 +32,13 @@ Administratorski pregled rang liste sadrži obnovu propuštenih upisa po nalogu 
 
 ## Katalog i uređivanje
 
-Javni katalog: **255 naselja, 63 potvrđene reke, 188 planina**. Dodatnih 412 OSM naziva reka ostaje privatni nacrt do nezavisne provere. Dnevni fond trenutno koristi **226 naselja, 61 reku i 52 planine** sa kompletnim pitanjima i fotografijama. Širi, potvrđeni katalog služi za odgovore i bazu znanja. Ovo nije tvrdnja da je obrađena svaka reka u Srbiji.
+Javna baza znanja: **255 naselja, 61 reka sa osnovnim činjenicama, 188 planina**. Urednički katalog sadrži 63 potvrđena rečna naziva; dva zapisa bez ušća, morskog sliva i dužine nisu na javnoj mapi ili spisku do dopune. Dodatnih 412 OSM naziva reka ostaje privatni nacrt do nezavisne provere. Dnevni fond trenutno koristi **226 naselja, 61 reku i 52 planine** sa kompletnim pitanjima i fotografijama. Širi, potvrđeni katalog služi za odgovore; baza znanja prikazuje zapise sa osnovnim činjenicama. Raniji zamrznuti zadaci i njihovi odgovori nisu menjani. Ovo nije tvrdnja da je obrađena svaka reka u Srbiji.
 
 Obuhvaćeni su Kosovo i Metohija. Popis RZS 2022. tamo nije sproveden: nepoznati broj stanovnika nije zamenjen izmišljenom vrednošću, već geografskim pitanjem. Kod drugih naselja koristi se stanovništvo samog naselja, ne cele opštine. Istoimena mesta imaju dodatnu administrativnu odrednicu.
 
 WP → **Srbija na dlanu → Geografski katalozi**: pregled spremnosti, pretraga, pojedinačna izmena naziva/prevoda/alternativnih naziva, koordinata, činjenica, izvora i fotografije sa licencom; validirani JSON uvoz i izvoz. Postojeća podešavanja imaju aktivne igre, dnevni režim, uključene dodatne runde i bodovanje. Promena kataloga ne prepisuje već zamrznute zadatke tog dana. Analitika, igrači i istorija podržavaju svih pet vrsta.
 
-Fotografije su lokalno u instalacionom ZIP-u. Manifest čuva HTTPS adresu, veličinu i SHA256; autor, licenca i izvor nalaze se uz zapis. Autori/licence dostupni su i pre odgovora, dok se izvor koji otkriva rešenje otvara kao pomoć. U toku igre nema zavisnosti od spoljnog servisa za mape ili slike.
+Fotografije su lokalno u instalacionom ZIP-u. Manifest čuva HTTPS adresu, veličinu i SHA256; autor, licenca i izvor nalaze se uz zapis. Autor i licenca dostupni su u sklopivom prikazu odmah ispod slike, i pre odgovora. Dugme za izvor kao pomoć je uklonjeno. U toku igre nema zavisnosti od spoljnog servisa za mape ili slike.
 
 [Izvori i ograničenja](../srbija-na-dlanu/EXPLORE-SOURCES.md) · [Provere](PROVERA.md)
 

@@ -4,7 +4,7 @@ Zasebna geografska aplikacija unutar WordPress-a: pet dnevnih igara, baza znanja
 
 **[Preuzmi instalacioni ZIP](https://github.com/cvjetan23/Srbija-na-dlanu/raw/refs/heads/main/dist/srbija-na-dlanu.zip)** · [Instalacija](srbija-na-dlanu/INSTALACIJA.md) · [Provere](docs/PROVERA.md) · [Zastave i licence](srbija-na-dlanu/FLAGS.md)
 
-**Doradi 4.2.5 traju završne provere; prethodno ažuriranje je već aktivno na sajtu.** Pet igara sa jednim zadatkom po danu i zajedničkom rang listom. [Igre i pravila](docs/NOVE-IGRE.md) · [Podaci i fotografije](srbija-na-dlanu/EXPLORE-SOURCES.md) · [Produkcijska provera](docs/LIVE-CHECK.md).
+**Verzija 4.2.5 je postavljena i aktivna na [cvjetan.dev/srbija-na-dlanu](https://cvjetan.dev/srbija-na-dlanu/).** Pet igara sa jednim zadatkom po danu i zajedničkom rang listom. [Igre i pravila](docs/NOVE-IGRE.md) · [Podaci i fotografije](srbija-na-dlanu/EXPLORE-SOURCES.md) · [Produkcijska provera](docs/LIVE-CHECK.md).
 
 ## Instalacija i ažuriranje
 
@@ -75,7 +75,7 @@ Shortcode `[srbija_na_dlanu]` i dalje radi na drugim WP stranicama; tu se zadrž
 ## Novo u 3.8.1
 
 - Kompaktnije ikonice teme i izbor jezika. Na mobilnom/tabletu jezik je levo, tema desno, a navigacija počinje od leve ivice.
-- [Razrađen predlog tri nove dnevne igre i zajedničkog rangiranja](docs/NOVE-IGRE.md). Ovo je koncept za pregled, a ne objava novih igara.
+- [Pet aktivnih dnevnih igara i zajedničko rangiranje](docs/NOVE-IGRE.md). Gradovi i naselja, reke i planine su aktivni uz okruge i opštine; vežbanje je odvojeno od javne rang liste.
 
 ## Novo u 3.8.0
 

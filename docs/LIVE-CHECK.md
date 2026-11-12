@@ -1,3 +1,19 @@
+# Produkcijska provera 4.2.5 — 12. novembar 2026.
+
+Dodatak je postavljen preko nativnog WordPress obrasca za zamenu instalacionog ZIP-a i ostao je aktivan. Tačan SHA256 paketa je `aa5a2f3dfaacb5f70cdd9c246d5cbcf9f91686c96850b73767254f9f440083c4`. Svih 11 javnih CSS/JS resursa uključujući novi `interface.css` poređeno je bajt po bajt; verzija API-ja i resursa je 4.2.5. SND resursi ostaju izuzeti iz optimizacije sa ispravnim redosledom.
+
+429 HTTP i 273 Chromium tvrdnji je prošlo na stvarnom sajtu. Pregledani su snimci svetle/tamne početne, dve pomoći i rezultata. Primarna dugmad imaju 44 px visinu i Sunrise samo u tamnoj temi; sekundarna su zelena i bela. Kartice, opis i pravila dele širinu, poslednja igra je centrirana. Zasebna sekcija baze ima originalnu SVG ilustraciju Srbije levo, opis i dugme desno, a prijava je u manjem centriranom bloku sa tri prednosti. „Igre” otvara samo pet izbora. Vežbanje je odvojeno ispod zadatka i čuva povratak u dnevni rezultat. Zastave i fotografije ostaju aktivne.
+
+Serverska obnova je vratila pet postojećih završenih dnevnih rezultata 9. novembra na nalogu njihovog vlasnika: okruzi 88, opštine 56, naselja 20, reke 80, planine 40 — ukupno 284. Obračun je ponovo proveren iz istorije, dnevni slotovi su jedinstveni, a ponovljen poziv nije dodao ništa. Svih šest javnih pregleda za taj datum prikazuje očekivane poene. Gostujuće provere nisu dodale javne rezultate. Privatnost naloga nije menjana.
+
+Odgovorene opcije zadržavaju punu jasnoću, potezi ne uključuju prekrivač, outline okviri su uklonjeni, a hover čuva istu boju. Autor i licenca fotografije su u sklopivom prikazu bez pomoći preko izvora. Javna baza prikazuje 61 reku sa osnovnim činjenicama; filteri imaju poravnata polja u boji stranice. Ilustracija je svedena na konture bez pozadine. Lupe za slike i mape imaju proverljiv kontrast u obe teme. Sva polja za unos, uključujući javni nadimak i prijavu, imaju podlogu različitu od okruženja; dijalozi su jednobojni i bez blura. Novi podrazumevani beogradski motiv je Hram Svetog Save, sa proverenom lokalnom fotografijom Borise Živkovića iz javnog dobra. Započete partije i sačuvani odgovori zadržavaju prethodne identifikatore.
+
+Sedam administratorskih stranica je zdravo; prethodne boje, pokušaji, četiri runde uključujući zastave i bodovanje ostali su sačuvani. Sesija za održavanje je odjavljena i zatvorena. Nisu provereni fizički uređaji ni produkcijska dostava e-pošte.
+
+[CI](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/43309366147) · [Tehničke promene](INTERFEJS-4.2.md)
+
+---
+
 # Produkcija — verzija 4.1.2
 
 Verzija **4.1.2 je postavljena i aktivna** na https://cvjetan.dev/srbija-na-dlanu/ — 10. novembar 2026. Nativni WP installer je potvrdio uspešnu zamenu; WP API potvrđuje aktivan dodatak 4.1.2.

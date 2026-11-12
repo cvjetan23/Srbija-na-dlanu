@@ -1,3 +1,16 @@
+# Provera verzije 4.2.5
+
+**Postavljeno i provereno na produkciji 12. novembra 2026.** [Završni CI](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/43309366147) je prošao: **58.467 WordPress, 141 JavaScript i 904 Chromium tvrdnji**. Provereni su svi prethodni tokovi i nove pomoći, dva nivoa dugmadi, svetla tema bez Sunrise, vežbanje i preuzimanje dnevnih poena posle prijave.
+
+- Izvor `8329fc438db1c1c272abdbed1a7a1bc9542f2a71`, paket `7af2ed301962302e81150fd88ad5d61e54b97f13`. Svih 213 datoteka repozitorijuma provereno je po Git blob SHA i veličini. ZIP: 30.916.363 bajtova, 482 datoteke dodatka. SHA256 `aa5a2f3dfaacb5f70cdd9c246d5cbcf9f91686c96850b73767254f9f440083c4`. Fotografije i geografski podaci su očuvani.
+- Produkcija: **429 javnih HTTP i 273 Chromium tvrdnji**. Svih pet gostujućih igara je završeno, provereni su nastavak, zastave/fotografije i zum, obe teme, četiri jezika, telefon, dve pomoći i povratak iz vežbanja u isti dnevni zadatak. Sedam administratorskih prikaza radi, uz očuvane boje, šest pokušaja, četiri dodatna pitanja i težine 60/6/10.
+- Ispravljen je upis preuzete gostujuće dnevne partije. Na produkciji je iz postojećih serverskih zapisa obnovljeno **pet rezultata za 9. novembar: ukupno 284 poena**. Ponovljeni poziv je obnovio nula rezultata. Proverene su zajednička i svih pet pojedinačnih javnih lista za taj datum. Nije izmišljana nova partija niti menjana privatnost naloga.
+- Administratorska sesija je odjavljena i zatvorena posle provere. Fizički telefon i dostava e-pošte nisu deo testa. Broj tvrdnji nije broj nezavisnih scenarija.
+
+[Interfejs i obnova rangiranja](INTERFEJS-4.2.md) · [Pravila](NOVE-IGRE.md) · [Provera produkcije](LIVE-CHECK.md)
+
+---
+
 # Provera verzije 4.1.2
 
 **Verzija je postavljena i aktivna na produkciji.** [Konačni CI izvora i paketa](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/42819371420) je prošao. Promene posle pakovanja obuhvataju samo dokumentaciju.
