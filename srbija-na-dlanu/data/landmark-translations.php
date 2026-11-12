@@ -541,6 +541,24 @@ return json_decode(<<<'SND_LANDMARK_LANGUAGES'
       "name": "Крепость Ново-Брдо",
       "fact": "Крепость Ново-Брдо свидетельствует о значении этого средневекового горнорудного центра."
     }
+  },
+  "Hram Svetog Save": {
+    "sr": {
+      "name": "Hram Svetog Save",
+      "fact": "Hram Svetog Save nalazi se na Vračaru u Beogradu i jedan je od prepoznatljivih simbola grada."
+    },
+    "en": {
+      "name": "Church of Saint Sava",
+      "fact": "The Church of Saint Sava stands on Vračar in Belgrade and is one of the city’s recognizable landmarks."
+    },
+    "de": {
+      "name": "Dom des Heiligen Sava",
+      "fact": "Der Dom des Heiligen Sava steht auf dem Vračar in Belgrad und ist eines der Wahrzeichen der Stadt."
+    },
+    "ru": {
+      "name": "Храм Святого Саввы",
+      "fact": "Храм Святого Саввы расположен на Врачаре в Белграде и является одним из узнаваемых символов города."
+    }
   }
 }
 SND_LANDMARK_LANGUAGES

@@ -138,7 +138,7 @@ final class SND_I18n {
             $vars['place']=self::place($meta['place']??($target['kind']==='district'?$target['seat']:$target['name']));
             $q['title']=self::t('Koja je zastava mesta „{place}“?',$vars);$q['correct_label']=self::t('Zastava mesta {place}',$vars);
             $q['explanation']=self::t('Prikazana je zastava mesta {place}.',$vars);
-        }elseif($type==='landmark'){$q['title']=self::t('Koja je znamenitost na fotografiji?');$q['explanation']=self::fact($target);$q['correct_label']=self::landmark_name($correct);
+        }elseif($type==='landmark'){$q['title']=self::t('Koja je znamenitost na fotografiji?');$fact_target=($target['landmark']['name']??'')===$correct?$target:array('landmark'=>array('name'=>$correct,'fact'=>$original['explanation']));$q['explanation']=self::fact($fact_target);$q['correct_label']=self::landmark_name($correct);
         }elseif($type==='distance'){
             preg_match_all('/„([^“]+)“/u',$original['title'],$m);$vars['anchor']=self::text($meta['anchor']??($m[1][1]??''));
             preg_match('/približno (\d+) km/u',$original['explanation'],$distance);$vars['km']=self::number($meta['km']??($distance[1]??0));

@@ -4,10 +4,10 @@ defined('ABSPATH') || exit;
 return json_decode(<<<'SND_LANDMARK_LABELS'
 {
   "Beogradska tvrđava": {
-    "sr": "Tvrđava uz Kalemegdan",
-    "en": "Fortress by Kalemegdan",
-    "de": "Festung am Kalemegdan",
-    "ru": "Крепость у Калемегдана"
+    "sr": "Beogradska tvrđava (Kalemegdan)",
+    "en": "Belgrade Fortress (Kalemegdan)",
+    "de": "Festung Belgrad (Kalemegdan)",
+    "ru": "Белградская крепость (Калемегдан)"
   },
   "Gradska kuća u Subotici": {
     "sr": "Gradska kuća u stilu secesije",
@@ -182,6 +182,12 @@ return json_decode(<<<'SND_LANDMARK_LABELS'
     "en": "Medieval mining fortress",
     "de": "Mittelalterliche Bergbaufestung",
     "ru": "Средневековая крепость рудокопов"
+  },
+  "Hram Svetog Save": {
+    "sr": "Hram Svetog Save",
+    "en": "Church of Saint Sava",
+    "de": "Dom des Heiligen Sava",
+    "ru": "Храм Святого Саввы"
   }
 }
 SND_LANDMARK_LABELS

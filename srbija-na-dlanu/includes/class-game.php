@@ -191,6 +191,17 @@ final class SND_Game {
         if(!SND_Kinds::is_explore($kind) && $flag_index!==false && SND_Settings::get('flag_fallback') && isset($c['questions'][$flag_index]) && $c['questions'][$flag_index]['type']!=='flag'){
             $flag=SND_Flags::question($c['target'],$c['date'].':'.$c['kind'].':restored-flag',true);if($flag){$state['question_overrides'][$flag_index]=$flag;}
         }
+        // New sessions use the reviewed church photo even if today's target is cached.
+        // Existing sessions keep their original questions and answer identifiers.
+        if(in_array($c['target']['id'],array('rs-00','m-beograd'),true) && ($c['target']['landmark']['name']??'')==='Beogradska tvrđava'){
+            $current=SND_Data::get()['territories'][$c['target']['id']]??null;
+            if(($current['landmark']['name']??'')==='Hram Svetog Save'){
+                $questions=self::questions($current,SND_Data::pool($kind),SND_Data::pool('district'),$c['date'].':'.$kind.':church-425');
+                foreach($c['questions'] as $i=>$question){
+                    if($question['type']==='landmark' && strpos($question['image_source']??'','Belgrade_Fortress_Kalemegdan-9878')!==false){$state['question_overrides'][$i]=$questions[3];}
+                }
+            }
+        }
         $state['rank_eligible']=SND_Ranking::reserve($state);
         self::persist($token, $state);
         SND_Progress::remember(get_current_user_id(), $kind, $mode, $token);

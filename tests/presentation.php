@@ -8,7 +8,7 @@ function presentation_ok($v,$label){global $count;$count++;if(!$v){throw new Run
 try{
     wp_set_current_user(0);$districts=SND_Data::pool('district');
     foreach(array('sr','en','de','ru') as $lang){SND_I18n::force($lang);$all=array();foreach($labels as $name=>$row){$all[]=$row[$lang];presentation_ok(SND_I18n::landmark_quiz_name($name)===$row[$lang],'All neutral names '.$lang.' '.$name);}
-        presentation_ok(count(array_unique($all))===30,'Thirty unambiguous labels '.$lang);
+        presentation_ok(count(array_unique($all))===31,'Thirty-one unambiguous labels '.$lang);
         foreach(SND_Data::get()['territories'] as $t){if(empty($t['landmark']['image'])){continue;}$questions=SND_Game::questions($t,SND_Data::pool($t['kind']),$districts,'presentation:'.$t['id']);$q=$questions[3];$translated=SND_I18n::question($q,$t);
             presentation_ok($q['type']==='landmark' && $translated['type']==='landmark','Photo question retained');presentation_ok(array_column($q['options'],'id')===array_column($translated['options'],'id'),'Saved answer IDs stay stable');
             foreach($q['options'] as $i=>$option){presentation_ok($translated['options'][$i]['label']===$labels[$option['label']][$lang],'Neutral option '.$t['id']);}

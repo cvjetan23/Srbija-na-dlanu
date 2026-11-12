@@ -70,3 +70,20 @@ html:not([data-snd-theme=dark]) .snd-app .snd-game .snd-flag-card.is-wrong .snd-
 .snd-app .snd-catalogue-controls button{height:44px;min-height:44px;margin:0;align-self:end}.snd-app .snd-landmark-attribution p{font-size:14px!important}
 @media(max-width:800px){.snd-app .snd-catalogue-controls{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:520px){.snd-app .snd-catalogue-controls{grid-template-columns:minmax(0,1fr);padding:16px}.snd-app .snd-catalogue-controls button{width:100%}}
+
+/* Fields must remain distinct inside cards as well as on the page canvas. */
+.snd-app{--snd-field-bg:var(--snd-surface)}
+.snd-app :is(.snd-auth-card,.snd-rank-profile,.snd-ranking-filters,.snd-catalogue-controls,.snd-explore-detail,.snd-progress-card){--snd-field-bg:var(--snd-bg)}
+.snd-app :is(input:not([type=hidden]):not([type=checkbox]):not([type=radio]):not([type=color]):not([type=range]):not([type=submit]):not([type=button]),select,textarea){background:var(--snd-field-bg)!important;color:var(--snd-text);border-radius:10px;min-height:44px;padding:10px 13px}
+.snd-app :is(input,select,textarea):focus-visible{filter:brightness(.96)}
+
+/* Explicit foreground roles prevent the magnifier from matching its button. */
+.snd-app .snd-game .snd-flag-zoom{background:var(--snd-secondary-bg);color:var(--snd-secondary-ink)}
+.snd-app .snd-game .snd-map-zoom{background:var(--snd-primary-bg);color:var(--snd-primary-ink)}
+.snd-app .snd-game :is(.snd-flag-zoom,.snd-map-zoom) svg{display:block;width:21px;height:21px;color:inherit;stroke:currentColor;fill:none;opacity:1}
+.snd-app .snd-game :is(.snd-flag-zoom,.snd-map-zoom):hover{filter:brightness(.96)}
+
+/* A quiet, solid dialog surface over a neutral veil, without blur. */
+.snd-app .snd-game .snd-modal-backdrop{background:color-mix(in srgb,var(--snd-deep,#102a26) 68%,transparent);backdrop-filter:none;-webkit-backdrop-filter:none}
+.snd-app .snd-game .snd-modal{background:var(--snd-surface);color:var(--snd-text);box-shadow:none;border-radius:18px}
+.snd-app .snd-game .snd-flag-preview img{background:var(--snd-bg);border-radius:12px}

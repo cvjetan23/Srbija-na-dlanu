@@ -17,6 +17,13 @@ final class SND_Data {
         $ids=array_column($data['territories'],'id');
         foreach(require SND_DIR.'data/city-municipalities.php' as $borough){if(in_array($borough['parent_id'],$ids,true) && !in_array($borough['id'],$ids,true)){$data['territories'][]=$borough;$ids[]=$borough['id'];}}
         if(strpos($data['coverage']??'','Igra obuhvata upravne okruge')===0){$data['coverage']='Igra obuhvata 29 upravnih okruga i Grad Beograd, kao i 197 opština, gradskih opština i gradova prema spisku RZS. Pet gradova je predstavljeno kroz svih 28 gradskih opština, bez preklapanja sa matičnim gradovima. Uključeni su Kosovo i Metohija sa pet okruga i 29 opština. Popis RZS 2022. tamo nije sproveden. Obrisi služe igri i nisu katastarske karte.';}
+        // Refresh only the shipped Belgrade default; administrator edits take precedence.
+        foreach ($data['territories'] as &$item) {
+            if (in_array($item['id'],array('rs-00','m-beograd'),true) && ($item['landmark']['name']??'')==='Beogradska tvrđava' && ($item['landmark']['image']??'')==='photos/4056dbb5852cdbe3.jpg') {
+                $item['landmark']=require SND_DIR.'data/belgrade-landmark.php';
+            }
+        }
+        unset($item);
         $overrides = get_option('snd_overrides', array());
         foreach ($data['territories'] as &$item) { if (isset($overrides[$item['id']])) { $item = array_merge($item, $overrides[$item['id']]); } }
         unset($item);
