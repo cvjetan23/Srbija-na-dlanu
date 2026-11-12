@@ -33,13 +33,13 @@ html[data-snd-theme=dark] .snd-app .snd-theme-options button[aria-pressed=true]{
 .snd-app .snd-game .snd-mode-label{display:inline-flex;gap:8px;align-items:center;font-size:15px;font-weight:650;color:var(--snd-secondary)}
 .snd-mode-label svg{width:18px;height:18px}.snd-app .snd-game .snd-daily-note{margin:8px 0 18px}
 .snd-app .snd-game .snd-practice-entry{max-width:650px;margin:35px auto 8px;text-align:center;padding:20px 0}
-.snd-app .snd-game .snd-practice-entry p{color:var(--snd-secondary);font-size:14px;margin:0 0 12px}.snd-app .snd-game .snd-practice-entry button{font-size:15px}
+.snd-app .snd-game .snd-practice-entry p{color:var(--snd-secondary);font-size:14px;margin:0 0 12px}.snd-app .snd-game .snd-practice-entry button{font-size:16px}
 .snd-app .snd-game .snd-hints{margin:18px 0;padding:16px;background:var(--snd-surface);border-radius:12px;text-align:center}
 .snd-app .snd-game .snd-hints p{font-size:16px;margin:0}.snd-app .snd-game .snd-name-pattern{display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-end;gap:5px;margin-top:12px}
 .snd-name-letter{display:inline-grid;place-items:center;position:relative;width:24px;height:34px;font-size:20px;font-weight:650}
 .snd-name-letter::after{content:"";position:absolute;bottom:0;left:2px;right:2px;height:2px;background:var(--snd-secondary)}
 .snd-name-separator{display:inline-block;width:12px;font-size:18px}.snd-app .snd-game .snd-hint-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:12px}
-.snd-app .snd-game .snd-hint-actions button{font-size:14px;min-height:40px;padding:8px 13px}.snd-hint-actions .snd-action-icon{width:18px;height:18px}
+.snd-app .snd-game .snd-hint-actions button{font-size:16px;min-height:44px;padding:10px 16px}.snd-hint-actions .snd-action-icon{width:18px;height:18px}
 .snd-app .snd-ranking nav a,.snd-app .snd-explore-library-tabs>a{background:var(--snd-soft);color:var(--snd-text)!important}
 .snd-app .snd-ranking nav a[aria-current=true],.snd-app .snd-explore-library-tabs>a[aria-current=page]{background:var(--snd-secondary-bg);color:var(--snd-secondary-ink)!important}
 .snd-app .snd-ranking-table tr:nth-child(even){background:var(--snd-soft)}.snd-app .snd-game .snd-points-result{background:var(--snd-surface)}
