@@ -79,7 +79,7 @@ final class SND_Site {
     public static function compass() {return '<svg class="snd-compass" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.4"/><path d="m16 8-2.6 5.4L8 16l2.6-5.4L16 8Z" fill="currentColor"/><path d="M12 1v3m0 16v3M1 12h3m16 0h3" stroke="currentColor"/></svg>';}
     public static function header() {
         $view=self::view();
-        echo '<header class="snd-app-header"><a class="snd-app-brand" href="'.esc_url(self::url()).'">'.self::compass().'<span data-snd-original>'.esc_html(SND_Settings::get('app_name')).'</span></a><nav id="snd-app-menu" class="snd-app-nav" aria-label="Glavni meni">';
+        echo '<header class="snd-app-header"><a class="snd-app-brand" href="'.esc_url(self::url()).'">'.self::compass().'<span data-snd-original>'.esc_html(SND_Settings::get('app_name')).'</span></a><button type="button" class="snd-mobile-menu" data-snd-menu-toggle aria-expanded="false" aria-controls="snd-app-menu snd-app-preferences" aria-label="'.esc_attr(SND_I18n::t('Otvori meni')).'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path class="snd-menu-open-icon" d="M4 6h16M4 12h16M4 18h16"/><path class="snd-menu-close-icon" d="m6 6 12 12M18 6 6 18"/></svg><span>Meni</span></button><nav id="snd-app-menu" class="snd-app-nav" aria-label="Glavni meni">';
         $items=array('home'=>'Početna','games'=>'Igre','library'=>'Baza znanja','ranking'=>'Rang lista');
         foreach($items as $key=>$name){
             if($key==='games'){
@@ -91,7 +91,7 @@ final class SND_Site {
             echo '<a href="'.esc_url(self::url($key)).'" '.($key===$view?'aria-current="page"':'').'>'.esc_html($name).'</a>';
         }
         echo '</nav>';self::preferences();$account=is_user_logged_in()?'account':'login';$label=SND_I18n::t(is_user_logged_in()?'Moj nalog':'Prijava');
-        echo '<a class="snd-account-link" href="'.esc_url(self::url($account)).'" aria-label="'.esc_attr($label).'" title="'.esc_attr($label).'"'.($account===$view?' aria-current="page"':'').'><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M4.5 21v-2a7.5 7.5 0 0 1 15 0v2"/></svg></a><button type="button" class="snd-mobile-menu" data-snd-menu-toggle aria-expanded="false" aria-controls="snd-app-menu snd-app-preferences" aria-label="'.esc_attr(SND_I18n::t('Otvori meni')).'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path class="snd-menu-open-icon" d="M4 6h16M4 12h16M4 18h16"/><path class="snd-menu-close-icon" d="m6 6 12 12M18 6 6 18"/></svg><span>Meni</span></button></header>';
+        echo '<a class="snd-account-link" href="'.esc_url(self::url($account)).'" aria-label="'.esc_attr($label).'" title="'.esc_attr($label).'"'.($account===$view?' aria-current="page"':'').'><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M4.5 21v-2a7.5 7.5 0 0 1 15 0v2"/></svg></a></header>';
     }
     private static function preferences() {
         $languages=SND_I18n::languages();$lang=SND_I18n::lang();$base=self::preference_url();
