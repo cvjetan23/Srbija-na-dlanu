@@ -1,3 +1,15 @@
+# Produkcijska provera 4.2.7 — 18. novembar 2026.
+
+Nativni WordPress installer potvrdio je uspešno ažuriranje i aktivan dodatak 4.2.7. Instaliran je provereni paket `e36bc99bbeffc0b0c961aa96d8514c0162e268eb`: **30.919.624 bajtova, 482 datoteke**, SHA256 `f25b48c0713049307a0d8ac6b79a2ad4a820e55054bf0ed57a8eebd31cc8cb56`. Svih 215 datoteka repozitorijuma odgovara manifestu. [CI](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/44317900672): 58.641 WP, 141 JS i 1.262 Chromium tvrdnji.
+
+Prošlo je **469 HTTP i 299 Chromium tvrdnji na javnom sajtu**. Svih 11 CSS/JS datoteka i SVG odgovara tačnom paketu. Četiri jezika i obe teme provereni su na 320/390/640/1440 px. Glavni mobilni panel, otvorene igre i jezici ostavljaju sadržaj stranice na istom mestu, uz nepromenjenu visinu zaglavlja. Pri maloj visini ekrana panel se skroluje zasebno, a kontrole teme ostaju dostupne. Escape zatvara prvo podmeni pa glavni panel i vraća fokus. Desktop zadržava isti raspored vidljivih linkova. Vizuelno su pregledani obe teme, veće srednje ikonice i otvoren panel preko stranice.
+
+Svih sedam administratorskih prikaza radi bez PHP grešaka. Paleta, šest pokušaja, runde population/administration/flag/landmark i težine 60/6/10 su sačuvani. Nije menjan obračun pomoći 5+5, postojeći progres, istorija ili rangiranje. Produkcijska provera interfejsa ne kreira partije, ne šalje poteze i ne upisuje poene naloga. Administratorska sesija je odjavljena i zatvorena.
+
+Fizički uređaji i dostava e-pošte nisu provereni. Broj tvrdnji nije broj nezavisnih scenarija. [Tehničke promene](INTERFEJS-4.2.md).
+
+---
+
 # Produkcijska provera 4.2.6 — 18. novembar 2026.
 
 Dodatak je ažuriran nativnim WordPress obrascem i ostao je aktivan. Instaliran je provereni paket `eb752d58618e04b701e7f6186f810e952a16969d`, SHA256 `c7a16432e053336921fd6e2d7b36ccb1aad56c1b5679a45511984a479a0d87a4`: 30.919.375 bajtova i 482 datoteke dodatka. API i resursi potvrđuju 4.2.6; svih 11 CSS/JS datoteka i SVG poređeni su bajt po bajt. Svih 215 datoteka repozitorijuma odgovara lokalnom manifestu.

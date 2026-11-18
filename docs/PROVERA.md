@@ -1,3 +1,17 @@
+# Provera verzije 4.2.7
+
+**Postavljeno i provereno na produkciji 18. novembra 2026.** [Završni CI](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/44317900672) prolazi **58.641 WordPress, 141 JavaScript i 1.262 Chromium tvrdnji**.
+
+- Mobilni meni je apsolutno pozicioniran ispod zaglavlja. Otvaranje menija, igara i jezika ne pomera sadržaj stranice. Dugi panel se skroluje unutar visine ekrana; i poslednje kontrole ostaju dostupne na kratkom ekranu. Desktop i rad bez JavaScript-a su očuvani.
+- Dve srednje ilustracije „Kako se igra?” bolje popunjavaju svoja polja, uz istu debljinu linija. Jednake visine kartica, paleta i postojeći tokovi igre ostaju provereni.
+- Izvor `8ca7b1863876b199f6068a06daf61d523d2bd326`, paket `e36bc99bbeffc0b0c961aa96d8514c0162e268eb`; svih 215 datoteka provereno po Git blob SHA i veličini. ZIP: **30.919.624 bajtova, 482 datoteke**, SHA256 `f25b48c0713049307a0d8ac6b79a2ad4a820e55054bf0ed57a8eebd31cc8cb56`.
+- Produkcija: **469 javnih HTTP i 299 Chromium tvrdnji**, uključujući četiri jezika, obe teme, 320/390/640/1440 px, prikaz preko sadržaja i dostupnost pri maloj visini. Svih 11 CSS/JS resursa i SVG odgovara paketu; sedam administratorskih stranica je zdravo, podešavanja su očuvana.
+- Produkcijska provera ovog prikaza ne šalje poteze igre i ne upisuje poene naloga. Administratorska sesija je odjavljena i zatvorena. Fizički uređaj i isporuka e-pošte nisu deo testa; broj tvrdnji nije broj nezavisnih scenarija.
+
+[Promene interfejsa](INTERFEJS-4.2.md) · [Provera produkcije](LIVE-CHECK.md)
+
+---
+
 # Provera verzije 4.2.6
 
 **Postavljeno i provereno na produkciji 18. novembra 2026.** [Završni CI](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/44281466510) je prošao: **58.641 WordPress, 141 JavaScript i 1.227 Chromium tvrdnji**. Broj tvrdnji nije broj nezavisnih scenarija.
