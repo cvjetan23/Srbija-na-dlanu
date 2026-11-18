@@ -1,3 +1,18 @@
+# Provera verzije 4.2.6
+
+**Postavljeno i provereno na produkciji 18. novembra 2026.** [Završni CI](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/44281466510) je prošao: **58.641 WordPress, 141 JavaScript i 1.227 Chromium tvrdnji**. Broj tvrdnji nije broj nezavisnih scenarija.
+
+- Pomoć je vidljiva uz „Otkrij odgovor” od početka: katanac i objašnjenje ostaju do drugog promašaja. Prvo slovo košta 5 poena, broj slova i prazna polja još 5. Umanjenje se prikazuje odmah i primenjuje na ukupno osvojene poene, najmanje nula. Prazna kartica i zbijene akcije su uklonjene.
+- Novi obračun verzije 3 ne menja istorijske rezultate. Provereni su pet igara, zaključavanje, oba troška, osvežavanje, odbijanje treće pomoći, nastavak prethodnih partija i obnova stvarnog rezultata bez dupliranja.
+- Kartice pravila imaju iste visine, prva ilustracija je linijska mapa, prijava je Sunrise samo u tamnoj temi. Niže plutajuće zaglavlje zadržava desktop linkove; na telefonu otvara jedan panel sa navigacijom i podešavanjima. Tab, Escape, povratak fokusa, rad bez JavaScript-a i niski ekrani su provereni.
+- Izvor `ce48aa27995a4cf57b2feaa85c2ca08cb96c8fec`, paket `eb752d58618e04b701e7f6186f810e952a16969d`. Svih 215 datoteka repozitorijuma provereno je po Git blob SHA i veličini. ZIP: **30.919.375 bajtova, 482 datoteke dodatka**, SHA256 `c7a16432e053336921fd6e2d7b36ccb1aad56c1b5679a45511984a479a0d87a4`.
+- Produkcija: **469 javnih HTTP i 316 Chromium tvrdnji**; pet završenih gostujućih dnevnih igara, obe pomoći, vežbanje i povratak, zastave/fotografije i uvećanje, obe teme i četiri jezika na telefonu. Svih 11 CSS/JS datoteka i SVG odgovaraju proverenom paketu. Sedam administratorskih prikaza radi, uz očuvanu paletu, šest pokušaja, četiri dodatne runde i zbirni trošak pomoći 10.
+- Ranije obnovljenih **284 poena za 9. novembar** ostaje vidljivo na zajedničkoj i svih pet pojedinačnih javnih lista. Tokom ove provere nisu upisivani novi rezultati stvarnog naloga niti menjana privatnost. Administratorska sesija je odjavljena i zatvorena. Fizički telefon i dostava e-pošte nisu deo testa.
+
+[Interfejs i smernice](INTERFEJS-4.2.md) · [Pravila](NOVE-IGRE.md) · [Produkcijska provera](LIVE-CHECK.md)
+
+---
+
 # Provera verzije 4.2.5
 
 **Postavljeno i provereno na produkciji 12. novembra 2026.** [Završni CI](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/43309366147) je prošao: **58.467 WordPress, 141 JavaScript i 904 Chromium tvrdnji**. Provereni su svi prethodni tokovi i nove pomoći, dva nivoa dugmadi, svetla tema bez Sunrise, vežbanje i preuzimanje dnevnih poena posle prijave.

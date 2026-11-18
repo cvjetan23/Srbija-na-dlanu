@@ -4,7 +4,7 @@ Zasebna geografska aplikacija unutar WordPress-a: pet dnevnih igara, baza znanja
 
 **[Preuzmi instalacioni ZIP](https://github.com/cvjetan23/Srbija-na-dlanu/raw/refs/heads/main/dist/srbija-na-dlanu.zip)** · [Instalacija](srbija-na-dlanu/INSTALACIJA.md) · [Provere](docs/PROVERA.md) · [Zastave i licence](srbija-na-dlanu/FLAGS.md)
 
-**Verzija 4.2.6 je u završnoj proveri; 4.2.5 je aktivna na sajtu.** Pet igara sa jednim zadatkom po danu i zajedničkom rang listom. [Igre i pravila](docs/NOVE-IGRE.md) · [Podaci i fotografije](srbija-na-dlanu/EXPLORE-SOURCES.md) · [Produkcijska provera](docs/LIVE-CHECK.md).
+**Verzija 4.2.6 je postavljena i aktivna na [cvjetan.dev/srbija-na-dlanu](https://cvjetan.dev/srbija-na-dlanu/).** Pet igara sa jednim zadatkom po danu i zajedničkom rang listom. [Igre i pravila](docs/NOVE-IGRE.md) · [Podaci i fotografije](srbija-na-dlanu/EXPLORE-SOURCES.md) · [Produkcijska provera](docs/LIVE-CHECK.md).
 
 ## Instalacija i ažuriranje
 
@@ -30,6 +30,13 @@ Zasebna geografska aplikacija unutar WordPress-a: pet dnevnih igara, baza znanja
 Ove stranice imaju svoj kompas, meni, zaglavlje i podnožje, bez zaglavlja i podnožja aktivne teme. Ostali deo sajta zadržava postojeći izgled. Postojeći Elementor podaci početne stranice se ne brišu. Dodatak ne menja globalnu početnu stranicu WordPress-a.
 
 Shortcode `[srbija_na_dlanu]` i dalje radi na drugim WP stranicama; tu se zadržava njihova tema. Za određenu igru koristi `[srbija_na_dlanu kind="district"]` ili `kind="municipality"`, `kind="city"`, `kind="river"`, `kind="mountain"`.
+
+## Novo u 4.2.6
+
+- Dve pomoći za naziv, po 5 poena svaka, dostupne posle drugog promašaja; cena, katanac i objašnjenje vide se od početka.
+- Jednake visine kartica pravila, usklađena linijska ilustracija i Sunrise prijava samo u tamnoj temi.
+- Niže plutajuće zaglavlje; minimalistički mobilni meni sa istim linkovima, jezikom i temom, uz rad tastaturom i bez JavaScript-a.
+- Verzionisano bodovanje čuva istorijske rezultate i podržava tačnu obnovu rangiranja bez dupliranja.
 
 ## Novo u 4.2.5
 

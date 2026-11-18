@@ -1,3 +1,19 @@
+# Produkcijska provera 4.2.6 — 18. novembar 2026.
+
+Dodatak je ažuriran nativnim WordPress obrascem i ostao je aktivan. Instaliran je provereni paket `eb752d58618e04b701e7f6186f810e952a16969d`, SHA256 `c7a16432e053336921fd6e2d7b36ccb1aad56c1b5679a45511984a479a0d87a4`: 30.919.375 bajtova i 482 datoteke dodatka. API i resursi potvrđuju 4.2.6; svih 11 CSS/JS datoteka i SVG poređeni su bajt po bajt. Svih 215 datoteka repozitorijuma odgovara lokalnom manifestu.
+
+[CI](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/44281466510) prolazi 58.641 WordPress, 141 JavaScript i 1.227 Chromium tvrdnji. Na stvarnom sajtu prošlo je **469 javnih HTTP i 316 Chromium tvrdnji**. Svih pet dnevnih partija završeno je kao gost, bez upisa bodova naloga. Provereni su 40 pogleda u četiri jezika, katalog, obe teme, fotografije/zastave i lupe, vežbanje i nastavak istog dnevnog rezultata. Mobilni prikaz je emuliran.
+
+Pomoć od početka prikazuje katanac, cenu i objašnjenje; otključava se posle dva promašaja. Prvo slovo oduzima 5 poena, sledeće otkrivanje još 5. Trošak se odmah prikazuje i čuva na serveru. Pomoć i otkrivanje odgovora dele razmaknut red ispod unosa; pre prve pomoći nema prazne kartice. Verzionisani obračun čuva ranije završene rezultate i postojeći napredak. Lokalni i CI testovi uključuju stvarni upis i ponovljenu obnovu 43 poena nakon jedne pomoći, uz odbijanje dupliranja.
+
+Kartice „Kako se igra?” imaju jednake visine i u prevodima. Prva ilustracija je originalna linijska mapa sa pinom. Završna prijava je žuta sa tamnim tekstom u tamnoj temi, a zelena sa belim tekstom u svetloj. Niže zaglavlje ostaje pri vrhu tokom skrolovanja; na telefonu je označeno dugme „Meni”, dok desktop zadržava linkove. Ista navigacija radi tastaturom i bez JavaScript-a; pri maloj visini ekrana zaglavlje ne zaklanja sadržaj. Nisu dodati blur, outline okviri ili žuti akcenti svetloj temi.
+
+Sedam administratorskih prikaza je zdravo. Sačuvani su postojeća paleta, šest pokušaja, četiri runde population/administration/flag/landmark i postavke 60/6/10. Podrazumevani prag pomoći prelazi sa tri na dva promašaja, uz očuvanje namerno podešenih drugih pragova. Šest javnih istorijskih rang lista ponovo potvrđuje 9. novembar: okruzi 88, opštine 56, naselja 20, reke 80 i planine 40 — ukupno **284 poena**. Privatnost i javni nadimak nisu menjani. Sesija za održavanje je odjavljena i zatvorena.
+
+Fizički uređaj i produkcijska dostava e-pošte nisu provereni. Broj tvrdnji nije broj nezavisnih scenarija. [Tehničke promene i istražene smernice](INTERFEJS-4.2.md).
+
+---
+
 # Produkcijska provera 4.2.5 — 12. novembar 2026.
 
 Dodatak je postavljen preko nativnog WordPress obrasca za zamenu instalacionog ZIP-a i ostao je aktivan. Tačan SHA256 paketa je `aa5a2f3dfaacb5f70cdd9c246d5cbcf9f91686c96850b73767254f9f440083c4`. Svih 11 javnih CSS/JS resursa uključujući novi `interface.css` poređeno je bajt po bajt; verzija API-ja i resursa je 4.2.5. SND resursi ostaju izuzeti iz optimizacije sa ispravnim redosledom.
