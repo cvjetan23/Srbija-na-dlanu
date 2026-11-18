@@ -4,7 +4,7 @@ Tags: geography, quiz, serbia, education
 Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 4.2.6
+Stable tag: 4.2.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -52,6 +52,10 @@ Detaljna analitika se od 3.0.0 čuva u dve tabele iste WP baze: {prefix}snd_game
 Kod: GPL-2.0-or-later. Geografija/fotografije: SOURCES.md i DATA-LICENSE.md. Zastave: FLAGS.md. Za dopunske granice Kosova i Metohije javni geografski servis nije naveo posebnu licencu za redistribuciju. Karte služe igri. Deaktivacija ne briše sadržaj i rezultate.
 
 == Changelog ==
+
+= 4.2.7 =
+* Mobilni meni se otvara preko stranice bez pomeranja sadržaja; duži panel se skroluje zasebno.
+* Veće srednje ilustracije u pravilima, uz usklađenu debljinu linija.
 
 = 4.2.6 =
 * Jednake visine kartica, linijska ilustracija mape i Sunrise poziv naloga u tamnoj temi.

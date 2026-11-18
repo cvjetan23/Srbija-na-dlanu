@@ -110,6 +110,7 @@ html{scroll-padding-top:90px}
 .snd-app .snd-app-header .snd-app-nav :is(a,summary){font-size:15px}
 .snd-app .snd-app-header .snd-preferences{width:auto;order:0;gap:10px;padding-left:8px;flex-shrink:0}
 .snd-app .snd-app-header .snd-account-link{order:0;flex:0 0 44px;width:44px;height:44px}
+.snd-app .snd-header-panel{display:contents}
 .snd-app .snd-mobile-menu{display:none}
 .snd-app .snd-mobile-menu svg{width:20px;height:20px;flex:0 0 20px}
 .snd-app .snd-menu-close-icon{display:none}
@@ -129,7 +130,13 @@ html{scroll-padding-top:90px}
  .snd-app .snd-app-header .snd-games-dropdown{position:static;width:100%;max-width:none;margin-top:8px;background:var(--snd-bg)}
  .snd-app .snd-app-header .snd-preferences{grid-column:1/-1;grid-row:3;width:100%;padding:0;margin-top:12px;justify-content:space-between;align-items:flex-start}
  .snd-app .snd-header-ready .snd-mobile-menu{grid-column:3;grid-row:1;display:flex;align-items:center;justify-content:center;gap:5px;min-height:44px;padding:8px 6px;background:var(--snd-bg);color:var(--snd-text);border-radius:11px;font-size:13px;font-weight:650}
- .snd-app .snd-header-ready[data-menu-open=false] :is(.snd-app-nav,.snd-preferences){display:none}
+ .snd-app .snd-header-ready .snd-header-panel{position:absolute;top:calc(100% + 8px);left:0;right:0;display:block;padding:10px;background:var(--snd-surface);border-radius:18px;max-height:calc(100vh - 92px);max-height:calc(100dvh - 92px);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;box-shadow:0 12px 30px color-mix(in srgb,var(--snd-deep,#102a26) 12%,transparent)}
+ .snd-app .snd-header-ready .snd-header-panel .snd-app-nav{margin-top:0}
+ .snd-app .snd-header-ready[data-menu-open=false] .snd-header-panel{display:none}
+ .snd-app .snd-header-ready .snd-preferences:has(.snd-language-picker[open]){flex-wrap:wrap}
+ .snd-app .snd-header-ready .snd-preference-group:has(.snd-language-picker[open]){width:100%}
+ .snd-app .snd-header-ready .snd-preferences:has(.snd-language-picker[open])>.snd-preference-group:last-child{margin-left:auto}
+ .snd-app .snd-header-ready .snd-language-options{position:static;width:100%;margin-top:8px}
  .snd-app .snd-app-header .snd-language-options{left:0;right:auto}
 }
 @media(max-width:380px){.snd-app .snd-app-header .snd-app-brand{font-size:16px}.snd-app .snd-app-header .snd-compass{width:27px;height:27px}}
