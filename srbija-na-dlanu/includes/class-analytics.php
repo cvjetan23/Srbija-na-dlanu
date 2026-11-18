@@ -97,7 +97,7 @@ final class SND_Analytics {
                 'technical_replacement'=>!empty($s['technical_replacements'][$i]));
         }
         return array('guesses'=>$s['guesses'],'questions'=>$questions,'activity'=>array_slice($s['activity_log']??array(),-100),
-            'ruleset'=>$c['ruleset']??1,'legacy'=>empty($s['started_at']),'points'=>SND_Scoring::calculate($s),'rank_eligible'=>!empty($s['rank_eligible']));
+            'ruleset'=>$c['ruleset']??1,'legacy'=>empty($s['started_at']),'hint_level'=>SND_Hints::level($s),'points'=>SND_Scoring::calculate($s),'rank_eligible'=>!empty($s['rank_eligible']));
     }
     public static function capture($s) {
         $user_id=(int)($s['owner']??0);if(!self::enabled($user_id) || empty($s['challenge']) || empty($s['game_id'])){return;}

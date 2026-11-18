@@ -9,7 +9,7 @@ final class SND_Settings {
             'default_theme'=>'auto','theme_switch'=>true,'primary_color'=>'#2d6a4f','dark_accent'=>'#95d5b2','highlight_color'=>'#FFD447','dark_button_color'=>'#2d6a4f',
             'ink_color'=>'#102a26','surface_color'=>'#ffffff','pale_color'=>'#f4f7ed','border_color'=>'#95d5b2','dark_surface_color'=>'#1a3c34','palette_version'=>2,'river_background'=>true,'font_scale'=>100,
             'district_enabled'=>true,'municipality_enabled'=>true,'city_enabled'=>true,'river_enabled'=>true,'mountain_enabled'=>true,'daily_only'=>true,'daily_enabled'=>true,'practice_enabled'=>true,'play_modes_version'=>2,
-            'max_guesses'=>6,'hint_after'=>3,'hint_enabled'=>true,'source_help_enabled'=>true,'media_fallback'=>true,
+            'max_guesses'=>6,'hint_after'=>2,'hint_policy_version'=>2,'hint_enabled'=>true,'source_help_enabled'=>true,'media_fallback'=>true,
             'explore_rounds'=>array(0,1,2,3),'rounds'=>array('population','administration','flag','landmark'),'show_sources'=>true,
             'analytics_enabled'=>true,'guest_analytics'=>true,'retention_days'=>365,'erase_deleted_users'=>true,
             'ranking_enabled'=>true,'points_territory'=>60,'points_step'=>6,'points_hint'=>10,'flag_fallback'=>true,
@@ -32,6 +32,7 @@ final class SND_Settings {
                 $stored['palette_version']=2;
             }
             if((int)($stored['play_modes_version']??0)<2){$stored['practice_enabled']=true;$stored['play_modes_version']=2;}
+            if((int)($stored['hint_policy_version']??0)<2){if((int)($stored['hint_after']??3)===3){$stored['hint_after']=2;}$stored['hint_policy_version']=2;}
             self::$cache=array_merge(self::defaults(),$stored);
         }
         return self::$cache;
@@ -75,18 +76,19 @@ final class SND_Settings {
         $out['points_hint']=max(0,min(100,(int)($input['points_hint']??10)));
         $out['font_scale']=max(90,min(140,(int)($input['font_scale']??100)));
         $out['max_guesses']=max(2,min(12,(int)($input['max_guesses']??6)));
-        $out['hint_after']=max(1,min($out['max_guesses']-1,(int)($input['hint_after']??3)));
+        $out['hint_after']=max(1,min($out['max_guesses']-1,(int)($input['hint_after']??2)));
         $out['retention_days']=(int)($input['retention_days']??365);if($out['retention_days']!==0){$out['retention_days']=max(7,min(3650,$out['retention_days']));}
         $out['explore_rounds']=array_values(array_intersect(array(0,1,2,3),array_map('intval',(array)($input['explore_rounds']??array()))));
         $out['rounds']=array_values(array_intersect(array('population','administration','flag','landmark'),(array)($input['rounds']??array())));
         return $out;
     }
     public static function game_options() {
-        $all=self::all();return array_intersect_key($all,array_flip(array('max_guesses','hint_after','hint_enabled','source_help_enabled','media_fallback','rounds','flag_fallback')));
+        $all=self::all();return array_intersect_key($all,array_flip(array('max_guesses','hint_after','hint_policy_version','hint_enabled','source_help_enabled','media_fallback','rounds','flag_fallback')));
     }
     public static function options_for($challenge) {
-        // Old sessions retain the rules under which they were started.
-        return array_merge(array('max_guesses'=>6,'hint_after'=>3,'hint_enabled'=>true,'source_help_enabled'=>true,'media_fallback'=>true,'rounds'=>array('population','administration','flag','landmark')),$challenge['options']??array());
+        $options=array_merge(array('max_guesses'=>6,'hint_after'=>2,'hint_enabled'=>true,'source_help_enabled'=>true,'media_fallback'=>true,'rounds'=>array('population','administration','flag','landmark')),$challenge['options']??array());
+        if((int)($options['hint_policy_version']??0)<2 && (int)$options['hint_after']===3){$options['hint_after']=2;}
+        return $options;
     }
     public static function public_config() {
         return array('app_name'=>self::get('app_name'),'languages'=>self::get('languages'),'language'=>SND_I18n::lang(),

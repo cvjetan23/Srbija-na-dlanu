@@ -188,6 +188,66 @@ return json_decode(<<<'SND_V42_LANGUAGES'
     "en": "This list contains verified entries with essential facts.",
     "de": "Die Liste enthält bestätigte Einträge mit grundlegenden Angaben.",
     "ru": "В списке — подтверждённые объекты с основными сведениями."
+  },
+  "Pomoći iskorišćene": {
+    "en": "Hints used",
+    "de": "Hinweise genutzt",
+    "ru": "Подсказки использованы"
+  },
+  "Pomoć · −{points}": {
+    "en": "Hint · −{points}",
+    "de": "Hilfe · −{points}",
+    "ru": "Подсказка · −{points}"
+  },
+  "Prvo slovo · −{points}": {
+    "en": "First letter · −{points}",
+    "de": "Anfangsbuchstabe · −{points}",
+    "ru": "Первая буква · −{points}"
+  },
+  "Broj slova · −{points}": {
+    "en": "Letter count · −{points}",
+    "de": "Buchstaben · −{points}",
+    "ru": "Число букв · −{points}"
+  },
+  "Pomoć trenutno nije dostupna.": {
+    "en": "Hints are currently unavailable.",
+    "de": "Hinweise sind derzeit nicht verfügbar.",
+    "ru": "Подсказки сейчас недоступны."
+  },
+  "Pomoć se otključava posle {count}. pokušaja.": {
+    "en": "Hints unlock after attempt {count}.",
+    "de": "Hinweise werden nach Versuch {count} freigeschaltet.",
+    "ru": "Подсказки доступны после попытки № {count}."
+  },
+  "Pomoći: −{points} poena.": {
+    "en": "Hints: −{points} points.",
+    "de": "Hinweise: −{points} Punkte.",
+    "ru": "Подсказки: −{points} очков."
+  },
+  "Prva pomoć oduzima {first}, a druga još {second} poena.": {
+    "en": "The first hint costs {first} points and the second another {second}.",
+    "de": "Der erste Hinweis kostet {first} Punkte, der zweite weitere {second}.",
+    "ru": "Первая подсказка стоит {first} очков, вторая — ещё {second}."
+  },
+  "Meni": {
+    "en": "Menu",
+    "de": "Menü",
+    "ru": "Меню"
+  },
+  "Otvori meni": {
+    "en": "Open menu",
+    "de": "Menü öffnen",
+    "ru": "Открыть меню"
+  },
+  "Zatvori meni": {
+    "en": "Close menu",
+    "de": "Menü schließen",
+    "ru": "Закрыть меню"
+  },
+  "Pomoći 2/2": {
+    "en": "Hints 2/2",
+    "de": "Hilfen 2/2",
+    "ru": "Подсказки 2/2"
   }
 }
 SND_V42_LANGUAGES

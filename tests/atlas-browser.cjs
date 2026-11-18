@@ -8,7 +8,7 @@ if(!['127.0.0.1','localhost'].includes(new URL(base).hostname))throw new Error('
 const app=base+'/srbija-na-dlanu/',output=process.env.SND_SCREENSHOTS;
 let total=0;const errors=[];
 function check(v,label){assert.ok(v,label);total++;}
-async function navigate(page,url){await page.goto(url,{waitUntil:'domcontentloaded'});await page.locator('.snd-preferences').waitFor();}
+async function navigate(page,url){await page.goto(url,{waitUntil:'domcontentloaded'});await page.locator('.snd-app-header').waitFor();}
 async function capture(page,name){if(output){fs.mkdirSync(output,{recursive:true});await page.screenshot({path:path.join(output,name+'.png'),animations:'disabled'});}}
 async function clickRegion(page,selector){
  await page.waitForFunction(()=>!document.documentElement.classList.contains('snd-theme-changing'));
@@ -26,7 +26,7 @@ async function clickRegion(page,selector){
  const target=await region.getAttribute('href'),bounds=await region.boundingBox();assert.ok(bounds,'SVG link has a bounding box');
  try{await Promise.all([page.waitForURL(target,{waitUntil:'domcontentloaded'}),region.click({position:{x:point.x-bounds.x,y:point.y-bounds.y}})]);}
  catch(error){if(output){fs.mkdirSync(output,{recursive:true});await page.screenshot({path:path.join(output,'failed-map-navigation.png'),animations:'disabled'}).catch(()=>{});}console.error(JSON.stringify({target,actual:page.url(),point,hit:await page.evaluate(({x,y})=>{const n=document.elementFromPoint(x,y);return n?{tag:n.tagName,cls:n.getAttribute('class'),link:n.closest('a')?.getAttribute('href')}:null;},point).catch(()=>null)}));throw error;}
- await page.locator('.snd-preferences').waitFor();
+ await page.locator('.snd-app-header').waitFor();
 }
 (async()=>{
  const browser=await chromium.launch({executablePath:process.env.CHROMIUM_BIN || '/usr/bin/chromium',headless:true,args:['--no-sandbox','--disable-dev-shm-usage']});
@@ -50,9 +50,9 @@ async function clickRegion(page,selector){
   for(const width of [320,390,768]){
    const mobile=await browser.newContext({viewport:{width,height:844},isMobile:width<768,hasTouch:true});const p=await mobile.newPage();p.on('pageerror',e=>errors.push(e.message));await navigate(p,app+'baza-znanja/?lang=ru');
    const dimensions=await p.evaluate(()=>({content:document.documentElement.scrollWidth,viewport:innerWidth}));check(dimensions.content<=width && dimensions.viewport===width,'No horizontal overflow '+width);
-   await p.locator('.snd-language-picker summary').tap();check(await p.locator('.snd-language-options').isVisible(),'Touch opens language picker '+width);const bounds=await p.locator('.snd-language-options').boundingBox();check(bounds.x>=0 && bounds.x+bounds.width<=width,'Picker stays in viewport '+width);await capture(p,'languages-'+width);
-   await Promise.all([p.waitForURL(u=>u.searchParams.get('lang')==='sr',{waitUntil:'domcontentloaded'}),p.locator('a[data-language=sr]').tap()]);check(new URL(p.url()).searchParams.get('lang')==='sr','Touch changes language '+width);await p.locator('[data-snd-theme-choice=dark]').tap();check(await p.locator('html').getAttribute('data-snd-theme')==='dark','Touch selects moon '+width);
-   await clickRegion(p,'.snd-map-region[data-territory="rs-25"]');check(new URL(p.url()).searchParams.get('okrug')==='rs-25','KiM district opens on small screen');check(await p.locator('.snd-member-table tbody a').count()>0,'KiM municipalities retained');await capture(p,'district-'+width);await mobile.close();
+   await p.locator('[data-snd-menu-toggle]').tap();await p.locator('.snd-language-picker summary').tap();check(await p.locator('.snd-language-options').isVisible(),'Touch opens language picker '+width);const bounds=await p.locator('.snd-language-options').boundingBox();check(bounds.x>=0 && bounds.x+bounds.width<=width,'Picker stays in viewport '+width);await capture(p,'languages-'+width);
+   await Promise.all([p.waitForURL(u=>u.searchParams.get('lang')==='sr',{waitUntil:'domcontentloaded'}),p.locator('a[data-language=sr]').tap()]);check(new URL(p.url()).searchParams.get('lang')==='sr','Touch changes language '+width);await p.locator('[data-snd-menu-toggle]').tap();await p.locator('[data-snd-theme-choice=dark]').tap();check(await p.locator('html').getAttribute('data-snd-theme')==='dark','Touch selects moon '+width);
+   await p.locator('[data-snd-menu-toggle]').tap();await clickRegion(p,'.snd-map-region[data-territory="rs-25"]');check(new URL(p.url()).searchParams.get('okrug')==='rs-25','KiM district opens on small screen');check(await p.locator('.snd-member-table tbody a').count()>0,'KiM municipalities retained');await capture(p,'district-'+width);await mobile.close();
   }
   const nojs=await browser.newContext({javaScriptEnabled:false,viewport:{width:1280,height:900}});const p=await nojs.newPage();await p.goto(app+'baza-znanja/?lang=sr');check(await p.locator('.snd-map-region').count()===30,'Map works without JS');await p.locator('.snd-theme-options button[value=dark]').click();check(await p.locator('html').getAttribute('data-snd-theme')==='dark','Native form selects dark without JS');await p.locator('.snd-language-picker summary').click();await p.locator('a[data-language=en]').click();check(await p.locator('html').getAttribute('lang')==='en','Native language link without JS');await nojs.close();
   check(errors.length===0,'No browser JavaScript errors: '+errors.join('; '));console.log('PASS: '+total+' real Chromium atlas, language, theme, keyboard and responsive assertions.');

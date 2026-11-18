@@ -184,7 +184,7 @@ final class SND_Game {
         $token = bin2hex(random_bytes(24));
         $state = array('challenge' => $c, 'stage' => 'guess', 'guesses' => array(), 'hint' => false, 'solved' => false, 'answers' => array(), 'question_index' => 0, 'revision' => 0, 'owner' => get_current_user_id(), 'game_id' => bin2hex(random_bytes(16)), 'recorded' => false,'started_at'=>time(),'activity_log'=>array(array('at'=>gmdate('c'),'action'=>'start')));
         $state['privacy_epoch']=get_current_user_id()?get_user_meta(get_current_user_id(),'snd_privacy_epoch',true):'';
-        $state['scoring']=SND_Scoring::for_challenge($c);
+        $state['scoring']=SND_Scoring::current_hint_policy(SND_Scoring::for_challenge($c));
         // Fresh sessions can restore a real flag round from an older cached day.
         // Already started sessions keep their questions and answer identifiers.
         $slots=$c['options']['rounds']??array('population','administration','flag','landmark');$flag_index=array_search('flag',$slots,true);
@@ -225,6 +225,8 @@ final class SND_Game {
         if(!empty($s['owner']) && (($s['privacy_epoch']??'')!==get_user_meta($s['owner'],'snd_privacy_epoch',true))){return new WP_Error('snd_expired','Sačuvana partija je istekla. Pokreni novu.',array('status'=>410));}
         if (!isset($s['challenge']) && isset($s['challenge_key'])) { $s['challenge'] = get_option($s['challenge_key']); }
         if (empty($s['challenge'])) { return new WP_Error('snd_expired', 'Podaci ove partije više nisu dostupni. Pokreni novu.', array('status' => 410)); }
+        // Pending guesses adopt the requested split cost; completed scores keep their snapshot.
+        if($s['stage']==='guess' && !empty($s['scoring'])){$s['scoring']=SND_Scoring::current_hint_policy($s['scoring']);}
         if ($s['challenge']['mode'] === 'daily' && $s['challenge']['date'] !== self::date()) { return new WP_Error('snd_new_day', 'Stigao je novi dnevni izazov. Pokreni današnju partiju.', array('status' => 410)); }
         foreach($s['challenge']['questions'] as $i=>$q){if(!isset($s['answers'][$i]) && ($q['type']??'')==='explore_city_river' && !isset($s['question_overrides'][$i])){$s['question_overrides'][$i]=SND_Explore::safe_decoys($q,$s['challenge']['date'].':'.$i);}}
         return $s;
@@ -284,6 +286,7 @@ final class SND_Game {
         $public_catalog=$c['catalog'];if(SND_Kinds::is_explore($c['kind'])){$public_catalog=array_filter($public_catalog,function($t){return SND_Explore::approved_id($t['id']);});}
         if($s['stage']==='guess'){$out['catalog'] = array_map(function ($t) { return array_intersect_key($t, array_flip(array('id', 'name', 'aliases'))); }, array_values($public_catalog));}
         $out['hint_level']=SND_Hints::level($s);
+        $out['hint_costs']=SND_Scoring::hint_prices($s);$out['hint_spent']=SND_Scoring::hint_spent($s);
         if ($s['stage'] !== 'guess') {
             $out['territory'] = array_intersect_key($c['target'], array_flip(array('id', 'name', 'region', 'map_path')));
             if(in_array($s['stage'],array('reveal','complete'),true)){$out['map'] = array_map(function ($t) { return array_intersect_key($t, array_flip(array('id', 'name', 'map_path','point'))); }, array_values($public_catalog));}

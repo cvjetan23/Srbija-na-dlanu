@@ -87,3 +87,52 @@ html:not([data-snd-theme=dark]) .snd-app .snd-game .snd-flag-card.is-wrong .snd-
 .snd-app .snd-game .snd-modal-backdrop{background:color-mix(in srgb,var(--snd-deep,#102a26) 68%,transparent);backdrop-filter:none;-webkit-backdrop-filter:none}
 .snd-app .snd-game .snd-modal{background:var(--snd-surface);color:var(--snd-text);box-shadow:none;border-radius:18px}
 .snd-app .snd-game .snd-flag-preview img{background:var(--snd-bg);border-radius:12px}
+
+/* Keep both actions visible without an empty hint card or a cramped form gap. */
+.snd-app .snd-game .snd-secondary-actions{display:grid;grid-template-columns:repeat(2,minmax(0,max-content));align-items:stretch;justify-content:center;gap:12px;margin:18px 0 0}
+.snd-app .snd-game .snd-secondary-actions .snd-text-button{min-width:0;width:100%;height:auto;margin:0;line-height:22px;padding:10px 14px}
+.snd-app .snd-game .snd-hint-availability{font-size:13px;line-height:1.6;color:var(--snd-secondary);text-align:center;margin:10px 0 0}
+.snd-app .snd-game .snd-hints{margin:18px 0;padding:14px 16px}
+.snd-app .snd-game .snd-hint-spent{font-size:13px;color:var(--snd-secondary);margin-top:8px}
+@media(max-width:520px){.snd-app .snd-game .snd-secondary-actions{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.snd-app .snd-game .snd-secondary-actions .snd-text-button{padding:10px;font-size:15px;gap:6px}.snd-app .snd-game .snd-secondary-actions .snd-action-icon{width:17px;height:17px;flex-basis:17px}}
+
+/* Equal instructional cards and an intentional final account action. */
+.snd-app .snd-home-rules ol{align-items:stretch;grid-auto-rows:1fr}
+.snd-app .snd-home-rules li{height:100%}
+html[data-snd-theme=dark] .snd-app .snd-home-signin .snd-app-button.snd-button-outline,html[data-snd-theme=dark] .snd-app .snd-home-signin .snd-app-button.snd-button-outline:hover{background:var(--snd-highlight,#FFD447)!important;color:var(--snd-deep,#102a26)!important}
+
+/* A compact sticky header; mobile uses the same navigation behind a labelled toggle. */
+html{scroll-padding-top:90px}
+.snd-app .snd-app-header{display:flex;flex-direction:row;position:sticky;top:8px;z-index:70;max-width:1180px;width:calc(100% - 24px);margin:8px auto 0;padding:8px 18px;min-height:60px;gap:18px;flex-wrap:nowrap;border-radius:18px;background:var(--snd-bg)}
+.snd-app .snd-app-header .snd-app-brand{font-size:20px;gap:9px;margin-right:auto;min-width:0}
+.snd-app .snd-app-header .snd-compass{width:32px;height:32px}
+.snd-app .snd-app-header .snd-app-nav{order:0;width:auto;flex-wrap:nowrap;justify-content:flex-end;gap:18px}
+.snd-app .snd-app-header .snd-app-nav :is(a,summary){font-size:15px}
+.snd-app .snd-app-header .snd-preferences{width:auto;order:0;gap:10px;padding-left:8px;flex-shrink:0}
+.snd-app .snd-app-header .snd-account-link{order:0;flex:0 0 44px;width:44px;height:44px}
+.snd-app .snd-mobile-menu{display:none}
+.snd-app .snd-mobile-menu svg{width:20px;height:20px;flex:0 0 20px}
+.snd-app .snd-menu-close-icon{display:none}
+.snd-app [data-snd-menu-toggle][aria-expanded=true] .snd-menu-open-icon{display:none}
+.snd-app [data-snd-menu-toggle][aria-expanded=true] .snd-menu-close-icon{display:block}
+.snd-app summary:focus-visible{text-decoration:underline;text-underline-offset:4px}
+@media(max-width:1100px) and (min-width:961px){.snd-app .snd-app-header{gap:12px;padding:8px 12px}.snd-app .snd-app-header .snd-app-brand{font-size:18px}.snd-app .snd-app-header .snd-app-nav{gap:14px}.snd-app .snd-app-header .snd-app-nav :is(a,summary){font-size:14px}.snd-app .snd-app-header .snd-language-picker{min-width:98px}}
+@media(max-width:960px){
+ .snd-app .snd-app-header{display:grid;grid-template-columns:minmax(0,1fr) 44px 70px;align-items:center;gap:0 6px;padding:8px 10px;background:var(--snd-surface);border-radius:18px}
+ .snd-app .snd-app-header .snd-app-brand{grid-column:1;grid-row:1;margin:0;font-size:18px;gap:8px;min-width:0;overflow:hidden}
+ .snd-app .snd-app-header .snd-app-brand span{overflow:hidden;text-overflow:ellipsis}
+ .snd-app .snd-app-header .snd-compass{width:29px;height:29px}
+ .snd-app .snd-app-header .snd-account-link{grid-column:2;grid-row:1}
+ .snd-app .snd-app-header .snd-app-nav{grid-column:1/-1;grid-row:2;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;width:100%;margin-top:12px;justify-content:stretch}
+ .snd-app .snd-app-header .snd-app-nav>a,.snd-app .snd-app-header .snd-games-menu>summary{display:flex;align-items:center;justify-content:space-between;min-height:44px;padding:10px 12px;background:var(--snd-bg);border-radius:10px;white-space:normal}
+ .snd-app .snd-app-header .snd-games-menu[open]{grid-column:1/-1}
+ .snd-app .snd-app-header .snd-games-dropdown{position:static;width:100%;max-width:none;margin-top:8px;background:var(--snd-bg)}
+ .snd-app .snd-app-header .snd-preferences{grid-column:1/-1;grid-row:3;width:100%;padding:0;margin-top:12px;justify-content:space-between;align-items:flex-start}
+ .snd-app .snd-header-ready .snd-mobile-menu{grid-column:3;grid-row:1;display:flex;align-items:center;justify-content:center;gap:5px;min-height:44px;padding:8px 6px;background:var(--snd-bg);color:var(--snd-text);border-radius:11px;font-size:13px;font-weight:650}
+ .snd-app .snd-header-ready[data-menu-open=false] :is(.snd-app-nav,.snd-preferences){display:none}
+ .snd-app .snd-app-header .snd-language-options{left:0;right:auto}
+}
+@media(max-width:380px){.snd-app .snd-app-header .snd-app-brand{font-size:16px}.snd-app .snd-app-header .snd-compass{width:27px;height:27px}}
+@media(max-height:500px){.snd-app .snd-app-header{position:relative;top:auto}}
+
+@media(max-width:600px){.snd-app .snd-game .snd-name-pattern{gap:4px}.snd-app .snd-game .snd-name-letter{width:clamp(15px,4.4vw,21px)}}

@@ -19,19 +19,30 @@
     button.addEventListener('click',event=>{event.preventDefault();apply(button.dataset.sndThemeChoice,true);send('preference',0);});
   });
   document.querySelectorAll('.snd-language-picker').forEach(picker=>{
-    picker.addEventListener('keydown',event=>{if(event.key==='Escape'){picker.open=false;picker.querySelector('summary').focus();}});
+    picker.addEventListener('keydown',event=>{if(event.key==='Escape'&&picker.open){picker.open=false;picker.querySelector('summary').focus();event.stopPropagation?.();}});
     document.addEventListener('click',event=>{if(!picker.contains(event.target))picker.open=false;});
   });
   document.querySelectorAll('.snd-games-menu').forEach(menu=>{
     const summary=menu.querySelector('summary');
     menu.addEventListener('keydown',event=>{
-      if(event.key==='Escape'){menu.open=false;summary.focus();event.stopPropagation();}
+      if(event.key==='Escape'&&menu.open){menu.open=false;summary.focus();event.stopPropagation();}
       if(event.key==='ArrowDown'&&event.target===summary){event.preventDefault();menu.open=true;menu.querySelector('a').focus();}
     });
     menu.addEventListener('toggle',()=>{if(menu.open)document.querySelectorAll('.snd-language-picker[open]').forEach(n=>n.open=false);});
     document.addEventListener('click',event=>{if(!menu.contains(event.target))menu.open=false;});
     menu.addEventListener('focusout',()=>setTimeout(()=>{if(!menu.contains(document.activeElement))menu.open=false;},0));
   });
+  // One navigation tree for all screens; full navigation remains usable without JS.
+  const header=document.querySelector('.snd-app-header'),menuToggle=header?.querySelector('[data-snd-menu-toggle]');
+  if(header && menuToggle){
+    const setMenu=open=>{header.dataset.menuOpen=String(open);menuToggle.setAttribute('aria-expanded',String(open));menuToggle.setAttribute('aria-label',L.text(open?'Zatvori meni':'Otvori meni'));if(!open)header.querySelectorAll('details[open]').forEach(n=>n.open=false);};
+    setMenu(false);header.classList.add('snd-header-ready');
+    menuToggle.addEventListener('click',()=>setMenu(menuToggle.getAttribute('aria-expanded')!=='true'));
+    header.addEventListener('keydown',event=>{if(event.key==='Escape'&&menuToggle.getAttribute('aria-expanded')==='true'){setMenu(false);menuToggle.focus();}});
+    document.addEventListener('click',event=>{if(!header.contains(event.target))setMenu(false);});
+    header.addEventListener('focusout',()=>setTimeout(()=>{if(!header.contains(document.activeElement))setMenu(false);},0));
+    window.addEventListener('resize',()=>{if(innerWidth>960)setMenu(false);});
+  }
   const pageLoader=document.getElementById('snd-page-loader');let loadTimer,clearTimer;
   function loading(on){if(!pageLoader)return;clearTimeout(loadTimer);clearTimeout(clearTimer);if(!on){pageLoader.hidden=true;return;}pageLoader.hidden=false;clearTimer=setTimeout(()=>{pageLoader.hidden=true;},12000);}
   document.addEventListener('click',event=>{

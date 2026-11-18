@@ -1,4 +1,4 @@
-# Pet dnevnih igara i vežbanje — 4.2.5
+# Pet dnevnih igara i vežbanje — 4.2.6
 
 Implementacija dnevnih igara za okruge, opštine, gradove i naselja, reke i planine. Isti zadatak za sve igrače i jezike, promena dana u zoni Europe/Belgrade. Svaka igra ima šest pokušaja, zatim četiri dodatna pitanja. Neuspešno pogađanje ne sprečava nastavak obrazovnih pitanja.
 
@@ -16,7 +16,7 @@ Planine se prikazuju dokumentovanim referentnim vrhom. Ne postoji izmišljena pr
 
 ## Bodovanje i rang lista
 
-Glavno pogađanje: 60, 54, 48, 42, 36 ili 30 poena za prvi do šestog pokušaja. Otkriven ili nepogođen odgovor daje 0. Pomoć oduzima 10 iz ove komponente, najmanje do 0. Svako tačno dodatno pitanje donosi 10, netačno/preskočeno 0. Otvaranje podataka o autoru i licenci fotografije ne menja poene. Ranije korišćena pomoć preko izvora ostaje sačuvana samo u postojećoj istoriji.
+Glavno pogađanje: 60, 54, 48, 42, 36 ili 30 poena za prvi do šestog pokušaja. Otkriven ili nepogođen odgovor daje 0. Prva pomoć za naziv oduzima 5 od ukupnih poena, druga još 5, sa donjom granicom nula. Svako tačno dodatno pitanje donosi 10, netačno/preskočeno 0. Otvaranje podataka o autoru i licenci fotografije ne menja poene. Ranije korišćena pomoć preko izvora ostaje sačuvana samo u postojećoj istoriji.
 
 Maksimum je **100 po igri, 500 dnevno ukupno**. Brzina nije kriterijum. Jedan upis po nalogu, datumu, sezoni i igri, uz serversku proveru vlasništva i verzije poteza. Nastavak na nalogu čuva i već odigrani deo. Gost ima nastavak u istom pregledaču; za javni plasman prijavom se povezuje započeta ili završena današnja partija sa nalogom, ako taj dnevni slot već nije popunjen.
 
@@ -24,7 +24,7 @@ Rang lista podrazumevano prikazuje samo dnevne zadatke nove sezone 4. Filteri: s
 
 ## Dve pomoći i vežbanje
 
-Posle podešenog broja pokušaja (podrazumevano tri), prva pomoć otkriva početno slovo naziva. Druga prikazuje broj slova i prazna podvučena polja sa samo početnim slovom. Razmaci i crtice ne ulaze u broj slova; Lj, Nj i Dž su jedno slovo u srpskoj latinici. Administrativna odrednica u zagradi nije deo naziva za pomoć. Ukupan penal obe pomoći je ranije podešenih 10 poena, bez dodatnog uvećanja za drugu pomoć.
+Posle podešenog broja pokušaja (podrazumevano dva), prva pomoć otkriva početno slovo naziva. Druga prikazuje broj slova i prazna podvučena polja sa samo početnim slovom. Razmaci i crtice ne ulaze u broj slova; Lj, Nj i Dž su jedno slovo u srpskoj latinici. Administrativna odrednica u zagradi nije deo naziva za pomoć. Svaka pomoć ima zaseban trošak: 5 poena za prvo slovo i još 5 za polja sa slovima. Dugme se vidi od početka sa katancem; kartica traga se pojavljuje tek posle korišćenja. Završene stare partije zadržavaju prethodni obračun.
 
 Vežbanje je ispod glavnog zadatka, ne pored oznake „Igra dana”. Može se igrati više puta. Dnevna partija, pokušaji, pomoći i rezultat ostaju sačuvani pri promeni režima. Vežbanje beleži lični napredak i poene, ali ne ulazi u javnu rang listu.
 

@@ -69,6 +69,7 @@ jobs:
           php tests/catalogue.php
           php tests/interface42.php
           php tests/update425.php
+          php tests/hints426.php
       - name: Real Chromium map and preference flows
         env:
           WP_ROOT: /tmp/snd-wp
@@ -96,6 +97,7 @@ jobs:
           node tests/interface42-browser.cjs
           node tests/feedback42-browser.cjs
           node tests/update425-browser.cjs
+          node tests/hints426-browser.cjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:

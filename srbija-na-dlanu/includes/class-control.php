@@ -52,7 +52,7 @@ final class SND_Control {
     private static function ranking_settings($s) {
         echo '<h2>Bodovanje i rang lista</h2>';self::checkbox('ranking_enabled','Omogući rang liste i upis bodova za nove partije',$s['ranking_enabled']);
         echo '<p>Javna sezonska lista sabira dnevne izazove svih pet igara, zajedno ili po igri. Dnevni maksimum je 500; mesečni i ukupni pregled sabiraju iste dnevne rezultate. Administratorski pregled „Arhiva svih partija“ čuva i ranije vežbanje. Rezultati se čuvaju nezavisno od analitike. Promene važe za nove partije i buduće dnevne izazove.</p><table class="form-table">';
-        foreach(array('points_territory'=>'Maksimum za teritoriju (ostatak do 100 deli se na pitanja)','points_step'=>'Umanjenje za svaki dodatni pokušaj','points_hint'=>'Umanjenje za pomoć pri pogađanju') as $key=>$label){echo '<tr><th>'.esc_html($label).'</th><td><input type="number" min="0" max="100" name="settings['.$key.']" value="'.(int)$s[$key].'"></td></tr>';}
+        foreach(array('points_territory'=>'Maksimum za teritoriju (ostatak do 100 deli se na pitanja)','points_step'=>'Umanjenje za svaki dodatni pokušaj','points_hint'=>'Ukupno umanjenje za dve pomoći (pola za svaku)') as $key=>$label){echo '<tr><th>'.esc_html($label).'</th><td><input type="number" min="0" max="100" name="settings['.$key.']" value="'.(int)$s[$key].'"></td></tr>';}
         echo '</table><p>Bez dodatnih pitanja teritorija vredi 100. Izvor kao pomoć isključuje poene samo za to pitanje. Zbir je ograničen na 0–100. Ranije partije ne dobijaju naknadno izmišljene bodove. Javno se prikazuje nadimak, a igrač može sakriti svoj plasman na nalogu.</p>';
     }
     public static function ranking() {

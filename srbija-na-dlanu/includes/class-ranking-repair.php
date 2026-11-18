@@ -7,12 +7,14 @@ final class SND_Ranking_Repair {
         if((int)$row['user_id']<1 || !get_userdata((int)$row['user_id']) || $row['mode']!=='daily' || $row['stage']!=='complete' || !empty($row['legacy']) || !in_array($row['kind'],SND_Kinds::ALL,true) || !preg_match('/^[a-f0-9]{32,64}$/D',$row['game_id']) || $row['played_on']>SND_Game::date()){return null;}
         $d=json_decode($row['details'],true);$p=$d['points']??null;$rules=$p['rules']??null;
         if(!preg_match('/^(\d{4})-(\d{2})-(\d{2})$/D',$row['played_on'],$date)||!checkdate((int)$date[2],(int)$date[3],(int)$date[1])||!is_array($d)||!is_array($d['guesses']??null)||!is_array($d['questions']??null)||!in_array($row['outcome'],array('solved','missed','revealed'),true)){return null;}
-        if(!is_array($rules)||(int)($rules['version']??0)!==2){return null;}foreach(array('territory','step','hint') as $key){if(!isset($rules[$key])||!is_numeric($rules[$key])||(int)$rules[$key]<0||(int)$rules[$key]>100){return null;}}
+        if(!is_array($rules)||!in_array((int)($rules['version']??0),array(2,3),true)){return null;}foreach(array('territory','step','hint') as $key){if(!isset($rules[$key])||!is_numeric($rules[$key])||(int)$rules[$key]<0||(int)$rules[$key]>100){return null;}}
+        if((int)$rules['version']===3 && (!isset($d['hint_level']) || !is_int($d['hint_level']) || $d['hint_level']<0 || $d['hint_level']>2 || ($rules['hint_costs']??null)!==SND_Scoring::hint_costs($rules['hint']))){return null;}
         if(!is_array($p)||!is_array($rules)||(int)($rules['season']??0)!==4||empty($rules['rank_enabled'])||!empty($d['legacy'])||!empty($d['summary_only'])||!isset($d['guesses'],$d['questions'])||count($d['guesses'])!==(int)$row['guesses']||count($d['questions'])!==(int)$row['question_count']){return null;}
         $answers=array();$help=array();foreach($d['questions'] as $i=>$q){$answers[$i]=array('correct'=>!empty($q['correct']),'skipped'=>!empty($q['skipped']));if(!empty($q['source_help'])){$help[$i]=true;}}
         $correct=count(array_filter($answers,function($a){return $a['correct'];}));if($correct!==(int)$row['score']){return null;}
         $completed=strtotime(($row['completed_at']??'').' UTC');if(!$completed){return null;}
         $s=array('owner'=>(int)$row['user_id'],'game_id'=>$row['game_id'],'stage'=>'complete','solved'=>$row['outcome']==='solved','guesses'=>$d['guesses'],'answers'=>$answers,'hint'=>!empty($p['penalty']),'source_help_questions'=>$help,'scoring'=>$rules,'completed_at'=>$completed,'challenge'=>array('kind'=>$row['kind'],'mode'=>'daily','date'=>$row['played_on'],'questions'=>array_fill(0,(int)$row['question_count'],array())));
+        if((int)$rules['version']===3){$s['hint_level']=$d['hint_level'];$s['hint']=$d['hint_level']>0;}
         $calculated=SND_Scoring::calculate($s);foreach(array('total','territory','quiz','penalty','correct','questions') as $key){if(!isset($p[$key]) || (int)$p[$key]!==$calculated[$key]){return null;}}
         return $s;
     }
