@@ -347,6 +347,16 @@ return json_decode(<<<'SND_V4_LANGUAGES'
     "de": "Welcher Referenzgipfel ist im PSS-Verzeichnis für Serbien für dieses Gebirge aufgeführt?",
     "ru": "Какая опорная вершина этой горы указана в справочнике PSS по Сербии?"
   },
+  "Koji je referentni vrh ove planine?": {
+    "en": "What is the reference peak of this mountain?",
+    "de": "Was ist der Referenzgipfel dieses Berges?",
+    "ru": "Какая вершина указана для этой горы?"
+  },
+  "Pin označava referentni vrh planine.": {
+    "en": "The pin marks the mountain’s reference peak.",
+    "de": "Die Markierung zeigt den Referenzgipfel des Berges.",
+    "ru": "Метка обозначает вершину горы."
+  },
   "Planina {name}: vrh {answer}. {scope}": {
     "en": "Mountain {name}: peak {answer}. {scope}",
     "de": "Berg {name}: Gipfel {answer}. {scope}",
