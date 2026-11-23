@@ -1,4 +1,4 @@
-# Pet dnevnih igara i vežbanje — 4.2.6
+# Pet dnevnih igara i vežbanje — 4.2.8
 
 Implementacija dnevnih igara za okruge, opštine, gradove i naselja, reke i planine. Isti zadatak za sve igrače i jezike, promena dana u zoni Europe/Belgrade. Svaka igra ima šest pokušaja, zatim četiri dodatna pitanja. Neuspešno pogađanje ne sprečava nastavak obrazovnih pitanja.
 
@@ -8,11 +8,11 @@ Implementacija dnevnih igara za okruge, opštine, gradove i naselja, reke i plan
 | Opštine | Obris; udaljenost i smer | Stanovništvo/geografija, pripadnost, zastava ili proverena zamena, znamenitost |
 | Gradovi i naselja | Referentni pin naselja; broj promašaja, km i smer ka cilju | Okrug, stanovništvo naselja ili region, reka ili smer prema drugom mestu, fotografija |
 | Reke | Stvarni tok u Srbiji; pogrešna reka se iscrtava i numeriše | Neposredni recipijent ili reka koju sastavnice formiraju, morski sliv, ukupna dužina, fotografija |
-| Planine | Referentni vrh PSS; promašaj dobija pin, km i smer | Vrh, visina, dokumentovana površina ili geografski region, fotografija |
+| Planine | Referentni vrh iz knjige; promašaj dobija pin, km i smer | Vrh, visina, region, fotografija ili pitanje o smeru prema drugoj planini |
 
 Mapa i fotografije imaju zasebno uvećanje koje ne šalje odgovor. Unos je iznad svih šest numerisanih pokušaja. Kod reka se ne prikazuje proizvoljna udaljenost između „centara reka“: porede se označeni tokovi. Dekorativna pozadina sa imenima reka isključena je na toj igri.
 
-Planine se prikazuju dokumentovanim referentnim vrhom. Ne postoji izmišljena precizna granica masiva. Za prekogranične planine naveden je obuhvat vrha; površina se koristi samo uz potvrđen izvor i obuhvat.
+Planine se prikazuju dokumentovanim referentnim vrhom. Ne postoji izmišljena precizna granica masiva. Katalog iz knjige čuva 197 referentnih položaja, koordinate i stranice izvora. 52 imaju fotografiju, 145 pitanje o smeru. Površina se ne dodaje bez potvrđenog izvora i obuhvata; ranije zamrznuta pitanja ostaju sačuvana.
 
 ## Bodovanje i rang lista
 
@@ -32,7 +32,7 @@ Administratorski pregled rang liste sadrži obnovu propuštenih upisa po nalogu 
 
 ## Katalog i uređivanje
 
-Javna baza znanja: **255 naselja, 61 reka sa osnovnim činjenicama, 188 planina**. Urednički katalog sadrži 63 potvrđena rečna naziva; dva zapisa bez ušća, morskog sliva i dužine nisu na javnoj mapi ili spisku do dopune. Dodatnih 412 OSM naziva reka ostaje privatni nacrt do nezavisne provere. Dnevni fond trenutno koristi **226 naselja, 61 reku i 52 planine** sa kompletnim pitanjima i fotografijama. Širi, potvrđeni katalog služi za odgovore; baza znanja prikazuje zapise sa osnovnim činjenicama. Raniji zamrznuti zadaci i njihovi odgovori nisu menjani. Ovo nije tvrdnja da je obrađena svaka reka u Srbiji.
+Javna baza znanja: **255 naselja, 61 reka sa osnovnim činjenicama, 197 planinskih zapisa**. Urednički katalog sadrži 63 potvrđena rečna naziva; dva zapisa bez ušća, morskog sliva i dužine nisu na javnoj mapi ili spisku do dopune. Dodatnih 412 OSM naziva reka ostaje privatni nacrt do nezavisne provere. Dnevni fond trenutno koristi **226 naselja, 61 reku i 197 planinskih zapisa** sa četiri potpuna pitanja. Planine bez fotografije imaju geografsko pitanje o smeru. Širi, potvrđeni katalog služi za odgovore; baza znanja prikazuje zapise sa osnovnim činjenicama. Raniji zamrznuti zadaci i njihovi odgovori nisu menjani. Ovo nije tvrdnja da je obrađena svaka reka u Srbiji.
 
 Obuhvaćeni su Kosovo i Metohija. Popis RZS 2022. tamo nije sproveden: nepoznati broj stanovnika nije zamenjen izmišljenom vrednošću, već geografskim pitanjem. Kod drugih naselja koristi se stanovništvo samog naselja, ne cele opštine. Istoimena mesta imaju dodatnu administrativnu odrednicu.
 

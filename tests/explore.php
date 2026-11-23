@@ -15,8 +15,9 @@ try{
   $kim=array_filter(SND_Explore::pool($kind),function($t){return $t['region']==='Kosovo i Metohija';});ex_ok(count($kim)>0,'KiM geography in '.$kind);
   foreach($kim as $t){if($kind==='city'){ex_ok(empty($t['population']) && empty($t['year']),'No invented KiM 2022 census');}}
   foreach(SND_Explore::targets($kind) as $t){
-   ex_ok(is_file(SND_DIR.'assets/'.$t['photo']['image']) && !empty($t['photo']['credit']) && !empty($t['photo']['license']) && !empty($t['photo']['source_url']),'Local photo and rights '.$t['id']);
+   if($kind!=='mountain' || !empty($t['photo']['image'])){ex_ok(is_file(SND_DIR.'assets/'.$t['photo']['image']) && !empty($t['photo']['credit']) && !empty($t['photo']['license']) && !empty($t['photo']['source_url']),'Local photo and rights '.$t['id']);}
    $questions=SND_Explore::questions($t,SND_Explore::pool($kind),'all-targets:'.$t['id']);ex_ok(count($questions)===4,'Four meaningful questions '.$t['id']);
+   if($kind==='mountain'){ex_ok($questions[3]['type']===(empty($t['photo']['image'])?'explore_direction':'explore_photo'),'Fourth mountain question uses the available media '.$t['id']);}
    foreach(array('sr','en','de','ru') as $lang){SND_I18n::force($lang);foreach($questions as $q){$q=SND_I18n::question($q,$t);ex_ok(count($q['options'])===4 && count(array_unique(array_column($q['options'],'id')))===4,'Four unique choices');ex_ok(in_array($q['correct'],array_column($q['options'],'id'),true),'Correct option exists');ex_ok(strpos($q['title'],'{')===false && strpos($q['explanation'],'{')===false,'All localized variables resolved');if($lang!=='sr'){ex_ok($q['title']!==SND_I18n::t($questions[array_search($q['type'],array_column($questions,'type'))]['title_key'],array(),'sr'),'Localized question title');}}}
   }
  }

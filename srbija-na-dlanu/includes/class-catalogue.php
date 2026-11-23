@@ -70,7 +70,7 @@ final class SND_Catalogue {
     public static function featured(){
         echo '<section class="snd-library-featured" aria-label="Istraži prirodu Srbije">';
         $groups=array('river'=>array('Reke Srbije','Istraži tok, ušće i sliv reke.',array('Dunav','Sava','Drina','Velika Morava','Tisa','Ibar')),'mountain'=>array('Planine Srbije','Pronađi planinu, njen vrh i visinu.',array('Kopaonik','Zlatibor','Tara i Zvijezda','Stara planina','Fruška gora','Šar planina')));
-        foreach($groups as $kind=>$group){echo '<article><h2>'.esc_html($group[0]).'</h2><p>'.esc_html($group[1]).'</p><ul>';$pool=self::pool($kind);foreach($group[2] as $name){foreach($pool as $t){if($t['name']===$name){echo '<li><a href="'.esc_url(self::url($kind,array('objekat'=>$t['id']))).'">'.esc_html(SND_Explore::name($t)).'</a></li>';break;}}}echo '</ul><a class="snd-app-button" href="'.esc_url(self::url($kind)).'">'.($kind==='river'?'Sve reke':'Sve planine').'<span aria-hidden="true">→</span></a></article>';}
+        foreach($groups as $kind=>$group){echo '<article><h2>'.esc_html($group[0]).'</h2><p>'.esc_html($group[1]).'</p><ul>';$pool=self::pool($kind);foreach($group[2] as $name){foreach($pool as $t){if($t['name']===$name || in_array($name,$t['aliases']??array(),true)){echo '<li><a href="'.esc_url(self::url($kind,array('objekat'=>$t['id']))).'">'.esc_html(SND_Explore::name($t)).'</a></li>';break;}}}echo '</ul><a class="snd-app-button" href="'.esc_url(self::url($kind)).'">'.($kind==='river'?'Sve reke':'Sve planine').'<span aria-hidden="true">→</span></a></article>';}
         echo '</section>';
     }
 }

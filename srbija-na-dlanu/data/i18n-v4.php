@@ -347,6 +347,16 @@ return json_decode(<<<'SND_V4_LANGUAGES'
     "de": "Welcher Referenzgipfel ist im PSS-Verzeichnis für Serbien für dieses Gebirge aufgeführt?",
     "ru": "Какая опорная вершина этой горы указана в справочнике PSS по Сербии?"
   },
+  "Koji je referentni vrh ove planine?": {
+    "en": "What is the reference peak of this mountain?",
+    "de": "Was ist der Referenzgipfel dieses Berges?",
+    "ru": "Какая вершина указана для этой горы?"
+  },
+  "Pin označava referentni vrh planine.": {
+    "en": "The pin marks the mountain’s reference peak.",
+    "de": "Die Markierung zeigt den Referenzgipfel des Berges.",
+    "ru": "Метка обозначает вершину горы."
+  },
   "Planina {name}: vrh {answer}. {scope}": {
     "en": "Mountain {name}: peak {answer}. {scope}",
     "de": "Berg {name}: Gipfel {answer}. {scope}",
@@ -671,6 +681,66 @@ return json_decode(<<<'SND_V4_LANGUAGES'
     "en": "Mountains — Srbija na dlanu",
     "de": "Berge — Srbija na dlanu",
     "ru": "Горы — Srbija na dlanu"
+  },
+  "Stranice izvora": {
+    "en": "Source pages",
+    "de": "Quellenseiten",
+    "ru": "Страницы источника"
+  },
+  "Izvor za ovu planinu": {
+    "en": "Source for this mountain",
+    "de": "Quelle zu diesem Berg",
+    "ru": "Источник об этой горе"
+  },
+  "U kom smeru je planina „{anchor}“ u odnosu na označeni vrh?": {
+    "en": "In which direction is the mountain “{anchor}” from the marked peak?",
+    "de": "In welcher Richtung liegt der Berg „{anchor}“ vom markierten Gipfel aus?",
+    "ru": "В каком направлении находится гора «{anchor}» от отмеченной вершины?"
+  },
+  "Od označenog vrha ka planini {anchor}: {answer}.": {
+    "en": "From the marked peak towards the mountain {anchor}: {answer}.",
+    "de": "Vom markierten Gipfel zum Berg {anchor}: {answer}.",
+    "ru": "От отмеченной вершины к горе {anchor}: {answer}."
+  },
+  "Šumadija": {
+    "en": "Šumadija",
+    "de": "Šumadija",
+    "ru": "Шумадия"
+  },
+  "Istočna Srbija (severni deo)": {
+    "en": "Eastern Serbia (northern part)",
+    "de": "Ostserbien (nördlicher Teil)",
+    "ru": "Восточная Сербия (северная часть)"
+  },
+  "Istočna Srbija (južni deo)": {
+    "en": "Eastern Serbia (southern part)",
+    "de": "Ostserbien (südlicher Teil)",
+    "ru": "Восточная Сербия (южная часть)"
+  },
+  "Jugozapadna Srbija": {
+    "en": "Southwestern Serbia",
+    "de": "Südwestserbien",
+    "ru": "Юго-Западная Сербия"
+  },
+  "Kopaonička grupa": {
+    "en": "Kopaonik range",
+    "de": "Kopaonik-Gruppe",
+    "ru": "Копаоникская группа"
+  },
+  "Jugoistočna Srbija (zapadni deo)": {
+    "en": "Southeastern Serbia (western part)",
+    "de": "Südostserbien (westlicher Teil)",
+    "ru": "Юго-Восточная Сербия (западная часть)"
+  },
+  "Jugoistočna Srbija (istočni deo)": {
+    "en": "Southeastern Serbia (eastern part)",
+    "de": "Südostserbien (östlicher Teil)",
+    "ru": "Юго-Восточная Сербия (восточная часть)"
+  },
+  "Referentni vrh i koordinate": {
+    "en": "Reference peak and coordinates",
+    "de": "Referenzgipfel und Koordinaten",
+    "ru": "Опорная вершина и координаты"
   }
 }
 SND_V4_LANGUAGES
