@@ -30,9 +30,8 @@ async function run(){
  };
  const host=root(),g=new Game(host);await g.ready;
  check(g.state.stage==='guess','Guest boot completes');
- check(host.innerHTML.includes('<h1>Okruzi</h1>')&&!host.innerHTML.includes('data-cmd="municipality"'),'Dedicated game has fixed heading and no duplicate kind tabs');
+ check(host.innerHTML.includes('<h1>Okruzi – Igra dana</h1>')&&!host.innerHTML.includes('data-cmd="municipality"'),'Dedicated game has fixed heading and no duplicate kind tabs');
  check(host.innerHTML.indexOf('snd-visual')<host.innerHTML.indexOf('snd-question-heading'),'Silhouette above question');
- check(host.innerHTML.includes('Igraš kao gost'),'Guest save status');
  check(calls[0].route==='session'&&calls[1].route==='bootstrap','WP cookie session checked before starting game');
  check(calls.every(c=>c.credentials==='same-origin'&&c.cache==='no-store'),'Requests carry same-origin credentials and bypass cache');
  values.set('snd:v1:preferences',JSON.stringify({kind:'district',mode:'daily'}));
@@ -43,7 +42,6 @@ async function run(){
  check(claim&&a.token==='account-token','Signing in claims guest session through API');
  check(!values.has('snd:v1:session:v2:guest:daily:district:'+base.date),'Claimed guest key removed');
  check(values.has('snd:v1:session:v2:user-42:daily:district:'+base.date),'Account token has user-specific storage key');
- check(a.root.innerHTML.includes('Progres se čuva na nalogu'),'Account save status');
  a.state={...base,stage:'quiz',territory:{name:'Beograd'},question:{type:'flag',title:'Koja je zastava?',options:['a','b','c','d'].map((id,i)=>({id,label:'Zastava '+String.fromCharCode(65+i),image:'https://example.test/flags/'+id+'.png'}))}};
  let markup=a.quizPanel();check((markup.match(/<img /g)||[]).length===4,'Flag question renders four images');
  check(markup.includes('snd-flag-option')&&markup.includes('snd-flag-options'),'Flag options use grid classes');

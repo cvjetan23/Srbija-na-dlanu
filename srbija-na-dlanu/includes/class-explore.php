@@ -21,8 +21,27 @@ final class SND_Explore {
     public static function data(){
         if(self::$cache===null){
             $file=SND_DIR.'data/explore.json';$base=is_file($file)?json_decode(file_get_contents($file),true):array('items'=>array(),'sources'=>array());
-            $custom=get_option('snd_explore_catalogue',null);if(is_array($custom) && !empty($custom['items'])){
-                $review=array_replace(array_column($base['items'],null,'id'),array_column(self::book_mountains(),null,'id'));foreach($custom['items'] as &$t){if(!isset($t['review_status'])){$seed=$review[$t['id']]??null;$same=$seed && $seed['kind']===$t['kind'] && SND_Text::key($seed['name'])===SND_Text::key($t['name']);foreach(array('review_status','verification_source','reviewed_on','review_note') as $key){$t[$key]=$same?($seed[$key]??''):'';}$t['review_status']=$t['review_status']?:'pending';}}unset($t);$base=$custom;
+            $shipped=array_column($base['items'],null,'id');
+            $river_review=require SND_DIR.'data/river-review.php';
+            $custom=get_option('snd_explore_catalogue',null);
+            if(is_array($custom) && !empty($custom['items'])){
+                $review=array_replace($shipped,array_column(self::book_mountains(),null,'id'));
+                foreach($custom['items'] as &$item){
+                    if(isset($item['review_status'])){continue;}
+                    $id=$item['id'];
+                    $seed=$review[$id]??null;
+                    if($seed && isset($river_review[$id]['name']) &&
+                        SND_Text::key($item['name'])===SND_Text::key($river_review[$id]['name'])){
+                        $seed=array_replace($seed,$river_review[$id]);
+                    }
+                    $same=$seed && $seed['kind']===$item['kind'] && SND_Text::key($seed['name'])===SND_Text::key($item['name']);
+                    foreach(array('review_status','verification_source','reviewed_on','review_note') as $key){
+                        $item[$key]=$same?($seed[$key]??''):'';
+                    }
+                    $item['review_status']=$item['review_status']?:'pending';
+                }
+                unset($item);
+                $base=$custom;
             }
             if (($base['mountains_version'] ?? 0) < self::MOUNTAINS_VERSION) {
                 $mountains = self::book_mountains();
@@ -36,6 +55,20 @@ final class SND_Explore {
                     );
                 }
             }
+            foreach($base['items'] as &$item){
+                $id=$item['id'];
+                if(!isset($river_review[$id],$shipped[$id])){continue;}
+                // Replace shipped values. Keep values an editor has changed.
+                foreach($river_review[$id] as $field=>$value){
+                    $before=$shipped[$id][$field]??null;
+                    $current=$item[$field]??null;
+                    if($current===$before || (is_numeric($before) && is_numeric($current) && (float)$before===(float)$current)
+                        || ($before===null && ($current==='' || $current===false))){
+                        $item[$field]=$value;
+                    }
+                }
+            }
+            unset($item);
             self::$cache=$base;
         }return self::$cache;
     }
@@ -52,7 +85,7 @@ final class SND_Explore {
         $used=array_map(function($o){return SND_Text::key($o['label']);},$q['options']);$choices=SND_Game::ordered($pool,$seed);
         foreach($q['options'] as &$o){if($o['id']===$q['correct'] || isset($known[SND_Text::key($o['label'])])){continue;}foreach($choices as $candidate){$key=SND_Text::key($candidate['name']);if(!in_array($key,$used,true)){$o['label']=$candidate['name'];$o['value']=$candidate['name'];$used[]=$key;break;}}}unset($o);return $q;
     }
-    public static function targets($kind){return array_filter(self::pool($kind),function($t){return !empty($t['playable']) && ($t['kind']==='mountain'?(!empty($t['peak']) && !empty($t['height'])):!empty($t['photo']['image']));});}
+    public static function targets($kind){return array_filter(self::pool($kind),function($t){return !empty($t['playable']) && ($t['kind']==='mountain'?(!empty($t['peak']) && !empty($t['height'])):($t['kind']==='river'?(!empty($t['mouth']) && !empty($t['sea']) && !empty($t['length_km'])):!empty($t['photo']['image'])));});}
     public static function target_counts(){$out=array();foreach(SND_Kinds::EXPLORE as $kind){$out[$kind]=count(self::targets($kind));}return $out;}
     public static function revision(){return substr(hash('sha256',wp_json_encode(self::data())),0,16);}
     public static function geometry_sources($items){
@@ -88,9 +121,32 @@ final class SND_Explore {
             if(!empty($t['river_name'])){$q[]=self::choice('city_river','Koja reka prolazi kroz ovo naselje ili pored njega?',$t['river_name'],array_column(self::pool('river'),'name'),$seed.':river','Uz naselje {name} je reka {answer}.',array('name'=>$t['name']),$t['river_source']??$t['source']);}
             else{$q[]=self::orientation($t,$pool,$seed.':orientation');}
         }elseif($kind==='river'){
-            $q[]=self::choice('mouth',!empty($t['forms_river'])?'Koja reka nastaje na sastavu ove reke?':'Gde se neposredno uliva ova reka?',$t['mouth'],array_column(self::targets('river'),'mouth'),$seed.':mouth',!empty($t['forms_river'])?'Na sastavu reke {name} nastaje {answer}.':'Reka {name}: neposredni recipijent je {answer}.',array('name'=>$t['name']),$source);
-            $q[]=self::choice('basin','Kojem morskom slivu pripada ova reka?',$t['sea'],array('Crno more','Jadransko more','Egejsko more','Baltičko more'),$seed.':sea','Sliv reke {name} završava u moru: {answer}.',array('name'=>$t['name']),$t['basin_source']??$source);
-            $q[]=self::numeric('length','Kolika je približna ukupna dužina reke?',$t['length_km'],'km',$seed.':length',$source,'Cela reka, uključujući deo van Srbije.');
+            $rivers=self::targets('river');
+            $mouth_title='Gde se neposredno uliva ova reka?';
+            $mouth_explanation='Ušće reke „{name}“: {answer}.';
+            $vars=array('name'=>$t['name']);
+            if(!empty($t['confluence_partner'])){
+                $mouth_title='Koja reka nastaje kada se ovaj tok spoji sa rekom „{partner}“?';
+                $mouth_explanation='Sastav reka „{name}“ i „{partner}“: {answer}.';
+                $vars['partner']=$t['confluence_partner'];
+            }elseif(!empty($t['branching'])){
+                $mouth_title='Koje dve reke primaju krakove ove reke?';
+                $mouth_explanation='Krakovi reke „{name}“ ulivaju se u dve reke. To su {answer}.';
+            }elseif(!empty($t['forms_river'])){
+                $mouth_title='Koja reka nastaje na ovom sastavu?';
+                $mouth_explanation='Reka „{name}“ jedna je od sastavnica reke „{answer}“.';
+            }
+            $q[]=self::choice('mouth',$mouth_title,$t['mouth'],array_column($rivers,'mouth'),$seed.':mouth',$mouth_explanation,$vars,($t['mouth_source']??'')?:$source);
+            $seas=array('Crno more','Jadransko more','Egejsko more','Baltičko more');
+            if(!empty($t['branching'])){
+                $seas=array('Crno more i Jadransko more','Jadransko more i Egejsko more','Crno more i Baltičko more');
+            }
+            $q[]=self::choice('basin',!empty($t['branching'])?'Kojim morskim slivovima pripadaju krakovi ove reke?':'Kojem morskom slivu pripada ova reka?',$t['sea'],$seas,$seed.':sea','Morski sliv reke „{name}“: {answer}.',array('name'=>$t['name']),$t['basin_source']??$source);
+            $length_scope=$t['length_scope']??'';
+            $length_title=$length_scope && $t['id']==='river-56672329'
+                ? 'Kolika je približna dužina Timoka od Zaječara do Dunava?'
+                : 'Kolika je približna ukupna dužina reke?';
+            $q[]=self::numeric('length',$length_title,$t['length_km'],'km',$seed.':length',$source,$length_scope);
         }else{
             $q[]=self::choice('peak','Koji je referentni vrh ove planine?',$t['peak'],array_column(self::pool('mountain'),'peak'),$seed.':peak','Planina {name}: vrh {answer}. {scope}',array('name'=>$t['name'],'scope'=>$t['peak_scope']??''),$source);
             $q[]=self::numeric('height','Kolika je približna visina tog vrha?',$t['height'],'m',$seed.':height',$source,$t['peak_scope']??'');
@@ -99,6 +155,8 @@ final class SND_Explore {
         }
         if ($kind === 'mountain' && empty($t['photo']['image'])) {
             $q[] = self::orientation($t, $pool, $seed . ':orientation');
+        } elseif ($kind==='river' && empty($t['photo']['image'])) {
+            $q[]=self::choice('river_region','U kojoj oblasti Srbije je deo toka prikazan na mapi?',$t['region'],array_column($pool,'region'),$seed.':river-region','Položaj prikazanog toka reke „{name}“: {answer}.',array('name'=>$t['name']),$t['source']);
         } else {
             $q[] = self::photo_question($t,$pool,$seed.':photo');
         }
@@ -106,7 +164,7 @@ final class SND_Explore {
     }
     public static function orientation($t,$pool,$seed){
         $others=array_filter($pool,function($v)use($t){return $v['id']!==$t['id'] && SND_Game::distance($t['center'],$v['center'])>10;});$order=SND_Game::ordered($others,$seed);$anchor=$order[0];$direction=SND_Game::direction($t['center'],$anchor['center']);
-        $mountain=$t['kind']==='mountain';$anchor_name=$anchor['name'];if($mountain && !empty($anchor['display_name'])){$anchor_name.=' · '.$anchor['peak'];}
+        $mountain=$t['kind']==='mountain';$anchor_name=$mountain?self::display_name($anchor):$anchor['name'];
         return self::choice('direction',$mountain?'U kom smeru je planina „{anchor}“ u odnosu na označeni vrh?':'U kom smeru je mesto „{anchor}“ u odnosu na označeni položaj?',ucfirst($direction['name']),array('Sever','Severoistok','Istok','Jugoistok','Jug','Jugozapad','Zapad','Severozapad'),$seed,$mountain?'Od označenog vrha ka planini {anchor}: {answer}.':'Od označenog položaja ka mestu {anchor}: {answer}.',array('anchor'=>$anchor_name),$t['source']);
     }
     public static function photo_question($t,$pool,$seed){
@@ -116,17 +174,82 @@ final class SND_Explore {
         return array('type'=>'explore_photo','title'=>$title,'title_key'=>$title,'correct'=>$correct,'correct_label'=>$t['name'],'options'=>$options,'explanation'=>'Fotografija prikazuje: {name}.','explanation_key'=>'Fotografija prikazuje: {name}.','vars'=>array('name'=>$t['name']),'source'=>$t['photo']['source_url'],'image_source'=>$t['photo']['source_url'],'attribution'=>$attribution);
     }
     public static function translate($q,$t){
-        $vars=$q['vars']??array();if(isset($vars['name'])){$vars['name']=self::name($t);}foreach($vars as $key=>$value){$vars[$key]=is_numeric($value)?SND_I18n::number($value):SND_I18n::text($value);}
+        $vars=$q['vars']??array();
+        $title=$q['title_key'];
+        $explanation=$q['explanation_key'];
+        switch($q['type']){
+            case 'explore_district':
+                if(($t['district_id']??'')==='rs-00' || ($t['district_name']??'')==='Grad Beograd'){
+                    $title='Kojoj administrativnoj celini pripada ovo naselje?';
+                }
+                $explanation='Administrativna celina naselja „{name}“: {answer}.';
+                break;
+            case 'explore_population':
+                $explanation='Prema popisu iz {year}. godine, naselje ima {value} stanovnika.';
+                $vars['year']=$t['year']??2022;
+                break;
+            case 'explore_direction':
+                if($t['kind']==='mountain'){
+                    $title='U kom smeru je planina „{anchor}“ od vrha planine „{name}“?';
+                    $explanation='Smer od vrha planine „{name}“ ka planini „{anchor}“: {answer}.';
+                }else{
+                    $title='U kom smeru je naselje „{anchor}“ od naselja „{name}“?';
+                    $explanation='Smer od naselja „{name}“ ka naselju „{anchor}“: {answer}.';
+                }
+                $vars['name']=$t['name'];
+                break;
+            case 'explore_city_river':
+                $explanation='Reka uz naselje „{name}“: {answer}.';
+                break;
+            case 'explore_peak':
+                $explanation='Referentni vrh planine „{name}“ je „{answer}“. {scope}';
+                break;
+            case 'explore_region':
+                if($t['kind']==='mountain'){
+                    $title='U kojoj oblasti se nalazi referentni vrh ove planine?';
+                    $explanation='Oblast u kojoj se nalazi vrh planine „{name}“: {answer}.';
+                }
+                break;
+            case 'explore_mouth':
+                if($title==='Koja reka nastaje na sastavu ove reke?'){
+                    $title='Koja reka nastaje na ovom sastavu?';
+                    $explanation='Reka „{name}“ jedna je od sastavnica reke „{answer}“.';
+                }elseif($title==='Gde se neposredno uliva ova reka?'){
+                    $explanation='Ušće reke „{name}“: {answer}.';
+                }
+                break;
+            case 'explore_basin':
+                $explanation=!empty($t['branching'])?'Morski slivovi reke „{name}“: {answer}.':'Morski sliv reke „{name}“: {answer}.';
+                break;
+            case 'explore_length':
+                if(empty($t['length_scope'])){$vars['detail']='';}
+                break;
+        }
+        if(isset($vars['name'])){$vars['name']=self::display_name($t);}
+        foreach($vars as $key=>$value){
+            if($key==='year'){continue;}
+            $vars[$key]=is_numeric($value)?SND_I18n::number($value):SND_I18n::text($value);
+        }
         $answer='';foreach($q['options'] as &$o){
             if(!empty($o['image']) && strpos($o['image'],'photos/')===0){$o['image']=SND_Data::image_url($o['image']);}
             if(isset($o['value']) && is_numeric($o['value'])){$o['label']=SND_I18n::t('Oko {value}',array('value'=>SND_I18n::number($o['value']))).($o['unit']?' '.$o['unit']:'');}
             else{$o['label']=SND_I18n::text($o['label']);}
             if($o['id']===$q['correct']){$answer=$o['label'];}unset($o['value'],$o['unit']);
-        }unset($o);$vars['answer']=$answer;$q['title']=SND_I18n::t($q['title_key'],$vars);$q['explanation']=SND_I18n::t($q['explanation_key'],$vars);if(!empty($q['attribution'])){foreach($q['attribution'] as &$credit){$credit['label']=SND_I18n::text($credit['label']);}unset($credit);}
+        }unset($o);$vars['answer']=$answer;$q['title']=SND_I18n::t($title,$vars);$q['explanation']=trim(SND_I18n::t($explanation,$vars));if(!empty($q['attribution'])){foreach($q['attribution'] as &$credit){$credit['label']=SND_I18n::text($credit['label']);}unset($credit);}
         unset($q['vars'],$q['title_key'],$q['explanation_key'],$q['approximate']);return $q;
     }
     public static function name($t){return $t['labels'][SND_I18n::lang()]??$t['name'];}
-    public static function display_name($t){$name=self::name($t);return !empty($t['display_name'])?$name.' · '.SND_I18n::t($t['district_name']):$name;}
+    public static function display_name($t){
+        $name=self::name($t);
+        if(empty($t['display_name'])){return $name;}
+        // Use the relative position for same-name mountains so the label does not give away the peak.
+        $positions=array(
+            'mountain-5-7'=>'istočni položaj', 'mountain-6-30'=>'zapadni položaj',
+            'mountain-6-28'=>'jugozapadni položaj', 'mountain-book-189'=>'severoistočni položaj',
+            'mountain-8-12'=>'istočni položaj', 'mountain-book-197'=>'zapadni položaj',
+        );
+        return $name.' · '.SND_I18n::t($positions[$t['id']]??($t['district_name']??''));
+    }
     public static function map_state($s){
         $t=$s['challenge']['target'];$out=array('kind'=>$t['kind'],'target'=>array('point'=>$t['point'],'path'=>$t['map_path']),'attempts'=>array());
         foreach($s['guesses'] as $i=>$g){$row=$s['challenge']['catalog'][$g['id']];$out['attempts'][]=array('number'=>$i+1,'name'=>self::display_name($row),'point'=>$row['point'],'path'=>$row['map_path'],'correct'=>$g['correct']);}
@@ -136,29 +259,41 @@ final class SND_Explore {
     public static function validate($data){
         if(!is_array($data) || (int)($data['schema']??0)!==1 || !is_array($data['items']??null) || count($data['items'])>5000){return new WP_Error('snd_explore_schema','Očekivan je katalog sa schema: 1 i najviše 5000 stavki.');}
         $shipped=json_decode(file_get_contents(SND_DIR.'data/explore.json'),true);$known=array_replace(array_column($shipped['items'],null,'id'),array_column(self::book_mountains(),null,'id'));
+        $river_review=require SND_DIR.'data/river-review.php';
         $out=array('schema'=>1,'items'=>array(),'sources'=>array(),'river_context'=>array(),'projection'=>self::data()['projection']??array());$ids=array();$ready=array_fill_keys(SND_Kinds::EXPLORE,0);
         $out['mountains_version'] = min(self::MOUNTAINS_VERSION, (int)($data['mountains_version'] ?? 0));
         foreach($data['items'] as $t){
             if(!is_array($t) || !is_string($t['id']??null) || !preg_match('/^(city|river|mountain)-[a-z0-9-]{1,60}$/D',$t['id']) || isset($ids[$t['id']]) || !in_array($t['kind']??'',SND_Kinds::EXPLORE,true)){return new WP_Error('snd_explore_id','Neispravan ili ponovljen identifikator.');}
             $r=array('id'=>$t['id'],'kind'=>$t['kind']);$ids[$t['id']]=true;
-            foreach(array('name','display_name','region','district_id','district_name','peak','peak_scope','mouth','sea','area_scope','river_name','forms_river') as $k){$r[$k]=sanitize_text_field($t[$k]??'');}if(!$r['name']){return new WP_Error('snd_explore_name','Nedostaje naziv.');}
+            foreach(array('name','display_name','region','district_id','district_name','peak','peak_scope','mouth','sea','area_scope','river_name','forms_river','confluence_partner','length_scope') as $k){$r[$k]=sanitize_text_field($t[$k]??'');}if(!$r['name']){return new WP_Error('snd_explore_name','Nedostaje naziv.');}
             foreach(array('center'=>array(40,48,17,25),'point'=>array(-50,650,-50,850)) as $k=>$bounds){$a=$t[$k]??null;if(!is_array($a)||count($a)!==2||!is_numeric($a[0])||!is_numeric($a[1])||$a[0]<$bounds[0]||$a[0]>$bounds[1]||$a[1]<$bounds[2]||$a[1]>$bounds[3]){return new WP_Error('snd_explore_point','Neispravne koordinate: '.$r['id']);}$r[$k]=array((float)$a[0],(float)$a[1]);}
             foreach(array('path','map_path') as $k){$v=$t[$k]??'';if(!is_string($v)||strlen($v)>150000||($v!==''&&!preg_match('/^[MmLlHhVvCcSsQqTtAaZz0-9eE.,\s+\-]+$/D',$v))){return new WP_Error('snd_explore_shape','Neispravna SVG putanja.');}$r[$k]=$v;}
-            foreach(array('source','facts_source','population_source','basin_source','area_source','river_source') as $k){$r[$k]=esc_url_raw($t[$k]??'',array('https'));}
+            foreach(array('source','facts_source','population_source','mouth_source','basin_source','area_source','river_source') as $k){$r[$k]=esc_url_raw($t[$k]??'',array('https'));}
             if(!$r['source']){return new WP_Error('snd_explore_source','Svaka stavka zahteva HTTPS izvor.');}
             foreach(array('population','year','height','length_km','area_km2') as $k){$r[$k]=max(0,(float)($t[$k]??0));}
             $r['labels']=array();foreach(array('sr','en','de','ru') as $lang){$r['labels'][$lang]=sanitize_text_field($t['labels'][$lang]??$r['name']);}
             $r['aliases']=array_map('sanitize_text_field',array_slice((array)($t['aliases']??array()),0,20));$r['photo']=array();
             if(!empty($t['photo'])){$p=$t['photo'];if((!preg_match('~^photos/v4/[a-f0-9]{16,64}\.(jpg|png|webp)$~D',$p['image']??'') && !(is_string($p['image']??null) && strpos($p['image'],'https://')===0 && esc_url_raw($p['image'],array('https')))) || empty($p['credit'])||empty($p['license'])||empty($p['source_url'])){return new WP_Error('snd_explore_photo','Fotografija zahteva lokalnu putanju, autora, licencu i izvor.');}foreach(array('image','credit','license') as $k){$r['photo'][$k]=sanitize_text_field($p[$k]);}$r['photo']['source_url']=esc_url_raw($p['source_url'],array('https'));$r['photo']['license_url']=esc_url_raw($p['license_url']??'',array('https'));}
-            if(!isset($t['review_status']) && isset($known[$r['id']]) && $known[$r['id']]['kind']===$r['kind'] && SND_Text::key($known[$r['id']]['name'])===SND_Text::key($r['name'])){foreach(array('review_status','verification_source','reviewed_on','review_note') as $key){$t[$key]=$known[$r['id']][$key]??'';}}
+            $seed=$known[$r['id']]??null;
+            if($seed && isset($river_review[$r['id']]['name']) &&
+                SND_Text::key($r['name'])===SND_Text::key($river_review[$r['id']]['name'])){
+                $seed=array_replace($seed,$river_review[$r['id']]);
+            }
+            if(!isset($t['review_status']) && $seed && $seed['kind']===$r['kind'] &&
+                SND_Text::key($seed['name'])===SND_Text::key($r['name'])){
+                foreach(array('review_status','verification_source','reviewed_on','review_note') as $key){
+                    $t[$key]=$seed[$key]??'';
+                }
+            }
             $r['review_status']=($t['review_status']??'pending')==='verified'?'verified':'pending';$r['verification_source']=esc_url_raw($t['verification_source']??'',array('https'));$r['reviewed_on']=sanitize_text_field($t['reviewed_on']??'');$r['review_note']=sanitize_text_field($t['review_note']??'');
             if($r['review_status']==='verified' && !$r['verification_source']){return new WP_Error('snd_explore_review','Potvrđen naziv zahteva nezavisan HTTPS izvor.');}
+            $r['branching']=!empty($t['branching']);
             $r['disabled']=!empty($t['disabled']);$r['playable']=!empty($t['playable'])&&!$r['disabled'] && self::reviewed($r);
             if ($r['kind'] === 'mountain') {
                 $r['prominence'] = max(0, (int)($t['prominence'] ?? 0));
                 $r['book_pages'] = array_values(array_filter(array_map('intval', (array)($t['book_pages'] ?? array()))));
             }
-            if($r['playable']){if(($r['kind']!=='mountain'&&empty($r['photo']))||($r['kind']==='river'&&(!$r['mouth']||!$r['sea']||!$r['length_km']))||($r['kind']==='mountain'&&(!$r['peak']||!$r['height']))){return new WP_Error('snd_explore_ready','Dnevni zadatak nema sve podatke: '.$r['id']);}$ready[$r['kind']]++;}
+            if($r['playable']){if(($r['kind']==='city'&&empty($r['photo']))||($r['kind']==='river'&&(!$r['mouth']||!$r['sea']||!$r['length_km']))||($r['kind']==='mountain'&&(!$r['peak']||!$r['height']))){return new WP_Error('snd_explore_ready','Dnevni zadatak nema sve podatke: '.$r['id']);}$ready[$r['kind']]++;}
             $out['items'][]=$r;
         }
         foreach($ready as $kind=>$n){if($n<4){return new WP_Error('snd_explore_pool','Potrebna su najmanje četiri kompletna dnevna zadatka: '.$kind);}}

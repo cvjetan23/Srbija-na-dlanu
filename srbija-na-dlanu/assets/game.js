@@ -32,7 +32,7 @@
   const nextSuggestionIndex = (active,count,key) => !count ? -1 : active < 0 ? key === 'ArrowUp' ? count - 1 : 0 : (active + (key === 'ArrowDown' ? 1 : -1) + count) % count;
   const touchMoved = (start,event) => Boolean(start && Math.hypot(event.clientX-start.x,event.clientY-start.y)>10);
   const kinds = ['district','municipality','city','river','mountain'];
-  const kindLabels = {district:'Okruzi',municipality:'Opštine i gradovi',city:'Gradovi i naselja',river:'Reke',mountain:'Planine'};
+  const kindLabels = {district:'Okruzi',municipality:'Opštine',city:'Gradovi i naselja',river:'Reke',mountain:'Planine'};
   const kindStats = (all,kind) => { const value=all && typeof all[kind]==='object' && all[kind] || {}; return {...value,days:Array.isArray(value.days)?value.days:[],discovered:Array.isArray(value.discovered)?value.discovered:[],streak:Number(value.streak)||0}; };
   const outcome = s => L.text(s.solved ? 'Pogođeno' : s.guesses.length >= s.max_guesses ? s.max_guesses===6 ? 'Nije pogođeno za šest pokušaja' : L.t('Nije pogođeno za {count} pokušaja',{count:s.max_guesses}) : 'Odgovor je otkriven');
   const questionSources = q => Array.isArray(q.sources) && q.sources.length ? q.sources.map(x=>sourceLink(x.url,x.label)).join('<br>') : sourceLink(q.source);
@@ -150,7 +150,9 @@
     }
     async action(action, value) {
       if (this.busy) return;
-      this.busy = true; this.error = ''; this.setBusy(true);const beforeRevision=this.state.revision;
+      this.busy = true; this.error = ''; this.setBusy(true);
+      const beforeRevision = this.state.revision;
+      const previousStage = this.state.stage;
       try { this.accept(await this.request('action', { token: this.token, revision: this.state.revision, action, value })); }
       catch (e) {
         this.error = e.message;
@@ -159,7 +161,13 @@
           try { this.accept(await this.request('resume', { token: this.token }));if(e.networkFailure && this.state.revision>beforeRevision)this.error=''; } catch (_) {}
         } else { this.setRecovery(e); }
       }
-      finally { this.busy = false; this.render(); this.focusPanel(); }
+      finally {
+        this.busy = false;
+        this.render();
+        const advanced = this.state.revision !== beforeRevision &&
+          (action === 'next' || previousStage !== this.state.stage);
+        this.focusPanel(advanced);
+      }
     }
     setBusy(on, overlay=false) {
       this.root.setAttribute('aria-busy', on ? 'true' : 'false');const loader=this.root.querySelector('.snd-game-loading'),shared=this.root.dataset.shell==='1' && typeof document.getElementById==='function'?document.getElementById('snd-page-loader'):null;if(shared)shared.hidden=!(on&&overlay);if(loader)loader.hidden=shared?true:!(on&&overlay);
@@ -201,34 +209,31 @@
     outline() { return this.info.outline.map(d => `<path d="${esc(d)}"/>`).join(''); }
     render() {
       const s = this.state; if (!s) return;
-      const isDistrict = s.kind === 'district';
+      const title = this.fixedKind ? L.text(kindLabels[s.kind]) : (L.config().app_name || 'Srbija na dlanu');
       this.root.innerHTML = L.html(`
-        <header class="snd-header"><h1>${this.fixedKind ? kindLabels[s.kind] : esc(L.config().app_name || 'Srbija na dlanu')}</h1><button class="snd-icon-button" data-cmd="help" aria-label="Kako se igra?" title="Kako se igra?">${icon('help')}</button></header>
-        <nav class="snd-toolbar" aria-label="Podešavanja igre">
-          ${this.fixedKind ? '' : `<div class="snd-tabs" role="group" aria-label="Izaberi igru">${kinds.filter(kind=>this.info.config?.[kind+'_enabled']!==false).map(kind=>`<button class="${s.kind===kind?'is-active':''}" data-cmd="${kind}" aria-pressed="${s.kind===kind}">${esc(kindLabels[kind])}</button>`).join('')}</div>`}
-          <div class="snd-mode-label" role="status">${icon(s.mode==='daily'?'calendar':'refresh')}<span>${s.mode==='daily'?'Igra dana':'Vežbanje'}</span></div>
-        </nav>
-        <div class="snd-game-loading" role="status" hidden>${L.config().loader || ''}<span class="snd-sr-only">Učitavanje…</span></div>${this.info.config && this.info.config.daily_only && s.mode==='daily'?'<p class="snd-daily-note">Jedan zadatak dnevno. Isti izazov za sve.</p>':''}${this.pointsIntro()}<div class="snd-board">${this.visual()}<section class="snd-panel" tabindex="-1" aria-label="Trenutna runda">${this.panel()}</section></div>
+        <header class="snd-header"><h1>${esc(L.t('{game} – {mode}', {game:title, mode:L.text(s.mode==='daily'?'Igra dana':'Vežbanje')}))}</h1><button class="snd-icon-button" data-cmd="help" aria-label="Kako se igra?" title="Kako se igra?" aria-haspopup="dialog">${icon('help')}</button></header>
+        ${this.fixedKind ? '' : `<nav class="snd-toolbar" aria-label="Podešavanja igre"><div class="snd-tabs" role="group" aria-label="Izaberi igru">${kinds.filter(kind=>this.info.config?.[kind+'_enabled']!==false).map(kind=>`<button class="${s.kind===kind?'is-active':''}" data-cmd="${kind}" aria-pressed="${s.kind===kind}">${esc(kindLabels[kind])}</button>`).join('')}</div></nav>`}
+        <div class="snd-game-loading" role="status" hidden>${L.config().loader || ''}<span class="snd-sr-only">Učitavanje…</span></div>
+        <div class="snd-board">${this.visual()}<section class="snd-panel" tabindex="-1" aria-label="Trenutna runda">${this.panel()}</section></div>
         <div class="snd-error" role="alert" ${this.error ? '' : 'hidden'}>${esc(this.error)}${this.recovery ? `<button data-cmd="${esc(this.recovery.command)}">${esc(this.recovery.label)}</button>` : ''}</div>
         ${this.canSave === false && !this.account.authenticated ? '<p class="snd-storage-note">Pregledač ne dozvoljava čuvanje partije i statistike.</p>' : ''}
         ${this.notice ? `<p class="snd-notice" role="status">${esc(this.notice)}</p>` : ''}
         ${!s.scoring_rules && s.stage==='guess'?`<aside class="snd-update-notice"><p>Nova verzija donosi bodovanje i obnovljenu rundu zastava. Nastavi ovu partiju ili započni novo vežbanje.</p><button class="snd-text-button" data-cmd="again">${icon('refresh')}<span>Započni novo vežbanje</span></button></aside>`:''}
         ${s.scoring_rules && s.kind==='municipality' && s.stage==='guess' && (this.info.retired_ids || []).some(id=>(s.catalog || []).some(t=>t.id===id))?`<aside class="snd-update-notice"><p>Spisak opština je ažuriran. Započeta partija zadržava ranije granice.</p>${this.info.config?.daily_only && s.mode==='daily'?'':`<button class="snd-text-button" data-cmd="again">${icon('refresh')}<span>Započni novo vežbanje</span></button>`}</aside>`:''}
-        ${this.practiceEntry()}<footer class="snd-footer"><p class="snd-save-status">${this.account.authenticated ? `<span>Progres se čuva na nalogu.</span><a href="${safeUrl(this.root.dataset.account)}">Moj nalog</a>` : `<span>Igraš kao gost.</span><a href="${safeUrl(this.root.dataset.login)}">Prijavi se</a><span>za čuvanje na nalogu.</span>`}</p>${L.config().show_sources===false?'':`<button data-cmd="sources">${icon('sources')}<span>Obuhvat i izvori</span></button>`}</footer>
+        ${this.practiceEntry()}
+        <footer class="snd-footer">${s.explore_map ? '<p class="snd-map-attribution"><a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">© OpenStreetMap contributors · ODbL</a></p>' : ''}${L.config().show_sources===false?'':`<button data-cmd="sources">${icon('sources')}<span>Obuhvat i izvori</span></button>`}</footer>
         <div class="snd-modal-host"></div><div class="snd-announcer" aria-live="polite" aria-atomic="true"></div>`);
       this.bind();
       const live=this.root.querySelector('.snd-announcer');
       if(live){const message=s.stage==='quiz'?L.t('Runda {round} od {total}: {title}',{round:s.question_index+2,total:s.question_count+1,title:s.question.title}):L.text(s.stage==='complete'?'Partija je završena.':s.stage==='reveal'?'Teritorija je otkrivena.':'Prepoznaj teritoriju.');setTimeout(()=>{if(this.root.querySelector('.snd-announcer')===live)live.textContent=message;},50);}
       this.setBusy(this.busy);
     }
-    visual() {
-      const s = this.state, q = s.question;
-      if(s.explore_map && !(s.stage==='quiz' && q.image)){return this.exploreVisual();}
-      if (s.stage === 'quiz' && q.image) {
-        return `<div class="snd-visual snd-visual-photo"><div class="snd-photo-wrap"><img class="snd-landmark-photo snd-media-img" src="${this.mediaUrl(q.image)}" alt="Znamenitost koju treba prepoznati" loading="eager"></div><details class="snd-photo-attribution snd-landmark-attribution"><summary>${esc(L.text('Fotografija: autor i licenca'))}</summary><p class="snd-photo-credit">${esc(q.credit)} · ${licenseUrl(q.license) ? `<a href="${safeUrl(licenseUrl(q.license))}" target="_blank" rel="noopener noreferrer">${esc(q.license)}</a>` : esc(q.license)}${q.image_source && q.answer ? ` · ${sourceLink(q.image_source,'Izvor fotografije ↗')}` : ''}</p></details></div>`;
-      }
-      if (s.stage === 'guess' || s.stage === 'quiz') {
-        return `<div class="snd-visual ${s.stage === 'quiz' ? 'snd-visual-small' : ''}"><svg class="snd-shape" viewBox="0 0 360 360" role="img" aria-label="${s.stage === 'guess' ? 'Obris nepoznate teritorije; sever je gore' : 'Obris teritorije ' + esc(s.territory.name)}"><path d="${esc(s.shape)}"/></svg></div>`;
+    visual(showResult = false) {
+      const s = this.state;
+      if (s.stage === 'quiz' || (s.stage === 'complete' && !showResult)) return '';
+      if (s.explore_map) return this.exploreVisual();
+      if (s.stage === 'guess') {
+        return `<div class="snd-visual"><svg class="snd-shape" viewBox="0 0 360 360" role="img" aria-label="Obris nepoznate teritorije; sever je gore"><path d="${esc(s.shape)}"/></svg></div>`;
       }
       const attempts=new Map(s.guesses.map((g,i)=>[g.id,{...g,number:i+1}]));
       return `<div class="snd-visual snd-visual-context"><svg class="snd-context-map" data-map-kind="${esc(s.kind)}" viewBox="0 0 600 800" role="img" aria-label="Položaj teritorije ${esc(s.territory.name)} na mapi Srbije"><g class="snd-map-base">${this.outline()}</g>${(s.map || []).map(t => `<path class="${t.id === s.territory.id ? 'snd-map-target' : attempts.has(t.id) ? 'snd-map-last' : 'snd-map-cell'}" data-map-region="${esc(t.id)}" d="${esc(t.map_path)}"/>`).join('')}<g class="snd-map-markers" aria-hidden="true">${s.guesses.map((g,i)=>`<g data-map-attempt="${esc(g.id)}" class="${g.correct?'is-correct':''}" visibility="hidden"><line/><circle r="22"/><text text-anchor="middle" dy=".35em">${i+1}</text></g>`).join('')}${!s.solved?`<g data-map-answer="${esc(s.territory.id)}" class="is-target" visibility="hidden"><line/><circle r="27"/><path class="snd-target-symbol" d="m0-13 4 8 9 1-7 6 2 9-8-4-8 4 2-9-7-6 9-1Z"/></g>`:''}</g></svg><aside class="snd-target-answer"><span>Zadata teritorija</span><strong>${esc(s.territory.name)}</strong></aside><ol class="snd-map-caption" aria-label="Prethodni pokušaji">${s.guesses.map((g,i)=>`<li class="${g.correct?'snd-legend-target':'snd-legend-last'}"><span class="snd-map-number" aria-hidden="true">${i+1}</span>${esc(g.name)}</li>`).join('')}</ol></div>`;
@@ -240,7 +245,7 @@
     }
     exploreVisual() {
       const s=this.state,m=s.explore_map,revealed=s.stage!=='guess';
-      return `<div class="snd-visual snd-explore-visual ${s.stage==='quiz'?'snd-explore-small':''}"><div class="snd-explore-map-wrap">${this.exploreSvg()}<button type="button" class="snd-map-zoom" data-cmd="zoommap" aria-label="Uvećaj mapu" title="Uvećaj mapu">${icon('zoom')}</button></div>${revealed?`<aside class="snd-target-answer"><span>Zadati odgovor</span><strong>${esc(s.territory.name)}</strong></aside>`:'<p class="snd-map-instruction">'+esc(L.text(m.kind==='river'?'Prepoznaj istaknuti tok. Severno je gore.':m.kind==='mountain'?'Pin označava referentni vrh planine.':'Pin označava položaj naselja. Severno je gore.'))+'</p>'}${m.attempts.length?`<ol class="snd-map-caption">${m.attempts.map(a=>`<li class="${a.correct?'snd-legend-target':'snd-legend-last'}"><span class="snd-map-number">${a.number}</span>${esc(a.name)}</li>`).join('')}</ol>`:''}<p class="snd-map-attribution"><a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">© OpenStreetMap contributors · ODbL</a>${m.kind==='mountain'?' · PSS':''}</p></div>`;
+      return `<div class="snd-visual snd-explore-visual ${s.stage==='quiz'?'snd-explore-small':''}"><div class="snd-explore-map-wrap">${this.exploreSvg()}<button type="button" class="snd-map-zoom" data-cmd="zoommap" aria-label="Uvećaj mapu" title="Uvećaj mapu">${icon('zoom')}</button></div>${revealed?`<aside class="snd-target-answer"><span>Zadati odgovor</span><strong>${esc(s.territory.name)}</strong></aside>`:'<p class="snd-map-instruction">'+esc(L.text(m.kind==='river'?'Prepoznaj istaknuti tok. Severno je gore.':m.kind==='mountain'?'Pin označava referentni vrh planine.':'Pin označava položaj naselja. Severno je gore.'))+'</p>'}${m.attempts.length?`<ol class="snd-map-caption">${m.attempts.map(a=>`<li class="${a.correct?'snd-legend-target':'snd-legend-last'}"><span class="snd-map-number">${a.number}</span>${esc(a.name)}</li>`).join('')}</ol>`:''}</div>`;
     }
     photoCredits(q) {
       const unlocked=q.answer || q.source_help_used;
@@ -249,13 +254,13 @@
     panel() {
       const s = this.state;
       if (s.stage === 'guess') return this.guessPanel();
-      if (s.stage === 'reveal') return `<h2>${s.solved?'Pogođeno':s.guesses.length>=s.max_guesses?'Nije pogođeno':'Odgovor je otkriven.'}</h2><p class="snd-panel-copy">${s.solved ? L.t('Pogođeno iz {count}. pokušaja.',{count:s.guesses.length}) : ''}</p><button class="snd-primary" data-cmd="next">${icon('next')}<span>${s.question_count ? 'Dodatna pitanja' : 'Rezultat'}</span></button><button class="snd-text-button" data-cmd="finish">${icon('finish')}<span>Završi partiju</span></button>`;
+      if (s.stage === 'reveal') return `<h2>${s.solved?'Pogođeno':s.guesses.length>=s.max_guesses?'Nije pogođeno':'Odgovor je otkriven.'}</h2><p class="snd-panel-copy">${s.solved ? L.t('Pogođeno iz {count}. pokušaja.',{count:s.guesses.length}) : ''}</p><button class="snd-primary" data-cmd="next">${icon('next')}<span>${s.question_count ? 'Dodatna pitanja' : 'Vidi rezultat'}</span></button><button class="snd-text-button" data-cmd="finish">${icon('finish')}<span>Završi partiju</span></button>`;
       if (s.stage === 'quiz') return this.quizPanel();
       return this.resultPanel();
     }
     guessPanel() {
       const s = this.state;
-      return `<p class="snd-round-label">Runda 1/${s.question_count + 1}</p><div class="snd-question-heading"><h2>${({city:'Koje je naselje označeno na mapi?',river:'Koja je reka označena na mapi?',mountain:'Koja je planina označena na mapi?'})[s.kind] || 'Koja je ovo teritorija?'}</h2><span class="snd-turn" aria-label="Pokušaj ${s.guesses.length + 1} od ${s.max_guesses}">Pokušaj ${s.guesses.length + 1}/${s.max_guesses}</span></div><form class="snd-guess-form"><label class="snd-sr-only" for="${this.root.id}-search">${({district:'Naziv okruga ili Grad Beograd',municipality:'Naziv opštine ili grada',city:'Naziv naselja',river:'Naziv reke',mountain:'Naziv planine'})[s.kind]}</label><div class="snd-search-wrap"><input id="${this.root.id}-search" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${({district:'Unesi okrug…',municipality:'Unesi opštinu ili grad…',city:'Unesi naselje…',river:'Unesi reku…',mountain:'Unesi planinu…'})[s.kind]}" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="${this.root.id}-suggestions"><div id="${this.root.id}-suggestions" class="snd-suggestions" role="listbox" aria-label="Predložene teritorije" hidden></div></div><button class="snd-primary" type="submit" data-cmd="guess" disabled>Pogodi</button></form><div class="snd-secondary-actions">${this.hintAction()}<button class="snd-text-button" data-cmd="giveup">${icon('eye')}<span>Otkrij odgovor</span></button></div>${this.hintAvailability()}${this.nameHints()}${this.history()}`;
+      return `<p class="snd-round-label">Runda 1/${s.question_count + 1}</p><div class="snd-question-heading"><h2>${({city:'Koje je naselje označeno na mapi?',river:'Koja je reka označena na mapi?',mountain:'Koja je planina označena na mapi?',municipality:'Koja je ovo opština?',district:'Koji je ovo okrug?'})[s.kind] || 'Koja je ovo teritorija?'}</h2><span class="snd-turn" aria-label="Pokušaj ${s.guesses.length + 1} od ${s.max_guesses}">Pokušaj ${s.guesses.length + 1}/${s.max_guesses}</span></div><form class="snd-guess-form"><label class="snd-sr-only" for="${this.root.id}-search">${({district:'Naziv okruga ili Grad Beograd',municipality:'Naziv opštine',city:'Naziv naselja',river:'Naziv reke',mountain:'Naziv planine'})[s.kind]}</label><div class="snd-search-wrap"><input id="${this.root.id}-search" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${({district:'Unesi okrug…',municipality:'Unesi opštinu…',city:'Unesi naselje…',river:'Unesi reku…',mountain:'Unesi planinu…'})[s.kind]}" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="${this.root.id}-suggestions"><div id="${this.root.id}-suggestions" class="snd-suggestions" role="listbox" aria-label="Predložene teritorije" hidden></div></div><button class="snd-primary" type="submit" data-cmd="guess" disabled>Pogodi</button></form><div class="snd-secondary-actions">${this.hintAction()}<button class="snd-text-button" data-cmd="giveup">${icon('eye')}<span>Otkrij odgovor</span></button></div>${this.hintAvailability()}${this.nameHints()}${this.history()}`;
     }
     hintAction() {
       const s=this.state,level=s.hint_level || 0,locked=s.guesses.length < (s.hint_after || 2),disabled=s.hint_enabled===false || locked || level>=2;
@@ -274,8 +279,8 @@
     }
     practiceEntry() {
       const s=this.state;
-      if(s.mode==='daily'&&this.info.config?.practice_enabled)return `<section class="snd-practice-entry"><p>Želiš još igre? Vežbanje ne utiče na rang listu.</p><button class="snd-secondary" data-cmd="practice">${icon('refresh')}<span>Vežbaj bez ograničenja</span></button></section>`;
-      if(s.mode==='practice'&&this.info.config?.daily_enabled)return `<section class="snd-practice-entry"><p>Za plasman odigraj igru dana.</p><button class="snd-secondary" data-cmd="daily">${icon('calendar')}<span>Vrati se na igru dana</span></button></section>`;
+      if(s.mode==='daily'&&this.info.config?.practice_enabled)return `<section class="snd-practice-entry"><button class="snd-secondary" data-cmd="practice">${icon('refresh')}<span>Vežbaj bez ograničenja</span></button></section>`;
+      if(s.mode==='practice'&&this.info.config?.daily_enabled)return `<section class="snd-practice-entry"><button class="snd-secondary" data-cmd="daily">${icon('calendar')}<span>Vrati se na igru dana</span></button></section>`;
       return '';
     }
     history() {
@@ -293,12 +298,17 @@
       const option=q.options.find(o=>o.id===id);if(!option || !option.image)return;
       this.modal(L.t('Uvećana slika: {label}',{label:option.label}),`<figure class="snd-flag-preview"><img src="${safeUrl(option.image)}" alt="${esc(option.label)}"><figcaption>${esc(option.label)}</figcaption></figure>`,'snd-flag-modal');
     }
+    questionPhoto(q) {
+      if (!q.image) return '';
+      return `<div class="snd-visual snd-visual-photo"><div class="snd-photo-wrap"><img class="snd-landmark-photo snd-media-img" src="${this.mediaUrl(q.image)}" alt="Znamenitost koju treba prepoznati" loading="eager"></div><details class="snd-photo-attribution snd-landmark-attribution"><summary>${esc(L.text('Fotografija: autor i licenca'))}</summary><p class="snd-photo-credit">${esc(q.credit)} · ${licenseUrl(q.license) ? `<a href="${safeUrl(licenseUrl(q.license))}" target="_blank" rel="noopener noreferrer">${esc(q.license)}</a>` : esc(q.license)}${q.image_source && q.answer ? ` · ${sourceLink(q.image_source,'Izvor fotografije ↗')}` : ''}</p></details></div>`;
+    }
     quizPanel() {
       const s=this.state,q=s.question,a=q.answer,media=Boolean(q.image || q.type==='flag' || q.type==='explore_photo');
-      return `<p class="snd-round">${esc(s.territory.name)} · Runda ${s.question_index+2}/${s.question_count+1}</p><h2 class="snd-question-title">${esc(q.title)}</h2>${q.subtitle ? `<p class="snd-panel-copy">${esc(q.subtitle)}</p>` : ''}
+      return `<p class="snd-round">${esc(s.territory.name)} · ${esc(L.t('Pitanje {number}/{total}', {number:s.question_index+1,total:s.question_count}))}</p><h2 class="snd-question-title">${esc(q.title)}</h2>
+        ${this.questionPhoto(q)}
         <div class="snd-options ${['flag','explore_photo'].includes(q.type)?'snd-flag-options':''}">${q.options.map(o=>this.questionOption(q,o,a)).join('')}</div>
         ${q.type==='explore_photo'&&!a?this.photoCredits(q):''}${media&&!a?`<div class="snd-media-error" role="status" ${this.mediaFailed?'':'hidden'}><p>${s.media_fallback!==false?'Slika nije mogla da se učita. Pokušaj ponovo ili otvori zamensko geografsko pitanje.':'Slika nije mogla da se učita. Pokušaj ponovo.'}</p><button data-cmd="retrymedia">Ponovo učitaj slike</button>${s.media_fallback!==false?'<button data-cmd="media_unavailable">Zamensko pitanje</button>':''}</div>`:''}
-        ${a?`<div class="snd-explanation ${a.skipped?'is-skipped':a.correct?'is-correct':'is-wrong'}" role="status"><strong>${a.skipped?'Preskočeno — tačan odgovor':a.correct?'Tačno.':'Netačno.'}</strong><p>${esc(q.explanation)}</p>${questionSources(q)}${this.credits(q)}${q.type==='explore_photo'?this.photoCredits(q):''}</div><button class="snd-primary" data-cmd="next">${icon('next')}<span>${s.question_index+1===s.question_count?'Rezultat':'Dalje'}</span></button>`:`<button class="snd-text-button" data-cmd="skip">${icon('skip')}<span>Preskoči pitanje</span></button>`}`;
+        ${a?`<div class="snd-explanation ${a.skipped?'is-skipped':a.correct?'is-correct':'is-wrong'}" role="status"><strong>${a.skipped?'Preskočeno — tačan odgovor':a.correct?'Tačno.':'Netačno.'}</strong><p>${esc(q.explanation)}</p>${questionSources(q)}${this.credits(q)}${q.type==='explore_photo'?this.photoCredits(q):''}</div><div class="snd-quiz-continue"><button type="button" class="snd-primary" data-cmd="next">${icon('next')}<span>${s.question_index+1===s.question_count?'Vidi rezultat':'Sledeće pitanje'}</span></button></div>`:`<button class="snd-text-button" data-cmd="skip">${icon('skip')}<span>Preskoči pitanje</span></button>`}`;
     }
     credits(q) {
       return q.credits && q.credits.length ? `<details class="snd-flag-credits"><summary>Autori i licence zastava</summary>${q.credits.map(c=>`<p>${esc(c.label)}: ${esc(c.credit)} · ${esc(c.license)} ${sourceLink(c.source,'Izvor ↗')}</p>`).join('')}</details>` : '';
@@ -328,7 +338,7 @@
     pointsIntro() {
       const s=this.state,r=s.scoring_rules;if(!r)return '';
       const base=s.question_count?r.territory:100;
-      return `<div class="snd-rank-intro"><details><summary>Bodovanje: 0–100</summary><p>${esc(L.t('Teritorija: do {base} poena. Svaki naredni pokušaj umanjuje taj deo za {step}.',{base,step:r.step}))} ${esc(L.t('Dodatna pitanja: do {quiz} poena, ravnomerno po tačnom odgovoru.',{quiz:100-base}))} ${esc((r.version || 1)>=3?L.t('Prva pomoć oduzima {first}, a druga još {second} poena.',{first:r.hint_costs[0],second:r.hint_costs[1]}):L.t('Pomoći za naziv ukupno oduzimaju {hint} poena.',{hint:r.hint}))}</p><a href="${safeUrl(L.config().ranking_url)}">Rang lista</a></details></div>`;
+      return `<section class="snd-help-scoring"><h3>Bodovanje: 0–100</h3><p>${esc(L.t('Teritorija: do {base} poena. Svaki naredni pokušaj umanjuje taj deo za {step}.',{base,step:r.step}))} ${esc(L.t('Dodatna pitanja: do {quiz} poena, ravnomerno po tačnom odgovoru.',{quiz:100-base}))} ${esc((r.version || 1)>=3?L.t('Prva pomoć oduzima {first}, a druga još {second} poena.',{first:r.hint_costs[0],second:r.hint_costs[1]}):L.t('Pomoći za naziv ukupno oduzimaju {hint} poena.',{hint:r.hint}))}</p><a href="${safeUrl(L.config().ranking_url)}">Rang lista</a></section>`;
     }
     rankLink() { const u=new URL(L.config().ranking_url || this.root.dataset.gamesUrl,location.href);u.searchParams.set('period','day');u.searchParams.set('rank_date',this.state.date);return u.href; }
     pointsResult() {
@@ -338,8 +348,8 @@
     }
     resultPanel() {
       const s=this.state,stats=kindStats(this.account.authenticated?this.account.progress:storage.get('stats',{}),s.kind);
-      const help=s.hint || s.source_help?'Pomoć: korišćena':'Pomoć: nije korišćena',discovered=stats.discovered.filter(id=>!(this.info.retired_ids || []).includes(id));
-      return `<h2>Rezultat</h2>${this.pointsResult()}<p class="snd-outcome">${esc(outcome(s))}</p><div class="snd-score-grid"><div><span>Teritorija</span><strong class="${s.solved?'':'snd-score-word'}">${s.solved?s.guesses.length+'<small>/'+s.max_guesses+'</small>':s.guesses.length>=s.max_guesses?'Nije pogođeno':'Otkriveno'}</strong></div><div><span>Kviz</span><strong>${s.score}<small>/${s.question_count}</small></strong></div></div><p class="snd-result-meta">${help}${s.mode==='daily'?' · Niz igranja: '+formatDays(this.streak()):''}</p><button class="snd-primary" data-cmd="share">${icon('share')}<span>Podeli rezultat</span></button>${this.info.config && this.info.config.daily_only && s.mode==='daily'?'<p class="snd-next-day">'+esc(L.text('Današnji zadatak je završen. Novi izazov stiže u ponoć po vremenu u Srbiji.'))+'</p><a class="snd-secondary" href="'+safeUrl(this.root.dataset.gamesUrl || this.root.dataset.districtUrl)+'">'+icon('next')+'<span>'+esc(L.text('Izaberi drugu igru'))+'</span></a>':`<button class="snd-secondary" data-cmd="again">${icon('refresh')}<span>${s.mode==='daily'?'Vežbaj':'Nova partija'}</span></button>`}<details class="snd-review"><summary>Odgovori i statistika</summary><p>Upoznato: ${discovered.length}/${this.info.counts[s.kind]} teritorija.</p>${s.review.map(q=>this.reviewItem(q)).join('')}</details>`;
+      const discovered=stats.discovered.filter(id=>!(this.info.retired_ids || []).includes(id));
+      return `<h2><span>Rezultat</span> · <span data-snd-original>${esc(s.territory.name)}</span></h2>${this.pointsResult()}<p class="snd-outcome">${esc(outcome(s))}</p><p class="snd-result-meta">${s.mode==='daily'?'Niz igranja: '+formatDays(this.streak()):''}</p><button class="snd-primary" data-cmd="share">${icon('share')}<span>Podeli rezultat</span></button>${this.info.config && this.info.config.daily_only && s.mode==='daily'?'<p class="snd-next-day">'+esc(L.text('Današnji zadatak je završen. Novi izazov stiže u ponoć po vremenu u Srbiji.'))+'</p><a class="snd-secondary" href="'+safeUrl(this.root.dataset.gamesUrl || this.root.dataset.districtUrl)+'">'+icon('next')+'<span>'+esc(L.text('Izaberi drugu igru'))+'</span></a>':`<button class="snd-secondary" data-cmd="again">${icon('refresh')}<span>${s.mode==='daily'?'Vežbaj':'Nova partija'}</span></button>`}<details class="snd-result-map"><summary>Mapa i pokušaji</summary>${this.visual(true)}</details><details class="snd-review"><summary>Odgovori i statistika</summary><p>Upoznato: ${discovered.length}/${this.info.counts[s.kind]} teritorija.</p>${s.review.map(q=>this.reviewItem(q)).join('')}</details>`;
     }
     mapAttempts() {
       const svg=this.root.querySelector('.snd-context-map');if(!svg)return;
@@ -445,7 +455,14 @@
         form.addEventListener('submit', event => { event.preventDefault(); if (this.selected) this.action('guess',this.selected.id); });
       }
     }
-    focusPanel() { const panel = this.root.querySelector('.snd-panel'); if (panel) panel.focus({ preventScroll:true }); }
+    focusPanel(scroll) {
+      const panel = this.root.querySelector('.snd-panel');
+      if (!panel) return;
+      panel.focus({preventScroll:true});
+      if (scroll && typeof panel.scrollIntoView === 'function') {
+        panel.scrollIntoView({block:'start', behavior:'instant'});
+      }
+    }
     modal(title, content, className='') {
       const host = this.root.querySelector('.snd-modal-host'), before = document.activeElement;
       host.innerHTML = L.html(`<div class="snd-modal-backdrop"><section class="snd-modal ${esc(className)}" role="dialog" aria-modal="true" aria-labelledby="${this.root.id}-modal-title" tabindex="-1"><button type="button" class="snd-modal-close" aria-label="Zatvori">${icon('wrong')}</button><h2 id="${this.root.id}-modal-title">${esc(title)}</h2>${content}</section></div>`);
@@ -463,11 +480,17 @@
       modal.focus();
     }
     help() {
-      const s=this.state;
-      if(this.info.config && this.info.config.daily_only){return this.modal('Kako se igra?',`<p>${esc(L.t('Prepoznaj teritoriju iz najviše {count} pokušaja.',{count:s.max_guesses}))}</p><ol><li>${esc(L.text('Prihvaćeni su latinica, ćirilica i unos bez kvačica.'))}</li><li>${esc(L.text(s.kind==='river'?'Uporedi označene tokove reka. Kilometri između reka se ne prikazuju.':s.explore_map?'Pinovi označavaju proverene referentne tačke. Kilometri i strelica vode od tvog odgovora ka zadatom pinu.':'Kilometri i strelica vode od tvog odgovora ka traženoj teritoriji.'))}</li><li>${esc(L.text('Odgovori na četiri pitanja, prepoznaj fotografiju ili zastavu i osvoji do 100 poena.'))}</li></ol><p>${esc(L.text('Igra dana je ista za sve. Vežbanje možeš igrati koliko želiš.'))}</p><p>${esc(L.t('Pomoć se otključava posle {count}. pokušaja.',{count:s.hint_after || 2}))} ${esc(L.text('Prva pomoć otkriva prvo slovo. Druga prikazuje broj slova i prazna polja.'))}</p>`);}
-      const intro=L.t('Prepoznaj teritoriju iz najviše {count} pokušaja.',{count:s.max_guesses});
-      const hint=s.hint_enabled!==false?L.t('Pomoć je dostupna posle {count} promašaja.',{count:s.hint_after || 3}):'';
-      this.modal('Kako se igra?', `<ol><li>${esc(intro)}</li><li>Izaberi naziv iz pretrage. Prihvaćeni su latinica, ćirilica i unos bez kvačica.</li><li>Strelica i kilometri vode od tvog odgovora ka traženoj teritoriji. Sever je gore.</li>${hint?`<li>${esc(hint)}</li>`:''}${s.question_count?'<li>Posle pogađanja slede dodatna pitanja. Možeš ih odigrati, preskočiti ili odmah završiti partiju.</li>':''}</ol><p>Za mesta bez potvrđene zastave ili fotografije dobijaš jasno označeno geografsko pitanje. Autor i licenca slike uvek su vidljivi.</p><p>Dnevni izazov je isti za sve i menja se u ponoć po vremenu u Srbiji. Vežbanje daje nasumične partije. Niz igranja broji završene dnevne partije, uključujući one sa otkrivenim odgovorom i preskočenim kvizom.</p><p>Prijavljenim igračima partija i rezultati čuvaju se na nalogu. Gosti čuvaju rezultate u ovom pregledaču. Deljenje ne otkriva rešenje.</p>`);
+      const s = this.state;
+      const guide = s.kind==='river'
+        ? 'Uporedi označene tokove reka. Kilometri između reka se ne prikazuju.'
+        : 'Kilometri i strelica vode od tvog odgovora ka traženoj teritoriji.';
+      this.modal('Kako se igra?', `
+        <p>${esc(L.t('Prepoznaj teritoriju iz najviše {count} pokušaja.',{count:s.max_guesses}))} ${esc(L.text(guide))}</p>
+        <p>Prihvaćeni su latinica, ćirilica i unos bez kvačica.</p>
+        ${s.hint_enabled!==false?`<p>${esc(L.t('Pomoć se otključava posle {count}. pokušaja.',{count:s.hint_after || 2}))} Prva pomoć otkriva prvo slovo. Druga prikazuje broj slova i prazna polja.</p>`:''}
+        ${s.mode==='daily'?'<p>Igra dana je ista za sve. Vežbanje možeš igrati koliko želiš.</p>':''}
+        ${this.pointsIntro()}
+      `);
     }
     sources() { this.modal('Mapa, podaci i slike', `<p>${esc(this.info.coverage)}</p>${this.state.explore_map?'<p>'+esc(L.text(this.kind==='river'?'Uporedi označene tokove reka. Kilometri između reka se ne prikazuju.':'Pinovi označavaju proverene referentne tačke. Kilometri i strelica vode od tvog odgovora ka zadatom pinu.'))+'</p>':'<p>Obrisi su pojednostavljeni radi prikaza. Udaljenost se računa između geometrijskih centara, ne između granica ili administrativnih sedišta.</p>'}<ul>${this.info.sources.map(s => `<li>${sourceLink(s.url,s.label)}<br><small>${esc(s.license)}</small></li>`).join('')}</ul><p>Uz odgovor na pitanje prikazan je njegov izvor. Fotografije i zastave imaju navedene autore i licence. Kada slika nije dostupna, dobijaš označeno geografsko pitanje.</p><p>${sourceLink('https://github.com/cvjetan23/Srbija-na-dlanu/blob/main/srbija-na-dlanu/FLAGS.md','Sve zastave: autori, licence i izvori ↗')}</p>`); }
     shareUrl() {

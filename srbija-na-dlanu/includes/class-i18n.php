@@ -122,32 +122,31 @@ final class SND_I18n {
         $type=$q['type'];$meta=$q['i18n_data']??array();
         if($type==='population'){
             $q['title']=self::t('Koliko približno stanovnika ima cela teritorija?');
-            $q['subtitle']=self::t('Popis {year} · stanovništvo cele teritorije',$vars);
-            $q['explanation']=self::t('Prema Popisu {year}, cela teritorija ima {population} stanovnika. Podatak se ne odnosi samo na naselje.',$vars);
+            unset($q['subtitle']);
+            $q['explanation']=self::t('Prema popisu iz {year}. godine, teritorija ima {population} stanovnika.',$vars);
         }elseif($type==='orientation'){
             preg_match('/„([^“]+)“/u',$original['title'],$m);$vars['anchor']=self::text($meta['anchor']??($m[1]??''));$vars['direction']=self::direction($correct);
             $q['title']=self::t('U kom smeru je centar teritorije „{anchor}“ u odnosu na ovu teritoriju?',$vars);
-            $reason=$target['region']==='Kosovo i Metohija'?'Popis RZS 2022. nije sproveden na teritoriji Kosova i Metohije; zato je ovde geografsko pitanje.':'Za ovu teritoriju u bazi nije naveden uporediv podatak o stanovništvu, pa je postavljeno geografsko pitanje.';
-            $q['explanation']=self::t('Od centra teritorije {name} ka centru teritorije {anchor} kreće se u smeru: {direction}.',$vars).' '.self::t($reason);
+            $q['explanation']=self::t('Smer od centra teritorije „{name}“ ka centru teritorije „{anchor}“: {direction}.',$vars);
         }elseif($type==='seat'){$q['title']=self::t('Koje je sedište ovog okruga?');$q['explanation']=self::t('Sedište okruga je {seat}.',$vars);
-        }elseif($type==='district'){$vars['district']=self::text($correct);$q['title']=self::t('Kojem okrugu pripada ova teritorija?');$q['explanation']=self::t('{name} pripada administrativnoj celini: {district}.',$vars);
-        }elseif($type==='membership'){$vars['member']=self::place($correct);$q['title']=self::t('Koja od ovih opština pripada ovom okrugu?');$q['explanation']=self::t('Opština {member} pripada celini: {name}, prema podeli na pet upravnih okruga na Kosovu i Metohiji.',$vars);
-        }elseif($type==='city_membership'){$q['title']=self::t('Kom gradu pripada ova gradska opština?');$vars['city']=self::place($target['parent_name']??'Beograd');$q['explanation']=($target['parent_id']??'')==='m-beograd'?self::t('Gradska opština {name} pripada Gradu Beogradu.',$vars):self::t('Gradska opština {name} pripada gradu {city}.',$vars);
-        }elseif($type==='river'){$q['title']=self::t('Na ušću kojih reka se nalazi Beograd?');$q['explanation']=self::t('Beograd se nalazi na ušću Save u Dunav.');
+        }elseif($type==='district'){$vars['district']=self::text($correct);$q['title']=self::t('Kojem okrugu pripada ova teritorija?');$q['explanation']=self::t('Upravni okrug teritorije „{name}“ je „{district}“.',$vars);
+        }elseif($type==='membership'){$vars['member']=self::place($correct);$q['title']=self::t('Koja od ovih opština pripada ovom okrugu?');$q['explanation']=self::t('Prema prikazanoj podeli, opština „{member}“ pripada okrugu „{name}“.',$vars);
+        }elseif($type==='city_membership'){$q['title']=self::t('Kojem gradu pripada ova gradska opština?');$vars['city']=self::place($target['parent_name']??'Beograd');$q['explanation']=self::t('Grad kojem pripada opština „{name}“ je „{city}“.',$vars);
+        }elseif($type==='river'){$q['title']=self::t('Na sastavu kojih reka se nalazi Beograd?');$q['explanation']=self::t('Beograd se nalazi na ušću Save u Dunav.');
         }elseif($type==='flag'){
             $vars['place']=self::place($meta['place']??($target['kind']==='district'?$target['seat']:$target['name']));
-            $q['title']=self::t('Koja je zastava mesta „{place}“?',$vars);$q['correct_label']=self::t('Zastava mesta {place}',$vars);
-            $q['explanation']=self::t('Prikazana je zastava mesta {place}.',$vars);
+            $q['title']=self::t('Koja je zastava mesta „{place}“?',$vars);$q['correct_label']=self::t('Zastava mesta „{place}“',$vars);
+            $q['explanation']=self::t('Prikazana je zastava mesta „{place}“.',$vars);
         }elseif($type==='landmark'){$q['title']=self::t('Koja je znamenitost na fotografiji?');$fact_target=($target['landmark']['name']??'')===$correct?$target:array('landmark'=>array('name'=>$correct,'fact'=>$original['explanation']));$q['explanation']=self::fact($fact_target);$q['correct_label']=self::landmark_name($correct);
         }elseif($type==='distance'){
             preg_match_all('/„([^“]+)“/u',$original['title'],$m);$vars['anchor']=self::text($meta['anchor']??($m[1][1]??''));
             preg_match('/približno (\d+) km/u',$original['explanation'],$distance);$vars['km']=self::number($meta['km']??($distance[1]??0));
             $q['title']=self::t('Koliko su približno udaljeni centri teritorija „{name}“ i „{anchor}“?',$vars);
-            $q['explanation']=self::t('Vazdušna udaljenost između geometrijskih centara je približno {km} km. Ne meri se put automobilom ni razmak između granica.',$vars);
+            $q['explanation']=self::t('Udaljenost između centara je približno {km} km vazdušnom linijom.',$vars);
         }elseif($type==='nearby'){
             preg_match('/približno (\d+) km/u',$original['explanation'],$distance);$vars['km']=self::number($meta['km']??($distance[1]??0));$vars['nearby']=self::text($correct);
-            $q['title']=self::t('Koja od ovih teritorija ima centar najbliži centru tražene teritorije?');
-            $q['explanation']=self::t('Od ponuđenih odgovora, najbliža je teritorija {nearby}: približno {km} km vazdušnom linijom između geometrijskih centara.',$vars);
+            $q['title']=self::t('Čiji je centar najbliži centru teritorije „{name}“?',$vars);
+            $q['explanation']=self::t('Najbliži je centar teritorije „{nearby}“, udaljen približno {km} km vazdušnom linijom.',$vars);
         }elseif($type==='region'){$vars['region']=self::region($target['region']);$q['title']=self::t('U kom širem delu Srbije se nalazi ova teritorija?');$q['explanation']=self::t('Širi položaj teritorije: {region}.',$vars);}
         foreach($q['options'] as &$option){
             if($type==='population' || $type==='distance'){

@@ -248,6 +248,281 @@ return json_decode(<<<'SND_V42_LANGUAGES'
     "en": "Hints 2/2",
     "de": "Hilfen 2/2",
     "ru": "Подсказки 2/2"
+  },
+  "Sledeće pitanje": {
+    "en": "Next question",
+    "de": "Nächste Frage",
+    "ru": "Следующий вопрос"
+  },
+  "Vidi rezultat": {
+    "en": "View result",
+    "de": "Ergebnis ansehen",
+    "ru": "Посмотреть результат"
+  },
+  "Pitanje {number}/{total}": {
+    "en": "Question {number}/{total}",
+    "de": "Frage {number}/{total}",
+    "ru": "Вопрос {number}/{total}"
+  },
+  "Mapa i pokušaji": {
+    "en": "Map and guesses",
+    "de": "Karte und Versuche",
+    "ru": "Карта и попытки"
+  },
+  "Koji je ovo okrug?": {
+    "en": "Which district is this?",
+    "de": "Welcher Bezirk ist das?",
+    "ru": "Какой это округ?"
+  },
+  "Koja je ovo opština?": {
+    "en": "Which municipality is this?",
+    "de": "Welche Gemeinde ist das?",
+    "ru": "Какая это община?"
+  },
+  "Naziv opštine": {
+    "en": "Municipality name",
+    "de": "Name der Gemeinde",
+    "ru": "Название общины"
+  },
+  "Unesi opštinu…": {
+    "en": "Enter a municipality…",
+    "de": "Gemeinde eingeben…",
+    "ru": "Введите название общины…"
+  },
+  "Prepoznaj opštinu po obrisu.": {
+    "en": "Identify the municipality by its outline.",
+    "de": "Erkenne die Gemeinde an ihrem Umriss.",
+    "ru": "Угадай общину по контуру."
+  },
+  "Opštine: {name}": {
+    "en": "Municipalities: {name}",
+    "de": "Gemeinden: {name}",
+    "ru": "Общины: {name}"
+  },
+  "Prema popisu iz {year}. godine, teritorija ima {population} stanovnika.": {
+    "en": "According to the {year} census, the area has {population} residents.",
+    "de": "Laut der Volkszählung von {year} hat das Gebiet {population} Einwohner.",
+    "ru": "По переписи {year} года на этой территории живёт {population} человек."
+  },
+  "Smer od centra teritorije „{name}“ ka centru teritorije „{anchor}“: {direction}.": {
+    "en": "Direction from the center of “{name}” to the center of “{anchor}”: {direction}.",
+    "de": "Richtung vom Zentrum von „{name}“ zum Zentrum von „{anchor}“: {direction}.",
+    "ru": "Направление от центра территории «{name}» к центру территории «{anchor}»: {direction}."
+  },
+  "Upravni okrug teritorije „{name}“ je „{district}“.": {
+    "en": "The administrative district of “{name}” is “{district}”.",
+    "de": "Das Gebiet „{name}“ gehört zum Verwaltungsbezirk „{district}“.",
+    "ru": "Территория «{name}» относится к округу «{district}»."
+  },
+  "Prema prikazanoj podeli, opština „{member}“ pripada okrugu „{name}“.": {
+    "en": "In the division shown, the municipality of “{member}” belongs to “{name}”.",
+    "de": "In der dargestellten Gliederung gehört die Gemeinde „{member}“ zum Bezirk „{name}“.",
+    "ru": "По показанному делению община «{member}» входит в округ «{name}»."
+  },
+  "Kojem gradu pripada ova gradska opština?": {
+    "en": "Which city does this urban municipality belong to?",
+    "de": "Zu welcher Stadt gehört diese Stadtgemeinde?",
+    "ru": "К какому городу относится эта городская община?"
+  },
+  "Grad kojem pripada opština „{name}“ je „{city}“.": {
+    "en": "The municipality of “{name}” belongs to the city of “{city}”.",
+    "de": "Die Gemeinde „{name}“ gehört zur Stadt „{city}“.",
+    "ru": "Община «{name}» относится к городу «{city}»."
+  },
+  "Na sastavu kojih reka se nalazi Beograd?": {
+    "en": "Which two rivers meet in Belgrade?",
+    "de": "Welche beiden Flüsse treffen in Belgrad zusammen?",
+    "ru": "Какие две реки сливаются в Белграде?"
+  },
+  "Zastava mesta „{place}“": {
+    "en": "Flag of “{place}”",
+    "de": "Flagge von „{place}“",
+    "ru": "Флаг «{place}»"
+  },
+  "Prikazana je zastava mesta „{place}“.": {
+    "en": "This is the flag of “{place}”.",
+    "de": "Hier ist die Flagge von „{place}“ zu sehen.",
+    "ru": "На изображении флаг «{place}»."
+  },
+  "Udaljenost između centara je približno {km} km vazdušnom linijom.": {
+    "en": "The centers are about {km} km apart in a straight line.",
+    "de": "Die Zentren liegen etwa {km} km Luftlinie auseinander.",
+    "ru": "Расстояние между центрами по прямой составляет около {km} км."
+  },
+  "Čiji je centar najbliži centru teritorije „{name}“?": {
+    "en": "Which of these areas has its center closest to the center of “{name}”?",
+    "de": "Welches dieser Gebiete hat sein Zentrum am nächsten beim Zentrum von „{name}“?",
+    "ru": "Центр какой из этих территорий ближе всего к центру «{name}»?"
+  },
+  "Najbliži je centar teritorije „{nearby}“, udaljen približno {km} km vazdušnom linijom.": {
+    "en": "The closest center is in “{nearby}”, about {km} km away in a straight line.",
+    "de": "Am nächsten liegt das Zentrum von „{nearby}“, etwa {km} km Luftlinie entfernt.",
+    "ru": "Ближе всего центр территории «{nearby}», примерно в {km} км по прямой."
+  },
+  "Kojoj administrativnoj celini pripada ovo naselje?": {
+    "en": "Which administrative area does this settlement belong to?",
+    "de": "Zu welchem Verwaltungsgebiet gehört dieser Ort?",
+    "ru": "К какой административной единице относится этот населённый пункт?"
+  },
+  "Administrativna celina naselja „{name}“: {answer}.": {
+    "en": "Administrative area of “{name}”: {answer}.",
+    "de": "Verwaltungsgebiet des Ortes „{name}“: {answer}.",
+    "ru": "Административная единица населённого пункта «{name}»: {answer}."
+  },
+  "Prema popisu iz {year}. godine, naselje ima {value} stanovnika.": {
+    "en": "According to the {year} census, the settlement has {value} residents.",
+    "de": "Laut der Volkszählung von {year} hat der Ort {value} Einwohner.",
+    "ru": "По переписи {year} года в населённом пункте живёт {value} человек."
+  },
+  "U kom smeru je planina „{anchor}“ od vrha planine „{name}“?": {
+    "en": "In which direction is “{anchor}” from the peak of “{name}”?",
+    "de": "In welcher Richtung liegt „{anchor}“ vom Gipfel von „{name}“ aus?",
+    "ru": "В каком направлении от вершины «{name}» находится гора «{anchor}»?"
+  },
+  "Smer od vrha planine „{name}“ ka planini „{anchor}“: {answer}.": {
+    "en": "Direction from the peak of “{name}” to “{anchor}”: {answer}.",
+    "de": "Richtung vom Gipfel von „{name}“ nach „{anchor}“: {answer}.",
+    "ru": "Направление от вершины «{name}» к горе «{anchor}»: {answer}."
+  },
+  "U kom smeru je naselje „{anchor}“ od naselja „{name}“?": {
+    "en": "In which direction is “{anchor}” from “{name}”?",
+    "de": "In welcher Richtung liegt der Ort „{anchor}“ vom Ort „{name}“ aus?",
+    "ru": "В каком направлении от населённого пункта «{name}» находится «{anchor}»?"
+  },
+  "Smer od naselja „{name}“ ka naselju „{anchor}“: {answer}.": {
+    "en": "Direction from “{name}” to “{anchor}”: {answer}.",
+    "de": "Richtung vom Ort „{name}“ nach „{anchor}“: {answer}.",
+    "ru": "Направление от населённого пункта «{name}» к «{anchor}»: {answer}."
+  },
+  "Reka uz naselje „{name}“: {answer}.": {
+    "en": "River near “{name}”: {answer}.",
+    "de": "Fluss am Ort „{name}“: {answer}.",
+    "ru": "Река у населённого пункта «{name}»: {answer}."
+  },
+  "Referentni vrh planine „{name}“ je „{answer}“. {scope}": {
+    "en": "The reference peak of “{name}” is “{answer}”. {scope}",
+    "de": "Der Referenzgipfel von „{name}“ ist „{answer}“. {scope}",
+    "ru": "Опорная вершина горы «{name}» — «{answer}». {scope}"
+  },
+  "U kojoj oblasti se nalazi referentni vrh ove planine?": {
+    "en": "Which region is the reference peak of this mountain in?",
+    "de": "In welcher Region liegt der Referenzgipfel dieses Berges?",
+    "ru": "В какой области находится опорная вершина этой горы?"
+  },
+  "Oblast u kojoj se nalazi vrh planine „{name}“: {answer}.": {
+    "en": "Region of the peak of “{name}”: {answer}.",
+    "de": "Region des Gipfels von „{name}“: {answer}.",
+    "ru": "Область, где находится вершина горы «{name}»: {answer}."
+  },
+  "Ušće reke „{name}“: {answer}.": {
+    "en": "Mouth of the “{name}” river: {answer}.",
+    "de": "Mündung des Flusses „{name}“: {answer}.",
+    "ru": "Устье реки «{name}»: {answer}."
+  },
+  "Koja reka nastaje na ovom sastavu?": {
+    "en": "Which river is formed at this confluence?",
+    "de": "Welcher Fluss entsteht an diesem Zusammenfluss?",
+    "ru": "Какая река образуется в этом месте слияния?"
+  },
+  "Reka „{name}“ jedna je od sastavnica reke „{answer}“.": {
+    "en": "The “{name}” river is one of the streams that form “{answer}”.",
+    "de": "Der Fluss „{name}“ ist einer der Quellflüsse von „{answer}“.",
+    "ru": "Река «{name}» — один из водотоков, образующих реку «{answer}»."
+  },
+  "Koja reka nastaje kada se ovaj tok spoji sa rekom „{partner}“?": {
+    "en": "Which river forms when this stream joins “{partner}”?",
+    "de": "Welcher Fluss entsteht, wenn dieser Wasserlauf auf „{partner}“ trifft?",
+    "ru": "Какая река образуется при слиянии этого водотока с рекой «{partner}»?"
+  },
+  "Sastav reka „{name}“ i „{partner}“: {answer}.": {
+    "en": "The “{name}” and “{partner}” rivers form “{answer}”.",
+    "de": "„{name}“ und „{partner}“ bilden „{answer}“.",
+    "ru": "Реки «{name}» и «{partner}» образуют реку «{answer}»."
+  },
+  "Koje dve reke primaju krakove ove reke?": {
+    "en": "Which two rivers receive the branches of this river?",
+    "de": "In welche zwei Flüsse münden die Arme dieses Flusses?",
+    "ru": "В какие две реки впадают рукава этой реки?"
+  },
+  "Krakovi reke „{name}“ ulivaju se u dve reke. To su {answer}.": {
+    "en": "The branches of the “{name}” river flow into {answer}.",
+    "de": "Die Arme des Flusses „{name}“ münden in {answer}.",
+    "ru": "Рукава реки «{name}» впадают в две реки. Это {answer}."
+  },
+  "Kojim morskim slivovima pripadaju krakovi ove reke?": {
+    "en": "Which seas do the branches of this river drain into?",
+    "de": "In welche Meere entwässern die Arme dieses Flusses?",
+    "ru": "К бассейнам каких морей относятся рукава этой реки?"
+  },
+  "Morski sliv reke „{name}“: {answer}.": {
+    "en": "Sea basin of the “{name}” river: {answer}.",
+    "de": "Meeresbecken des Flusses „{name}“: {answer}.",
+    "ru": "Морской бассейн реки «{name}»: {answer}."
+  },
+  "Morski slivovi reke „{name}“: {answer}.": {
+    "en": "Sea basins of the “{name}” river: {answer}.",
+    "de": "Meeresbecken des Flusses „{name}“: {answer}.",
+    "ru": "Морские бассейны реки «{name}»: {answer}."
+  },
+  "Crno more i Egejsko more": {
+    "en": "Black Sea and Aegean Sea",
+    "de": "Schwarzes Meer und Ägäis",
+    "ru": "Чёрное и Эгейское моря"
+  },
+  "Crno more i Jadransko more": {
+    "en": "Black Sea and Adriatic Sea",
+    "de": "Schwarzes Meer und Adria",
+    "ru": "Чёрное и Адриатическое моря"
+  },
+  "Jadransko more i Egejsko more": {
+    "en": "Adriatic Sea and Aegean Sea",
+    "de": "Adria und Ägäis",
+    "ru": "Адриатическое и Эгейское моря"
+  },
+  "Crno more i Baltičko more": {
+    "en": "Black Sea and Baltic Sea",
+    "de": "Schwarzes Meer und Ostsee",
+    "ru": "Чёрное и Балтийское моря"
+  },
+  "Kolika je približna dužina Timoka od Zaječara do Dunava?": {
+    "en": "Approximately how long is the Timok from Zaječar to the Danube?",
+    "de": "Wie lang ist der Timok ungefähr von Zaječar bis zur Donau?",
+    "ru": "Какова примерная длина Тимока от Заечара до Дуная?"
+  },
+  "Od sastava Belog i Crnog Timoka do Dunava.": {
+    "en": "From the confluence of the White and Black Timok to the Danube.",
+    "de": "Vom Zusammenfluss des Weißen und Schwarzen Timok bis zur Donau.",
+    "ru": "От слияния Белого и Чёрного Тимока до Дуная."
+  },
+  "U kojoj oblasti Srbije je deo toka prikazan na mapi?": {
+    "en": "In which region of Serbia is the stretch shown on the map?",
+    "de": "In welcher Region Serbiens liegt der auf der Karte gezeigte Abschnitt?",
+    "ru": "В каком регионе Сербии находится показанный на карте участок?"
+  },
+  "Položaj prikazanog toka reke „{name}“: {answer}.": {
+    "en": "Location of the stretch of “{name}” shown: {answer}.",
+    "de": "Lage des gezeigten Abschnitts des Flusses „{name}“: {answer}.",
+    "ru": "Расположение показанного участка реки «{name}»: {answer}."
+  },
+  "istočni položaj": {
+    "en": "eastern location",
+    "de": "östliche Lage",
+    "ru": "восточная точка"
+  },
+  "zapadni položaj": {
+    "en": "western location",
+    "de": "westliche Lage",
+    "ru": "западная точка"
+  },
+  "jugozapadni položaj": {
+    "en": "southwestern location",
+    "de": "südwestliche Lage",
+    "ru": "юго-западная точка"
+  },
+  "severoistočni položaj": {
+    "en": "northeastern location",
+    "de": "nordöstliche Lage",
+    "ru": "северо-восточная точка"
   }
 }
 SND_V42_LANGUAGES
