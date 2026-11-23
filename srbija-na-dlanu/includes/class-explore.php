@@ -11,6 +11,10 @@ final class SND_Explore {
         static $mountains = null;
         if ($mountains === null) {
             $mountains = json_decode(file_get_contents(SND_DIR . 'data/mountains-book.json'), true) ?: array();
+            foreach ($mountains as &$mountain) {
+                $mountain += array('district_id'=>'','district_name'=>$mountain['region']??'','peak_scope'=>'','photo'=>array(),'labels'=>array());
+            }
+            unset($mountain);
         }
         return $mountains;
     }
@@ -102,7 +106,8 @@ final class SND_Explore {
     }
     public static function orientation($t,$pool,$seed){
         $others=array_filter($pool,function($v)use($t){return $v['id']!==$t['id'] && SND_Game::distance($t['center'],$v['center'])>10;});$order=SND_Game::ordered($others,$seed);$anchor=$order[0];$direction=SND_Game::direction($t['center'],$anchor['center']);
-        return self::choice('direction','U kom smeru je mesto „{anchor}“ u odnosu na označeni položaj?',ucfirst($direction['name']),array('Sever','Severoistok','Istok','Jugoistok','Jug','Jugozapad','Zapad','Severozapad'),$seed,'Od označenog položaja ka mestu {anchor}: {answer}.',array('anchor'=>$anchor['name']),$t['source']);
+        $mountain=$t['kind']==='mountain';$anchor_name=$anchor['name'];if($mountain && !empty($anchor['display_name'])){$anchor_name.=' · '.$anchor['peak'];}
+        return self::choice('direction',$mountain?'U kom smeru je planina „{anchor}“ u odnosu na označeni vrh?':'U kom smeru je mesto „{anchor}“ u odnosu na označeni položaj?',ucfirst($direction['name']),array('Sever','Severoistok','Istok','Jugoistok','Jug','Jugozapad','Zapad','Severozapad'),$seed,$mountain?'Od označenog vrha ka planini {anchor}: {answer}.':'Od označenog položaja ka mestu {anchor}: {answer}.',array('anchor'=>$anchor_name),$t['source']);
     }
     public static function photo_question($t,$pool,$seed){
         $others=array_filter($pool,function($x)use($t){return $x['id']!==$t['id'] && !empty($x['photo']['image']) && $x['photo']['image']!==$t['photo']['image'];});$used=array_merge(array($t),array_slice(SND_Game::ordered($others,$seed),0,3));$used=SND_Game::ordered($used,$seed.':options');$options=array();$attribution=array();$letters=array('A','B','C','D');$correct='';

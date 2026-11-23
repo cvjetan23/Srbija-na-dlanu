@@ -53,6 +53,12 @@ Kod: GPL-2.0-or-later. Geografija/fotografije: SOURCES.md i DATA-LICENSE.md. Zas
 
 == Changelog ==
 
+= 4.2.8 =
+* Katalog planina iz knjige: 197 referentnih položaja, devet novih unosa i sačuvanih 188 ranijih identifikatora.
+* Svih 197 je u dnevnom fondu: 52 sa licenciranim fotografijama, 145 sa geografskim pitanjem o smeru.
+* Stranice izvora u detaljima, prevedeni regioni i ispravna polja novih zapisa.
+* Današnji zamrznuti izazovi, započete partije i rangiranje ostaju sačuvani.
+
 = 4.2.7 =
 * Mobilni meni se otvara preko stranice bez pomeranja sadržaja; duži panel se skroluje zasebno.
 * Veće srednje ilustracije u pravilima, uz usklađenu debljinu linija.
