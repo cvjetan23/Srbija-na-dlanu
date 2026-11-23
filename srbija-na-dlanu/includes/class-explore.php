@@ -166,7 +166,7 @@ final class SND_Explore {
     }
     public static function orientation($t,$pool,$seed){
         $others=array_filter($pool,function($v)use($t){return $v['id']!==$t['id'] && SND_Game::distance($t['center'],$v['center'])>10;});$order=SND_Game::ordered($others,$seed);$anchor=$order[0];$direction=SND_Game::direction($t['center'],$anchor['center']);
-        $mountain=$t['kind']==='mountain';$anchor_name=$mountain?self::display_name($anchor):$anchor['name'];
+        $mountain=$t['kind']==='mountain';$anchor_name=self::display_name($anchor);
         return self::choice('direction',$mountain?'U kom smeru je planina „{anchor}“ u odnosu na označeni vrh?':'U kom smeru je mesto „{anchor}“ u odnosu na označeni položaj?',ucfirst($direction['name']),array('Sever','Severoistok','Istok','Jugoistok','Jug','Jugozapad','Zapad','Severozapad'),$seed,$mountain?'Od označenog vrha ka planini {anchor}: {answer}.':'Od označenog položaja ka mestu {anchor}: {answer}.',array('anchor'=>$anchor_name),$t['source']);
     }
     public static function photo_question($t,$pool,$seed){
