@@ -121,7 +121,11 @@ final class SND_I18n {
             'population'=>self::number($target['population']??0),'answer'=>$correct);
         $type=$q['type'];$meta=$q['i18n_data']??array();
         if($type==='population'){
-            $q['title']=self::t('Koliko približno stanovnika ima cela teritorija?');
+            $q['title']=self::t($target['kind']==='municipality'
+                ? 'Koliko približno stanovnika ima ova opština?'
+                : ($target['id']==='rs-00'
+                    ? 'Koliko približno stanovnika ima administrativno područje Beograda?'
+                    : 'Koliko približno stanovnika ima ovaj okrug?'));
             unset($q['subtitle']);
             $q['explanation']=self::t('Prema popisu iz {year}. godine, teritorija ima {population} stanovnika.',$vars);
         }elseif($type==='orientation'){

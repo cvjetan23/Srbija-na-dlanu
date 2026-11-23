@@ -124,6 +124,7 @@ final class SND_Explore {
             $rivers=self::targets('river');
             $mouth_title='Gde se neposredno uliva ova reka?';
             $mouth_explanation='Ušće reke „{name}“: {answer}.';
+            $mouth_options=array_column($rivers,'mouth');
             $vars=array('name'=>$t['name']);
             if(!empty($t['confluence_partner'])){
                 $mouth_title='Koja reka nastaje kada se ovaj tok spoji sa rekom „{partner}“?';
@@ -132,11 +133,12 @@ final class SND_Explore {
             }elseif(!empty($t['branching'])){
                 $mouth_title='Koje dve reke primaju krakove ove reke?';
                 $mouth_explanation='Krakovi reke „{name}“ ulivaju se u dve reke. To su {answer}.';
+                $mouth_options=array('Lepenac i Beli Drim','Sitnica i Binačka Morava','Beli Drim i Ibar');
             }elseif(!empty($t['forms_river'])){
                 $mouth_title='Koja reka nastaje na ovom sastavu?';
                 $mouth_explanation='Reka „{name}“ jedna je od sastavnica reke „{answer}“.';
             }
-            $q[]=self::choice('mouth',$mouth_title,$t['mouth'],array_column($rivers,'mouth'),$seed.':mouth',$mouth_explanation,$vars,($t['mouth_source']??'')?:$source);
+            $q[]=self::choice('mouth',$mouth_title,$t['mouth'],$mouth_options,$seed.':mouth',$mouth_explanation,$vars,($t['mouth_source']??'')?:$source);
             $seas=array('Crno more','Jadransko more','Egejsko more','Baltičko more');
             if(!empty($t['branching'])){
                 $seas=array('Crno more i Jadransko more','Jadransko more i Egejsko more','Crno more i Baltičko more');
@@ -203,6 +205,9 @@ final class SND_Explore {
                 break;
             case 'explore_peak':
                 $explanation='Referentni vrh planine „{name}“ je „{answer}“. {scope}';
+                break;
+            case 'explore_height':
+                $title='Kolika je približna visina referentnog vrha ove planine?';
                 break;
             case 'explore_region':
                 if($t['kind']==='mountain'){

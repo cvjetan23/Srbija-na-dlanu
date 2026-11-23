@@ -523,6 +523,46 @@ return json_decode(<<<'SND_V42_LANGUAGES'
     "en": "northeastern location",
     "de": "nordöstliche Lage",
     "ru": "северо-восточная точка"
+  },
+  "Kolika je približna visina referentnog vrha ove planine?": {
+    "en": "What is the approximate elevation of this mountain’s reference peak?",
+    "de": "Wie hoch ist der Referenzgipfel dieses Berges ungefähr?",
+    "ru": "Какова примерная высота опорной вершины этой горы?"
+  },
+  "Koliko približno stanovnika ima ova opština?": {
+    "en": "What is the approximate population of this municipality?",
+    "de": "Wie viele Einwohner hat diese Gemeinde ungefähr?",
+    "ru": "Сколько примерно жителей в этой общине?"
+  },
+  "Koliko približno stanovnika ima ovaj okrug?": {
+    "en": "What is the approximate population of this district?",
+    "de": "Wie viele Einwohner hat dieser Bezirk ungefähr?",
+    "ru": "Сколько примерно жителей в этом округе?"
+  },
+  "Koliko približno stanovnika ima administrativno područje Beograda?": {
+    "en": "What is the approximate population of the administrative area of Belgrade?",
+    "de": "Wie viele Einwohner hat das Verwaltungsgebiet von Belgrad ungefähr?",
+    "ru": "Сколько примерно жителей на административной территории Белграда?"
+  },
+  "Lepenac i Sitnica": {
+    "en": "Lepenac and Sitnica",
+    "de": "Lepenac und Sitnica",
+    "ru": "Лепенац и Ситница"
+  },
+  "Lepenac i Beli Drim": {
+    "en": "Lepenac and White Drin",
+    "de": "Lepenac und Weißer Drin",
+    "ru": "Лепенац и Белый Дрин"
+  },
+  "Sitnica i Binačka Morava": {
+    "en": "Sitnica and Binačka Morava",
+    "de": "Sitnica und Binačka Morava",
+    "ru": "Ситница и Биначка-Морава"
+  },
+  "Beli Drim i Ibar": {
+    "en": "White Drin and Ibar",
+    "de": "Weißer Drin und Ibar",
+    "ru": "Белый Дрин и Ибар"
   }
 }
 SND_V42_LANGUAGES
