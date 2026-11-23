@@ -25,7 +25,9 @@ try{
  SND_I18n::force('sr');
  $cities=SND_Explore::pool('city');
  $reference=$cities['city-2252596334'];
+ SND_I18n::force('ru');
  $direction=SND_Explore::orientation($cities['city-60352987'],array($reference),'namesake-reference');
+ SND_I18n::force('sr');
  ex_ok(strpos(SND_I18n::question($direction,$cities['city-60352987'])['title'],'Lazarevac · Toplički okrug')!==false,'Directions distinguish same-name settlements');
  foreach(array('a','b') as $letter){$id=wp_insert_user(array('user_login'=>'snd-explore-'.$letter.'-'.bin2hex(random_bytes(5)),'user_pass'=>bin2hex(random_bytes(20)),'user_email'=>bin2hex(random_bytes(8)).'@example.invalid','role'=>'subscriber'));ex_ok(!is_wp_error($id),'Test account');$users[]=$id;}
  wp_set_current_user($users[0]);$sum=0;

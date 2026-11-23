@@ -166,7 +166,7 @@ final class SND_Explore {
     }
     public static function orientation($t,$pool,$seed){
         $others=array_filter($pool,function($v)use($t){return $v['id']!==$t['id'] && SND_Game::distance($t['center'],$v['center'])>10;});$order=SND_Game::ordered($others,$seed);$anchor=$order[0];$direction=SND_Game::direction($t['center'],$anchor['center']);
-        $mountain=$t['kind']==='mountain';$anchor_name=self::display_name($anchor);
+        $mountain=$t['kind']==='mountain';$anchor_name=self::display_name($anchor,'sr');
         return self::choice('direction',$mountain?'U kom smeru je planina „{anchor}“ u odnosu na označeni vrh?':'U kom smeru je mesto „{anchor}“ u odnosu na označeni položaj?',ucfirst($direction['name']),array('Sever','Severoistok','Istok','Jugoistok','Jug','Jugozapad','Zapad','Severozapad'),$seed,$mountain?'Od označenog vrha ka planini {anchor}: {answer}.':'Od označenog položaja ka mestu {anchor}: {answer}.',array('anchor'=>$anchor_name),$t['source']);
     }
     public static function photo_question($t,$pool,$seed){
@@ -243,9 +243,9 @@ final class SND_Explore {
         }unset($o);$vars['answer']=$answer;$q['title']=SND_I18n::t($title,$vars);$q['explanation']=trim(SND_I18n::t($explanation,$vars));if(!empty($q['attribution'])){foreach($q['attribution'] as &$credit){$credit['label']=SND_I18n::text($credit['label']);}unset($credit);}
         unset($q['vars'],$q['title_key'],$q['explanation_key'],$q['approximate']);return $q;
     }
-    public static function name($t){return $t['labels'][SND_I18n::lang()]??$t['name'];}
-    public static function display_name($t){
-        $name=self::name($t);
+    public static function name($t,$lang=null){return $t['labels'][$lang?:SND_I18n::lang()]??$t['name'];}
+    public static function display_name($t,$lang=null){
+        $name=self::name($t,$lang);
         if(empty($t['display_name'])){return $name;}
         // Use the relative position for same-name mountains so the label does not give away the peak.
         $positions=array(
@@ -253,7 +253,7 @@ final class SND_Explore {
             'mountain-6-28'=>'jugozapadni položaj', 'mountain-book-189'=>'severoistočni položaj',
             'mountain-8-12'=>'istočni položaj', 'mountain-book-197'=>'zapadni položaj',
         );
-        return $name.' · '.SND_I18n::t($positions[$t['id']]??($t['district_name']??''));
+        return $name.' · '.SND_I18n::t($positions[$t['id']]??($t['district_name']??''),array(),$lang);
     }
     public static function map_state($s){
         $t=$s['challenge']['target'];$out=array('kind'=>$t['kind'],'target'=>array('point'=>$t['point'],'path'=>$t['map_path']),'attempts'=>array());
