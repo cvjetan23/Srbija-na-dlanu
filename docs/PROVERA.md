@@ -1,3 +1,18 @@
+# Provera verzije 4.2.8
+
+**Postavljeno i provereno na produkciji 23. novembra 2026.** [Paket planina](https://github.com/cvjetan23/Srbija-na-dlanu/pull/1) spojen je posle [završnog CI-ja](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/45131206398): **68.748 WordPress, 141 JavaScript i 1.331 Chromium tvrdnji**.
+
+- 197 referentnih položaja iz 201 reda knjiškog kataloga; četiri ponovljena položaja čuvaju objedinjene stranice. Svih 188 ranijih identifikatora i naziva/alternativnih naziva je sačuvano, uz devet novih zapisa. Ovo nije tvrdnja da svaki knjiški položaj predstavlja geografski zaseban masiv.
+- Svih 197 je u podrazumevanom dnevnom fondu. 52 koriste postojeće licencirane fotografije, a 145 pitanje o smeru prema drugoj planini. Preostala pitanja pokrivaju vrh, visinu i region. Pinovi odgovaraju objavljenim koordinatama; nova i istoimena mesta imaju upotrebljive podatke i odrednice.
+- Posebne provere pokrivaju sve detalje bez PHP upozorenja, stranice izvora, uvoz/izvoz, očuvanje zamrznutog starog zadatka i 94 poena sa ranijim promašajem, te obe nove varijante kroz stvarne zahteve za 100 poena. Prevedeni su novi regioni i objašnjenja.
+- Izvor `3fd2e2927e9754f186793cf0041b395e62b5b26c`, paket `3137fa02cdf0d1869a1cca9e4dba4ae2f505e827`, spajanje `f741ad3fa727db0661311aac493fbf9b6dcdc704`. Svih 218 datoteka provereno po Git blob SHA i veličini. ZIP: **30.935.515 bajtova, 483 datoteke**, SHA256 `3d367e0fc185a0bf53edc5b6d1b3de702f6a81f2dd316185505cd74a739fe032`. Arhiv originalne Git grane je prethodno proveren u svih 216 datoteka; prvobitni instalacioni ZIP još je bio 4.2.7, pa je izgrađen novi paket.
+- Produkcija: **1116 javnih HTTP i 78 Chromium tvrdnji**, uključujući svih 197 objavljenih naziva/vrhova/visina, devet novih detalja, stvarni nastavak pre-ažuriranja, po jednu završenu foto i geografsku partiju, uvećanje, četiri jezika i obe teme na telefonu. Stara anonimna partija zadržala je pokušaj, geometriju, katalog i konačnih 94 poena; nove varijante daju 100. Provera ne upisuje bodove stvarnog naloga ili javne liste.
+- Sedam administratorskih prikaza radi; podešavanja, paleta, četiri runde, šest pokušaja i 60/6/10 su očuvani. Nativni izvozi pre/posle potvrđuju nepromenjene zapise naselja i reka. Današnji već zamrznuti zadaci nisu resetovani. Sesija za održavanje je odjavljena i zatvorena.
+
+Fizički uređaj i dostava e-pošte nisu deo testa. Broj tvrdnji nije broj nezavisnih scenarija. [Pravila](NOVE-IGRE.md) · [Izvori](../srbija-na-dlanu/EXPLORE-SOURCES.md) · [Produkcijska evidencija](LIVE-CHECK.md)
+
+---
+
 # Provera verzije 4.2.7
 
 **Postavljeno i provereno na produkciji 18. novembra 2026.** [Završni CI](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/44317900672) prolazi **58.641 WordPress, 141 JavaScript i 1.262 Chromium tvrdnji**.

@@ -1,3 +1,17 @@
+# Produkcijska provera 4.2.8 — 23. novembar 2026.
+
+[Izmena planinskog kataloga](https://github.com/cvjetan23/Srbija-na-dlanu/pull/1) je spojena i postavljena nativnim WordPress installerom. Aktivan dodatak i javni API potvrđuju 4.2.8. Paket `3137fa02cdf0d1869a1cca9e4dba4ae2f505e827`, spajanje `f741ad3fa727db0661311aac493fbf9b6dcdc704`; **30.935.515 bajtova, 483 datoteke**, SHA256 `3d367e0fc185a0bf53edc5b6d1b3de702f6a81f2dd316185505cd74a739fe032`. Svih 218 datoteka repozitorijuma odgovara lokalnom manifestu i testiranom paketu.
+
+[CI](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/45131206398) prolazi **68.748 WP, 141 JS i 1.331 Chromium tvrdnji**. Na stvarnom sajtu prošlo je **1116 HTTP i 78 Chromium tvrdnji**: tačne CSS/JS datoteke, 40 pogleda u četiri jezika, sva 197 referentna položaja sa vrhovima/visinama u tabeli i na mapi, devet novih detalja sa stranicama knjige, uvećanje fotografija, oba toka pitanja i mobilni prikaz u obe teme. Katalog je 197 knjiških zapisa iz 201 reda sa četiri objedinjena ponavljanja; 52 fotografije i 145 geografskih završnih pitanja. Svih 188 ranijih identifikatora ostaje dostupno.
+
+Pre instalacije sačuvana je jedna anonimna partija vežbanja sa promašajem. Posle instalacije isti token nastavlja isti pokušaj, koordinate i zamrznuti katalog od 188 zapisa; završetak daje 94 poena. Nove partije koriste 197 zapisa i obe isprobane varijante daju po 100. Gostujuće probe ne upisuju poene naloga ili rang liste. Dnevni zadaci koji su već zamrznuti nisu obrisani ili izmenjeni; proširen fond učestvuje u novim izborima.
+
+Nativni administratorski izvoz pre ažuriranja odgovarao je prethodnim isporučenim podacima, bez ručnih izmena. Izvoz posle potvrđuje novu planinsku verziju i nepromenjene zapise ostalih geografskih igara. Svih sedam administratorskih prikaza je zdravo. Paleta, pokušaji, runde population/administration/flag/landmark i težine 60/6/10 ostali su isti. Administratorska sesija je odjavljena i zatvorena. Fizički uređaj i isporuka e-pošte nisu provereni; broj tvrdnji nije broj nezavisnih scenarija.
+
+[Pravila](NOVE-IGRE.md) · [Poreklo podataka](../srbija-na-dlanu/EXPLORE-SOURCES.md)
+
+---
+
 # Produkcijska provera 4.2.7 — 18. novembar 2026.
 
 Nativni WordPress installer potvrdio je uspešno ažuriranje i aktivan dodatak 4.2.7. Instaliran je provereni paket `e36bc99bbeffc0b0c961aa96d8514c0162e268eb`: **30.919.624 bajtova, 482 datoteke**, SHA256 `f25b48c0713049307a0d8ac6b79a2ad4a820e55054bf0ed57a8eebd31cc8cb56`. Svih 215 datoteka repozitorijuma odgovara manifestu. [CI](https://github.com/cvjetan23/Srbija-na-dlanu/actions/runs/44317900672): 58.641 WP, 141 JS i 1.262 Chromium tvrdnji.
