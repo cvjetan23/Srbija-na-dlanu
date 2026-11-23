@@ -46,6 +46,7 @@ async function run(){
  let markup=a.quizPanel();check((markup.match(/<img /g)||[]).length===4,'Flag question renders four images');
  check(markup.includes('snd-flag-option')&&markup.includes('snd-flag-options'),'Flag options use grid classes');
  check(!markup.includes('is-correct')&&!markup.includes('Autori i licence'),'Unanswered question does not reveal correct choice');
+ check(markup.includes('aria-label="Zastava A"')&&!markup.includes('>Zastava A<'),'Flag names are available to assistive tech only');
  a.state.question={...a.state.question,correct:'b',explanation:'Zastava Beograda.',source:'https://example.test/source',answer:{choice:'a',correct:false},credits:[{label:'Zastava B',credit:'Autor',license:'CC BY-SA 4.0',source:'https://example.test/source'}]};
  markup=a.quizPanel();check((markup.match(/disabled/g)||[]).length===4&&markup.includes('is-correct')&&markup.includes('is-wrong'),'Answered flags locked and correct/wrong choices marked');
  check(markup.includes('Autori i licence')&&markup.includes('Autor'),'Attribution appears after answer');

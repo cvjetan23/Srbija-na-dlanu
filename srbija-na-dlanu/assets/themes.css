@@ -15,9 +15,9 @@ html[data-snd-theme=dark] .snd-app .snd-game{color-scheme:dark}
 .snd-app .snd-home-library,.snd-app .snd-detail-note,.snd-app .snd-auth-notice{background:var(--snd-soft);color:var(--snd-text);border-color:var(--snd-border)}
 .snd-app input:not([type=checkbox]),.snd-app select,.snd-app textarea{background:var(--snd-surface);color:var(--snd-text);border-color:var(--snd-control-border)}
 .snd-app input::placeholder{color:var(--snd-secondary)!important;opacity:1}
-.snd-app .snd-game .snd-option,.snd-app .snd-game .snd-secondary,.snd-app .snd-game .snd-history li,.snd-app .snd-game .snd-suggestions,.snd-app .snd-game .snd-modal,.snd-app .snd-game .snd-explanation,.snd-app .snd-game .snd-hint,.snd-app .snd-game .snd-notice,.snd-app .snd-game .snd-media-error,.snd-app .snd-game .snd-flag-card{background:var(--snd-surface);color:var(--snd-text);border-color:var(--snd-border)}
+.snd-app .snd-game .snd-option,.snd-app .snd-game .snd-secondary,.snd-app .snd-game .snd-history li,.snd-app .snd-game .snd-suggestions,.snd-app .snd-game .snd-modal,.snd-app .snd-game .snd-hint,.snd-app .snd-game .snd-notice,.snd-app .snd-game .snd-media-error,.snd-app .snd-game .snd-flag-card{background:var(--snd-surface);color:var(--snd-text);border-color:var(--snd-border)}
 .snd-app .snd-game .snd-option:hover:not(:disabled),.snd-app .snd-game .snd-suggestions>[role=option]:hover,.snd-app .snd-game .snd-suggestions>[aria-selected=true]{background:var(--snd-soft);border-color:var(--snd-accent)}
-.snd-app .snd-game .snd-option.is-correct,.snd-app .snd-game .snd-history .is-correct,.snd-app .snd-game .snd-explanation.is-correct,.snd-app .snd-game .snd-flag-card.is-correct{background:var(--snd-surface);color:var(--snd-text);border:2px solid var(--snd-correct)}
+.snd-app .snd-game .snd-option.is-correct,.snd-app .snd-game .snd-history .is-correct,.snd-app .snd-game .snd-flag-card.is-correct{background:var(--snd-surface);color:var(--snd-text);border:2px solid var(--snd-correct)}
 .snd-app .snd-game .snd-option.is-wrong,.snd-app .snd-game .snd-flag-card.is-wrong{background:var(--snd-surface);color:var(--snd-text);border-color:var(--snd-secondary)}
 .snd-app .snd-game .snd-answer-badge.is-correct{background:transparent;color:var(--snd-direction);border:1.5px solid var(--snd-correct)}
 .snd-app .snd-game .snd-answer-badge.is-wrong{background:transparent;color:var(--snd-text);border:1px solid var(--snd-secondary)}
@@ -84,8 +84,5 @@ html[data-snd-theme=dark] .snd-app .snd-rule-number{color:var(--snd-highlight,#F
 .snd-app .snd-game .snd-option.is-wrong,.snd-app .snd-game .snd-flag-card.is-wrong{background:var(--snd-highlight,#FFD447);color:var(--snd-deep,#102a26)!important;border:2px solid var(--snd-highlight,#FFD447)}
 .snd-app .snd-game .snd-flag-card:is(.is-correct,.is-wrong) .snd-flag-option{background:transparent!important;color:inherit!important;border:0}
 .snd-app .snd-game .snd-option .snd-answer-badge{background:transparent;color:inherit;border:1.5px solid currentColor}
-.snd-app .snd-game .snd-explanation{border:1px solid var(--snd-border)}
-.snd-app .snd-game .snd-explanation.is-correct{border:1px solid var(--snd-border);border-inline-start:4px solid var(--snd-brand,#2d6a4f)}
-.snd-app .snd-game .snd-explanation.is-wrong{border-inline-start:4px solid var(--snd-highlight,#FFD447)}
 
 .snd-app .snd-game .snd-guess-form{grid-template-columns:minmax(0,1fr) max-content}

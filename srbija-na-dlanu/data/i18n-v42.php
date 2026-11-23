@@ -563,6 +563,101 @@ return json_decode(<<<'SND_V42_LANGUAGES'
     "en": "White Drin and Ibar",
     "de": "Weißer Drin und Ibar",
     "ru": "Белый Дрин и Ибар"
+  },
+  "Kako se zove vrh označen na mapi?": {
+    "en": "What is the name of the peak marked on the map?",
+    "de": "Wie heißt der auf der Karte markierte Gipfel?",
+    "ru": "Как называется вершина, отмеченная на карте?"
+  },
+  "U kojoj oblasti se nalazi označeni vrh?": {
+    "en": "Which region is the marked peak in?",
+    "de": "In welcher Region liegt der markierte Gipfel?",
+    "ru": "В каком регионе находится отмеченная вершина?"
+  },
+  "Koji je najviši vrh ove planine?": {
+    "en": "What is the highest peak of this mountain?",
+    "de": "Welcher ist der höchste Gipfel dieses Berges?",
+    "ru": "Какая вершина этой горы самая высокая?"
+  },
+  "Kolika je približna visina najvišeg vrha?": {
+    "en": "What is the approximate elevation of the highest peak?",
+    "de": "Wie hoch ist der höchste Gipfel ungefähr?",
+    "ru": "Какова примерная высота самой высокой вершины?"
+  },
+  "U kojoj oblasti se nalazi najviši vrh ove planine?": {
+    "en": "Which region is the highest peak of this mountain in?",
+    "de": "In welcher Region liegt der höchste Gipfel dieses Berges?",
+    "ru": "В каком регионе находится высшая вершина этой горы?"
+  },
+  "Koji je najviši vrh ove planine u Srbiji?": {
+    "en": "What is this mountain’s highest peak in Serbia?",
+    "de": "Welcher Gipfel dieses Berges ist in Serbien der höchste?",
+    "ru": "Какая вершина этой горы самая высокая в Сербии?"
+  },
+  "Kolika je približna visina njenog najvišeg vrha u Srbiji?": {
+    "en": "What is the approximate elevation of its highest peak in Serbia?",
+    "de": "Wie hoch ist ihr höchster Gipfel in Serbien ungefähr?",
+    "ru": "Какова примерная высота её высшей вершины в Сербии?"
+  },
+  "U kojoj oblasti je najviši vrh ove planine u Srbiji?": {
+    "en": "Which region is this mountain’s highest peak in Serbia in?",
+    "de": "In welcher Region liegt der höchste Gipfel dieses Berges in Serbien?",
+    "ru": "В каком регионе находится высшая вершина этой горы в Сербии?"
+  },
+  "Vrh planine „{name}“ iz kataloga je „{answer}“. {scope}": {
+    "en": "The listed peak of “{name}” is “{answer}”. {scope}",
+    "de": "Der aufgeführte Gipfel von „{name}“ ist „{answer}“. {scope}",
+    "ru": "В каталоге для горы «{name}» указана вершина «{answer}». {scope}"
+  },
+  "U bazi je izbor većih i poznatijih reka u Srbiji.": {
+    "en": "The database lists a selection of Serbia’s larger and better-known rivers.",
+    "de": "Die Datenbank enthält eine Auswahl größerer und bekannterer Flüsse in Serbien.",
+    "ru": "В базе собраны некоторые крупные и известные реки Сербии."
+  },
+  "Pogledaj spisak reka": {
+    "en": "Browse the river list",
+    "de": "Flussliste ansehen",
+    "ru": "Посмотреть список рек"
+  },
+  "Uvećana zastava": {
+    "en": "Enlarged flag",
+    "de": "Vergrößerte Flagge",
+    "ru": "Увеличенный флаг"
+  },
+  "Pin označava položaj vrha planine.": {
+    "en": "The pin marks the location of the mountain peak.",
+    "de": "Der Pin markiert die Lage des Berggipfels.",
+    "ru": "Метка показывает расположение вершины горы."
+  },
+  "Vrh": {
+    "en": "Peak",
+    "de": "Gipfel",
+    "ru": "Вершина"
+  },
+  "Prominencija": {
+    "en": "Topographic prominence",
+    "de": "Schartenhöhe",
+    "ru": "Относительная высота"
+  },
+  "Koordinate vrha": {
+    "en": "Peak coordinates",
+    "de": "Gipfelkoordinaten",
+    "ru": "Координаты вершины"
+  },
+  "Strane tabele": {
+    "en": "Table pages",
+    "de": "Tabellenseiten",
+    "ru": "Страницы таблицы"
+  },
+  "Oblast u knjizi": {
+    "en": "Region in the book",
+    "de": "Region im Buch",
+    "ru": "Регион в книге"
+  },
+  "Podoblast u knjizi": {
+    "en": "Subregion in the book",
+    "de": "Teilregion im Buch",
+    "ru": "Подрегион в книге"
   }
 }
 SND_V42_LANGUAGES

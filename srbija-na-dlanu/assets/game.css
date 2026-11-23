@@ -81,10 +81,6 @@ body:not(.snd-app-body) .snd-game{--snd-brand:#2d6a4f;--snd-accent:#2d6a4f;--snd
 .snd-game .snd-option.is-correct{background:var(--snd-soft);border-color:var(--snd-accent);color:var(--snd-text)}
 .snd-game .snd-option.is-wrong{background:var(--snd-surface,#fff);border-color:var(--snd-secondary);color:var(--snd-text)}
 .snd-game .snd-option.is-muted{opacity:1;color:var(--snd-secondary)}
-.snd-game .snd-explanation{margin:12px 0 16px;padding:12px 14px;border-radius:4px;background:var(--snd-soft);text-align:left;font-size:13px;line-height:1.6;color:var(--snd-secondary)}
-.snd-game .snd-explanation.is-correct{background:var(--snd-soft);color:var(--snd-secondary)}
-.snd-game .snd-explanation strong{font-size:13px;font-weight:600}
-.snd-game .snd-explanation p{margin-top:4px;font-size:13px;line-height:1.65}
 .snd-game .snd-source{display:inline-block;color:var(--snd-secondary);font-size:11px;text-decoration:underline;text-underline-offset:3px;margin-top:6px;overflow-wrap:anywhere}
 .snd-game .snd-score-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0 12px}
 .snd-game .snd-score-grid>div{border:1px solid var(--snd-line);border-radius:5px;padding:12px}
@@ -178,6 +174,9 @@ body:not(.snd-app-body) .snd-game{--snd-brand:#2d6a4f;--snd-accent:#2d6a4f;--snd
 .snd-app .snd-game .snd-flag-option .snd-option-label{font-size:16px}
 @media(max-width:560px){.snd-game .snd-flag-zoom{top:14px;right:14px}.snd-app .snd-game .snd-flag-card .snd-flag-option{padding:9px 9px 8px;min-height:135px}}
 
+.snd-game .snd-flag-card .snd-image-only{justify-content:center;flex:1;padding-bottom:12px}
+.snd-game .snd-flag-card .snd-image-only .snd-option-label{min-height:25px}
+.snd-game .snd-suggestion-location{display:block;font-size:.8em;color:var(--snd-secondary)}
 .snd-game .snd-panel{scroll-margin-top:12px}
 .snd-game .snd-help-scoring{margin-top:20px}
 .snd-game .snd-help-scoring h3{font-size:1rem;margin:0 0 8px}
@@ -189,7 +188,7 @@ body:not(.snd-app-body) .snd-game{--snd-brand:#2d6a4f;--snd-accent:#2d6a4f;--snd
  .snd-game .snd-quiz-continue{
   position:fixed;inset:auto 0 0;z-index:45;box-sizing:border-box;
   padding:8px max(16px,env(safe-area-inset-right)) calc(8px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left));
-  background:var(--snd-bg,var(--snd-surface,#fff));box-shadow:0 -6px 20px rgba(0,0,0,.1)
+  background:var(--snd-surface,#fff);box-shadow:0 -6px 20px rgba(0,0,0,.14)
  }
  .snd-game .snd-quiz-continue [data-cmd=next]{display:flex;justify-content:center;width:100%;max-width:540px;min-height:44px;margin:0 auto}
 }

@@ -1,4 +1,4 @@
-# Srbija na dlanu 4.2.9
+# Srbija na dlanu 4.2.10
 
 Zasebna geografska aplikacija unutar WordPress-a: pet dnevnih igara, baza znanja i nalozi igrača. Sveden prikaz: slika gore, pitanje i odgovori ispod, sa većim slovima.
 
@@ -30,6 +30,11 @@ Zasebna geografska aplikacija unutar WordPress-a: pet dnevnih igara, baza znanja
 Ove stranice imaju svoj kompas, meni, zaglavlje i podnožje, bez zaglavlja i podnožja aktivne teme. Ostali deo sajta zadržava postojeći izgled. Postojeći Elementor podaci početne stranice se ne brišu. Dodatak ne menja globalnu početnu stranicu WordPress-a.
 
 Shortcode `[srbija_na_dlanu]` i dalje radi na drugim WP stranicama; tu se zadržava njihova tema. Za određenu igru koristi `[srbija_na_dlanu kind="district"]` ili `kind="municipality"`, `kind="city"`, `kind="river"`, `kind="mountain"`.
+
+## Novo u 4.2.10
+
+- Podaci iz tabele planinskih vrhova i jasnija pitanja o vrhu, visini i oblasti.
+- Jednostavniji prikaz zastava i odgovora, puna podloga trake za nastavak na telefonu i kraći nazivi reka.
 
 ## Novo u 4.2.9
 

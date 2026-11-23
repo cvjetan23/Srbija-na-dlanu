@@ -31,7 +31,7 @@ async function choose(p,name){const input=p.locator('.snd-guess-form input');awa
    const points=await p.locator('[data-map-attempt]').evaluateAll(nodes=>nodes.map(n=>{const b=n.getBoundingClientRect();return{x:b.x+b.width/2,y:b.y+b.height/2};}));check(points.every((a,i)=>points.slice(i+1).every(b=>Math.hypot(a.x-b.x,a.y-b.y)>15)),'Map numbers remain distinct '+theme);await shot(p,'numbered-map-'+theme);
    await p.locator('[data-cmd=next]').click();await stable(p);
    for(let i=0;i<4;i++){
-    await p.locator('[data-choice]').first().click();await p.locator('.snd-explanation').waitFor();await stable(p);check(await p.locator('.snd-board').evaluate(n=>getComputedStyle(n).opacity)==='1','No lightening after quiz answer '+i+' '+theme);await p.locator('[data-cmd=next]').click();await stable(p);
+    await p.locator('[data-choice]').first().click();await p.locator('.snd-quiz-status').waitFor({state:'attached'});await stable(p);check(await p.locator('.snd-board').evaluate(n=>getComputedStyle(n).opacity)==='1','No lightening after quiz answer '+i+' '+theme);await p.locator('[data-cmd=next]').click();await stable(p);
    }
    await p.locator('[data-cmd=share]').waitFor();check(await p.locator('.snd-result-map').getAttribute('open')===null,'Result starts without the map '+theme);await p.locator('.snd-result-map summary').click();check(await p.locator('[data-map-attempt]').count()===4,'Map attempt numbers are available on final result '+theme);await context.close();
   }

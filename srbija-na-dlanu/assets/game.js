@@ -245,7 +245,7 @@
     }
     exploreVisual() {
       const s=this.state,m=s.explore_map,revealed=s.stage!=='guess';
-      return `<div class="snd-visual snd-explore-visual ${s.stage==='quiz'?'snd-explore-small':''}"><div class="snd-explore-map-wrap">${this.exploreSvg()}<button type="button" class="snd-map-zoom" data-cmd="zoommap" aria-label="Uvećaj mapu" title="Uvećaj mapu">${icon('zoom')}</button></div>${revealed?`<aside class="snd-target-answer"><span>Zadati odgovor</span><strong>${esc(s.territory.name)}</strong></aside>`:'<p class="snd-map-instruction">'+esc(L.text(m.kind==='river'?'Prepoznaj istaknuti tok. Severno je gore.':m.kind==='mountain'?'Pin označava referentni vrh planine.':'Pin označava položaj naselja. Severno je gore.'))+'</p>'}${m.attempts.length?`<ol class="snd-map-caption">${m.attempts.map(a=>`<li class="${a.correct?'snd-legend-target':'snd-legend-last'}"><span class="snd-map-number">${a.number}</span>${esc(a.name)}</li>`).join('')}</ol>`:''}</div>`;
+      return `<div class="snd-visual snd-explore-visual ${s.stage==='quiz'?'snd-explore-small':''}"><div class="snd-explore-map-wrap">${this.exploreSvg()}<button type="button" class="snd-map-zoom" data-cmd="zoommap" aria-label="Uvećaj mapu" title="Uvećaj mapu">${icon('zoom')}</button></div>${revealed?`<aside class="snd-target-answer"><span>Zadati odgovor</span><strong>${esc(s.territory.name)}</strong></aside>`:'<p class="snd-map-instruction">'+esc(L.text(m.kind==='river'?'Prepoznaj istaknuti tok. Severno je gore.':m.kind==='mountain'?'Pin označava položaj vrha planine.':'Pin označava položaj naselja. Severno je gore.'))+'</p>'}${m.attempts.length?`<ol class="snd-map-caption">${m.attempts.map(a=>`<li class="${a.correct?'snd-legend-target':'snd-legend-last'}"><span class="snd-map-number">${a.number}</span>${esc(a.name)}</li>`).join('')}</ol>`:''}</div>`;
     }
     photoCredits(q) {
       const unlocked=q.answer || q.source_help_used;
@@ -290,13 +290,18 @@
     questionOption(q,o,a) {
       const status=a?o.id===q.correct?'is-correct':o.id===a.choice?'is-wrong':'is-muted':'',flag=q.type==='flag' || q.type==='explore_photo';
       const badge=a && (o.id===q.correct || o.id===a.choice)?`<span class="snd-answer-badge ${o.id===q.correct?'is-correct':'is-wrong'}" role="img" aria-label="${o.id===q.correct?'Tačan odgovor':'Netačan odgovor'}">${icon(o.id===q.correct?'correct':'wrong')}</span>`:'';
-      const choice=`<button class="snd-option ${flag?'snd-flag-option':''} ${status}" data-choice="${esc(o.id)}" ${a || this.mediaFailed?'disabled':''}>${o.image?`<img class="snd-media-img" src="${this.mediaUrl(o.image)}" alt="" loading="eager">`:''}<span class="snd-option-label"><span>${esc(o.label)}</span>${badge}</span></button>`;
+      const imageOnly=q.type==='flag';
+      const optionLabel=imageOnly?o.label+(badge?' · '+L.text(o.id===q.correct?'Tačan odgovor':'Netačan odgovor'):''):'';
+      const caption=`<span class="snd-option-label">${imageOnly?'':`<span>${esc(o.label)}</span>`}${badge}</span>`;
+      const choice=`<button class="snd-option ${flag?'snd-flag-option':''} ${imageOnly?'snd-image-only':''} ${status}" data-choice="${esc(o.id)}" ${imageOnly?'aria-label="'+esc(optionLabel)+'"':''} ${a || this.mediaFailed?'disabled':''}>${o.image?`<img class="snd-media-img" src="${this.mediaUrl(o.image)}" alt="" loading="eager">`:''}${imageOnly&&!badge?'':caption}</button>`;
       return flag?`<div class="snd-flag-card ${status}">${choice}<button type="button" class="snd-flag-zoom" aria-haspopup="dialog" data-zoom="${esc(o.id)}" aria-label="${esc(L.t('Uvećaj: {label}',{label:o.label}))}" ${this.mediaFailed?'disabled':''}>${icon('zoom')}</button></div>`:choice;
     }
     zoomFlag(id) {
       const q=this.state && this.state.question;if(!q || !['flag','explore_photo'].includes(q.type))return;
       const option=q.options.find(o=>o.id===id);if(!option || !option.image)return;
-      this.modal(L.t('Uvećana slika: {label}',{label:option.label}),`<figure class="snd-flag-preview"><img src="${safeUrl(option.image)}" alt="${esc(option.label)}"><figcaption>${esc(option.label)}</figcaption></figure>`,'snd-flag-modal');
+      const flag=q.type==='flag';
+      const title=flag?L.text('Uvećana zastava'):L.t('Uvećana slika: {label}',{label:option.label});
+      this.modal(title,`<figure class="snd-flag-preview"><img src="${safeUrl(option.image)}" alt="${esc(option.label)}">${flag?'':`<figcaption>${esc(option.label)}</figcaption>`}</figure>`,'snd-flag-modal');
     }
     questionPhoto(q) {
       if (!q.image) return '';
@@ -307,8 +312,8 @@
       return `<p class="snd-round">${esc(s.territory.name)} · ${esc(L.t('Pitanje {number}/{total}', {number:s.question_index+1,total:s.question_count}))}</p><h2 class="snd-question-title">${esc(q.title)}</h2>
         ${this.questionPhoto(q)}
         <div class="snd-options ${['flag','explore_photo'].includes(q.type)?'snd-flag-options':''}">${q.options.map(o=>this.questionOption(q,o,a)).join('')}</div>
-        ${q.type==='explore_photo'&&!a?this.photoCredits(q):''}${media&&!a?`<div class="snd-media-error" role="status" ${this.mediaFailed?'':'hidden'}><p>${s.media_fallback!==false?'Slika nije mogla da se učita. Pokušaj ponovo ili otvori zamensko geografsko pitanje.':'Slika nije mogla da se učita. Pokušaj ponovo.'}</p><button data-cmd="retrymedia">Ponovo učitaj slike</button>${s.media_fallback!==false?'<button data-cmd="media_unavailable">Zamensko pitanje</button>':''}</div>`:''}
-        ${a?`<div class="snd-explanation ${a.skipped?'is-skipped':a.correct?'is-correct':'is-wrong'}" role="status"><strong>${a.skipped?'Preskočeno — tačan odgovor':a.correct?'Tačno.':'Netačno.'}</strong><p>${esc(q.explanation)}</p>${questionSources(q)}${this.credits(q)}${q.type==='explore_photo'?this.photoCredits(q):''}</div><div class="snd-quiz-continue"><button type="button" class="snd-primary" data-cmd="next">${icon('next')}<span>${s.question_index+1===s.question_count?'Vidi rezultat':'Sledeće pitanje'}</span></button></div>`:`<button class="snd-text-button" data-cmd="skip">${icon('skip')}<span>Preskoči pitanje</span></button>`}`;
+        ${q.type==='explore_photo'?this.photoCredits(q):a?this.credits(q):''}${media&&!a?`<div class="snd-media-error" role="status" ${this.mediaFailed?'':'hidden'}><p>${s.media_fallback!==false?'Slika nije mogla da se učita. Pokušaj ponovo ili otvori zamensko geografsko pitanje.':'Slika nije mogla da se učita. Pokušaj ponovo.'}</p><button data-cmd="retrymedia">Ponovo učitaj slike</button>${s.media_fallback!==false?'<button data-cmd="media_unavailable">Zamensko pitanje</button>':''}</div>`:''}
+        ${a?`<p class="snd-sr-only snd-quiz-status" role="status">${a.skipped?'Preskočeno — tačan odgovor':a.correct?'Tačno.':'Netačno.'}</p><div class="snd-quiz-continue"><button type="button" class="snd-primary" data-cmd="next">${icon('next')}<span>${s.question_index+1===s.question_count?'Vidi rezultat':'Sledeće pitanje'}</span></button></div>`:`<button class="snd-text-button" data-cmd="skip">${icon('skip')}<span>Preskoči pitanje</span></button>`}`;
     }
     credits(q) {
       return q.credits && q.credits.length ? `<details class="snd-flag-credits"><summary>Autori i licence zastava</summary>${q.credits.map(c=>`<p>${esc(c.label)}: ${esc(c.credit)} · ${esc(c.license)} ${sourceLink(c.source,'Izvor ↗')}</p>`).join('')}</details>` : '';
@@ -424,7 +429,7 @@
           matches=found.filter(t=>!guessed.has(t.id)).sort((a,b)=>rank(a)-rank(b)||a.name.localeCompare(b.name,L.config().language==='sr'?'sr-Latn':L.config().language || 'sr-Latn'));
           const alreadyTried=found.length>0 && matches.length===0;
           active = -1; input.removeAttribute('aria-activedescendant');
-          list.innerHTML = L.html(matches.length ? matches.map((t,i) => `<div role="option" id="${this.root.id}-option-${i}" aria-selected="false" data-index="${i}">${esc(t.name)}<span aria-hidden="true">${icon('enter')}</span></div>`).join('') : `<div class="snd-no-matches">${alreadyTried?'Ovu teritoriju si već pokušao/la.':'Nema rezultata. Probaj drugi naziv.'}</div>`);
+          list.innerHTML = L.html(matches.length ? matches.map((t,i) => `<div role="option" id="${this.root.id}-option-${i}" aria-selected="false" data-index="${i}"><div>${esc(t.name)}${t.location?`<small class="snd-suggestion-location">${esc(t.location)}</small>`:''}</div><span aria-hidden="true">${icon('enter')}</span></div>`).join('') : `<div class="snd-no-matches">${alreadyTried?'Ovu teritoriju si već pokušao/la.':'Nema rezultata. Probaj drugi naziv.'}</div>`);
           list.hidden = false; input.setAttribute('aria-expanded','true');
           list.querySelectorAll('[role=option]').forEach(option=>option.addEventListener('click',()=>{
             if(gesture && gesture.moved)return;choose(Number(option.dataset.index));
@@ -448,8 +453,12 @@
             const item = list.querySelector(`[data-index="${active}"]`); if (item) { input.setAttribute('aria-activedescendant',item.id); item.scrollIntoView({block:'nearest'}); }
           } else if (event.key === 'Enter' && !list.hidden && active >= 0) { event.preventDefault(); choose(active); }
           else if (event.key === 'Enter' && !this.selected) {
-            const exact = matches.findIndex(t => [t.name,...(t.aliases || [])].some(n => normalize(n) === normalize(input.value)));
-            if (exact >= 0) { event.preventDefault(); choose(exact); }
+            const name = normalize(input.value);
+            const exact = matches.filter(t => [t.name,...(t.aliases || [])].some(n => normalize(n) === name));
+            if (exact.length === 1 || (exact.length && !exact[0].location)) {
+              event.preventDefault();
+              choose(matches.indexOf(exact[0]));
+            }
           } else if (event.key === 'Escape') close();
         });
         form.addEventListener('submit', event => { event.preventDefault(); if (this.selected) this.action('guess',this.selected.id); });

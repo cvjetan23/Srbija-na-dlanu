@@ -28,12 +28,14 @@ check(await p.locator('.snd-practice-entry [data-cmd=practice]').isVisible(),'Se
    await p.locator('.snd-guess-form input').fill(choice.name);await p.getByRole('option',{name:choice.name,exact:true}).click();await p.locator('[data-cmd=guess]').click();await stable(p);check(await p.locator('.snd-target-answer strong').textContent().then(s=>s.includes(target.name.split(' · ')[0])),'Target revealed '+kind);await p.locator('[data-cmd=next]').click();await stable(p);
    for(let i=0;i<state.challenge.questions.length;i++){
     const internal=fixture('state',{token:game.token,user:'snd-http-a'}),q=internal.question_overrides?.[i]||internal.challenge.questions[i];
+    if(q.type==='flag'){check(await p.locator('.snd-flag-option').evaluateAll(nodes=>nodes.every(n=>n.getAttribute('aria-label')&&!n.textContent.trim())),'Flag options have accessible names without visible letters');}
     if(q.type==='explore_photo'){
      check(await p.locator('[data-zoom]').count()===4,'Four photo zoom controls '+kind);check(await p.locator('.snd-photo-attribution').count()===1,'Authors and licences available before answer');let writes=0;const track=r=>{if(r.url().includes('/v1/action'))writes++;};p.on('request',track);const zoom=p.locator('[data-zoom]').first();check(await zoom.textContent()==='','Icon-only photo magnifier');await zoom.click();await p.locator('.snd-flag-preview img').waitFor();check(await p.locator('.snd-flag-preview img').evaluate(i=>i.complete && i.naturalWidth>0),'Enlarged local photo loads');check(writes===0,'Zoom does not submit answer');await p.keyboard.press('Escape');p.off('request',track);await shot(p,kind+'-photos');
     }
-    await p.locator('[data-choice="'+q.correct+'"]').click();await stable(p);check(await p.locator('.snd-explanation').count()===1,'Answer explanation');
+    await p.locator('[data-choice="'+q.correct+'"]').click();await stable(p);check(await p.locator('.snd-option.is-correct .snd-answer-badge').count()===1&&await p.locator('.snd-explanation').count()===0,'Answer is marked without a separate feedback box');
     check(await p.locator('.snd-board>.snd-visual,.snd-panel>.snd-panel-copy').count()===0,'Quiz has no repeated map or subtitle '+kind);
     const next=p.locator('.snd-quiz-continue [data-cmd=next]');
+    check(await next.evaluate(n=>{const bar=n.parentElement,c=getComputedStyle(bar);return c.position==='fixed'&&bar.getBoundingClientRect().width===innerWidth&&c.backgroundColor===getComputedStyle(document.querySelector('.snd-app-header')).backgroundColor;}),'Solid dock spans the mobile viewport '+kind);
     check(await next.evaluate(n=>{const r=n.getBoundingClientRect();const x=r.left+r.width/2,y=r.top+r.height/2;return r.top>=innerHeight-85&&r.bottom<=innerHeight&&r.height>=44&&n.contains(document.elementFromPoint(x,y));}),'Next is reachable at the bottom without scrolling '+kind);
     check((await next.innerText()).trim()===(i===state.challenge.questions.length-1?'Vidi rezultat':'Sledeće pitanje'),'Explicit next action '+kind);
     await next.click();await stable(p);

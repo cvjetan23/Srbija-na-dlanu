@@ -317,6 +317,13 @@ final class SND_Game {
         }
         foreach($out['guesses'] as &$guess){$t=$c['catalog'][$guess['id']]??null;if($t){$guess['name']=SND_I18n::territory_name($t);}$guess['direction']['name']=SND_I18n::direction($guess['direction']['name']);}unset($guess);
         if(isset($out['catalog'])){foreach($out['catalog'] as &$entry){$original=$entry['name'];$t=$c['catalog'][$entry['id']];$entry['name']=SND_I18n::territory_name($t);$aliases=$entry['aliases']??array();$aliases[]=$original;foreach(array('sr','en','de','ru') as $language){$aliases[]=SND_I18n::t($original,array(),$language);}if($original==='Beograd'){$aliases=array_merge($aliases,array('Belgrade','Belgrad','Белград'));}$entry['aliases']=array_values(array_unique($aliases));}unset($entry);}
+        if($c['kind']==='river' && !empty($out['catalog'])){
+            $names=array_count_values(array_column($out['catalog'],'name'));
+            foreach($out['catalog'] as &$entry){
+                if($names[$entry['name']]>1){$entry['location']=SND_I18n::text($c['catalog'][$entry['id']]['district_name']??'');}
+            }
+            unset($entry);
+        }
         if(isset($out['territory'])){$out['territory']['name']=SND_I18n::territory_name($c['target']);}
         if(isset($out['map'])){foreach($out['map'] as &$entry){$entry['name']=SND_I18n::territory_name($c['catalog'][$entry['id']]);}unset($entry);}
         if($s['hint']){$out['name_hint']=SND_Hints::describe($s);$out['hint_text']=SND_I18n::t('Počinje slovom {letter}.',array('letter'=>$out['name_hint']['first']));}

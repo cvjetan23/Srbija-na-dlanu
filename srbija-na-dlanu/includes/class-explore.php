@@ -112,6 +112,27 @@ final class SND_Explore {
         foreach(array(.4,.65,1.5,2,2.6) as $factor){$v=max($step,(int)round($n*$factor/$step)*$step);if($v!==$n){$others[]=$v;}}
         $q=self::choice($type,$title,$n,$others,$seed,'Podatak u izvoru: {value} {unit}. {detail}',array('value'=>$number,'unit'=>$unit,'detail'=>$detail),$source,$unit);$q['approximate']=true;return $q;
     }
+    public static function mountain_book_entry($t){
+        static $book;
+        if($book===null){$book=array_column(self::book_mountains(),null,'id');}
+        $entry=$book[$t['id']??'']??null;
+        if(!$entry || $entry['name']!==$t['name'] || $entry['peak']!==($t['peak']??'') || (int)$entry['height']!==(int)($t['height']??0)){
+            return null;
+        }
+        return $entry;
+    }
+    private static function mountain_titles($t){
+        $id=$t['id']??'';
+        // The book covers high points in Serbia. Some entries mark a local summit or landmark.
+        $mapped_ids=array('mountain-2-1','mountain-book-040','mountain-book-189','mountain-8-12','mountain-book-197','mountain-10-16');
+        if(!self::mountain_book_entry($t) || in_array($id,$mapped_ids,true)){
+            return array('peak'=>'Kako se zove vrh označen na mapi?','height'=>'Kolika je približna visina tog vrha?','region'=>'U kojoj oblasti se nalazi označeni vrh?');
+        }
+        if(in_array($id,array('mountain-5-17','mountain-10-9','mountain-10-15'),true)){
+            return array('peak'=>'Koji je najviši vrh ove planine u Srbiji?','height'=>'Kolika je približna visina njenog najvišeg vrha u Srbiji?','region'=>'U kojoj oblasti je najviši vrh ove planine u Srbiji?');
+        }
+        return array('peak'=>'Koji je najviši vrh ove planine?','height'=>'Kolika je približna visina najvišeg vrha?','region'=>'U kojoj oblasti se nalazi najviši vrh ove planine?');
+    }
     public static function questions($t,$pool,$seed){
         $kind=$t['kind'];$source=$t['facts_source']??$t['source'];$q=array();
         if($kind==='city'){
@@ -150,10 +171,11 @@ final class SND_Explore {
                 : 'Kolika je približna ukupna dužina reke?';
             $q[]=self::numeric('length',$length_title,$t['length_km'],'km',$seed.':length',$source,$length_scope);
         }else{
-            $q[]=self::choice('peak','Koji je referentni vrh ove planine?',$t['peak'],array_column(self::pool('mountain'),'peak'),$seed.':peak','Planina {name}: vrh {answer}. {scope}',array('name'=>$t['name'],'scope'=>$t['peak_scope']??''),$source);
-            $q[]=self::numeric('height','Kolika je približna visina tog vrha?',$t['height'],'m',$seed.':height',$source,$t['peak_scope']??'');
+            $titles=self::mountain_titles($t);
+            $q[]=self::choice('peak',$titles['peak'],$t['peak'],array_column(self::pool('mountain'),'peak'),$seed.':peak','Planina {name}: vrh {answer}. {scope}',array('name'=>$t['name'],'scope'=>$t['peak_scope']??''),$source);
+            $q[]=self::numeric('height',$titles['height'],$t['height'],'m',$seed.':height',$source,$t['peak_scope']??'');
             if(!empty($t['area_km2']) && !empty($t['area_scope']) && !empty($t['area_source'])){$q[]=self::numeric('area','Kolika je približna površina navedenog planinskog obuhvata?',$t['area_km2'],'km²',$seed.':area',$t['area_source'],$t['area_scope']);}
-            else{$q[]=self::choice('region','U kom širem delu Srbije je označena planina?',$t['region'],array_column($pool,'region'),$seed.':region','Označeni položaj planine {name}: {answer}.',array('name'=>$t['name']),$t['source']);}
+            else{$q[]=self::choice('region',$titles['region'],$t['region'],array_column($pool,'region'),$seed.':region','Označeni položaj planine {name}: {answer}.',array('name'=>$t['name']),$t['source']);}
         }
         if ($kind === 'mountain' && empty($t['photo']['image'])) {
             $q[] = self::orientation($t, $pool, $seed . ':orientation');
@@ -204,14 +226,15 @@ final class SND_Explore {
                 $explanation='Reka uz naselje „{name}“: {answer}.';
                 break;
             case 'explore_peak':
-                $explanation='Referentni vrh planine „{name}“ je „{answer}“. {scope}';
+                $title=self::mountain_titles($t)['peak'];
+                $explanation='Vrh planine „{name}“ iz kataloga je „{answer}“. {scope}';
                 break;
             case 'explore_height':
-                $title='Kolika je približna visina referentnog vrha ove planine?';
+                $title=self::mountain_titles($t)['height'];
                 break;
             case 'explore_region':
                 if($t['kind']==='mountain'){
-                    $title='U kojoj oblasti se nalazi referentni vrh ove planine?';
+                    $title=self::mountain_titles($t)['region'];
                     $explanation='Oblast u kojoj se nalazi vrh planine „{name}“: {answer}.';
                 }
                 break;
@@ -246,7 +269,7 @@ final class SND_Explore {
     public static function name($t,$lang=null){return $t['labels'][$lang?:SND_I18n::lang()]??$t['name'];}
     public static function display_name($t,$lang=null){
         $name=self::name($t,$lang);
-        if(empty($t['display_name'])){return $name;}
+        if(($t['kind']??'')==='river' || empty($t['display_name'])){return $name;}
         // Use the relative position for same-name mountains so the label does not give away the peak.
         $positions=array(
             'mountain-5-7'=>'istočni položaj', 'mountain-6-30'=>'zapadni položaj',

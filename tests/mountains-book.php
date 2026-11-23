@@ -18,7 +18,11 @@ try{
   $q=SND_Explore::questions($t,$pool,'book:'.$id);if($q[3]['type']==='explore_photo'){$photos++;}else{$directions++;mb_ok(strpos($q[3]['title_key'],'planina')!==false,'Missing image uses a mountain direction question '.$id);}
   mb_ok(count($q)===4&&!empty($t['book_pages'])&&$t['source']===SND_Explore::MOUNTAINS_SOURCE,'Four sourced questions and source pages '.$id);
   set_error_handler(function($severity,$message,$file,$line){throw new ErrorException($message,0,$severity,$file,$line);});ob_start();try{SND_Explore_Admin::detail($t);$html=ob_get_contents();}finally{ob_end_clean();restore_error_handler();}
-  mb_ok(strpos($html,'Stranice izvora')!==false&&strpos($html,'<dt>Referentni vrh</dt>')!==false&&strpos($html,'<dt>Okrug</dt>')===false,'Detail renders source pages and a peak without a false administrative label '.$id);
+  mb_ok(strpos($html,'Stranice izvora')!==false&&strpos($html,'<dt>Vrh</dt>')!==false&&strpos($html,'<dt>Okrug</dt>')===false&&strpos($html,'<dt>Koordinate vrha</dt>')!==false&&strpos($html,'<dt>Prominencija</dt>')!==false,'Detail renders source pages and a peak without a false administrative label '.$id);
+ }
+ mb_ok(array_sum(array_map(function($t){return count($t['book_sections']);},$book))===201,'All 201 rows retain table pages and region memberships');
+ foreach(array('mountain-7-7'=>'Koji je najviši vrh ove planine?','mountain-10-9'=>'Koji je najviši vrh ove planine u Srbiji?','mountain-book-189'=>'Kako se zove vrh označen na mapi?') as $id=>$title){
+  $t=$pool[$id];$q=SND_Explore::questions($t,$pool,'peak-scope');mb_ok(SND_I18n::question($q[0],$t)['title']===$title,'Peak wording matches the scope '.$id);
  }
  mb_ok($photos===52&&$directions===145,'Exactly 52 licensed-photo and 145 direction tasks');
  $_GET=array('tip'=>'mountain');set_error_handler(function($severity,$message,$file,$line){throw new ErrorException($message,0,$severity,$file,$line);});ob_start();try{SND_Catalogue::library();$html=ob_get_contents();}finally{ob_end_clean();restore_error_handler();}mb_ok(substr_count($html,'data-catalogue-item=')===197,'All new records render in the knowledge table without warnings');

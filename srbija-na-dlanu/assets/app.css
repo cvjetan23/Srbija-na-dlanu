@@ -111,7 +111,7 @@ html:has(body.snd-app-body){margin-top:0!important}
 .snd-app .snd-game .snd-primary,.snd-app .snd-game .snd-secondary,.snd-app .snd-game .snd-option{font-size:17px;min-height:49px}
 .snd-app .snd-game .snd-search-wrap input{font-size:18px}
 .snd-app .snd-game .snd-text-button{font-size:15px;min-height:40px}
-.snd-app .snd-game .snd-panel-copy,.snd-app .snd-game .snd-history strong,.snd-app .snd-game .snd-distance,.snd-app .snd-game .snd-explanation p{font-size:16px}
+.snd-app .snd-game .snd-panel-copy,.snd-app .snd-game .snd-history strong,.snd-app .snd-game .snd-distance{font-size:16px}
 .snd-app .snd-game .snd-turn,.snd-app .snd-game .snd-round{font-size:15px}
 .snd-save-status{font-size:14px!important;line-height:1.6;color:var(--snd-secondary)!important;margin-top:16px!important;text-align:center}
 .snd-save-status a{text-decoration:underline}

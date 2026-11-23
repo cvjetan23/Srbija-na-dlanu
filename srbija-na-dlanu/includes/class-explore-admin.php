@@ -40,14 +40,28 @@ final class SND_Explore_Admin {
     public static function library_tabs(){SND_Catalogue::tabs();}
     public static function library(){return SND_Catalogue::library();}
     public static function detail($t){
-        echo '<article class="snd-explore-detail"><h2>'.esc_html(SND_Explore::name($t)).'</h2><dl class="snd-facts">';$facts=array('Položaj'=>$t['region']);if($t['kind']!=='mountain' && !empty($t['district_name'])){$facts['Okrug']=$t['district_name'];}
+        echo '<article class="snd-explore-detail"><h2>'.esc_html(SND_Explore::name($t)).'</h2><dl class="snd-facts">';$facts=array('Položaj'=>$t['region']);if($t['kind']==='city' && !empty($t['district_name'])){$facts['Okrug']=$t['district_name'];}
         if($t['kind']==='city'){$facts['Stanovništvo naselja']=!empty($t['population'])?SND_I18n::number($t['population']).' · '.$t['year']:'—';}
         elseif($t['kind']==='river'){$facts['Uliva se u']=$t['mouth']??'—';$facts['Morski sliv']=$t['sea']??'—';$facts['Dužina · ceo tok']=!empty($t['length_km'])?SND_I18n::number($t['length_km']).' km':'—';}
-        else{$facts['Referentni vrh']=$t['peak'];$facts['Visina']=$t['height'].' m';if(!empty($t['peak_scope'])){$facts['Obuhvat']=$t['peak_scope'];}if(!empty($t['book_pages'])){$facts['Stranice izvora']=implode(', ',$t['book_pages']);}if(!empty($t['area_km2'])){$facts['Površina']=$t['area_km2'].' km² · '.$t['area_scope'];}}
+        else{
+            $facts['Vrh']=$t['peak'];$facts['Visina']=$t['height'].' m';
+            if(!empty($t['prominence'])){$facts['Prominencija']=$t['prominence'].' m';}
+            if(!empty($t['peak_scope'])){$facts['Obuhvat']=$t['peak_scope'];}
+            if(!empty($t['book_pages'])){$facts['Stranice izvora']=implode(', ',$t['book_pages']);}
+            if(!empty($t['area_km2'])){$facts['Površina']=$t['area_km2'].' km² · '.$t['area_scope'];}
+            $book=SND_Explore::mountain_book_entry($t);
+            if($book && $book['center']===$t['center']){
+                $facts['Koordinate vrha']=implode(' N, ',$book['book_coordinates']).' E';
+                $facts['Strane tabele']=implode(', ',array_unique(array_column($book['book_sections'],'table_page')));
+                $facts['Oblast u knjizi']=implode(' / ',array_unique(array_column($book['book_sections'],'area')));
+                $groups=array_filter(array_column($book['book_sections'],'group'));
+                if($groups){$facts['Podoblast u knjizi']=implode(' / ',array_unique($groups));}
+            }
+        }
         foreach($facts as $label=>$value){echo '<div><dt>'.esc_html(SND_I18n::t($label)).'</dt><dd>'.esc_html($value?:'—').'</dd></div>';}echo '</dl>';
         if(!empty($t['photo']['image'])){$p=$t['photo'];echo '<img src="'.esc_url(SND_Data::image_url($p['image'])).'" alt="'.esc_attr(SND_Explore::name($t)).'" loading="lazy"><p class="snd-photo-credit">'.esc_html($p['credit'].' · '.$p['license']).' · <a href="'.esc_url($p['source_url']).'" target="_blank" rel="noopener noreferrer">Izvor fotografije</a></p>';}
         if(!empty($t['verification_source'])){echo '<p class="snd-catalogue-proof">Potvrda naziva: <a href="'.esc_url($t['verification_source']).'" target="_blank" rel="noopener noreferrer">'.esc_html($t['kind']==='mountain'?'Izvor za ovu planinu':($t['kind']==='river'?'Pregled izvora za ovu reku':'Pregled izvora za ovo naselje')).' ↗</a></p>';}
-        echo '<p>'.($t['kind']==='mountain'?'Pin označava referentni vrh planine.':($t['kind']==='river'?'Na mapi je deo toka na teritoriji Srbije; podatak o dužini odnosi se na celu reku.':'Stanovništvo se odnosi na naselje, ne na celu opštinu.')).'</p><p><a href="'.esc_url(!empty($t['facts_source'])?$t['facts_source']:$t['source']).'" target="_blank" rel="noopener noreferrer">Izvor podataka</a> · <a href="'.esc_url($t['source']).'" target="_blank" rel="noopener noreferrer">Geografski izvor</a></p><a class="snd-app-button" href="'.esc_url(SND_Site::url($t['kind'])).'">Igraj današnji izazov</a></article>';
+        echo '<p>'.($t['kind']==='mountain'?'Pin označava položaj vrha planine.':($t['kind']==='river'?'Na mapi je deo toka na teritoriji Srbije; podatak o dužini odnosi se na celu reku.':'Stanovništvo se odnosi na naselje, ne na celu opštinu.')).'</p><p><a href="'.esc_url(!empty($t['facts_source'])?$t['facts_source']:$t['source']).'" target="_blank" rel="noopener noreferrer">Izvor podataka</a> · <a href="'.esc_url($t['source']).'" target="_blank" rel="noopener noreferrer">Geografski izvor</a></p><a class="snd-app-button" href="'.esc_url(SND_Site::url($t['kind'])).'">Igraj današnji izazov</a></article>';
     }
 }
 add_action('admin_menu',array('SND_Explore_Admin','menu'),30);
